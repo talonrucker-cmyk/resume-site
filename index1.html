@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Making money make sense — Talon Rucker</title>
+<title>Talon Rucker — Financial Professional</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,10 +26,10 @@
     --display:'Space Grotesk',system-ui,sans-serif;
     --body:'Hanken Grotesk',system-ui,sans-serif;
     --mono:'JetBrains Mono',ui-monospace,monospace;
-    --maxw:1200px;
+    --maxw:1160px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth;font-size:15px}
+  html{scroll-behavior:smooth}
   body{font-family:var(--body);background:var(--paper);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
   ::selection{background:var(--amber-soft);color:var(--ink)}
@@ -56,7 +56,7 @@
   .nav .btn{padding:9px 16px}
 
   /* HERO */
-  .hero{position:relative;padding:48px 0 0;overflow:hidden}
+  .hero{position:relative;padding:74px 0 0;overflow:hidden}
   .hero::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(120% 80% at 78% 12%,#000 0%,transparent 62%);-webkit-mask-image:radial-gradient(120% 80% at 78% 12%,#000 0%,transparent 62%);opacity:.6}
   .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1.25fr .9fr;gap:54px;align-items:center}
   .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(2.5rem,5.4vw,4.6rem);line-height:1.02;letter-spacing:-.025em;margin:20px 0 22px}
@@ -132,9 +132,9 @@
   .disclaim{font-size:.7rem;color:#5E776C;margin-top:14px;line-height:1.5}
 
   /* SECTION SHELL */
-  section.block{padding:54px 0;position:relative}
-  .sec-head{max-width:60ch;margin-bottom:30px}
-  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(1.55rem,2.8vw,2.15rem);letter-spacing:-.02em;margin:12px 0 0}
+  section.block{padding:84px 0;position:relative}
+  .sec-head{max-width:60ch;margin-bottom:46px}
+  .sec-head h2{font-family:var(--display);font-weight:600;font-size:clamp(1.8rem,3.2vw,2.5rem);letter-spacing:-.02em;margin:14px 0 0}
 
   /* ABOUT */
   #about{background:var(--ink);color:#E8EEE9}
@@ -154,7 +154,7 @@
   .xp:last-child{border-bottom:1px solid var(--line)}
   .xp-meta .date{font-family:var(--mono);font-size:.8rem;color:var(--pine);letter-spacing:.02em}
   .xp-meta .loc{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);margin-top:6px}
-  .xp-logo{width:60px;height:60px;border-radius:15px;background:#fff;object-fit:contain;padding:9px;display:block;margin-bottom:14px;box-shadow:0 6px 16px -8px rgba(10,40,30,.4),inset 0 0 0 1px rgba(20,32,28,.06);overflow:hidden}
+  .xp-logo{width:56px;height:56px;border-radius:13px;border:1px solid var(--line);background:#fff;object-fit:cover;display:block;margin-bottom:14px;box-shadow:0 1px 3px rgba(10,40,30,.1);overflow:hidden}
   .xp-logo.mono-tile{display:grid;place-items:center;font-family:var(--display);font-weight:700;color:#fff;background:var(--pine);font-size:1.2rem;letter-spacing:.01em}
   .xp-body h3{font-family:var(--display);font-weight:600;font-size:1.28rem;letter-spacing:-.01em}
   .xp-body .org{font-weight:600;color:var(--pine);margin:2px 0 10px;font-size:.98rem}
@@ -246,7 +246,7 @@
 
   /* TOOLS: WEALTH CALCULATOR */
   .wcalc{display:grid;grid-template-columns:.78fr 1.22fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
-  .wc-inputs{background:var(--paper-2);padding:22px 24px;border-right:1px solid var(--line)}
+  .wc-inputs{background:var(--paper-2);padding:30px;border-right:1px solid var(--line)}
   .wc-title{font-family:var(--display);font-weight:700;font-size:1.3rem;letter-spacing:-.01em}
   .wc-sub{color:var(--ink-soft);font-size:.9rem;margin:6px 0 22px}
   .wc-field{margin-bottom:18px}
@@ -284,35 +284,6 @@
   .reveal.in{opacity:1;transform:none}
   .hero .reveal{transition-delay:var(--d,0s)}
 
-  /* COLLAPSIBLE SECTIONS */
-  .collapse{margin-bottom:20px}
-  .collapse>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px 24px;padding:20px 24px;background:var(--white);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);transition:border-color .2s,box-shadow .2s}
-  .collapse>summary::-webkit-details-marker{display:none}
-  .collapse>summary::marker{content:""}
-  .collapse>summary:hover{border-color:var(--pine);box-shadow:0 16px 38px -20px rgba(10,40,30,.45)}
-  .collapse-txt{flex:1 1 320px}
-  .collapse-txt .eyebrow{margin-bottom:9px}
-  .collapse-txt h3{font-family:var(--display);font-weight:600;font-size:clamp(1.15rem,2.2vw,1.42rem);letter-spacing:-.01em;line-height:1.15;color:var(--ink)}
-  .collapse-txt p{font-size:.92rem;color:var(--ink-soft);margin-top:6px;max-width:58ch}
-  .collapse-btn{flex:none;font-family:var(--body);font-weight:600;font-size:.9rem;color:var(--pine);background:var(--paper-2);border:1px solid var(--line-strong);border-radius:999px;padding:10px 18px;display:inline-flex;align-items:center;gap:9px;white-space:nowrap;transition:background .2s,border-color .2s,color .2s}
-  .collapse>summary:hover .collapse-btn{border-color:var(--pine);background:var(--sage);color:var(--pine-deep)}
-  .cc-chev{display:inline-block;transition:transform .25s ease;font-size:.9em}
-  .collapse[open]>summary .cc-chev{transform:rotate(180deg)}
-  .cc-less{display:none}
-  .collapse[open]>summary .cc-more{display:none}
-  .collapse[open]>summary .cc-less{display:inline}
-  .collapse-body{padding-top:18px;animation:collapseIn .35s ease}
-  @keyframes collapseIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
-
-  /* EXPERIENCE: see-more toggle */
-  .xp-more>summary{list-style:none;cursor:pointer;display:flex;justify-content:center;padding:24px 0 2px}
-  .xp-more>summary::-webkit-details-marker{display:none}
-  .xp-more>summary::marker{content:""}
-  .xp-more-btn{font-family:var(--body);font-weight:600;font-size:.92rem;color:var(--pine);background:var(--paper-2);border:1px solid var(--line-strong);border-radius:999px;padding:11px 22px;display:inline-flex;align-items:center;gap:9px;transition:background .2s,border-color .2s,color .2s}
-  .xp-more>summary:hover .xp-more-btn{border-color:var(--pine);background:var(--sage);color:var(--pine-deep)}
-  .xp-more[open]>summary .cc-more{display:none}
-  .xp-more[open]>summary .cc-less{display:inline}
-
   /* RESPONSIVE */
   @media(max-width:900px){
     nav.links{display:none}
@@ -340,132 +311,34 @@
     .reveal{opacity:1;transform:none}
     .curve-path{stroke-dasharray:none!important;stroke-dashoffset:0!important}
   }
-
-  /* ---- MULTI-PAGE TOGGLE ---- */
-  main [data-page]{display:none}
-  main[data-active="home"] [data-page="home"],
-  main[data-active="fun"]  [data-page="fun"]{display:block}
-
-  /* page-tab nav (always visible, incl. mobile) */
-  nav.page-tabs{display:flex;align-items:center;gap:6px}
-  nav.page-tabs a{font-family:var(--body);font-size:.92rem;color:var(--ink-soft);font-weight:600;padding:8px 15px;border-radius:999px;transition:color .2s,background .2s}
-  nav.page-tabs a:hover{color:var(--ink);background:var(--paper-2)}
-  nav.page-tabs a.active{color:var(--pine);background:var(--sage)}
-
-  /* PDF embed */
-  .pdf-wrap{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
-  .pdf-frame{width:100%;height:72vh;min-height:480px;border:0;display:block;background:var(--paper-2)}
-  .pdf-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--pine-deep)}
-  .pdf-dots{display:inline-flex;gap:6px}
-  .pdf-dots i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.32)}
-  .pdf-bartitle{font-family:var(--mono);font-size:.74rem;letter-spacing:.03em;color:#D7E1D8;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pdf-hint{font-family:var(--mono);font-size:.72rem;color:var(--amber-soft);display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
-  .pdf-chev{display:inline-block;animation:pdfbounce 1.4s ease-in-out infinite}
-  @keyframes pdfbounce{0%,100%{transform:translateY(-2px)}50%{transform:translateY(3px)}}
-  .pdf-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:16px 20px;border-top:1px solid var(--line)}
-  .pdf-actions .note{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
-
-  /* fun page media cards */
-  .fun-grid{display:grid;grid-template-columns:1fr;gap:22px;align-items:start;max-width:820px}
-  .embed-card{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:26px}
-  .embed-card h3{font-family:var(--display);font-weight:600;font-size:1.18rem}
-  .embed-card p.sub{font-size:.9rem;color:var(--ink-soft);margin-top:4px}
-  .spotify-embed{width:100%;height:420px;border:0;border-radius:12px;margin-top:16px}
-  .soon-block{margin-top:18px;padding:26px;border:1px dashed var(--line-strong);border-radius:12px;background:var(--paper);text-align:center}
-  .family-gallery{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-  .fam-photo{width:100%;height:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;display:block;box-shadow:0 6px 18px -10px rgba(10,40,30,.4);background:var(--paper-2)}
-  .fam-photo.wide{grid-column:span 2;aspect-ratio:16/10}
-  @media(max-width:560px){.family-gallery{grid-template-columns:1fr 1fr}.fam-photo.wide{grid-column:span 2}}
-  @media(max-width:900px){
-    nav.page-tabs{gap:2px}
-    nav.page-tabs a{padding:7px 11px;font-size:.86rem}
-    .fun-grid{grid-template-columns:1fr}
-    .pdf-frame{height:70vh;min-height:440px}
-  }
-  @media(max-width:560px){
-    .wordmark{font-size:.94rem}
-    nav.page-tabs a{padding:6px 9px;font-size:.8rem}
-    .nav .btn{display:none}
-  }
-
-  /* CASH FLOW CONCEPTS */
-  .cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-  .cf-panel{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
-  .cf-panel.accent{border-color:var(--pine);box-shadow:0 22px 54px -26px rgba(14,82,64,.55)}
-  .cf-tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:20px}
-  .cf-panel.accent .cf-tag{color:var(--pine)}
-  .cf-flow{display:flex;flex-direction:column;align-items:center}
-  .cf-box{width:100%;max-width:290px;text-align:center;padding:13px 16px;border-radius:12px;font-family:var(--display);font-weight:600;font-size:1rem}
-  .cf-box.income{background:var(--pine);color:#fff}
-  .cf-box.neutral{background:var(--paper-2);color:var(--ink);border:1px solid var(--line-strong)}
-  .cf-box.wealth{background:var(--amber);color:var(--pine-deep)}
-  .cf-box.wealth small{display:block;font-family:var(--body);font-weight:600;font-size:.74rem;opacity:.9;margin-top:3px}
-  .cf-box.lifestyle{background:var(--brick);color:#fff}
-  .cf-bolt{filter:grayscale(1) brightness(3)}
-  .cf-arrow{position:relative;width:2px;height:24px;background:var(--line-strong)}
-  .cf-arrow::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line-strong)}
-  .cf-arrow.red{background:var(--brick)}
-  .cf-arrow.red::after{border-top-color:var(--brick)}
-  .cf-allocs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 2px;max-width:290px}
-  .cf-allocs span{font-family:var(--mono);font-size:.7rem;background:var(--sage);color:var(--pine-deep);border-radius:999px;padding:4px 10px}
-  .cf-save{text-align:center;margin-top:14px;font-family:var(--mono);font-size:.78rem;color:var(--ink-soft)}
-  .cf-save em{font-style:normal;opacity:.8}
-  .cf-points{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:9px}
-  .cf-points li{position:relative;padding-left:20px;color:var(--ink-soft);font-size:.9rem}
-  .cf-points li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:2px;background:var(--amber)}
-  .cf-note{margin-top:18px;padding-top:15px;border-top:1px dashed var(--line);font-size:.9rem;color:var(--ink-soft);line-height:1.55}
-  @media(max-width:900px){.cf-grid{grid-template-columns:1fr}}
-
-  /* HUMAN LIFE VALUE */
-  .hlv{display:grid;grid-template-columns:.85fr 1.15fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
-  .hlv-inputs{background:var(--paper-2);padding:22px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
-  .hlv-output{padding:28px;display:flex;flex-direction:column;justify-content:center;background:var(--pine-deep);color:#fff}
-  .hlv-bk{font-family:var(--mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amber-soft)}
-  .hlv-bv{font-family:var(--display);font-weight:700;font-size:clamp(2rem,5vw,3rem);letter-spacing:-.02em;margin:6px 0 8px;line-height:1}
-  .hlv-meta{font-family:var(--mono);font-size:.8rem;color:#BAC7C0}
-  .hlv-note{margin-top:22px;font-size:.92rem;color:#D7E1D8;line-height:1.55;max-width:44ch}
-  @media(max-width:900px){.hlv{grid-template-columns:1fr}.hlv-inputs{border-right:none;border-bottom:1px solid var(--line)}}
-
-  /* READING LIST (accordion) */
-  .booklist{margin-top:18px;display:flex;flex-direction:column;gap:10px}
-  .booklist details{border:1px solid var(--line);border-radius:12px;background:var(--paper);overflow:hidden}
-  .booklist summary{cursor:pointer;list-style:none;padding:14px 16px;font-family:var(--display);font-weight:600;font-size:1rem;display:flex;align-items:center;gap:10px}
-  .booklist summary::-webkit-details-marker{display:none}
-  .booklist summary .btitle{flex:1}
-  .booklist summary::after{content:"+";font-family:var(--mono);color:var(--pine);font-size:1.15rem;line-height:1;transition:transform .2s ease}
-  .booklist details[open] summary::after{transform:rotate(45deg)}
-  .booklist summary:hover{color:var(--pine)}
-  .bcount{font-family:var(--mono);font-size:.7rem;color:var(--ink-soft);background:var(--white);border:1px solid var(--line);border-radius:999px;padding:2px 9px}
-  .brank{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pine);padding:14px 16px 0}
-  .booklist ul{list-style:none;padding:4px 16px 14px;columns:2;column-gap:26px}
-  .booklist li{font-size:.86rem;color:var(--ink);padding:6px 0;break-inside:avoid;border-top:1px dashed var(--line)}
-  .booklist li .ba{color:var(--ink-soft)}
-  .booklist li .note{color:var(--amber);font-size:.78rem}
-  @media(max-width:560px){.booklist ul{columns:1}}
 </style>
 </head>
 <body>
 
 <header class="nav">
   <div class="wrap nav-inner">
-    <a href="#home" data-nav="home" class="wordmark"><span class="mark">TR</span>Talon Rucker</a>
-    <nav class="page-tabs">
-      <a href="#home" data-nav="home" class="active">Home</a>
-      <a href="#fun" data-nav="fun">More</a>
+    <a href="#top" class="wordmark"><span class="mark">TR</span>Talon Rucker</a>
+    <nav class="links">
+      <a href="#about">Why</a>
+      <a href="#experience">Experience</a>
+      <a href="#creds">Credentials</a>
+      <a href="#tools">Tools</a>
+      <a href="#links">Links</a>
+      <a href="#contact">Contact</a>
     </nav>
     <a href="mailto:talonrucker@gmail.com?subject=Hi%20Talon" class="btn btn-primary">Get in touch</a>
   </div>
 </header>
 
-<main id="top" data-active="home">
+<main id="top">
 
   <!-- HERO -->
-  <section class="hero" data-page="home">
+  <section class="hero">
     <div class="wrap">
       <div class="hero-grid">
         <div class="hero-copy">
           <span class="eyebrow reveal" style="--d:.05s">Financial professional · Provo, UT</span>
-          <h1 class="reveal" style="--d:.12s">Making money <em>make sense</em>—<br>so it works <span class="amber">for you.</span></h1>
+          <h1 class="reveal" style="--d:.12s">I make money <em>make sense</em>—<br>so it works <span class="amber">for you.</span></h1>
           <p class="lede reveal" style="--d:.2s">A finance grad and systems thinker turning the overwhelming parts of money into a plan that's simple, repeatable, and built to compound.</p>
           <div class="hero-cta reveal" style="--d:.28s">
             <a href="#contact" class="btn btn-primary">Let's talk →</a>
@@ -486,127 +359,8 @@
     </div>
   </section>
 
-  <!-- QUICK ACCESS (jump into the tools) -->
-  <section id="explore" class="block" data-page="home">
-    <div class="wrap">
-      <div class="sec-head reveal"><span class="eyebrow">Explore</span><h2>Jump straight to what matters.</h2></div>
-      <div class="link-grid">
-
-        <a href="#experience" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
-          <h3>Experience &amp; track record</h3>
-          <p>The roles that built the toolkit—finance, sales leadership, and building systems that scale.</p>
-          <span class="link-go">See the résumé <span class="arrow">→</span></span>
-        </a>
-
-        <a href="#cashflow" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 3 14h7l-1 8 11-13h-8l1-7z"/></svg></div>
-          <h3>Interrupt the spending circuit</h3>
-          <p>The typical cash-flow trap versus the wealth-building setup that pays your future self first.</p>
-          <span class="link-go">See the concept <span class="arrow">→</span></span>
-        </a>
-
-        <a href="#balancesheet" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
-          <h3>The living balance sheet</h3>
-          <p>A one-page snapshot of where you actually stand—assets, protection, and cash flow.</p>
-          <span class="link-go">View the example <span class="arrow">→</span></span>
-        </a>
-
-        <a href="#hlv" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
-          <h3>Your human life value</h3>
-          <p>Your paycheck is your biggest asset. See what your future income is really worth.</p>
-          <span class="link-go">Run the numbers <span class="arrow">→</span></span>
-        </a>
-
-        <a href="#guide" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
-          <h3>Why you need a financial planner</h3>
-          <p>The short guide on what a planner actually does and how the right plan pays for itself.</p>
-          <span class="link-go">Read the guide <span class="arrow">→</span></span>
-        </a>
-
-        <a href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg></div>
-          <h3>Start your Roth IRA</h3>
-          <p>Fidelity's official walkthrough for opening a Roth IRA in the app—the first move I'd make at your age.</p>
-          <span class="link-go">Watch the tutorial <span class="arrow">→</span></span>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- CREDENTIALS -->
-  <section id="creds" class="block" data-page="home">
-    <div class="wrap">
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">Credentials</span>
-            <h3>The foundation, on paper.</h3>
-            <p>Education, licenses, and certifications behind the advice.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-      <div class="cred-grid">
-        <div class="card reveal">
-          <h3><span class="dot"></span>Education</h3>
-          <div class="cred-row"><span class="k">B.S. in Finance</span><span class="v">Apr 2026</span></div>
-          <div class="cred-row"><span class="k">BYU — Marriott School of Business</span><span class="v">Provo, UT</span></div>
-          <div class="cred-row"><span class="k">GPA · Academic Perf. Scholarship</span><span class="v">3.90 / 4.00</span></div>
-          <div class="cred-row"><span class="k">Degree completed in</span><span class="v">3 years</span></div>
-          <div class="chips"><span class="chip">Finance Society</span><span class="chip">Wealth Management Assoc.</span><span class="chip">SF Net Trek Rep</span></div>
-        </div>
-        <div class="card reveal">
-          <h3><span class="dot"></span>Licenses &amp; Designations</h3>
-          <div class="cred-row"><span class="k">SIE — Securities Industry Essentials</span><span class="v">Passed</span></div>
-          <div class="cred-row"><span class="k">Life &amp; Health Insurance</span><span class="v">Licensed</span></div>
-          <div class="cred-row"><span class="k">eMoney Advisor</span><span class="v">Certified</span></div>
-          <p class="pursuing">Currently pursuing the <b>CFP®</b>, <b>Series 7</b>, and <b>Series 66</b>.</p>
-          <div class="chips"><span class="chip">Eagle Scout</span><span class="chip">EVC Wrestling Champion</span><span class="chip">AI enthusiast</span></div>
-        </div>
-      </div>
-        </div>
-      </details>
-    </div>
-  </section>
-
-  <!-- ABOUT / WHY -->
-  <section id="about" class="block" data-page="home">
-    <div class="wrap">
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">The why</span>
-            <h3>Why I do this.</h3>
-            <p>The story - and the belief - behind the way I plan.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-      <div class="about-grid">
-        <div class="reveal">
-          <p>I chose finance because of the role models I grew up watching. My family carried very little stress about the future—and it was never luck, it was a plan. We thought early about retirement, insurance, and investing, and I watched those decisions quietly shape how we lived: <strong>with confidence instead of worry.</strong></p>
-          <p>Once you've watched compound growth work on real money, it's hard not to want to share it. That's the whole reason I'm here.</p>
-          <p>Leading a sales team in college, I sat across from hundreds of families. One pattern stuck: the people genuinely at peace weren't always the ones earning the most—<strong>they were the ones with a plan that was simple, repeatable, and reliable.</strong> That's the difference I want to make.</p>
-        </div>
-        <div class="reveal">
-          <div class="pullquote">
-            Money is like oxygen. When it's flowing to the right places, you have <span>freedom.</span> When it gets disorganized, it's suffocating.
-          </div>
-          <p style="margin-top:30px;color:#BAC7C0">I'm a systems guy. I like taking the things that feel overwhelming and making them simple—so you can stop managing money and start using it to focus on what actually matters to you.</p>
-        </div>
-      </div>
-        </div>
-      </details>
-    </div>
-  </section>
-
   <!-- COMPOUND INTEREST TEACHER -->
-  <section class="compound" data-page="home">
+  <section class="compound">
     <div class="wrap">
       <div class="comp-head reveal">
         <span class="eyebrow">The compound effect</span>
@@ -672,10 +426,29 @@
     </div>
   </section>
 
-
+  <!-- ABOUT / WHY -->
+  <section id="about" class="block">
+    <div class="wrap">
+      <div class="sec-head reveal"><span class="eyebrow">The why</span></div>
+      <div class="about-grid">
+        <div class="reveal">
+          <p>I chose finance because of the role models I grew up watching. My family carried very little stress about the future—and it was never luck, it was a plan. We thought early about retirement, insurance, and investing, and I watched those decisions quietly shape how we lived: <strong>with confidence instead of worry.</strong></p>
+          <p>Once you've watched compound growth work on real money, it's hard not to want to share it. That's the whole reason I'm here.</p>
+          <p>Leading a sales team in college, I sat across from hundreds of families. One pattern stuck: the people genuinely at peace weren't always the ones earning the most—<strong>they were the ones with a plan that was simple, repeatable, and reliable.</strong> That's the difference I want to make.</p>
+        </div>
+        <div class="reveal">
+          <div class="pullquote">
+            Money is like oxygen. When it's flowing to the right places, you have <span>freedom.</span> When it gets disorganized, it's suffocating.
+            <div class="pq-by">— My job: keep it flowing</div>
+          </div>
+          <p style="margin-top:30px;color:#BAC7C0">I'm a systems guy. I like taking the things that feel overwhelming and making them simple—so you can stop managing money and start using it to focus on what actually matters to you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- EXPERIENCE -->
-  <section id="experience" class="block" data-page="home">
+  <section id="experience" class="block">
     <div class="wrap">
       <div class="sec-head reveal"><span class="eyebrow">Track record</span><h2>Experience that built the toolkit.</h2></div>
       <div class="xp-list">
@@ -698,6 +471,19 @@
 
         <div class="xp reveal">
           <div class="xp-meta">
+            <div class="xp-logo mono-tile">4C</div>
+            <div class="date">Mar 2026</div><div class="loc">Provo, UT</div>
+          </div>
+          <div class="xp-body">
+            <h3>Presenter &amp; Strategist — 1st Place</h3>
+            <div class="org">4C Group Case Competition</div>
+            <ul><li>Took 1st of 120 participants for a strategic restructuring of the 4C Group's bonus program.</li></ul>
+            <div class="tagset"><span class="tag">Strategy</span><span class="tag">Presenting</span></div>
+          </div>
+        </div>
+
+        <div class="xp reveal">
+          <div class="xp-meta">
             <img class="xp-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAIAAACxN37FAABGiUlEQVR42u29aZMcSZIlpmpmfnvckRfOquqZ4c6ukP//P5BfuKRQKJztnS4cecQd4bfbofxg7hGRSAANVNcBVNurrBJUIjMi3P2ZmprqU1UkInBw+LOAuVvg8GeC+NVfkYgICJzdd/g1gIiI+AcT2hhjyAABdJ8EwRHc4csIbElkyYOAjDHG2JdzGn91H9q+IEH3HwR0T8nh6yj0mDxfZaHRHQod3KHQwcER2sHht8c/eii0HsvRy1Fa7bPDbr8rykJpxRjjnKNzbBy+0ANGBABttNYaEcMgHA/Hk9E4DMKP8u1XJjQR2WgG59x+p5Xt3979/H/9v//3m9s3VV15wguDkDPUhoiMe2AOn2czYwwA6qap64pxfj2/+m//9l//t//yv54T2pDhjH+K0/+ohTbmEaGllO/u3/3v//3/+D//n/9+yA9hGA6SVHCulDaO0A5/j9CCCwDIizzLM+GJf3n9F9/3f3r108Xs4kRoYxhjn4qe/cMux+Mcijb6kB3e37//65v/uTts4ygZD4ZCCCWVI7TD3ye08ADgkO13h73ne4Hnb3abVsqnXu5v5UN/3A8xxhhtDBEZ6ljvMisOX8Qe6OPQ9IvSzf8oofFx5gSR+Z6fxPFoMATANI5Hg5EQQilljLPQDn/XQgsAsLlB4XnDdBCGIWfs6cHx97PQQogwCJMo1tokcZzEieBCaUdohy/xobk9mGmjhfDiKPY9n7GvCC7/+oQGskdR+x9jzr7cM3P4/G5viFlvwxLI4nd1OT4S9yCjtVZKSaWkUkopIHAW2uFLLLT1mqWSSklCsJ7qV3HaZQodvsnD4S/9RUdohz8VHKEdHKEdHByhHRwcoR0cHKEdHKEdHByhHRwcoR0cHKEdHByhHRyhHRwcoR0cHKEdHByhHRwcoR0coR0cHKEdHByhHRwcoR0cHKEdHKEdHByhHRwcoR0cHKEdHByhHRyhHRwcoR0cHKEdHByhHRwcoR0coR0cHKEdHByhHRwcoR0cHKEdHKEdHByhHRwcoR0cHKEdHKEdHByhHRwcoR0cHKH/WYEA+NW/RN0X/Vqfgr632ya+i09J3wC7foeLwq+8ZvrNPi/90puPf/STchb6G17E9E0tQGehf1MLjb/TG+PTt/0S24lf/TMIeHx9IiIi+03E/i87T4Ls+9u/AAAi0/0wIiJD+xeE9oMS9Z+4/71Hv/v4Yujzn/M32xGQeieLTv/7y9bzr0xoJAAC/MTX1z7y00X9iSzO5x4ToiUhEIAhAADLT8Qj+eizr4MWgPTBj1NHXfzY7fzCZ3H8NXrKY/rkdf7Oj865HA7O5XD4rc+gCMh63wCfbvkIcPRJABEZngwTmc4ao7XLRL0JRnzsuzy1n/jE1P7ex3H8R9/yeyU0/kGBD/r1NtEnl0DUvTYBAtrN87jLW2JST0zrVPRuhiU0kSUz9Xtv72cQEADDzk0Hwg9cZ6RPOhUf9TDwy5j5FXe194QIH/2vs9Dfu399fnB79D2inp39X+CnXqE7IPZUJgIiRGvKe1+c/rS30BH6WyR0b6qBjt8jIgQEYAwZQ0QGCPbw9wHgPCfTExrgLP5x9k74actKv44L4Aj9ZaEB+sSB/Q8ITXzlzouffZeOvQBdvIPOgxV42vQRGWOISETaaKO1IWN/DZH1rgV9GBTBD52bT14nPomEfOwu4NM/0N+/h3j2+/Rr3Whnob+LJUxP/HYi0lobQ12AjkAbrbUCImS9+QYkehx2Ptnm44HxNz2bOQv965nAb8pCf/W14DEgAQAEpvsL9oi+xhiD1MU4rPFknHFEzjhj9sc6SjPs/BMAMGSgD3Af3+EP3G7xT0Bowl+Nr/g70g3h8QH81wjC4JPnTNjTmXVvZhghUU9oBoYMGCAgY4whALD+NOeMMy6YYIyjJW5/FmSMITJCIGO6jCJ1bP4SYn3+Z/Brnjh9wk13FvrP5VV8zEIf86PWf4BjOA+AIfM85nse9nnBY9gCEfHTS4eOsevfb2P7J7DQ34WD8ftcSJcyweMJF4EBIBIZTYaIEJEzzhkjQ1orYwwD5nkiDKMoCsMgFJwbY+q6qcqyrmuttSFtT4rYCTaQiMgYsrTvLDN9QCn63a6ZHh3ovwMfmrALj3/067fg8a+V6fjSR/uPPw0CRKs6OmUDj4QmAE1IxmijLaERGYGNZGjh8zRJLuYX8/l8NB75wpey3W13y+VyvV4XZamUPIY2GDICMGSI+iNkb/5PqURE+HsBj697HPih04UE1Ecz6PFdpk8fhemXyg2dy/G7HvvOY2BEZM4XCSISWgoaYwwRnoLQAACc8ziOL+bz169evXjxYj6beZ5f1/VqtYqjSHC+XK0O2UFKaYgYY4zZ9CGYXotn1w7B4wwO/KnSLOK74Bl+2U/ip7/zGcNKn7U9X/4BvmIrICAyRlvq0kn8yRkwJGu2GbOEtj8huAjDYDadPn/+/Kcff3r96tVkPOFC1HU1Gg6TKPJ9HxlTSu7bVikluPVWGJKx+wE8Pgh+VKGJv+WF/z7WRHwnVvMsDnv6VveI6EOp4nmMgc63+sdPiD7i3z3+ztMPcEq1nU5u5+GWT6+OXt8MBAiPT2cEnTU2BADIGXLOGFq6K1IMMfD90XB0dXn18sXL169fv3z+YhCmhlHT1kmSpEni+b6U8rDfHXZ7LRUCCABkyIn13ETqci3nt/DRkqcnGg46Rfg+SM58npOn+0l4PCWQs9Bfu5S/KjGHX/67HyuXQviyb36w/BCAIWOCM4accYasc22JNJEmY5AI0QBJKY02BMA494RIk2Q6mVxdXt3c3FxdXoUQtCgbGSRJksSxMWa1XP4cxQCglUKGQMQQgbFOX33UecBR4Y9nZvgTl/+lJho/+6Twd/Nsvn1C43HBf75g4njoOb9zx2dCj43P47MQHeMM5wm5noOdVvOodOv+ORWMwEdT83RK8wEeI8tECCi4CIMgTZM0SaMw8j0PALVWdduWTZVXZd02ddtKKckY+04M0RMiiqLhcDidTCY4AYAQdO155JnA97MsS5PEEwIAyNggCVhC29g1nqmb+tMhPtrw+goXPBW12B2FntDxscU9u/XQafzOfgWPWfzTPez+fSzf66OQ9GcjNJ3dqNNWj52212ofGdh/j8S0OV8EeHTkwX4bZb0As2cj9sEFsvkzq9g8Gstj9VX/xgbO5JrYJe66H6bTkuj1QI+JjgCMMSAwYBiiJ7zhYHhzfX19fT2bzpI4RmRt2xzybLVdPyyXy+1a7fdgyFpZBgg24601EHHO+5flAri2Jz9t+szJMULNGDIAYxDxUcVKF71+5EqhlZX2a5l1aibrHp0EJWd31spQrXvOGGNdlLArCaNHJV+9r2PF2VZtcnwG/Um1W/fmpKz6BZEO8c3b545WvQ6NPiip6wU9ZAwwBuemABGPROu/ablHfcwMj/w7qYWpO4r1loqAgMzRvIBBw4AdTdfR9vd6uF5R9IGlsS9ijEHkjCVxcnlx+dMPPz5//nw8HCGyqq42283b23famLwqd7ud0VprzXs211WVZdl2u12vVslNHEPUQluZqq7rw+GwXC53u31TN0TEGEOwLrgxZMgYmzv8jAtFfd6luxxr0pl1rM1HiHWU+QExxsiQOV76me7vyRHibBukbvVRL6JCREL8Ewv8PxT+HnXBds+0JsEAHHO6WhMRkeluL9rYFTLA083uGIgAul8WRIDIGDvS3hhttLbvaG0xUbfF2r/XSh8fAx0r+fBotju1HJ4pPI02RhslJWcIRL7nDdJ0PpvdXF9PRhNELKpSCF5U5WK1FIwZY5SUWimDSIYrKcuy3Kw3b9+8icOwLMqRPwRBjWryoliv1m/evrm/uyuKwhIaALTW0LaajOlu2Wn/OTMKXfUhAZ3XA3SVAprOPTT8sIKmu19aazxV9/ZODcNjItM+QoYInerVWg1j7FqzkXIAzrgf+LZYoY/LPHq774PQ9DQOcLK/eH4Wt/aWDNkNkTGOiGCIDGkb/erQ6Rw4AQECIzzualb33pd/EBAhIAEyIEOApvPhjl8AhAwZMkTWscEYQ1r3Zg8AARlnwLqndfS7EU+LoX9BA6bzeTjjvueHQRAGYRgEAKi0DoIg8ANfeJyxYyG0FRaRNnVVrVdrjwvZNKvlcjqYBlEgjTrs9w8PD+/f397e3ZZFiQieJ9B6ONoYMgQE1idgSGQ9bGMjgx2nLemBrFjvyGci6vh4yr9bU8KOAQxNpgucG9MJr624BHq/zN54exftCZWM1pqMtRtKG6O1BgAuOOcMhXeKmiPgV8YOv0ULfcpp0dmKB2R4EqcfHVQksI4mASBjcOZEM0TkjD0+FDJk1HkmhogIyZ708KiLR2QMkVhvyrsHw7pVxQ0gAiM0JwUF64kLYENvNs9M/Uog68sbYoxx+8UtdYAMGa0JwGhtU9acWaUR8zg3AIJzzjgAyFYe9nujVJnnm/V6Np0nSaKN3u/3Dw8Pi8XicDi0svWE6JxsRAJggGQv4uhfEXXriuC0wx9LC9AGxJGMYfjo7Gaji2D6Cn7sWYpo0JC1rJ3zzhhjgAhkjvcDrJ+NYAyyXjbFObM23i4Fzvg5jT/YEL47Qp8Ou4B4HmUiAGZ3q/4grLUmY3lCYEnAuSc8IQTjDM4ql7Tq0KsjGOfCutfdpqftAkFEe88RgAM/HeNt0MA+cs65LzybsziqgQhIa61U91ZHvbIQnHcPlzFAYpozLjjzfd8TgjNmH68lNBljVybn3Bci8P0wCIw2vucJLoxSSuumaUgbrZSUbdXUURgZbbIsW6/Xh8NBSsk594UPCEYbu30QkDFgiMxRb0dnYRoiyxrW7yRkCBlyxrgQ1he3jwK6/LvRRiulAIgxzjn3PME4s3fO/mNfx/6YUt12ZsOIKIR9U4ZMBJ7ve8Lz7fLT2iitgKiVEio4O1X+0T70x84Pp2/iJ459R33O0SRQ76LZU7T1yzgDIOiOOmDs+drzRBiEUQ/P87pSDq2llFVVVWVZVZXWmjHmB0EQBJ4QwFArraRspVRKGWMQUAghhOCcc275hkYb2bZt22ilETEIgjiKozjyg4ALYV0epWRdN3Vd13VTV1Xd1EoqG5DhiL7wPN/zhYeIRhvB2XAwTJM0DCNPeJ38CMCa5MD34ygapIPxcMQQjTEeFwhQ103bNN2+LAQCtm2rldZSF2WhlLKfWPi+9TeMPRgIhgy11G0rq6ZumsYQIQJHRqd4DjAEQA4EBIYh84QIgzAIA194jCEZUlprpWTbNm3TtkSgAEBwFoZBHMVhFPqe7/meEIIh01q3bVvVdVVVdVU20EotOw/GaEOAiIKLJElGo+FgOIqjSHDRSlmURZEXu8Muyw7Un2LxDyf0BySmLzbOZ0G6/nTW18N1JpTo/PwlGLcB3SSJB+lgMBgOBmmSJGEQMs7toaqq6+xwOGRZkef2qYdRlMRxEAaccalUVVZ5npVlKaVEZEEQxFEUhqEfhp4QiKCUKsuqLPO2kYxhEifj0Xg4GsZp7Hk+IipjmroqyqosiqIosizL8qwqKyUVIQnGA98fDAbDdBAEASJyjnEYX8znw8EwDALBubWCnHPf85MomozGVxeXSJSXEyLDAKWU+8OhyHMASJJkPB4PkpQLrpVumsbGGaSURMQ4931feEJ4nud5fuAzxpqmzbJsvdlopay3ap1+MtA5voiMAWOccc/3/CSOh4NBmqZxGNp3Kcsyz/LscFBSCaaFH/ieF8XxIE2Hw+FgMIiTOAwj3/cRUUlZVlVmkWdlUdZN3bRNq6Qx2mjDOBc+T+JkMpleXFyMRiPf8+u63u/3q/W6la2whrxbA+arTLX4pnxnOAvBn7W3QusO9jsmIaLn+UkYpUk6Ho0m48lkNB4Oh2maxnEUhiHngsi0rSyr8rDvCa214DyMojRN4ii2VmG32y1Xi81mW1UlR56kyWQ8GY1Hg8EwCAJEapo2z/I8z5qmZYylaTKdTMeTcZKmvu8DglSqqqqyLMuyLIpiv99vNpvdbpdned3UHFkYhpPx5PnNzXQ69T2fIXDOh4PBbDqNosjGpwGBI7PUv7y4RMTxaNi2kgDI6CzL7u7u15wDwGw2u7m5mU2mHETT1kVVZHlWFEVVVW3bAmIYhukgHQyHw+Ew9mOGLG+Lh/t7Q1TVVdu2RMQArOofkIwh0po4455I4ng8HM9m09lsNhwNh0nq+4GU7Wq1fvf2bZHlRinB+HAwnEwmo/FoNByNxqPRaJSmgziK/MBHQCnbsiz3h2xvb32WHbL9dr/b7XZlVWitEVFwHgRBEidpmqZp6gmPMybbNomTJI6jMPREt82eqt3/SEJ/oBr9mH4CP+4/92w2x/IheyDsXAgi4oi+HwwHg4vZ/HJ+eX11dTm/GI/GSZIEQeB7nu/7XAggklLWdZ0XRVGWTV0bY7jgQRCkSZokic/8WtUP9w+h73PAw8ETnI/Hk+vr65ub69nFPA5jRCrLKsuyPM/bViJnSRyNhuPhcBDFkfA8AJBK1nXdNG0rW2tmlsvlYrFYLpbb7VZJOUiSi/nshx9+ePXyZRqlAEZrLYRI4yRNEsE5IDBAwXkUhDBCz/eHaVo1tSFCZFK1i4eFlUQDwNXl5V9++unFsxc+hK2qt8V2vV6v1+vNZnPIDsZQmqYXlxfPnj+7vr4ZizEi26vd/0zSpmnzLGubRkqJAByQGCBwqaVWCoj7kZiOJ69evHzx/MXl9cVwOBqlgzCMmqb++W8/5/vDPd6CgSSJXz5//vr16/nFfDgYDQbpYDCM4zgMQyG4TXk2TZMXRZ7neVEcssNytbq9u32LzBittWHIrIMEAEYZ2bSqlXVdy7ZliGEQxFEU+L499hxjsn+0hf4lvY37oLwx/Wkb7dnLXpi9Ns/34ziez+evX75+9fLly2fPL+eXw3QQhgFjAhE4YzbcYbSWSjatlLJVStsAreA8iqMkSQPwK1WGvl+XZZkXpI0QYjIeX11evHr58tmzmzQeAFBRlnme11WltEGOYRDESRKGoed5NrSijFZKaWOMMW3bZofDfDafTMbDdHB7e5fnWRIns8n02c3NTz/+OEnGBkzT1tpojwnRH7yAgCHzPZ97XhTF4+FIG805Z1zUTeULb7vd7Pd7AJjNpq9evvyXn/4lhqGkelWsbm/vPN9XWldN3TYtFzwdDG5ubn76y7/M+RwBN2ZtjNntdtvtpq6qPM9t8K6L2xEYre27zyezH169+stf/nJ1dTVI0zhOAuEXRV4e8jRKAs+Pw+hiOvvp9Q//5d///fr6KknSIAiCIPR9jzGOeDyKg1Kylapumn12uH+4D8NAK6WMsodLBNBat3VTlqVVHtZ1XVWVVIoBCuEJLrQ2v6CDyDfkctBZ2f159MecZZ8Q0fO8wWBwfX39ww8//PT6h+dXN5PRJI7CkAcMBIAxfdTXHjINkIHufG43MN/zI4wBeATBfrBP4yQKgtLzhRChHyRRPEoHk9E45UMAiMMojWOlFCJjnPuB56PPgBOQAd0FaYEhgAZTmzqOojiK0jhOoiTwgtVqIbgYDAaDwWA0HA68MQCpsJZG2UOZjRR3/hVDj/OAMcQQAH3wEUQdVYf9PoniwPcBIImS8Xg8jy4BGEDMYta2Mivy1WoNAG3bNk1jjPF9f5QMI4gAYAKT+Xx+dXW1XC6KvFBSVlWllGJcIHLbXJMhi4JgMhxdX169ePb8an4VhyEDrkEXRGDIF2I0GEZ++OLF8x9ev/7p9Q9X11dhGDNEANLGSClVqwwZq3T1w5SD0GD2k0PgedropqmVVkCQZQetdVNVVVmGQcAADem6rpu6kUq1baukNDZIg58sK/t2Cd3l+c/Oj1aA1mclbGytSw74vj8YDOYXF89fvPjh9euXL17OBuMwCD3GOfgAHAA4GILWADHgCH6fpyJgSoNSoDnwXgxi48TArHiBAIE6BYXNaQD64EEIRCRQcOAIwnbZ0tAqUoDogy8gAAAPtGYq9AMxniRhkiZp6AdxHLZ1E4UhGFPXdeSVDJgGDV0g0sr8u40VDYBhwJlVNWimBKANl5G9CQztFnTsssmAc8Gt3yJbmWW5Nma/3xd50ajGPl4ESJL48vLy+bPnRV5WZdVUTdM2yIwnPAQSXMRBOEgH49FoMhpPxuNhOPKA11Dut9uH2/vdZsMBn11dB0Hw8uXzVy9eXs4vptEEwAeQtanqoszyrCwLrU0YhKPRyB9PGPgMYBJgO20a2SjV2if9Tus8z8uiDIIgjuMgCGzyUGtd13WR50VRNE2DiBwZZ7wTdn1nFvokxeo6A9lEhjHGaG0MMYa+5w0Gg4uLi+fPn718/uLm5mY2nUYsIDJNUxtPCyY06Kqu66pSWgvPi8MwCEIOjIC0lfcYrRlDARxEreu2blQrjdaktQbSUsm2beq6ruowDRhwDcpoTUCKkQKF2BBQ3bRFUVR1zRDjJBkMBz74EmRVV1rrIAjSMI2SyF7CbrNhyPa7/bu377bxhnMhOA983+rsWL9qbXcCRUZrJZXSRjPOPOHVbbNcLHa7XVkUwvdkK5umNSAZeABUq1pKqbRWStVNk2WHuq4Wo+FisVgul/6176FoqBFCTCeTm5ubw/6w3Wz2261WGlAzZIJzL/AGaToejkbDYZLEYRB4IAB0lh9u37/723/+bbFYcMQXz55dXFzc3FxfXV5FYQgABE3RFLvtZr1Zb9abfbbXysRJPJ9fyradX1wEGBFQ6AfzycwmV1rZHg6HPMuqqvILP0nSMAw550p1MdYsz/M8b5om8APGkHeZge9by/FoozHGaKWZEEEQTKfTF8+fv3r16tnNzXg8DkXIgbeyrqpqv9+3si3K0oaKlNZCiDiKkiQJw9D3Pc/zOBeMMc/zEJkAapqmbVullFHaGIMAWiklpWzatmlkJBkYRbJpW6mlkqppm6ZpqrrO8yLL87qpOeODwWAynaSDgScEIHqexzkPWMAEG49HWTZp6zrPi7u7++VyyRgTXCRxPB6NZrPZZDSOw8jmN40xTdOUdZXl2e5wKMpCG8W50FovFovb29vdbhenSdO2bdvWugmAGZBN00gpbUKnlW1Z11jXm+1msVotFosgCuI4AgP2c86ms+l0OkxT3/ORwBiDRILzMAiH6WA8HA0HgziMPC4AQGmZ7Q8PDw/39/dZlg0Hg6urq9evX88msyRJkKCo8zzPV+vVw/3d/cPDcrncH/bGUJIkFxeX+9322eEwm8+CMGSIw3jImTCGdrvt7fv3i8Uiz7soJ+eccd42TVmWVVXVdS2l1NaD/kbESed5aaRPVJ48kXPgmaD8GLOziTqttSd4HEZXl5c//vDjTz/9eH1xHYcRAwQgTaaoy8Vi+fDwsFwtt7ttVVbSGHtkHgwGo9FoMplMJpPRcJgmKedWe9Fldo/VSH2OuGvNwoAx4IBSKnnIDtvdbr3dbDab3X5/2B3yIpdKCSEGaTqbzeYXFxfz+WQ6GU8mXTEfkPC8OI6DMFhvNqvlKjsc6qbhjI1H4+c3N69evkICMeVh4FuRkFTycDjcPty/vX2/XC7KqrTiqizPFotFWVVzjkop8ziURWeab2201jrP8+1uu95shpMhMgy9MPAClrLRcDgeDofDQRrHme9LpQTngRekSTIdj2fTyXg0TuJEMA/AtLotyzLP87IsjTFRHM9ms+urqzQeewKrptrv9/f3D+/evX379u39/f16vcqLnAjjJF6t1rvtdrffv3z14ur6ejydJkHii1CSupjPx+NxFMdFUdZ1s9/vpZSIKJWUUkqlDBEyRMasstf0hZffmzjpsYarS3effsYwZEkcX11cvn756tXzF9NowhFbkKRNUZeb/e7nd2/+v//4jzdv3262m6ZptCEyRggxGAxm8/nz5zcvnr988ewZCh7GEeOcg8dt1Z1VHcDxGGrz6FxwD0EgtU3brDbrn9++ffPuze3d/Xq9zvaHqq6JSAgehfF0Onn+/MVf/vIjEzwdDLTRNavbtjXGeL7neZ6UcrlevX/7drvdIcB8Nq/L0i6G4WAQBr5NuUutsiK/Wz78j//8n2/e/rzd7xmCL3ylVFHkiJgOB8poAEAOHDiA7nL1tgSAM8ZZq2RZ19v9br3ZTGeTOEziIA5EIASPoyhNktFgOBoOsv2+KCuP8cDzh+lgNp3OZ/PxaBRFEQPQoCpZV3Xdtq0BEr4XJ3E6HKSDYcBjhFZKuT/sl8vF7e3d3d3dcrHYZ4e6rpExpZXWWmtlkDxfxEkymkx8HngsGAzS0Wg8mUyGw+Ehy+qqyvK8qmvrVtoMIiIK4XHBCVGf1Vx+3/JROu+EDMiQecJL43g2nlzO5/PBLISwobqsy7qut9vdu/v7/3z35j/+9p9v3r7Z7/d2oWulADGJ49l+W8paI3qhH6XpcDQ6thL4pDQKEaE7e5V1vVit/vrzf/7HX/96e3e73+/rsgswMYZCeOvtpqprzxeD0XAwGgpfcM6txNTzPC/wAaGqq/V2s7hfEBmpZJrGl9eXZVUqrZAhR2SKGTJV0+yyw8Nm9fbhbr3ZIEEUhAxRtm0YhlLKXthmnhoFxhgTgpqmquvtbrdary4u5rPpXAjhM18D830/DMNhmg7TYRxGddWQJo4sjePZdDqfTYfDARdcGa1I1W1dN02rFAEJLrwg8IPA4x4Cs5uJ9d0JSQgRxTExjNO0T797XAhtTKuU1LqrA0AM/CBJktF4PB6Pt7td27ZN29ZNo40CQE8IDBAZQ94HXr9+RJ34Fhxm+EjTYjpWqCBDT4ggCJIoGSTpME4TSBhwiW3dNMvN5u7u7m9v37y5vX3YrPdFXspGG0MAyigi0jXAgfvrKBkOxrPpvCpbrUz3Hh9tGIJ9q/BOgde0zXK7fvP+3d/evVlv1lJKMABABoiUqVupjfYDb7KYXCwvxpOx54soigQXnu+FGEVxFIQBF5yIlJbGGKmk/VJaERAyxhljnBOgNKpWslat/UJCJjhHdozt0aNe0Wc6AwTknHNORFVdbTabxWp5tbt6XteA6IHHAH3fT+J4NBxNRqNVnBz2B22MYGyQDubz+cXFxWA4YIw1baOVKsrSZh+VNp6HXHDhCQRueQaIfuCPxqNreROFUVEWUkqrqGOcI0PORTpMB6OR7/sEYMAw4AgsDEObx0zTJC/yxp5hwDDGCK1/SoaMsX3REL82ofF7EBq/bIrksatOV7fXCzhs37Y4jOIoCr3A44J14TkmpdxsN+/ev//53dv75bJoKhDcj0JDAAhaa0OGMaYRyqY+FHlW5GVbK6NNJ0/utGenAUwfzKACQGStUvvssNisV9ttWVeB70dJyJAZQ6ptVasMUFXXu/1uuVpNZ7MojoUngiAIvIAJHsVxFEdxHMdJFMeRNiYMQyvlQY7IsHNzrF6ZITLGfSHCwI9jBhD4IQPQjZW/8Q86xR3LvuAsbN80zW6/X6832+2uKAstFQTAgHlCJHEyHU/n09li+LBZb+qm8ewxYDqbTWdpkhgDdd1UVbnf77M8r5paaw2sU3sYIAZgwHDB03TAhTccDuumsUqSrisfdr1PReDFSRKnKSBKkByMASOEiKJoMBikaRrs9lVda6MZciEE9wQy1KarJuPClgkw+P6jHKf4BkNkjAWeH0WRbX5lBeVWjGu0zg7Z4uHh/v5+t91KKT0hhCeoz6Lb8xNHpomatm3aVkqpjfn8RvbBMFatdWXP4E2ljRa+F8Wxx4VSWnLesgYIiLSNtOx2u+lkOhoMOecB85nfbfRRFEZRFMWR1iaKwp7TVoZ6emvGmPCE5/thFEWyZYCRF4AhScg5Z9i5/Oxj056OBeRSyrIs99l+f9hnWVZWZeu1HJFznkTJdDq9uLiYTqfL5YqIfN+P43g0Go0Go9CLpW5znR8Oh/Vqvd1uy7I0QFaECACKNAepwSDjURTHSULTqU0Onk3rAkNG2zIZu1SZDb0TAXEhwjCM4ziO4zAMeMGZ5oDArYzbSqborATyG7TQv6iOsJ++x4Az5nnCFnMwhsZoQ5qBYMAZomplnufZbl8WhTGacc4QjfXDGeNdJyrATkrfpxE/QeiulPMsbXneIr8z6HTac1hHIwACJWVd1VVR2lwd59wDHwC6/PZZibM9fXLObdGNlal0OrhOsc0Z4xw5A2AMuw64toCmq33tK4T7j3sU4VuZIZEp8ny32242681mk/I4DiPOWJokeDGvq3K1Wq03G8b5YDgYDAbpII2DgQ8+clBKbXfb27vb27u7PM/8wPc84XkeY4zIEHb+ABdcCMGs1Lar5urLL7vdDwwZrQ0iGjC2cp8x9DzPDwLfD6zc9KgTpg+nz32nNYV03p7uVB3RZ7yt7N5K6hkBaDKABhA4co9zDxknQG1QadDallVQX/thFdSMMYHIgXGwSTY8eRln3D7qqOjJMVEw7nEhODdKkzZaKtDGKGOUBmPYMVZiBfJWp49MADPQSTWM1kopqRQZMkb3KSQGAMZoQ2CrkmyFCyMEY0gbAiJtwBjSmpABkb0cfiQ0dEOukHpllz00KqjrerfbPTws5tO7SATz6SwKgyROAt9rmubZs/V2twuCcDQZD8ejOI59EdrwSdu2683m3fv3t7fvtVaz+VwIIayQv+vGYFXgSkplxauM2SyYDbR1thkRDRmlDSBwwRljrWqLsmyaRit1bIQGZKt2tD1idwVEtpbmJGL4U7gcx4iHMUbb/ptd0+OuFpUjC/0gjeI0ijIhdCuVUl3nTc6QCBgQIHFAQ4yIAXBA9pXjGbF35VhfMaVbBZzZ4g2jNGOAPnHknvACz7Oy/b6WhcAQfWQQykmoYHP7NlMIhtAQaAPagNZw7EDQle8SADw6K52vyZ4B1i3XSudZ/vDwMBoMkzAKoyAKg8ALAs8bjUcXl5cvsixOkngwGE8mfhDYVqUadF3X2912sVgsVktPiOF43BVM9ZJIBkxrnWVZkee26yljyBgzxtjiTtuwGhnTRtuIExOMc66NzotisVhsd7uyrJRScH5wsfn/R3k1+g4t9JOsS1eB3BeZWhVbXddN02ijGWN2w9WggCCOotl4Mp9Ms8OhKkpZN4TAPU8whqavnjLMWlY0Bs8qivFzN60z18zmX+zeqTQpTdoAERJ1KWulAI3RgeA8DqMkSaIwFJyTNoopqZWNyxpjzrtuGjorLu0Es6caXzKGNCEBZ0xwAWCsoIG6HeA0X+Y0uvesTsLG18lQnuUP9w9xEA6TdDIeT4djLgQARVE0nc5etnI8mQRxPLuYe0GgQGmjy7rYHw7b7Xa92ex3+zAK27a1WkKltTW/CNjKdr1e375/v16v66bmjFknW/etnuyKbpWq20ZpxTgTnkCARspDlm232+121zQNETFEc6y465q0d9W19PWCaPEHk/dJmyPq4g1HQ4xaqrppiqIoyqJtJR3bEJBEwEGaXl9d5Vle5EWRF23TaGM4MME4ImoyVmnkce57p+w3e/T+H3SReFRojID2afme53u+1sazuVqGSGCQaUSG6HteHMfj0Wg8HtsORtroBptaNk3TyNbqV81xz7GlztqqS7r2K6c2MAyRW2kOcs4YENj60rPKYXpyJ/FYam69diIqy3K5XAXCm4zGN9c31/NLHWgOyLkYDAfA2FS2fhAkg4HneY2u66ZebhaL1XK93eR5VlYVMais3Fu2VqBsZepKqcPh8P72/Zs3bw6HAxHZMhOtTS/HAQOklGqU1EYjQy44Q1Rk2qat6rqum0bWxhjsGlMe08NfXen9rbscx4OB7QVDRK2URVX1dRlSkvSRExrP8ybDkb55plpZl2VVlUBQ1TXa2C0QB2SeiOJ4Mp7Mp9PJyFaw8b+/2M5CRb7vT0aj66ursigPecYQBONExkZ+bR+C6WR6eXFxcXExm06H6SDwfSCQJOvWlhpa0Yg22jwtVLNsZJwLT/gWnic4RwCjtGwkaKOk8sX56EJ6HBI9fVxbD8IYR0DZykwe1r6/Wq62m22W52ma+igAIIwi4fsGwPN84Xuc81pW22z77u793d3ddrer21YZ3TRtURRZUTRNC4ge9zhwANv9xiiliqJYrpZFXiilbLytL8gwTHDheV7gcSFsNbCUrdL9hmUdrMddEvomYb+cPN8soamTVAAQkNKqaZqiLLIsOxwO+SRPQwRGoR/wwYgzRtqoVhqiKIzW223dNlJrrRXjPE7i6Wz27ObZq9evnt08Gw1HQojOIT3W7j+2z1ZUaj1WQyaK4mfPnv97UcRRtFgu8zyvy6quKyT0Qy8Mgulk8uzZ89evX99cX0/GkyRKPOFpMlLKqq6KorBLsWkapbQt1D8dIwEMEENknAVBkCTJYDAYpGkSRdn+0DZNbbRRWjWtxwSzQ2NtL51+OeBpZn0fROndUKmU1PpwOGy2m/V6vdlukyROwwQZ+oHvIQIyITyOQoEssvJh8fCfP//85u3bzWYjpSQyTdvuD4f9fl83DTL0wLPrkHOeDtKLi4v9fp/n+W6z22y3dVUZY5AxTYaMCeNoNp+Pp+PhaERAeZ7vdm1dN1K13YpkgMjRZlz7Zm7nS/M0zfn7JDQ9dWGP16KNLstqs9ncLx6G6cBMTRT5vu/7zPc8gQYQwPP90XD4/u5+s93kRSG19P1gMp3cPHv2+vXrly9fXl5cDocDT3hW9f/RqPOxWYIBY5VPcRS/evkyDIP5xfzdu3f3d/fL5TLb7402YRhMx5Nnz569fPnyxYsX19fXw8Eg8ANkqKSuq+aQZfv9fr/f50VRt63WCpnous7YWn+tldaeENxmHIbD2XR2Mb/YbLZ1VeeHTClJpBFQ8K7E5fG9omNDlq4RHRwbkdkYia7b5pBly9VysXiIo4hNMU5iLgQxJLDdX5ghyovi9u7+57/9/Pbdu91+r7QGRNm7vIc8b9tWgfaAK1DC8+YXF5wLPwgYY20r66aRbQsMERlpMgzDMLy8uvzXf/236+trA2axWLx9+4atVnmRSymVNmSImGHQNz6x4vSzNr59K6o/S2Ll2LDKtm5omnq1Xr179zaOQs7ZJZ+HYcK5FwSCAQougjBM03QwGD4sF/vDoVUyDMOLi/mzFy9ev359fXMzSAddg4K+hQpDfFoW0TUpBAOAhkwQBFdXV6PxaDabjkejYTpMk2S33Rptkji+mM9fvHjx/Pnzy8vL4XCYJEnIQw26lm1VVtvNbrVabXe7sixtOxWy1UdS1k1d1XXdtgMiblMXvjdSej6fP3v2rGka3/MOu31dVWVeVkURBH4YBLbLAuumayLjnJ+PmzjriQgAjDNOnIjKutpsNw+LRZqmcRSFceRxZgAMkQYNhFLJoijW6/ViuVxvNmVVAQByTq2s63q336/X69V6PZvNhv5QMRmGYRSG08k0TVPOORF4vr9Zr+0kDaUVIc5ms3/7X/7t3//rf3v+4jkg3d3dxUkcvXlz/3C/3++LqjLa4ONGat1QmEfnwO+40Qydi6GP0yOPx/amaZar5c8/x54QgfBiP0yCiCNHYElMnDHhC98P4jiZzWd5XkitgsAfTyaXV1dXN9eTydRHX4M2pE/7MsOTZgDPMzsdoYmM4DzgwcAbxHHs+X4YROPx6LDfkzZRGE7G48vLy4uLi+FoFIaBj4EAj4CU1lmWLRYPd3d36/W6qmsA4IIDYqtkXuTb/W67201n2Xg84kIEEBpm4kRNJpMXL154nnd5cVHlZVVVm/VmuXho6tpq4bETTh2NGMOzhpSnsCBDxrlld1VV6+3mfvFglbTD8SiEyKaD7BZRVGWWZfvDwcrfWimFENY3UsZkef7+9vavf/2r4PxmfpOO4yiMY4jQB/6cK60RcDQe7bY7qSQAGDKM88l09vqH1z/8+OPl1SXjOBqNvMATntBG13VdVjUR9S1qji2vuiDnZ5Jf3xah8TyLcZQCnU0FxlNzO+y2z+7YzmXbrjcbBojAoiBKozTyg/GAcWSGiAsRxwkwFsXx5dVFK5WtMw2jMBkM0uHAQwFAmjQZQ9wYYDZgZs7u3ymqS6ePSWQMGAYsYMFsOvOEN5tNm6omYwTnYRgmSZIkie1KYcBIkJWqsyxbrFbvb2/f391utpumbRhnXuBrY5pW7rNsuV4NR8PheDQZjweDoc8BALkQSZrc4PVoNNJSgqK6qW9vb//Hf/zH/f1dGIbA0MBZf8Wuu+gx+ncc9o2AjHPbzA/rpt3t9ovVcjqZXlxdTJtZHCcITBtSUjat3O532/2uKIu2bW3gRZMBBCYEAJRV9f72ve95TdOUP5avXr/05h55IQIGQXB5eeF53tX1VVEUUrbWWxCel6aD0WQ8HA2TJOGCM84a1eZ5vlgsb+8fbHTJ9rIiRGPoVPN/lpf92mD0N+ly9Fs+dc1GbfthprUuigIMCe6N0sEwSQVnbdOGQcgYCia44OlwMBiNrPm13QDt0c8YU7alDfIKzomLUz/Gj2fAjykMsCpH5MzG8CaTyWw2w9Ng7s7fM0SybrSppFKH/HB///Du9v3t3e1ytcryXGmFnHFfkNTK6LwoVut1HMeDwXA0HAZxRCMSTBBQGIVhFF4wHnAvgKCBejwZt21TNTXZp95/uOM67Dt4Ej0OniBjjAMRKa3ystjudpvddp8dyqoajKTHfEOmke2hyDebzXa7LcrS+gyWWza/DQhKq/V6DYaUlGSIC8aQqZHyPA8AkjQdDIfPnz9TSikpDREyJjxPeB4gaqO1sVVlmnMuPI8LcZwwet6mvi+GPvXZ+5NEOc5NNx079nVNt1RZVZvN5u27d0Hgt227vziMR+M0SQZpmiRJ5MUIQa/WAQBqoDyUWVGWUrZAwLmI40gIbg/j5tigqe/qfKowB0DgDKBtmqwsGikZZ+kwnYwmAxidx/U01DXVTVUVWZ4X+T7LVuvl/cPD337++e7+fp8d6rYhBKsR5YSGqGnb3X7v+74fBEHgG4DyshzEAz/ygyCIMAwhtj6QgPDi8nI4GoVh2DSNJlJGK6M9ZjQYO8WiU6j15pm6nqzEGSJjZIzSqqqrQ57tDvvtfn/Is2E9goBpYxrZHrLDarVarlf7w75uak3G3hNExoVNzpuqrlabtZWmcMbqurmYzwaDQZIkw8EwxRQ8Dh5A9OgZNtDs5C7LsrIu8yJfrlaL5fKQZVJJ6No14kcqnf4BfCsVKx+f54FwbCpvqLMZxpiiKu4e7onMITus1pvry6uL+Xw+nxsG6InwWOkNoKA5VNlitdxut7amNYqi0WikjfY9v6zKvCqqpm5la/O3BCdSI6A9gNd1vVwuN/stIc7mUwAMRoF/enSmBVmU5W6/W6/Wy+XyYfFw93D3sFwsl6vNblfVtTIGWKeNZYKDMZpMUVXL9cogGKKyrnf73cX8YjKdjEZjnnAPFAfPvkGrpNJaGZJK13Wd5fk226nYtFpmRZ6XZVlXtWylUaZ32mybbKRu0qwyhmRbVOX2sF9tNov1OkriYaqV0YfDYb1e3y8eFsvFbr8t60opaYgQbNvi7qxpjGnaZrvf8ndMK7Xbb68ury4vL+bzuVIKZpBiyvoPDAAGdAVVVmarzWq1Xq02m9V6+bBY3j/c3y/u67oGBMYZIZquay891vP8wnD0txmH/nCl2vsL2Ekoldb7bK+UzIr8cMizIs/KPK+KfXkYDUdJklpRuZSyLIvNdvuwWKw366ZuBOdpmk4mk0M29n2/qqr7+/v1Zp3lWdM2jB9HUVrFDyJwhtg27XK5/Pn927ptZvNZVdXl83KQDhhDMCCVLIvykB12291ysbx/uL+7u7t7uNvstkVRtlrZHlAEpO18CcYYotZaKpUVhTJGa1039SE77A+Hy/xyOsnTJInCMAxD3/fruv757dvFanXIs6auN7vd3cO9FwaDQdoqnWfZarNebTaHLGva1pCx+/hRwgaIdq8xRK2UWZEvVst0MACE0fBARPv9viujWq2yPG9lazqNOB5FFbavBAA0bbPerGUrD9lhu93u9rvdfrff76fbaZqmfRM20lo3bWvzBuvterlc3i8X94uH1Wq12+/zPFdSQt/+2Dwdf3Pqb/xncTno8WBBW2TI+rEfxpiqrmUr67Zp2rZq6312eFgtBoNBHMdhGHXiXaWapj5k+Xa73e/3bdsKweM4Hg6Hg3Tg+aKpm81ms1os9vs9aRKesA/v2GcdgDFkUsrdbvfm7Zvtfp/eD7bb3d39fRRF9tRijGmbtiyLwyHbbm1jrtV6ty2qQilNDDnnXaP1bqJ855wbMI2UymhtdNM2WZbtdvvlcjkajsIwtP0WhSeklMvl6s2bn1ebtWxbpTUx2Oy3SRJLbeqqzvJ8s92uN5u8KJTSgMAYs+Ghs0w6A0NSqX2W3T08EMFuv0+TBAHyvFitVg8Pi812U1aVIYOccej64x4PNYQAhpRWZamVVHVTl2WZ5dl6vbob3w0GgziK/SCwITxjjJSyrKuyLHaH/Xa7Xe+26836kGV10yilsGtLcsp4W13lPw7xbTnNx9PBqQ7juP3g8Wxvz/Vaaw3GEDWy3e62vu8LzxddJ1yrXSSjVdvKqq4bKwrjzBNeEAaBH3DOlFRFnpdloZWOgihJEgKwlSPHfCxDNNpqxJbv7m8554vFYjKZcM61VN26M6SUquu6rKqyKuuqqtvWmE6BYU7uIZrjSBgE4EiapNZ5UUgpi7zc7Xa3t2kYhIIzBNuqiRFAVVaHwyEvci3VITts99vwb5EfCG1Aa6OUrBvbSqSWSh6HdkLfFtCWUBvQ0uisyPWDyfLs/e2t73kAJJu2KMq8KOq6tvsJ47wf9XUaU3EmoIKmba3quijy5WIZhoEfBJ7wbEjRPjNDJJVs2qaqqrIqy6apm1oqRcZY+Tj1+W561HOd+szWLyi/+k7ko/Cheom6Z0RgiOq2aZXcZwfbkUZrDWdtS8+HAXQTU07BWzRat01jjPGERyOwFX5nR+8ul2yI2rbN8ny1WrVKbXe7OI6tYbYzqQTn2AVVjFXbIOfC9wnB9OfOoxxf90O3ulVnjFa6rKq6booiF1wwxH44cn+lx5GyxgCAPZwhO/ZcwEcTf6yFBuicjb6cHYkMUd00rZR5nlu9Redrm64/up1cAV2Tn9O8BDgbJcMAEVAbXVZlVZaIH26kcErsgzZGaWVLPJEzxhgXAq2O44MdmQjwVxhl+C20Avviy+jH8fQCcCIEZbTRymgtpZKtlEoabXqxHmOcWZttM6vQKzBtEIOMUVIiYhxGSqtuZtQxpG/jhtipsaWSVdOUVSWVrOpaa900LZKxkaiu2g+Z3QSE4Mx29DIA3cM7H8ZlTSdDO3eNGaOM0tJ6ltCtDG206UMNXHieEAL6Lu426Whlx5xxtEUunHHGgQH2VX293uPUwdWqQNu20cqQVmSIdVtBt7P1zMR+VuNpyAqeR1Tt55NdywKjdSeG7mpqGOOccW6LLcCWt6B3Ssx28fHTSjgtm++U0OcZlk/Nzj1JPPExq20/PHtjbTtGBGKIgnEUjHczF5itVmL8bAPrUt4nV9YwBAaMAYIB0sY8iuWdfacbVGiPdYIDQx9snRdDjoi2zbN1jsHOFyCGRI+CqtSVUxESsH5+DGOMOHWT5u00KGQceJ8vsW4QIkMgRDLIEO2QIkvB4/gUe1uRHavIDAGCYYCnfgCdKWDICIghmX6goU3X2fIpOvXq7keN2p0RbKPjLs4JZFtM2MFGBpFYN6TMNqTjjB2fHUNDZJtv9LFYOD6LRwGB09Z49oc/pYWmD/X3ffYaGCPiwsPumRIhsvNpNx8OBe6NhDGybcmQ5wnrOFrN0Cnmb8u17DQbIYTn+UBhHCdJgohaKStIp1Mr4GNeCM3J5zzFVx81H7AeBaItTwLRUc6Wb7HeoB7NHuccCKwms3Oqem/k+FKPC6SPMwc7BtrF0/kTQqAhMHZh94r6s1zd2YzODz58V1TCThb9sdNx9HbOR4v05yEbD8V+UBx95Sb95/KhP0LovhkNY9y6d90QYjzb4Om8+469lbbi37ZVN9qg4Lb+/ixchX2HUs44RzsSh3NOQnie5/uMMSMEEeFxCNpR+Xo2EfHoGhI8+gCnuLt9J86OFa9dnWzvGbNufhzZpSgYZ4DUzVcEY47J+6f5Vng8Nex8iK59U0ACO73G5p3taRvPxuCeffKzbfLRfDd8rO9Ce+2nQRLYTyU8Jeb7+Yi/wO38FghNH0hCH3+fnlzS+YXiZ1JINqfducNdGoB1OzkZemQhj9nVrskQEbebMpBBIgSD2PWdscLOc3FM541Q5yra1rYE3QGU6NiS4jSs+kxiczZnvBu/fJz32Rdtw8nGGyAAg6D7saonV5iA2YnFjAGi0Z1Ovg94Hedkd0rjvvSn+49NG9l9334U0Y2c62dEW76zbpYgEJrTKM3epz662AhEgHZnIDxXZHeFl92l4dmM3jMhKALSadLvMbTRFStQF+b8s2g5PupjfFRw0XmKxx4OSEin5gNHy3wW67DWjAEBQ7CEBtJg/wBWUam6mKDm4BnoBgzbeEUXMTQG+xEZXW8DRAanwO15I4Sz0dXdNLX+yR/dEcKjX2rXCpy5PX3rR9sFwOZ+empqGy7g/RTFfm8/DXG1L3vUyWM/5AEBDWPIWO8RPXLJmGX04y5N+DjW1HkldiD02ejujtDd8bofZvjYET6FTs5zgwhPMuH/PC7HcQt9HMfsTipPxip/eNLsRxh34h5LaLKie6ONkVq3RnrIG9VKpb6kofzRU/9oUSc+zhoRnPqNHZ8jAhh8FIqH03D3zoQbW5x7Eifi8YM9mu3XD2mmY5zj7AABx2AvPJ5XDp9ti4GPSi6O3dvo8UZLH3tMj3zwR842fnz7/l58aHpUf/rI1v4dI42Pfv+skuHDvqVH9+9oDOncQgIDJGS2d27fEoXIkriRsm6asirzIg89P+B1Vh2yPGvbtmsuQRoRyRCwjotHqtnZmedqOKTzmFdvqM1ZUQl29UfYTQI9d7z7jQWPqhYyAKQ7q3xuifswGNmpJNhnJo8e7HEKpC116uuMz3YtOreWeFyWp+fVG+DjQQ/PN6LuFU0XFD8dE/qexb2+/WyW6rmFPi8fg+MhluCrVdHiuzPKTy0G64wtnVub8/YOdN7O9DQnjqAPxhkATaaRbV6W2/0+iiMErKvK5yLL88XiIc9z2wxJkECGRHRs/4mA1I2lPc4MPks7Hx/UafJef+g/trzBbqa7bZtAdNZp73EvSevxHE1sH807a3B3lqj48JvU7+nIjzv+eQOFD7b/D8+AfdHyUwNOp1FBYCU3JzcPT0leoifVbp9QPZxFpf9pXI5H5YentiTnXPjodmdDRb1l6n4BAVFrbbvQelxI2ey2uzSOPM6LorxfLLbbrZ3bKYDwNOzpFCelsy3iC6vgjpbwtEufWazPPNHzbvCnIzOdxU0+6j2cTfPFj/sG8Nhf+vvXcO60nM7ueHbr8QmF8WNPkX4df+MPIDR+5Q/Tk2/ReZegYxCos8inE06fRsXHz+cUGTVdKgyRIyAqY4qqhDXVZblaLaMg8IUnENtWZnmxzfZN2zLOPYas8w7oOKUAnnrWxxzbaTr88dMcPebugZMBc14hc/6g6cyYYhcaeMQHeya2k+gJu+R+N3W3jx/Yj9PFUPB4m44i8HOLQPAo4fV4SZyOCNh30+tDyozOl2VvmumDRskfOYLgeRTr6MDA8TxE309N4afCdl+yAM5OTX3N8ymPAvRIhvDEYT9T9Pe6DmbI1HUt6ybbH2yinPd+n9ZGgm6N7oa5H9+Bzvw+u71+qtf8WfDrWMiM1Pm3ROZ4xCPE8/56HyQaj/nCc/cF6ewTnCWTTgv+uIxtlu+o+jlZhFMUCLvzx0eSdDZsfyzyYniqO/lMfI3O+qwgwoe9celxXJboFxi+P02U40vXDH52u2D2D4aUUTagQdqQ7TFnB6lxxjwOgtt8DBhDv/bnNF+2ieGZf/53P8Snt/FP/83XZDh+PTfh18SvT2iED+fWPzKOn4kzPvn5p+7W0RbgeRSIHkWEHom2zhp04ll2tksD2k4AfS4L+jpT23UODCGRYcgJgBijLldBvUdx5nTixy714/Q4C0890ZchfEpxhp++S/Cx23smkXscR6In9x4/4hZ/5K0/svmQOb9GfPK8enXJoyVAfz+adVy334p89DMt++mXeth45pt+GNftXTt2aiX0kRc7bmn9WaVPX53FRLupDrxPyNAxDGHzdn0d+uN3+Fje+dMX9cEMnE6g8/EatA/5RR/2AYOzRiznopGPfLanPsSTn6EPHdtPRf/haQD7iQWij177pwPcZ4mVkwaBHp/x/8lcjq+6dPbktzrd2HnsF/BMcEq/RhHnZz8NgcO3GOXAx1+/RQAEPjHy8Be8ET5xC4/lFPRURULwtZVC+EuXHHx2l8Nf927+o7/3Ra9Gv/Hb/UksNP5KP0zwpLPu09/FX2vx/PLNBb+NO/kLXup3OEQycHD4E8ER2sER2sHBEdrBwRHawcER2sER2sHBEdrBwRHawcER2sHBEdrBEdrBwRHawcER2sHBEdrBwRHawRHawcER2sHBEdrBwRHawcER2sER2sHBEdrBwRHawcER2sHBEdrBEdrBwRHawcER2sHBEdrBwRHawRHawcER2sHBEdrBwRHawcER2sER2sHBEdrBwRHawcER2sER2sHBEdrBwRHawcER2sHBEdrBEdrBwRHawcER2sHBEdrBwRHawRHawcER2sHBEdrBwRHaweH3JzQCIKK7uQ5/EkITABG5m+vwZyI0EDhOO/wJCI3AkDHGGDIAPHHcweG7IzQCMGScc845Y6z3pB2dHb5XQiPnwvf9IAg8z+OMg/OnHX5HiH+Mv/hBNAMRA89P4mSQDJq2QUAAMESO0w7fA6GfGnzGojAaDgaj4bCqq7ZtjDHWSCMiIjpmO3zTLgfCIyPNGIujeDKcTIbjJEo458YYrbUhg0/MuYPDt0VohFMY40joQZJeTC8up5eT0TjwA0AwxhwttOO0w/dkoTnngyS9ml++uH4+n86jICQipZXRxjkbDt8DoXujS0SGiDGWxMnNxfWPL3+4ubxO4gQIWimVVpbQeAZ39x2+3UOhDWVwxpI4ub645owvt6uf3/18v3yo6soymCEjIEICACAw0J0X3WNw+FYIfTS0RGQdZd/zvaHne96rZy9f3LxYbdfaGKlaANBaE5F1U4AclR2+YQv9gROSJumz62f/+uO/lFXFOV+ul3lZSNkSEeecM46AyE6+BwIAoksp/jPD7uE2tGDxC1xT8Wvy+PF3ruaX/+3f/itn3A98RNbcva3qSmvlkYcCkDGBgnPOkAECgnOpHaFRcAEAggtPCC6EEOJMQPH7EpohwuM3HibDH1/+6AkPGLZSStUyROtP2x+2Z0kDxhlmh/MAgzZaaQ2MdcGxr6HHr2ehrc9gwx3GICJjbJQO4eZF0zZt2wae9+7u/Wa3Lquqaeu6bYw2UrZKaW300aFGJ2X6Jya0xwUAHPLDPtsLz8+KrK5rbfQf4UOfmedz12eYDF4+eym49+zy+s37d29v39wvH1bb1fawK8uyqMumbVrZ2uRL50g7Rv/TEloIAMiKPMsz4flFWTSyU08c8flYwm91KDy+MSJOh5NBnL5+/ur51Yur+cV/vvnbu4d3D6vl7rDbZ4dMZHVTa62NMdYTcdGPf1JCMxTcAwBtjNFa+F4cx74XMMY+INjvSugjtNFkSAhh5dFhEEZB6Ake+OFoOLycrXaH/T4/5EXeNI02jtDOQqPVGxdVWRQ5F+KHF6+fXd2EQfjRzf/3JjRDRozO3973/euLa0/4F7N5XuRlVVVNVTeNUtLmZdA50f/UjAYbtmtl27YtY2wymvz48vUgHZwT+vNxj9/bHBoySimllDXJ2hgyxsmlHU6hhS7rbABQCBH6QRCEgvNzH/qPJDSdwUbL3WNz+A39gt9z9TlBksNvzjK32zv8mSB+zzezi6fzPwAACFz7DoePEAWo77+FDBl+Rfab/e4f9fGn/sTfOThSE/wSY/fHuBzOLjt8KUG/8tzlfGiHPxVcEM3BEdrBwRHawcER2sHBEdrBEdrBwRHawcER2sHBEdrBwRHawRHawcER2sHBEdrBwRHawcER2sER2sHhe8X/Dw30v79q6aELAAAAAElFTkSuQmCC" alt="Aptive Environmental logo">
             <div class="date">Apr 2024 – Aug 2025</div><div class="loc">CA · WA · OR</div>
           </div>
@@ -711,9 +497,6 @@
             <div class="tagset"><span class="tag">Prospecting</span><span class="tag">Team leadership</span><span class="tag">Retention</span></div>
           </div>
         </div>
-
-        <details class="xp-more reveal">
-          <summary><span class="xp-more-btn"><span class="cc-more">See 3 more roles</span><span class="cc-less">Show fewer roles</span> <span class="cc-chev">&#x25BE;</span></span></summary>
 
         <div class="xp reveal">
           <div class="xp-meta">
@@ -762,105 +545,47 @@
             <div class="tagset"><span class="tag">Operations</span><span class="tag">Training</span></div>
           </div>
         </div>
-        </details>
 
       </div>
     </div>
   </section>
 
-  <!-- ============ HOME (page 1): THE PLAN ============ -->
-  <!-- PLAN INTRO -->
-  <section class="block" data-page="home">
+  <!-- CREDENTIALS -->
+  <section id="creds" class="block">
     <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">The plan</span>
-        <h2>What a real plan looks like.</h2>
+      <div class="sec-head reveal"><span class="eyebrow">Credentials</span><h2>The foundation, on paper.</h2></div>
+      <div class="cred-grid">
+        <div class="card reveal">
+          <h3><span class="dot"></span>Education</h3>
+          <div class="cred-row"><span class="k">B.S. in Finance</span><span class="v">Apr 2026</span></div>
+          <div class="cred-row"><span class="k">BYU — Marriott School of Business</span><span class="v">Provo, UT</span></div>
+          <div class="cred-row"><span class="k">GPA · Academic Perf. Scholarship</span><span class="v">3.90 / 4.00</span></div>
+          <div class="cred-row"><span class="k">Degree completed in</span><span class="v">3 years</span></div>
+          <div class="chips"><span class="chip">Finance Society</span><span class="chip">Wealth Management Assoc.</span><span class="chip">SF Net Trek Rep</span></div>
+        </div>
+        <div class="card reveal">
+          <h3><span class="dot"></span>Licenses &amp; Designations</h3>
+          <div class="cred-row"><span class="k">SIE — Securities Industry Essentials</span><span class="v">Passed</span></div>
+          <div class="cred-row"><span class="k">Life &amp; Health Insurance</span><span class="v">Licensed</span></div>
+          <div class="cred-row"><span class="k">eMoney Advisor</span><span class="v">Certified</span></div>
+          <p class="pursuing">Currently pursuing the <b>CFP®</b>, <b>Series 7</b>, and <b>Series 66</b>.</p>
+          <div class="chips"><span class="chip">Eagle Scout</span><span class="chip">EVC Wrestling Champion</span><span class="chip">AI enthusiast</span></div>
+        </div>
       </div>
-      <p class="lede reveal" style="max-width:64ch">A real plan isn't guesswork or a hot stock tip. It's a few simple moves—start early, save consistently, let it compound—repeated on purpose for a long time. Play with the two tools below to feel the math for yourself, then read the short guide on why a planner is worth it.</p>
-    </div>
-  </section>
-
-  <!-- CASH FLOW CONCEPTS -->
-  <section id="cashflow" class="block" data-page="home">
-    <div class="wrap">
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">Cash flow concepts</span>
-            <h3>Interrupt the spending circuit.</h3>
-            <p>Rewire your paycheck so saving happens first, automatically.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-          <p style="color:var(--ink-soft);margin-top:14px;max-width:64ch">Most Americans wire their whole paycheck straight into checking—so spending happens by default and saving only happens if there's willpower left over. Flip the wiring: pay your future self first, automatically, before the money ever touches checking.</p>
-      <div class="cf-grid reveal">
-
-        <div class="cf-panel">
-          <div class="cf-tag">The typical setup</div>
-          <div class="cf-flow">
-            <div class="cf-box income"><span class="cf-bolt">⚡</span> Income</div>
-            <div class="cf-arrow"></div>
-            <div class="cf-box neutral">Checking</div>
-            <div class="cf-arrow red"></div>
-            <div class="cf-box lifestyle">Lifestyle</div>
-          </div>
-          <div class="cf-save">Save? <em>Only if there's money left over.</em></div>
-          <ul class="cf-points">
-            <li>Lifestyle is plugged straight into income</li>
-            <li>Spend by default, save only by decision</li>
-            <li>A quiet, phantom drain on income over time</li>
-          </ul>
-          <p class="cf-note">This is where most paychecks land: direct-deposited into checking, where whatever you didn't spend is what you "saved." For most people, that isn't much.</p>
-        </div>
-
-        <div class="cf-panel accent">
-          <div class="cf-tag">The wealth-building setup</div>
-          <div class="cf-flow">
-            <div class="cf-box income"><span class="cf-bolt">⚡</span> Income</div>
-            <div class="cf-arrow"></div>
-            <div class="cf-box wealth">Wealth-Building Account<small>auto-saves 15–20% first</small></div>
-            <div class="cf-allocs"><span>Cash</span><span>Investments</span><span>Retirement</span><span>Real estate</span><span>Businesses</span></div>
-            <div class="cf-arrow"></div>
-            <div class="cf-box neutral">Checking</div>
-            <div class="cf-arrow red"></div>
-            <div class="cf-box lifestyle">Lifestyle</div>
-          </div>
-          <ul class="cf-points">
-            <li>Your saving rate rises automatically as income grows</li>
-            <li>Spending now takes a deliberate decision</li>
-            <li>Built for tax efficiency, risk balance, and liquidity</li>
-          </ul>
-          <p class="cf-note">Automate the save first—15–20% swept into a wealth-building account before it ever reaches checking. It takes the pain (and the willpower) out of saving, and quietly compounds in the background.</p>
-        </div>
-
-      </div>
-        </div>
-      </details>
     </div>
   </section>
 
   <!-- TOOLS -->
-  <section id="tools" class="block" data-page="home">
+  <section id="tools" class="block">
     <div class="wrap">
       <div class="sec-head reveal">
         <span class="eyebrow">Try it yourself</span>
-        <h2>The tools I actually use.</h2>
+        <h2>What a real plan looks like.</h2>
         <p style="color:var(--ink-soft);margin-top:14px;max-width:60ch">Two of the tools I use to make money make sense: a personal balance sheet that shows where you actually stand, and a wealth calculator that shows what your saving rate is really worth. The calculator is fully live—change any input and watch it recompute.</p>
       </div>
 
       <!-- BALANCE SHEET EXAMPLE -->
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">Balance sheet</span>
-            <h3>The living balance sheet.</h3>
-            <p>A one-page snapshot of where you stand - assets, protection, and cash flow.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-      <div class="bsheet reveal" id="balancesheet">
+      <div class="bsheet reveal">
         <div class="bs-band protect">
           <div class="bs-band-title">Protection</div>
           <div class="bs-cells">
@@ -909,20 +634,8 @@
         </div>
         <p class="bs-note">Illustrative example for a mid-career household — not real figures. This is the snapshot we'd build together and update over time.</p>
       </div>
-        </div>
-      </details>
 
       <!-- WEALTH BUILDING CALCULATOR -->
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">Calculator</span>
-            <h3>Wealth Building Calculator.</h3>
-            <p>See what your savings rate is really worth over a career.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
       <div class="wcalc reveal">
         <div class="wc-inputs">
           <div class="wc-title">Wealth Building Calculator</div>
@@ -946,7 +659,7 @@
           </div>
           <div class="wc-field">
             <label for="wcLife">Lifestyle (spend)</label>
-            <div class="wc-ctrl"><input type="range" id="wcLife" min="0" max="100" step="1" value="80"><span class="wc-val" id="wcLifeV">80%</span></div>
+            <div class="wc-ctrl"><input type="range" id="wcLife" min="40" max="95" step="1" value="80"><span class="wc-val" id="wcLifeV">80%</span></div>
           </div>
           <div class="wc-saverate">You save <b id="wcSave">20%</b> of every raise.</div>
         </div>
@@ -964,94 +677,63 @@
           <p class="wc-note">Hypothetical. The red bars show what your lifestyle spending could have grown to if invested at the same return—the true cost of every dollar spent instead of saved.</p>
         </div>
       </div>
-        </div>
-      </details>
-
     </div>
   </section>
 
-  <!-- HUMAN LIFE VALUE CALCULATOR -->
-  <section id="hlv" class="block" data-page="home">
+  <!-- LINKS -->
+  <section id="links" class="block">
     <div class="wrap">
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">What are you worth?</span>
-            <h3>Your paycheck is your biggest asset.</h3>
-            <p>See what your future income is really worth - and why it is worth protecting.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-          <p style="color:var(--ink-soft);margin-top:14px;max-width:64ch">The years of income ahead of you are probably the largest asset you'll ever own—and the one most people never protect. Put in an age and an income to see the paychecks a family is really counting on between now and retirement. <b>That</b> number is what the right life and disability insurance is quietly protecting.</p>
-      <div class="hlv reveal">
-        <div class="hlv-inputs">
-          <div class="wc-field">
-            <label for="hlvAge">Current age</label>
-            <div class="wc-ctrl wc-num"><input type="number" id="hlvAge" min="16" max="70" step="1" value="30"></div>
-          </div>
-          <div class="wc-field">
-            <label for="hlvInc">Annual income</label>
-            <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="hlvInc" min="0" max="5000000" step="1000" value="75000"></div>
-          </div>
-          <div class="wc-field">
-            <label for="hlvGrow">Annual raise</label>
-            <div class="wc-ctrl"><input type="range" id="hlvGrow" min="0" max="8" step="0.5" value="4"><span class="wc-val" id="hlvGrowV">4%</span></div>
-          </div>
-          <div class="wc-field">
-            <label for="hlvRet">Retirement age</label>
-            <div class="wc-ctrl wc-num"><input type="number" id="hlvRet" min="40" max="80" step="1" value="65"></div>
-          </div>
-        </div>
-        <div class="hlv-output">
-          <div class="hlv-bk">Between now &amp; retirement, you're projected to earn</div>
-          <div class="hlv-bv" id="hlvVal">$0</div>
-          <div class="hlv-meta"><span id="hlvYears">35 years</span> of income, growing <span id="hlvGrow2">4%</span> a year</div>
-          <p class="hlv-note">A permanent loss of that income—death or disability—is the single biggest financial threat most families face. It's also the one thing insurance is built to protect.</p>
-        </div>
-      </div>
-      <p class="wc-note" style="margin-top:14px">A simple projection of future earnings—an illustration to size the conversation, not a quote or advice.</p>
-        </div>
-      </details>
-    </div>
-  </section>
+      <div class="sec-head reveal"><span class="eyebrow">Go deeper</span><h2>Links worth a look.</h2></div>
+      <div class="link-grid">
 
-  <!-- WHY YOU NEED A FINANCIAL PLANNER (PDF) -->
-  <section id="guide" class="block" data-page="home">
-    <div class="wrap">
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">The guide</span>
-            <h3>Why you need a financial planner.</h3>
-            <p>A short read on how the right plan pays for itself.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-      <p class="lede reveal" style="max-width:64ch;margin-bottom:28px">A short read on what a planner actually does, where the value comes from, and how the right plan pays for itself. Scroll through it below, or open the full PDF.</p>
-      <div class="pdf-wrap reveal">
-        <div class="pdf-bar">
-          <span class="pdf-dots"><i></i><i></i><i></i></span>
-          <span class="pdf-bartitle">Why You Need a Financial Planner — 8 pages</span>
-          <span class="pdf-hint">Scroll to read <span class="pdf-chev">↓</span></span>
+        <a href="https://www.linkedin.com/in/talonrucker" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg></div>
+          <h3>LinkedIn</h3>
+          <p>The full timeline, recommendations, and the network behind the résumé.</p>
+          <span class="link-go">View profile <span class="arrow">→</span></span>
+        </a>
+
+        <a href="Talon_Rucker_Resume.pdf" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 18 15 15"/></svg></div>
+          <h3>Résumé (PDF)</h3>
+          <p>One page with the full experience, leadership, and awards list.</p>
+          <span class="link-go">Open / download <span class="arrow">→</span></span>
+        </a>
+
+        <a href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener" class="link-card reveal">
+          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg></div>
+          <h3>Start your Roth IRA</h3>
+          <p>Fidelity's official walkthrough for opening a Roth IRA in the app—the first move I'd make at your age.</p>
+          <span class="link-go">Watch the tutorial <span class="arrow">→</span></span>
+        </a>
+
+        <a href="mailto:talonrucker@gmail.com?subject=Saw%20your%20site" class="link-card reveal">
+          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+          <h3>Email me</h3>
+          <p>The fastest way to start a conversation. I read everything that lands here.</p>
+          <span class="link-go">talonrucker@gmail.com <span class="arrow">→</span></span>
+        </a>
+
+        <div class="link-card soon reveal">
+          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></div>
+          <h3>4C Case Competition</h3>
+          <p>The 1st-place strategy deck—restructuring a company bonus program.</p>
+          <span class="soon-pill">Coming soon</span>
         </div>
-        <iframe class="pdf-frame" src="why-you-need-a-financial-planner.pdf#view=FitH&toolbar=1" title="Why you need a Financial Planner" loading="lazy"></iframe>
-        <div class="pdf-actions">
-          <span class="note">8-page guide · PDF</span>
-          <span style="display:flex;gap:12px;flex-wrap:wrap">
-            <a href="why-you-need-a-financial-planner.pdf" target="_blank" rel="noopener" class="btn btn-ghost">Open in new tab ↗</a>
-            <a href="why-you-need-a-financial-planner.pdf" download class="btn btn-primary">Download PDF</a>
-          </span>
+
+        <div class="link-card soon reveal">
+          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+          <h3>What I'm reading</h3>
+          <p>The books shaping how I think about money, systems, and growth.</p>
+          <span class="soon-pill">Coming soon</span>
         </div>
+
       </div>
-        </div>
-      </details>
     </div>
   </section>
 
   <!-- CONTACT -->
-  <section id="contact" class="block" data-page="home">
+  <section id="contact" class="block">
     <div class="wrap">
       <span class="eyebrow reveal">Let's build the plan</span>
       <h2 class="reveal">Money should feel like freedom, not friction.</h2>
@@ -1065,137 +747,6 @@
         <a href="tel:+14805892068">(480) 589-2068</a>
         <a href="https://www.linkedin.com/in/talonrucker" target="_blank" rel="noopener">linkedin.com/in/talonrucker</a>
         <span>Provo, UT</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ PAGE 3: MORE / FUN ============ -->
-  <section class="block" data-page="fun">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Off the clock</span>
-        <h2>A few things I'm into.</h2>
-      </div>
-      <p class="lede reveal" style="max-width:64ch;margin-bottom:40px">The stuff that keeps me sharp outside of finance—what I'm listening to, reading, and the systems I use to stay productive. More coming soon.</p>
-
-      <div class="fun-grid">
-        <!-- FAMILY & FUN (Facebook video embeds) -->
-        <div class="embed-card reveal">
-          <h3>👨‍👩‍👧 Family &amp; fun</h3>
-          <p class="sub">Life outside of spreadsheets—family, the outdoors, and the people who keep me grounded.</p>
-          <!-- Photo gallery: replace each .fam-photo placeholder with
-               <img class="fam-photo" src="images/family-1.jpg" alt="caption"> once photos are added. -->
-          <div class="family-gallery" id="familyGallery">
-            <div class="soon-block" style="grid-column:1 / -1">
-              <span class="soon-pill">Photos coming</span>
-              <p class="sub" style="margin-top:14px">Send me a few favorite family / fun photos and they'll fill this space as a clean gallery.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- SPOTIFY -->
-        <div class="embed-card reveal">
-          <h3>🎧 On repeat</h3>
-          <p class="sub">My current playlist—work, focus, and everything in between.</p>
-          <iframe class="spotify-embed" src="https://open.spotify.com/embed/playlist/2d9SYVCxBUGmonHsTMLb29?utm_source=generator" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify playlist"></iframe>
-        </div>
-
-        <!-- BOOKS -->
-        <div class="embed-card reveal" style="grid-column:1 / -1">
-          <h3>📚 The reading list</h3>
-          <p class="sub">Books shaping how I think about money, faith, systems, and growth. Tap a shelf to open it.</p>
-          <div class="booklist">
-            <details>
-              <summary><span class="btitle">On my list to read</span><span class="bcount">32</span></summary>
-              <ul>
-                <li><b>How Will You Measure Your Life?</b></li>
-                <li><b>Man's Search for Meaning</b> <span class="ba">· Viktor Frankl</span></li>
-                <li><b>The Power of Everyday Missionaries</b></li>
-                <li><b>Leading Without Authority</b></li>
-                <li><b>The Anxious Generation</b></li>
-                <li><b>The Innovator's Dilemma</b></li>
-                <li><b>Essentialism</b></li>
-                <li><b>Rivers West</b> <span class="note">— where my name comes from</span></li>
-                <li><b>Mere Christianity</b> <span class="ba">· C.S. Lewis</span></li>
-                <li><b>The Art of Doing Twice the Work in Half the Time</b></li>
-                <li><b>A Tale of Two Cities</b></li>
-                <li><b>The Ruthless Elimination of Hurry</b></li>
-                <li><b>Story Selling</b></li>
-                <li><b>The Screwtape Letters</b></li>
-                <li><b>The Wealth of Nations</b></li>
-                <li><b>Ego Is the Enemy</b></li>
-                <li><b>Grit</b> <span class="ba">· Angela Duckworth</span></li>
-                <li><b>The Obstacle Is the Way</b></li>
-                <li><b>Spiritual Roots of Human Relations</b></li>
-                <li><b>A Higher Calling</b></li>
-                <li><b>The Four Agreements</b></li>
-                <li><b>Can't Hurt Me</b> <span class="ba">· David Goggins</span></li>
-                <li><b>The Sun Does Shine</b></li>
-                <li><b>Never Split the Difference</b></li>
-                <li><b>The Black Swan</b></li>
-                <li><b>The Pilgrim's Progress</b></li>
-                <li><b>Worth the Wrestle</b> <span class="ba">· Sheri Dew</span></li>
-                <li><b>Too Big to Fail</b></li>
-                <li><b>A Random Walk Down Wall Street</b></li>
-                <li><b>The Psychology of Money</b> <span class="ba">· Morgan Housel</span></li>
-                <li><b>Hidden Potential</b></li>
-                <li><b>The Power of Now</b></li>
-              </ul>
-            </details>
-            <details>
-              <summary><span class="btitle">Self-help &amp; growth — ranked</span><span class="bcount">27</span></summary>
-              <div class="brank">Top tier</div>
-              <ul>
-                <li><b>The Millionaire Next Door</b></li>
-                <li><b>Extreme Ownership</b></li>
-                <li><b>The Go-Giver</b></li>
-                <li><b>Single, Dating, Engaged, Married</b></li>
-                <li><b>In the Hands of the Lord</b> <span class="ba">· Pres. Oaks biography</span></li>
-                <li><b>Crucial Conversations</b></li>
-              </ul>
-              <div class="brank">Great</div>
-              <ul>
-                <li><b>How to Win Friends &amp; Influence People</b> <span class="ba">· Dale Carnegie</span></li>
-                <li><b>Men Are from Mars, Women Are from Venus</b></li>
-              </ul>
-              <div class="brank">Solid</div>
-              <ul>
-                <li><b>Financial Freedom</b> <span class="ba">· Grant Sabatier</span></li>
-                <li><b>The Total Money Makeover</b> <span class="ba">· Dave Ramsey</span></li>
-                <li><b>David and Goliath</b> <span class="ba">· Malcolm Gladwell</span></li>
-                <li><b>Atomic Habits</b></li>
-                <li><b>The 7 Habits of Highly Effective People</b> <span class="ba">· Stephen Covey</span></li>
-                <li><b>Boundaries</b> <span class="ba">· Cloud &amp; Townsend</span></li>
-                <li><b>The Little Book of Common Sense Investing</b> <span class="ba">· John C. Bogle</span></li>
-                <li><b>Rich Dad Poor Dad</b> <span class="ba">· Robert Kiyosaki</span></li>
-              </ul>
-              <div class="brank">Everything else</div>
-              <ul>
-                <li><b>Never Eat Alone</b></li>
-                <li><b>Take the Stairs</b> <span class="ba">· Rory Vaden</span></li>
-                <li><b>The Alchemist</b> <span class="ba">· Paulo Coelho</span></li>
-                <li><b>Stillness Is the Key</b></li>
-                <li><b>Outliers</b></li>
-                <li><b>The Art of War</b></li>
-                <li><b>The Greatest Salesman in the World</b></li>
-                <li><b>The 2-Hour Job Search</b></li>
-                <li><b>Relentless</b></li>
-                <li><b>The Book of Five Rings</b></li>
-                <li><b>The Wealth Ladder</b></li>
-              </ul>
-            </details>
-          </div>
-        </div>
-
-        <!-- PRODUCTIVITY VIDEOS -->
-        <div class="embed-card reveal" style="grid-column:1 / -1">
-          <h3>🗓️ Productivity tutorials</h3>
-          <p class="sub">Short walkthroughs on getting more out of Google Calendar—and running your week like a system.</p>
-          <div class="soon-block">
-            <span class="soon-pill">Coming soon</span>
-            <p class="sub" style="margin-top:14px">I'm filming these now. Once they're up, they'll embed right here.</p>
-          </div>
-        </div>
       </div>
     </div>
   </section>
@@ -1219,32 +770,6 @@
   },{threshold:.14, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
   window.addEventListener('load',()=>{ document.querySelectorAll('.hero .reveal').forEach(el=>el.classList.add('in')); });
-
-  // ---- Page routing (Home / A Real Plan / More) ----
-  (function(){
-    const main=document.getElementById('top');
-    const pages=['home','fun'];
-    const tabs=document.querySelectorAll('[data-nav]');
-    function show(page,smooth,force){
-      if(!pages.includes(page)) page='home';
-      main.setAttribute('data-active',page);
-      tabs.forEach(t=>t.classList.toggle('active', t.getAttribute('data-nav')===page));
-      if(force){ main.querySelectorAll('[data-page="'+page+'"] .reveal').forEach(el=>el.classList.add('in')); }
-      window.scrollTo({top:0, behavior: smooth ? 'smooth' : 'auto'});
-    }
-    tabs.forEach(t=>t.addEventListener('click',e=>{
-      e.preventDefault();
-      const page=t.getAttribute('data-nav');
-      if(location.hash.slice(1)===page){ show(page,true,true); }
-      else { location.hash=page; }
-    }));
-    window.addEventListener('hashchange',()=>{
-      const h=location.hash.slice(1);
-      if(pages.includes(h)) show(h,true,true);   // known page → switch; unknown (e.g. #contact) → let native anchor scroll
-    });
-    const start=location.hash.slice(1);
-    show(pages.includes(start)?start:'home', false, false);
-  })();
 
   // ---- Compound interest chart (age-aware + interactive) ----
   (function(){
@@ -1473,50 +998,6 @@
     [yrs,inc,grow,ret,life].forEach(el=>{el.addEventListener('input',draw);el.addEventListener('change',draw);});
     draw();
   })();
-
-  // ---- Human Life Value calculator ----
-  (function(){
-    const $=id=>document.getElementById(id);
-    const age=$('hlvAge'), inc=$('hlvInc'), grow=$('hlvGrow'), ret=$('hlvRet');
-    const val=$('hlvVal'), yrsEl=$('hlvYears'), growV=$('hlvGrowV'), grow2=$('hlvGrow2');
-    if(!val) return;
-    const fmt=n=>'$'+Math.round(n).toLocaleString('en-US');
-    function calc(){
-      const a=parseInt(age.value,10)||0, r=parseInt(ret.value,10)||65;
-      const income=parseFloat(inc.value)||0, g=(parseFloat(grow.value)||0)/100;
-      const years=Math.max(0, r-a);
-      let total=0, cur=income;
-      for(let y=0;y<years;y++){ total+=cur; cur*=(1+g); }
-      val.textContent=fmt(total);
-      yrsEl.textContent=years+' year'+(years===1?'':'s');
-      const gTxt=(parseFloat(grow.value)||0)+'%';
-      growV.textContent=gTxt; if(grow2) grow2.textContent=gTxt;
-    }
-    [age,inc,grow,ret].forEach(el=>{el.addEventListener('input',calc);el.addEventListener('change',calc);});
-    calc();
-  })();
-
-  // ---- Collapsible sections: reveal on open + open via in-page links ----
-  (function(){
-    function revealIn(el){ el.querySelectorAll('.reveal').forEach(function(r){ r.classList.add('in'); }); }
-    document.querySelectorAll('details.collapse, details.xp-more').forEach(function(d){
-      d.addEventListener('toggle', function(){ if(d.open) revealIn(d); });
-    });
-    function openFor(hash){
-      if(!hash || hash.charAt(0) !== '#' || hash.length < 2) return;
-      var el; try{ el = document.querySelector(hash); }catch(e){ return; }
-      if(!el) return;
-      var d = el.closest ? el.closest('details.collapse') : null;
-      if(!d && el.querySelector){ d = el.querySelector('details.collapse'); }
-      if(d && !d.open){ d.open = true; revealIn(d); }
-    }
-    document.querySelectorAll('a[href^="#"]').forEach(function(a){
-      a.addEventListener('click', function(){ openFor(a.getAttribute('href')); });
-    });
-    window.addEventListener('hashchange', function(){ openFor(location.hash); });
-    if(location.hash){ openFor(location.hash); }
-  })();
-</script>
 
 </body>
 </html>
