@@ -161,8 +161,24 @@ Separate files — these never touch `index.html`, so this is the cheapest batch
 
 ## Batch 10 — Fun page & tutorial
 
-- [ ] 45. Replace the section marked in `image10.png` with a **site tutorial**.
-      Concept still being designed — do not build until settled.
+- [ ] 45. **Site tutorial — spotlight the tabs.** DECIDED 22 Jul 2026.
+      - Delete the `#explore` "Jump straight to what matters" section outright
+        (confirmed via `image9.png`). Let the page close up — shorter is better.
+      - Tour trigger goes in the **hero**, next to the Lessons button.
+      - On click: dim the page and spotlight each nav tab / major section in
+        turn, with a short label.
+      - Give every label a **one-line "why it matters"** alongside the name.
+        Talon's goal is teaching concepts, not just showing where to click, and
+        the label costs nothing extra. Keep to one sentence — fewest words wins.
+      - Visitor-paced (Next / Skip), never auto-advancing. Remember completion
+        in `localStorage` so it doesn't nag returning visitors. Keep the trigger
+        on the page so the tour can be replayed.
+      - Must work on mobile, where the nav tabs are hidden below 860px —
+        check what the spotlight targets there before building.
+
+      Note: in the source docx, screenshots appear *above* the text that
+      refers to them. `image10.png` belongs to the wealth calculator tax
+      request in Batch 3, not to this item.
 - [ ] 46. Easter egg: a $10 bill on a fishing hook that swims across the screen.
       Clicking it offers to help open a Roth IRA, with Talon contributing $10.
       **Fun page only.**
@@ -175,11 +191,19 @@ Separate files — these never touch `index.html`, so this is the cheapest batch
 
 ## Open questions
 
-- Batch 10 #45 — tutorial concept unresolved. Options discussed: highlight all
-  clickable tabs, play a video, or auto-scroll section to section with a short
-  pop-out explaining each. Talon's constraint: **as few words as possible.**
 - Batch 3 #23 — confirm the year 10 / year 20 incomes should interpolate between
   steps rather than jump.
+
+## Decisions log
+
+- **22 Jul 2026** — Tutorial: spotlight-the-tabs, not a guided scroll tour.
+  Explore section deleted, trigger moves to the hero. (#45)
+- **22 Jul 2026** — Wealth calculator taxes use real bracket math, not a flat rate.
+- **22 Jul 2026** — Roth contributions held flat, with a note that limits may rise.
+  Traditional and 401(k) added alongside, with their own limits.
+- **22 Jul 2026** — Redfin embed dropped; plain link instead.
+- **22 Jul 2026** — Book suggestions handled by text/email, not a form.
+- **22 Jul 2026** — Risk tolerance survey written from scratch (copyright).
 
 ## Not doing
 
