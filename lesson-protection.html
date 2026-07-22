@@ -889,10 +889,33 @@
   ['d_inc','d_ben','d_cap','d_need'].forEach(function(id){ bindMoney(id, function(){ calcDI(false); }); });
   diPct.addEventListener('input', function(){ calcDI(true); });
 
+  /* ---------- MASTER AGE & INCOME ----------
+     Set on the home page, carried here through localStorage. Read only:
+     edits made in this deck stay in this deck. */
+  function applyMaster(){
+    var m; try{ m = JSON.parse(localStorage.getItem('tr-master') || 'null'); }catch(e){ return; }
+    if (!m) return;
+    if (m.income > 0) {
+      ['q_inc','f_inc','d_inc'].forEach(function(id){
+        var el = document.getElementById(id);
+        el.value = group(m.income);
+        el.dispatchEvent(new Event('input', {bubbles:true}));
+      });
+    }
+    if (m.age > 0) {
+      ['q_age','f_age'].forEach(function(id){
+        var el = document.getElementById(id);
+        el.value = Math.min(Math.max(m.age, +el.min), +el.max);
+        el.dispatchEvent(new Event('input', {bubbles:true}));
+      });
+    }
+  }
+
   /* ---------- INIT ---------- */
   calcQual();
   calcFuture();
   calcDI(false);
+  applyMaster();
   go(0);
 })();
 </script>

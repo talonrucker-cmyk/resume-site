@@ -118,6 +118,11 @@
   .numfld:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(14,82,64,.12)}
 
   .result-card{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:30px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+  /* Future/today's-dollars toggle. Own classes, not .wc-tab: that selector is bound globally by the wealth calculator. */
+  .ci-tabs{display:flex;gap:6px;margin-bottom:18px}
+  .ci-tab{font-family:var(--body);font-weight:700;font-size:.78rem;padding:7px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#9EBBAE;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+  .ci-tab:hover{color:#fff}
+  .ci-tab.active{background:var(--amber);color:var(--ink);border-color:var(--amber)}
   .result-card .rk{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:#7FA295}
   .result-card .big{font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1;color:#fff;margin:6px 0 4px}
   .result-card .big .amber{color:var(--amber-soft)}
@@ -131,6 +136,49 @@
   .result-card .fid-link{font-family:var(--mono);font-size:.76rem;color:#9EBBAE;margin-top:12px;display:inline-block}
   .result-card .fid-link:hover{color:#fff}
   .disclaim{font-size:.7rem;color:#5E776C;margin-top:14px;line-height:1.5}
+  .result-card .aftertax{font-size:.8rem;color:#9EBBAE;margin:-2px 0 4px}
+  .result-card .aftertax b{color:var(--amber-soft);font-weight:700}
+
+  /* Account type + contribution mode pills. Own classes again — .ci-tab is bound globally. */
+  .ac-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:12px 4px 0}
+  .ac-row .ac-lab{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);margin-right:4px}
+  .ac-tab{font-family:var(--body);font-weight:700;font-size:.76rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink-soft);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+  .ac-tab:hover{color:var(--ink)}
+  .ac-tab.active{background:var(--pine);color:#fff;border-color:var(--pine)}
+
+  /* Roth vs Traditional vs 401(k) comparison */
+  .rvt{background:var(--white);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px;margin-top:26px}
+  .rvt h3{font-family:var(--display);font-weight:600;font-size:1.3rem;margin:0 0 4px}
+  .rvt .rvt-sub{color:var(--ink-soft);font-size:.9rem;margin:0 0 18px;line-height:1.5}
+  .rvt-ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;font-size:.88rem;color:var(--ink)}
+  .rvt-ctl select{font-family:var(--body);font-size:.88rem;padding:7px 9px;border:1px solid var(--line-strong);border-radius:8px;background:var(--white);color:var(--ink)}
+  .rvt-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:end;min-height:200px}
+  .rvt-col{display:flex;flex-direction:column;justify-content:flex-end;height:100%;text-align:center}
+  .rvt-val{font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--pine);margin-bottom:6px}
+  .rvt-bar{border-radius:10px 10px 0 0;background:var(--pine);transition:height .45s cubic-bezier(.4,.1,.2,1);min-height:4px}
+  .rvt-col.win .rvt-bar{background:var(--amber)}
+  .rvt-col.win .rvt-val{color:#9a6410}
+  .rvt-name{font-weight:700;font-size:.88rem;color:var(--ink);margin-top:9px}
+  .rvt-note{font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);margin-top:4px;line-height:1.45}
+  .rvt-verdict{background:var(--sage);color:var(--pine);border-radius:10px;padding:13px 15px;margin-top:20px;font-size:.9rem;line-height:1.55}
+  .rvt-verdict b{font-weight:800}
+
+  /* risk tolerance survey */
+  .rt-q{border-top:1px solid #e6e9e1;padding:14px 0}
+  .rt-q:first-child{border-top:0}
+  .rt-q p{margin:0 0 9px;font-weight:600;font-size:.94rem;color:var(--ink)}
+  .rt-opts{display:flex;gap:8px;flex-wrap:wrap}
+  .rt-opt{font-family:var(--body);font-size:.85rem;text-align:left;padding:9px 13px;border-radius:9px;border:1px solid #d9ddd4;background:#fff;color:var(--ink-soft);cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+  .rt-opt:hover{border-color:var(--pine);color:var(--ink)}
+  .rt-opt.on{background:var(--pine);border-color:var(--pine);color:#fff;font-weight:600}
+  /* four-band result scale — shared by the affordability gauge and the risk survey */
+  .bscale{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:16px}
+  .bband{text-align:center;font-size:.72rem;font-weight:700;padding:9px 4px;border-radius:8px;background:#eceee8;color:#8b958d;line-height:1.35}
+  .bband small{display:block;font-weight:600;font-size:.64rem;opacity:.85;margin-top:2px}
+  .bband.on{color:#fff}
+  .bband.on.k-slate{background:#5b6b7a}.bband.on.k-green{background:#2e8b57}
+  .bband.on.k-pine{background:var(--pine)}.bband.on.k-amber{background:#b58600}
+  .bband.on.k-red{background:#c0392b}
 
   /* SECTION SHELL */
   section.block{padding:54px 0;position:relative}
@@ -244,6 +292,35 @@
   .bs-networth span{font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;font-size:.8rem;color:#9FBBB0}
   .bs-networth b{font-family:var(--display);font-weight:700;font-size:1.5rem}
   .bs-note{font-size:.76rem;color:var(--ink-soft);padding:14px 22px;font-style:italic}
+  /* clickable lines */
+  button.bs-cell,button.bs-row{width:100%;font:inherit;border:0;border-radius:0;cursor:pointer;text-align:left;-webkit-appearance:none;appearance:none}
+  button.bs-cell{border-right:1px solid rgba(255,255,255,.18);text-align:center;transition:filter .18s}
+  button.bs-cell:last-child{border-right:none}
+  button.bs-cell:hover,button.bs-cell:focus-visible{filter:brightness(1.12)}
+  button.bs-row{border-bottom:1px solid var(--line);background:transparent;transition:background .18s}
+  button.bs-row:hover,button.bs-row:focus-visible{background:var(--paper-2)}
+  .bs-edit{margin-left:8px;font-size:.72rem;opacity:.45}
+  button.bs-row:hover .bs-edit,button.bs-cell:hover .bs-edit{opacity:.9}
+  .bs-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:0 22px 4px}
+  .bs-reset{background:none;border:0;padding:0;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--pine);cursor:pointer;text-decoration:underline}
+  /* balance-sheet pop-up */
+  .bsm{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;background:rgba(12,20,17,.62);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:20px}
+  .bsm.open{display:flex}
+  .bsm-box{background:var(--white);border-radius:16px;box-shadow:0 24px 70px -20px rgba(0,0,0,.55);width:min(420px,100%);max-height:86vh;overflow:auto}
+  .bsm-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;color:#fff;font-family:var(--display);font-weight:600}
+  .bsm-head.protect{background:var(--amber)} .bsm-head.assets{background:var(--pine-deep)}
+  .bsm-head.liab{background:var(--brick)} .bsm-head.cash{background:var(--pine)}
+  .bsm-x{background:none;border:0;color:#fff;font-size:1.4rem;line-height:1;cursor:pointer;padding:0 2px}
+  .bsm-body{padding:16px 18px}
+  .bsm-body .xc-f{margin-bottom:11px}
+  .bsm-body .xc-in input{width:120px}
+  .bsm-yn{display:flex;gap:8px}
+  .bsm-yn button{font:inherit;font-size:.82rem;padding:6px 15px;border:1px solid #d9ddd4;background:#fff;border-radius:8px;cursor:pointer;color:var(--ink-soft)}
+  .bsm-yn button.on{background:var(--pine);border-color:var(--pine);color:#fff;font-weight:600}
+  .bsm-sum{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+  .bsm-sum span{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+  .bsm-sum b{font-family:var(--display);font-size:1.24rem}
+  .bsm-hint{font-size:.76rem;color:var(--ink-soft);margin-top:10px}
 
   /* TOOLS: WEALTH CALCULATOR */
   .wcalc{display:grid;grid-template-columns:.78fr 1.22fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
@@ -279,6 +356,29 @@
   .wc-legend i.green{background:var(--pine)}
   .wc-legend i.red{background:var(--brick)}
   .wc-note{font-size:.78rem;color:var(--ink-soft);margin-top:14px;line-height:1.5}
+  .wc-bsub{font-family:var(--mono);font-size:.7rem;color:var(--ink-soft);margin-top:6px}
+  .wc-big.alt .wc-bsub{color:#9FBBB0}
+  .wc-total{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-soft);text-align:center}
+  .wc-total b{font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--brick)}
+  /* income steps + advanced */
+  .wc-sub-d{margin:-8px 0 18px}
+  .wc-sub-d>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--pine);padding:2px 0}
+  .wc-sub-d>summary::-webkit-details-marker{display:none}
+  .wc-sub-d>summary::before{content:'\25B8 ';display:inline-block;transition:transform .2s}
+  .wc-sub-d[open]>summary::before{transform:rotate(90deg)}
+  .wc-step{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:.82rem;color:var(--ink-soft)}
+  .wc-step .wc-num{padding:0 6px;flex:1;min-width:0}
+  .wc-step input{border:none;outline:none;background:var(--white);border:1px solid var(--line-strong);border-radius:7px;font-family:var(--display);font-weight:700;font-size:.9rem;padding:6px 4px;color:var(--ink);width:52px;text-align:center}
+  .wc-step .wc-num input{border:none;width:100%;text-align:left}
+  .wc-step-x{border:none;background:none;color:var(--ink-soft);cursor:pointer;font-size:1.1rem;line-height:1;padding:0 2px}
+  .wc-step-x:hover{color:var(--brick)}
+  .wc-addstep{margin-top:10px;font-family:var(--body);font-weight:700;font-size:.8rem;padding:6px 12px;border-radius:999px;border:1px dashed var(--line-strong);background:none;color:var(--pine);cursor:pointer}
+  .wc-addstep:hover{border-style:solid}
+  .wc-hint{font-size:.75rem;color:var(--ink-soft);margin-top:10px;line-height:1.5}
+  .wc-advbtn{margin:22px 0 0;font-family:var(--body);font-weight:700;font-size:.82rem;padding:7px 15px;border-radius:999px;border:1px solid #d9ddd4;background:var(--white);color:var(--ink-soft);cursor:pointer}
+  .wc-advbtn.active{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .wc-adv{margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+  .wc-adv select{width:100%;padding:9px 10px;border:1px solid var(--line-strong);border-radius:9px;background:var(--white);font-family:var(--display);font-weight:700;font-size:.95rem;color:var(--ink)}
 
   /* REVEAL */
   .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
@@ -457,6 +557,13 @@
   .booklist li .ba{color:var(--ink-soft)}
   .booklist li .note{color:var(--amber);font-size:.78rem}
   @media(max-width:560px){.booklist ul{columns:1}}
+  /* ---- Master income & age: feeds every calculator ---- */
+  .master{background:var(--white);border:1px solid var(--line-strong);border-radius:14px;box-shadow:var(--shadow);padding:20px 24px;margin-bottom:22px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:22px}
+  .master .m-lead{flex:1 1 240px;min-width:200px}
+  .master .m-lead b{display:block;font-family:var(--display);font-size:1.05rem}
+  .master .m-lead span{font-size:.86rem;color:var(--ink-soft)}
+  .master .wc-field{margin-bottom:0;width:170px}
+  @media(max-width:560px){.master .wc-field{width:100%}}
   /* ---- Savings Potential calc: inflation tabs ---- */
   .wc-tabs{display:flex;gap:6px;margin-bottom:16px}
   .wc-tab{font-family:var(--body);font-weight:700;font-size:.85rem;padding:8px 16px;border-radius:999px;border:1px solid #d9ddd4;background:var(--paper-2);color:var(--ink-soft);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
@@ -511,6 +618,52 @@
   .xc-res .k{font-size:.8rem;opacity:.85;letter-spacing:.03em}
   .xc-res .v{font-size:2rem;font-weight:800;margin-top:4px;line-height:1.1}
   .xc-res .v.warn{color:#ffd7cf}
+  .xc-res .sub{font-size:.82rem;opacity:.9;margin-top:8px;line-height:1.4}
+  .xc-res .sub b{font-weight:800}
+
+  /* Charts are drawn in a small viewBox, so a full-width container stretches
+     them to ~540px tall on desktop. Cap every one of them, not just Batch 4's. */
+  .x-svg{max-width:640px;margin-left:auto;margin-right:auto}
+  .x-svg.sm{max-width:560px;margin:18px auto 0}
+
+  /* protection self-check: four household totals, side by side (#33) */
+  .pcards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:4px}
+  .pcard{background:var(--paper-2);border:1px solid #e6e9e1;border-radius:10px;padding:14px 12px}
+  .pcard h5{margin:0 0 10px;text-align:center;font-size:.86rem;font-weight:800;color:var(--ink)}
+  .pcard .xc-in{width:100%}
+  .pcard .xc-in input{width:100%;text-align:right}
+  .pcard .hint{font-size:.7rem;color:var(--ink-soft);text-align:center;margin-top:7px;line-height:1.35}
+  .yn{display:grid;grid-template-columns:1fr auto auto;gap:6px 12px;align-items:center;font-size:.84rem;color:var(--ink)}
+  .yn .yh{font-size:.68rem;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.06em;text-align:center}
+  .yn input{accent-color:var(--pine);margin:0 auto;display:block}
+  @media(max-width:820px){.pcards{grid-template-columns:1fr 1fr}}
+  @media(max-width:460px){.pcards{grid-template-columns:1fr}}
+
+  /* ledger rows — ported from the lesson deck for the Batch 6 calculators (#38) */
+  .ldg{margin-top:16px;border-top:1px solid var(--line)}
+  .ldg .lrow{display:flex;justify-content:space-between;gap:12px;padding:9px 2px;border-bottom:1px solid #eef0ea;font-size:.88rem;color:var(--ink-soft)}
+  .ldg .lrow b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .ldg .lrow.tot{border-bottom:0;font-weight:700;color:var(--ink)}
+  .ldg .lrow.tot b{font-size:1.05rem}
+  .ldg .lrow.tot.gap b{color:#c0392b}
+  .meter2{margin-top:16px}
+  .meter2 .track{display:flex;height:20px;border-radius:7px;overflow:hidden;background:#eceee8}
+  .meter2 .track i{display:block;height:100%}
+  .meter2 .cov{background:#2e8b57}.meter2 .gap{background:#c0392b}
+  .meter2 .key{display:flex;gap:16px;justify-content:center;font-size:.74rem;color:var(--ink-soft);margin-top:8px}
+  .meter2 .key i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .flagbar{margin-top:14px;background:#fdf0ed;border-left:3px solid #c0392b;color:#8f2b1f;font-size:.8rem;font-weight:700;padding:10px 12px;border-radius:0 8px 8px 0;line-height:1.45}
+
+  /* bracket breakdown (tax calculator) */
+  .brk{width:100%;border-collapse:collapse;margin-top:16px;font-size:.86rem}
+  .brk th{text-align:left;font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);font-weight:700;padding:0 8px 8px;border-bottom:1px solid var(--line)}
+  .brk td{padding:8px;border-bottom:1px solid #eef0ea}
+  .brk td:nth-child(n+2){text-align:right;font-variant-numeric:tabular-nums}
+  .brk tr.spent td{color:var(--ink)}
+  .brk tr.unused td{color:#b3bcb4}
+  .brk tr.top td{font-weight:800}
+  .brk .bar{display:block;height:5px;border-radius:3px;background:var(--pine);margin-top:5px}
+  .brk tr.unused .bar{background:#dfe3da}
 
   /* two-panel compare */
   .cmp2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -528,6 +681,7 @@
   .tw-card{background:#fff;border:1px solid #e6e9e1;border-radius:12px;padding:14px}
   .tw-card h4{margin:0 0 6px;text-align:center;font-size:1.02rem;color:var(--ink)}
   .tw-card svg,.x-svg{width:100%;height:auto;display:block}
+  .tw-card svg{max-width:420px;margin:0 auto}
   .tw-legend{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:.76rem;color:var(--ink-soft);margin-top:8px}
   .tw-legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:3px;border-radius:2px}
 
@@ -543,6 +697,9 @@
   @media(max-width:720px){
     .xc-grid,.cmp2,.tw-wrap{grid-template-columns:1fr}
     .xcat-sub{margin-left:0}
+    .bscale{grid-template-columns:1fr 1fr}
+    .rvt-bars{gap:9px}
+    .rvt-name{font-size:.78rem}
   }
 </style>
 </head>
@@ -705,9 +862,20 @@
               </g>
             </g>
           </svg>
+          <div class="ac-row" role="group" aria-label="Account type">
+            <span class="ac-lab">Account</span>
+            <button type="button" class="ac-tab active" data-acct="roth">Roth IRA</button>
+            <button type="button" class="ac-tab" data-acct="trad">Traditional IRA</button>
+            <button type="button" class="ac-tab" data-acct="k401">401(k)</button>
+          </div>
+          <div class="ac-row" role="group" aria-label="How often you contribute">
+            <span class="ac-lab">Put in</span>
+            <button type="button" class="ac-tab active" data-mode="once">Once</button>
+            <button type="button" class="ac-tab" data-mode="every">Every year</button>
+          </div>
           <div class="control">
-            <label for="seed">One-time deposit</label>
-            <input type="range" id="seed" min="100" max="10000" step="100" value="1000">
+            <label for="seed" id="seedLab">One-time deposit</label>
+            <input type="range" id="seed" min="100" max="7000" step="100" value="1000">
             <span class="amt" id="seedAmt">$1,000</span>
           </div>
           <div class="control">
@@ -724,17 +892,43 @@
         </div>
 
         <div class="result-card reveal">
+          <div class="ci-tabs" role="tablist">
+            <button type="button" class="ci-tab active" data-ci="future">Future dollars</button>
+            <button type="button" class="ci-tab" data-ci="today">Today&rsquo;s dollars</button>
+          </div>
           <div class="rk" id="rkLine">By age 65, it becomes</div>
           <div class="big"><span class="amber" id="finalVal">$27,367</span></div>
+          <p class="aftertax" id="afterTax" style="display:none"></p>
           <div class="breakdown">
             <div class="bd"><div class="bn" id="contribVal">$1,000</div><div class="bl">You put in</div></div>
             <div class="bd grow"><div class="bn" id="growthVal">$26,367</div><div class="bl">Pure growth</div></div>
           </div>
-          <p class="blurb">A Roth IRA grows <b style="color:#fff">completely tax-free</b>. Drop in $1,000, leave it alone, and at a long-run market average near 8% it keeps doubling roughly every 9 years—without you adding another cent. <b style="color:#fff">The earlier you start, the more the math does for you.</b></p>
+          <p class="blurb" id="ciBlurb">A Roth IRA grows <b style="color:#fff">completely tax-free</b>. Drop in $1,000, leave it alone, and at a long-run market average near 8% it keeps doubling roughly every 9 years—without you adding another cent. <b style="color:#fff">The earlier you start, the more the math does for you.</b></p>
           <a class="video-cta" href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener">▶ &nbsp;Open a Roth IRA in the Fidelity app</a>
           <a class="fid-link" href="https://www.fidelity.com/learning-center/trading-investing/how-to-open-a-roth-ira" target="_blank" rel="noopener">Fidelity's step-by-step guide →</a>
-          <p class="disclaim">Hypothetical illustration. 8% is an assumed average annual return, not a guarantee; actual results vary and investments can lose value.</p>
+          <p class="disclaim">Hypothetical illustration. 8% is an assumed average annual return, not a guarantee; actual results vary and investments can lose value. Today&rsquo;s dollars discounts by 3% a year for inflation.</p>
         </div>
+      </div>
+
+      <!-- Roth vs Traditional vs 401(k) — reads the sliders above -->
+      <div class="rvt reveal">
+        <h3>Same money. Three accounts.</h3>
+        <p class="rvt-sub">What <b id="rvtAmt">$1,000</b> a year for <b id="rvtYrs">43</b> years is worth <b>after tax</b> in each&mdash;capped at what each account legally allows.</p>
+        <div class="rvt-ctl">
+          <label for="rvtRate">Your tax rate in retirement will be</label>
+          <select id="rvtRate">
+            <option value="lower">lower than today</option>
+            <option value="same" selected>about the same</option>
+            <option value="higher">higher than today</option>
+          </select>
+        </div>
+        <div class="rvt-bars">
+          <div class="rvt-col" id="rvtC0"><div class="rvt-val"></div><div class="rvt-bar"></div><div class="rvt-name">Roth IRA</div><div class="rvt-note"></div></div>
+          <div class="rvt-col" id="rvtC1"><div class="rvt-val"></div><div class="rvt-bar"></div><div class="rvt-name">Traditional IRA</div><div class="rvt-note"></div></div>
+          <div class="rvt-col" id="rvtC2"><div class="rvt-val"></div><div class="rvt-bar"></div><div class="rvt-name">401(k)</div><div class="rvt-note"></div></div>
+        </div>
+        <div class="rvt-verdict" id="rvtVerdict"></div>
+        <p class="x-note" style="color:#6b756e">Roth is funded with money you&rsquo;ve already paid tax on, so the same paycheck buys a smaller contribution&mdash;but nothing is owed later. Traditional and 401(k) go in untaxed and are taxed on the way out. 2025 limits, under age 50. Federal only; no employer match, no state tax.</p>
       </div>
     </div>
   </section>
@@ -751,6 +945,21 @@
         <h2>The Financial Calculators I actually use.</h2>
         <p style="color:var(--ink-soft);margin-top:14px;max-width:60ch">The financial calculators I use to make money make sense&mdash;each one fully live, so you can change any input and watch it recompute.</p>
       </div>
+      <div class="master reveal">
+        <div class="m-lead">
+          <b>Start here.</b>
+          <span>Your age and income fill in every calculator below.</span>
+        </div>
+        <div class="wc-field">
+          <label for="mAge">Your age</label>
+          <div class="wc-ctrl wc-num"><input type="number" id="mAge" min="16" max="80" step="1" value="30"></div>
+        </div>
+        <div class="wc-field">
+          <label for="mInc">Annual income</label>
+          <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="mInc" min="0" max="5000000" step="1000" value="75000"></div>
+        </div>
+      </div>
+
       <details class="collapse reveal">
         <summary>
           <div class="collapse-txt">
@@ -774,6 +983,12 @@
             <label for="wcInc">Year-1 income</label>
             <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="wcInc" min="20000" max="2000000" step="5000" value="200000"></div>
           </div>
+          <details class="wc-sub-d">
+            <summary>Income changes at set years</summary>
+            <div id="wcSteps"></div>
+            <button type="button" class="wc-addstep" id="wcAddStep">+ Add a step</button>
+            <p class="wc-hint">Income jumps to the amount you set in that year, then grows at that step&rsquo;s raise until the next one.</p>
+          </details>
           <div class="wc-field">
             <label for="wcGrow">Annual raise</label>
             <div class="wc-ctrl"><input type="range" id="wcGrow" min="0" max="10" step="0.5" value="4"><span class="wc-val" id="wcGrowV">4%</span></div>
@@ -791,6 +1006,18 @@
             <div class="wc-ctrl"><input type="range" id="wcInfl" min="0" max="6" step="0.5" value="3"><span class="wc-val" id="wcInflV">3%</span></div>
           </div>
           <div class="wc-saverate">You save <b id="wcSave">20%</b> of every raise.</div>
+          <button type="button" class="wc-advbtn" id="wcAdvBtn" aria-expanded="false">Advanced</button>
+          <div class="wc-adv" id="wcAdv" hidden>
+            <div class="wc-field">
+              <label for="wcTax">Federal income tax</label>
+              <select id="wcTax">
+                <option value="off">Ignore taxes</option>
+                <option value="single">Single filer</option>
+                <option value="married">Married, filing jointly</option>
+              </select>
+            </div>
+            <p class="wc-hint" id="wcTaxNote">2025 brackets and standard deduction, indexed forward by your inflation rate. Federal only &mdash; no state or payroll tax.</p>
+          </div>
         </div>
 
         <div class="wc-output">
@@ -799,14 +1026,15 @@
             <button type="button" class="wc-tab" data-mode="today">Today&rsquo;s dollars</button>
           </div>
           <div class="wc-bignums">
-            <div class="wc-big"><div class="wc-bk">Realized wealth</div><div class="wc-bv" id="wcWealth">$7,364,800</div></div>
-            <div class="wc-big alt"><div class="wc-bk">Retirement income @5%/yr</div><div class="wc-bv" id="wcIncome">$368,240</div></div>
+            <div class="wc-big"><div class="wc-bk">Realized wealth</div><div class="wc-bv" id="wcWealth">$7,364,800</div><div class="wc-bsub" id="wcWealthSub"></div></div>
+            <div class="wc-big alt"><div class="wc-bk">Retirement income @5%/yr</div><div class="wc-bv" id="wcIncome">$368,240</div><div class="wc-bsub" id="wcTaxSub"></div></div>
           </div>
           <svg class="wc-chart" id="wcChart" viewBox="0 0 1000 460" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Wealth built versus lifestyle spending forfeited over a career"></svg>
           <div class="wc-legend">
             <span><i class="sw green"></i>Wealth you build (invested &amp; compounding)</span>
             <span><i class="sw red"></i>Cash you spend on lifestyle (not invested)</span>
           </div>
+          <div class="wc-total">Lifetime lifestyle spending: <b id="wcSpend">$0</b> &mdash; spent, never invested, never compounded.</div>
           <p class="wc-note">Hypothetical. Only the money you <b>save</b> is invested and compounds. The red bars are the raw dollars spent on lifestyle over the same years&mdash;spent, not grown. Flip to <b>Today&rsquo;s dollars</b> to strip out inflation and see what the ending balance is actually worth in current buying power.</p>
         </div>
       </div>
@@ -923,35 +1151,35 @@
         <div class="bs-band protect">
           <div class="bs-band-title">Protection</div>
           <div class="bs-cells">
-            <div class="bs-cell"><span>If you're sued</span><b>$1.0M umbrella</b></div>
-            <div class="bs-cell"><span>If you get sick</span><b>Disability + health</b></div>
-            <div class="bs-cell"><span>Wills &amp; trust</span><b>In place</b></div>
-            <div class="bs-cell"><span>At death</span><b>$1.0M life</b></div>
+            <button type="button" class="bs-cell" data-bs="sued"><span>If you're sued</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="sick"><span>If you get sick</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="wills"><span>Wills &amp; trusts</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="death"><span>At death</span><b></b></button>
           </div>
         </div>
 
         <div class="bs-mid">
           <div class="bs-col assets">
             <div class="bs-col-head">Assets</div>
-            <div class="bs-row"><span>Personal property</span><b>$45,000</b></div>
-            <div class="bs-row"><span>Savings &amp; cash</span><b>$35,000</b></div>
-            <div class="bs-row"><span>Investments</span><b>$120,000</b></div>
-            <div class="bs-row"><span>Retirement (Roth / 401k)</span><b>$185,000</b></div>
-            <div class="bs-row"><span>Real estate</span><b>$420,000</b></div>
-            <div class="bs-row"><span>Business</span><b>$25,000</b></div>
-            <div class="bs-row total"><span>Total assets</span><b>$830,000</b></div>
+            <button type="button" class="bs-row" data-bs="personal"><span>Personal property</span><b></b></button>
+            <button type="button" class="bs-row" data-bs="savings"><span>Savings &amp; cash</span><b></b></button>
+            <button type="button" class="bs-row" data-bs="invest"><span>Investments</span><b></b></button>
+            <button type="button" class="bs-row" data-bs="retire"><span>Retirement (Roth / 401k)</span><b></b></button>
+            <button type="button" class="bs-row" data-bs="realestate"><span>Real estate</span><b></b></button>
+            <button type="button" class="bs-row" data-bs="business"><span>Business</span><b></b></button>
+            <div class="bs-row total"><span>Total assets</span><b data-bs-out="assets"></b></div>
           </div>
           <div class="bs-right">
             <div class="bs-col liab">
               <div class="bs-col-head">Liabilities</div>
-              <div class="bs-row"><span>Short term</span><b>$6,000</b></div>
-              <div class="bs-row"><span>Taxes owed</span><b>$4,000</b></div>
-              <div class="bs-row"><span>Mortgage</span><b>$310,000</b></div>
-              <div class="bs-row"><span>Business debt</span><b>$0</b></div>
-              <div class="bs-row total"><span>Total liabilities</span><b>$320,000</b></div>
+              <button type="button" class="bs-row" data-bs="short"><span>Short term</span><b></b></button>
+              <button type="button" class="bs-row" data-bs="taxowed"><span>Taxes owed</span><b></b></button>
+              <button type="button" class="bs-row" data-bs="mortgage"><span>Mortgage</span><b></b></button>
+              <button type="button" class="bs-row" data-bs="bizdebt"><span>Business debt</span><b></b></button>
+              <div class="bs-row total"><span>Total liabilities</span><b data-bs-out="liab"></b></div>
             </div>
             <div class="bs-networth">
-              <span>Net worth</span><b>$510,000</b>
+              <span>Net worth</span><b data-bs-out="net"></b>
             </div>
           </div>
         </div>
@@ -959,14 +1187,25 @@
         <div class="bs-band cash">
           <div class="bs-band-title">Cash flow (annual)</div>
           <div class="bs-cells">
-            <div class="bs-cell"><span>Earnings</span><b>$200,000</b></div>
-            <div class="bs-cell"><span>Protection costs</span><b>$8,000</b></div>
-            <div class="bs-cell"><span>Asset building</span><b>$40,000</b></div>
-            <div class="bs-cell"><span>Debts &amp; taxes</span><b>$70,000</b></div>
-            <div class="bs-cell hi"><span>Left for lifestyle</span><b>$82,000</b></div>
+            <button type="button" class="bs-cell" data-bs="earn"><span>Earnings</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="protcost"><span>Protection costs</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="build"><span>Asset building</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="debttax"><span>Debts &amp; taxes</span><b></b></button>
+            <div class="bs-cell hi"><span>Left for lifestyle</span><b data-bs-out="life"></b></div>
           </div>
         </div>
-        <p class="bs-note">Illustrative example for a mid-career household — not real figures. This is the snapshot we'd build together and update over time.</p>
+        <div class="bs-foot">
+          <p class="bs-note" style="padding:14px 0 4px">Click any line to enter your own numbers. Saved on this device only.</p>
+          <button type="button" class="bs-reset" id="bsReset">Reset to example</button>
+        </div>
+      </div>
+
+      <!-- balance-sheet pop-up -->
+      <div class="bsm" id="bsModal" role="dialog" aria-modal="true" aria-labelledby="bsmTitle">
+        <div class="bsm-box">
+          <div class="bsm-head" id="bsmHead"><span id="bsmTitle"></span><button type="button" class="bsm-x" id="bsmX" aria-label="Close">&times;</button></div>
+          <div class="bsm-body" id="bsmBody"></div>
+        </div>
       </div>
         </div>
       </details>
@@ -1027,28 +1266,6 @@
 
       <details class="collapse reveal">
         <summary>
-          <div class="collapse-txt"><span class="eyebrow">Self-check</span><h3>What&rsquo;s your level of protection?</h3><p>Enter a few household totals and see where the gaps are.</p></div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body"><div class="x-tool">
-          <div class="x-why"><b>Why it matters:</b> Most people insure their car and phone but leave their income, their liability, and their family&rsquo;s future uncovered. This is a 30-second gut-check of the four pillars everyone should have in place.</div>
-          <div class="xc-grid">
-            <div class="xc-fields">
-              <div class="xc-f"><label for="lpLife">Life insurance</label><div class="xc-in"><span class="pre">$</span><input type="number" id="lpLife" min="0" step="10000" value="0"></div></div>
-              <div class="xc-f"><label for="lpDis">Disability (monthly benefit)</label><div class="xc-in"><span class="pre">$</span><input type="number" id="lpDis" min="0" step="100" value="0"></div></div>
-              <div class="xc-f"><label for="lpLiab">Liability / umbrella</label><div class="xc-in"><span class="pre">$</span><input type="number" id="lpLiab" min="0" step="50000" value="0"></div></div>
-              <div class="xc-f"><label for="lpWills">Will &amp; trust in place?</label>
-                <select id="lpWills" class="xc-in" style="padding:7px 8px"><option value="no">No</option><option value="partial">Just a will</option><option value="yes">Yes, both</option></select>
-              </div>
-            </div>
-            <div class="xc-res"><div class="k">Protection gaps found</div><div class="v" id="lpScore">4</div><div id="lpMsg" style="font-size:.82rem;opacity:.9;margin-top:8px;line-height:1.4">Fill in your numbers above.</div></div>
-          </div>
-          <ul id="lpFlags" class="x-note" style="margin-top:14px;padding-left:18px"></ul>
-        </div></div>
-      </details>
-
-      <details class="collapse reveal">
-        <summary>
           <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Protection overview scorecard.</h3><p>Map every coverage from &ldquo;warning&rdquo; to &ldquo;optimal.&rdquo;</p></div>
           <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
         </summary>
@@ -1077,6 +1294,126 @@
 
       <details class="collapse reveal">
         <summary>
+          <div class="collapse-txt"><span class="eyebrow">Self-check</span><h3>What&rsquo;s your level of protection?</h3><p>Enter a few household totals and see where the gaps are.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Most people insure their car and phone but leave their income, their liability, and their family&rsquo;s future uncovered. This is a 30-second gut-check of the four pillars everyone should have in place.</div>
+          <p class="x-note" style="text-align:center;margin:0 0 14px;font-size:.86rem">Enter your information below. These numbers are household totals.</p>
+          <div class="pcards">
+            <div class="pcard">
+              <h5>Life Insurance</h5>
+              <div class="xc-in"><span class="pre">$</span><input type="number" id="lpLife" min="0" step="10000" value="0"></div>
+              <div class="hint">Total death benefit in force</div>
+            </div>
+            <div class="pcard">
+              <h5>Disability</h5>
+              <div class="xc-in"><span class="pre">$</span><input type="number" id="lpDis" min="0" step="100" value="0"></div>
+              <div class="hint">Monthly benefit</div>
+            </div>
+            <div class="pcard">
+              <h5>Liability</h5>
+              <div class="xc-in"><span class="pre">$</span><input type="number" id="lpLiab" min="0" step="50000" value="0"></div>
+              <div class="hint">Umbrella coverage</div>
+            </div>
+            <div class="pcard">
+              <h5>Wills &amp; Trusts</h5>
+              <div class="yn">
+                <span></span><span class="yh">Yes</span><span class="yh">No</span>
+                <label for="lpWillY">Wills</label>
+                <input type="radio" name="lpWill" id="lpWillY" value="yes"><input type="radio" name="lpWill" id="lpWillN" value="no" checked>
+                <label for="lpTrustY">Trusts</label>
+                <input type="radio" name="lpTrust" id="lpTrustY" value="yes"><input type="radio" name="lpTrust" id="lpTrustN" value="no" checked>
+              </div>
+            </div>
+          </div>
+          <div class="xc-res" style="margin-top:18px"><div class="k">Protection gaps found</div><div class="v" id="lpScore">4</div><div id="lpMsg" style="font-size:.82rem;opacity:.9;margin-top:8px;line-height:1.4">Fill in your numbers above.</div></div>
+          <ul id="lpFlags" class="x-note" style="margin-top:14px;padding-left:18px"></ul>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>How much life insurance would you qualify for?</h3><p>Carriers cap coverage by age. Here&rsquo;s your ceiling.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> You can&rsquo;t buy unlimited coverage. Carriers price off a multiple of income that <b>shrinks with age</b>, plus your debt. Knowing the ceiling tells you how much of your working life is still insurable&mdash;and it only gets smaller from here.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="liAge">Current age</label><div class="xc-in"><input type="range" id="liAge" min="18" max="85" value="34" style="width:130px"><b id="liAgeV" style="margin-left:8px">34</b></div></div>
+              <div class="xc-f"><label for="liInc">Gross annual income</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liInc" min="0" max="5000000" step="5000" value="120000"></div></div>
+              <div class="xc-f" id="liNwF" style="display:none"><label for="liNw">Total net worth</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liNw" min="0" step="50000" value="2500000"></div></div>
+              <div class="xc-f"><label for="liDebt">Outstanding debt</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liDebt" min="0" step="10000" value="340000"></div></div>
+              <div class="xc-f"><label for="liHave">Coverage already in force</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liHave" min="0" step="50000" value="500000"></div></div>
+            </div>
+            <div class="xc-res"><div class="k">Maximum qualified coverage</div><div class="v" id="liMax">$0</div><div class="sub" id="liBasis"></div></div>
+          </div>
+          <div class="ldg">
+            <div class="lrow"><span>Maximum qualified</span><b id="liL1">$0</b></div>
+            <div class="lrow"><span>Already in force</span><b id="liL2">$0</b></div>
+            <div class="lrow tot"><span>Remaining insurable capacity</span><b id="liL3">$0</b></div>
+          </div>
+          <div class="flagbar" id="liFlag" style="display:none"></div>
+          <p class="x-note"><b>The guideline table:</b> 18&ndash;40 &rarr; 30&times; income &middot; 41&ndash;50 &rarr; 20&times; &middot; 51&ndash;60 &rarr; 15&times; &middot; 61&ndash;65 &rarr; 10&times; &middot; 66&ndash;70 &rarr; 1&times; net worth &middot; 71&ndash;80 &rarr; &frac12;&times; net worth &middot; 81+ case by case. Debt is added on top. Educational estimate only&mdash;guidelines vary by carrier, and final underwriting depends on health, occupation and financial documentation. Same math as the <a href="lesson-protection.html" style="color:var(--pine);font-weight:700">Protection lesson</a>.</p>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>Your monthly disability gap.</h3><p>What arrives if your paycheck stops tomorrow.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Life insurance protects your family from your death. Disability insurance protects them from your life. Group coverage at work typically replaces about 60% of <i>base</i> pay and caps the monthly benefit&mdash;so the higher you earn, the bigger the hole.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="diInc">Gross annual income</label><div class="xc-in"><span class="pre">$</span><input type="number" id="diInc" min="0" max="5000000" step="5000" value="200000"></div></div>
+              <div class="xc-f calc"><label>Monthly equivalent</label><b id="diMo">$16,667</b></div>
+              <div class="xc-f"><label for="diBen">Current monthly DI benefit</label><div class="xc-in"><span class="pre">$</span><input type="number" id="diBen" min="0" step="100" value="0"></div></div>
+              <div class="xc-f"><label for="diPct">Or estimate: policy replaces</label><div class="xc-in"><input type="range" id="diPct" min="0" max="80" step="5" value="0" style="width:130px"><b id="diPctV" style="margin-left:8px">0%</b></div></div>
+              <div class="xc-f"><label for="diCap">Monthly cap on the policy</label><div class="xc-in"><span class="pre">$</span><input type="number" id="diCap" min="0" step="500" value="10000"></div></div>
+              <div class="xc-f"><label for="diNeed">Essential monthly expenses</label><div class="xc-in"><span class="pre">$</span><input type="number" id="diNeed" min="0" step="250" value="9000"></div></div>
+            </div>
+            <div class="xc-res"><div class="k">Potential monthly gap</div><div class="v warn" id="diGap">$16,667</div><div class="sub" id="diSub"></div></div>
+          </div>
+          <div class="meter2">
+            <div class="track"><i class="cov" id="diBarCov" style="width:0%"></i><i class="gap" id="diBarGap" style="width:100%"></i></div>
+            <div class="key"><span><i style="background:#2e8b57"></i>Covered</span><span><i style="background:#c0392b"></i>Exposed</span></div>
+          </div>
+          <div class="ldg">
+            <div class="lrow"><span>Current monthly income</span><b id="diL1">$16,667</b></div>
+            <div class="lrow"><span>Current monthly DI benefit</span><b id="diL2">$0</b></div>
+            <div class="lrow tot gap"><span>Potential disability gap</span><b id="diL3">$16,667</b></div>
+            <div class="lrow"><span>Essential expenses shortfall</span><b id="diL4">$9,000</b></div>
+          </div>
+          <div class="flagbar" id="diFlag" style="display:none"></div>
+          <p class="x-note">Before-tax figures. Employer-paid premiums generally make the benefit <b>taxable</b>, which widens the real gap; a policy you pay for yourself pays out tax-free. Set the cap to 0 for no cap.</p>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>What a death benefit actually replaces.</h3><p>Not a lump sum to spend&mdash;a paycheck that keeps arriving.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> A $1M death benefit sounds like a windfall, so families spend it&mdash;and it&rsquo;s gone in a decade. Invested instead, it replaces the salary that died with you. That&rsquo;s the whole job of life insurance: keep the paycheck coming.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="dbBen">Death benefit</label><div class="xc-in"><span class="pre">$</span><input type="number" id="dbBen" min="0" max="20000000" step="50000" value="1000000"></div></div>
+              <div class="xc-f"><label for="dbInc">Income to replace</label><div class="xc-in"><span class="pre">$</span><input type="number" id="dbInc" min="0" max="2000000" step="5000" value="100000"></div></div>
+              <div class="xc-f"><label for="dbRet">Annual return</label><div class="xc-in"><input type="range" id="dbRet" min="1" max="12" step="0.5" value="10" style="width:150px"><b id="dbRetV" style="margin-left:8px">10%</b></div></div>
+            </div>
+            <div class="xc-res"><div class="k">Income the benefit pays</div><div class="v" id="dbOut">$100,000</div><div class="sub" id="dbSub"></div></div>
+          </div>
+          <svg class="x-svg sm" id="dbChart" viewBox="0 0 340 160" role="img" aria-label="Death benefit balance over 40 years while paying out replacement income"></svg>
+          <p class="x-note">Same math as the passive income tool in Cash Flow: draw only what the balance earns and the principal is still there for the next generation. Draw more and the green line bends toward zero&mdash;the year it hits the axis is the year the money stops.</p>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
           <div class="collapse-txt"><span class="eyebrow">Explainer</span><h3>Term vs. whole life insurance.</h3><p>The one you asked about&mdash;what the two curves actually mean.</p></div>
           <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
         </summary>
@@ -1085,13 +1422,15 @@
           <div class="tw-wrap">
             <div class="tw-card">
               <h4>Term Life</h4>
-              <svg viewBox="0 0 220 130" role="img" aria-label="Term life: flat death benefit that ends, cost rising over time">
-                <line x1="26" y1="10" x2="26" y2="112" stroke="#cfd4ca" stroke-width="1"/><line x1="26" y1="112" x2="210" y2="112" stroke="#cfd4ca" stroke-width="1"/>
-                <path d="M30,40 H150" fill="none" stroke="#e0b400" stroke-width="4"/><line x1="150" y1="32" x2="150" y2="48" stroke="#e0b400" stroke-width="4"/>
-                <path d="M30,108 Q120,104 175,50" fill="none" stroke="#c0392b" stroke-width="4"/>
-                <text x="34" y="34" font-size="10" fill="#6b6f66">Death benefit (ends)</text>
-                <text x="120" y="86" font-size="10" fill="#6b6f66">Cost</text>
-                <text x="150" y="126" font-size="9" fill="#9aa093" text-anchor="middle">years →</text>
+              <svg viewBox="0 0 300 180" role="img" aria-label="Term life: a level death benefit that ends after the term, and a cost that climbs steeply with age">
+                <rect x="34" y="12" width="258" height="134" rx="4" fill="#f1f2ef"/>
+                <text x="16" y="84" font-size="12" font-weight="700" fill="#6b6f66">$</text>
+                <path d="M46,50 H196" fill="none" stroke="#e0b400" stroke-width="3.5" stroke-linecap="round"/>
+                <line x1="196" y1="41" x2="196" y2="59" stroke="#e0b400" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M46,142 C120,140 176,128 206,78" fill="none" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/>
+                <text x="52" y="40" font-size="11" font-weight="700" fill="#5b6b7a">Death Benefit</text>
+                <text x="104" y="126" font-size="11" font-weight="700" fill="#5b6b7a">Cost</text>
+                <text x="163" y="170" font-size="10" font-weight="700" letter-spacing="1" fill="#9aa093" text-anchor="middle">YEARS</text>
               </svg>
               <div class="tw-legend"><span><i style="background:#e0b400"></i>Death benefit</span><span><i style="background:#c0392b"></i>Cost</span></div>
               <ul style="margin:10px 0 0;padding-left:18px;font-size:.86rem;color:var(--ink);line-height:1.5">
@@ -1102,15 +1441,16 @@
             </div>
             <div class="tw-card">
               <h4>Whole Life</h4>
-              <svg viewBox="0 0 220 130" role="img" aria-label="Whole life: rising death benefit, level cost, growing cash value">
-                <line x1="26" y1="10" x2="26" y2="112" stroke="#cfd4ca" stroke-width="1"/><line x1="26" y1="112" x2="210" y2="112" stroke="#cfd4ca" stroke-width="1"/>
-                <path d="M30,48 Q120,44 205,20" fill="none" stroke="#e0b400" stroke-width="4"/>
-                <path d="M30,100 Q140,92 205,26" fill="none" stroke="#2f6df6" stroke-width="4"/>
-                <path d="M30,78 H205" fill="none" stroke="#c0392b" stroke-width="4"/>
-                <text x="34" y="42" font-size="10" fill="#6b6f66">Death benefit</text>
-                <text x="120" y="60" font-size="10" fill="#6b6f66">Cash value</text>
-                <text x="34" y="74" font-size="10" fill="#6b6f66">Cost (level)</text>
-                <text x="150" y="126" font-size="9" fill="#9aa093" text-anchor="middle">years →</text>
+              <svg viewBox="0 0 300 180" role="img" aria-label="Whole life: a death benefit that drifts upward, a level cost, and cash value compounding toward the benefit">
+                <rect x="34" y="12" width="258" height="134" rx="4" fill="#f1f2ef"/>
+                <text x="16" y="84" font-size="12" font-weight="700" fill="#6b6f66">$</text>
+                <path d="M46,96 C120,80 200,66 284,44" fill="none" stroke="#e0b400" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M46,138 C130,132 220,112 284,26" fill="none" stroke="#2f6df6" stroke-width="3.5" stroke-linecap="round"/>
+                <path d="M46,118 H284" fill="none" stroke="#c0392b" stroke-width="3.5" stroke-linecap="round"/>
+                <text x="176" y="64" font-size="11" font-weight="700" fill="#5b6b7a">Death Benefit</text>
+                <text x="140" y="102" font-size="11" font-weight="700" fill="#5b6b7a">Cash Value</text>
+                <text x="56" y="111" font-size="11" font-weight="700" fill="#5b6b7a">Cost</text>
+                <text x="163" y="170" font-size="10" font-weight="700" letter-spacing="1" fill="#9aa093" text-anchor="middle">YEARS</text>
               </svg>
               <div class="tw-legend"><span><i style="background:#e0b400"></i>Death benefit</span><span><i style="background:#2f6df6"></i>Cash value</span><span><i style="background:#c0392b"></i>Cost</span></div>
               <ul style="margin:10px 0 0;padding-left:18px;font-size:.86rem;color:var(--ink);line-height:1.5">
@@ -1155,6 +1495,28 @@
       <!-- ========== 2 · CASH FLOW ========== -->
       <h3 class="xcat reveal"><span class="xnum">2</span>Cash Flow</h3>
       <p class="xcat-sub reveal">Once you&rsquo;re protected, wealth is built from cash flow&mdash;not income. It&rsquo;s not what you make, it&rsquo;s what you keep and where you direct it.</p>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Savings &amp; wealth-building scorecard.</h3><p>Are your saving habits set up to win?</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Assets are the <i>result</i>; habits are the <i>engine</i>. This checks whether the machine that builds your wealth is actually running. <b>Click a box</b> to mark where you are.</div>
+          <div class="sc-legend"><span><i class="sc-w"></i>Warning</span><span><i class="sc-m"></i>Moderate</span><span><i class="sc-o"></i>Optimal</span></div>
+          <table class="scard" data-scard>
+            <thead><tr><th>Habit</th><th>Warning</th><th>Moderate</th><th>Optimal</th></tr></thead>
+            <tbody>
+              <tr data-row><td>Savings rate</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o on"></div></td></tr>
+              <tr data-row><td>Wealth-building account</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>WBA target funding</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Lifestyle costs mapped</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Employer match captured</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Saving is automatic</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </details>
 
       <details class="collapse reveal">
         <summary>
@@ -1237,9 +1599,73 @@
         </div></div>
       </details>
 
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>One lump sum, left alone.</h3><p>Invest it once. Don&rsquo;t touch it. See where it lands.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> A windfall&mdash;a bonus, an inheritance, a house sale&mdash;is usually spent because nobody ever showed what it becomes if it isn&rsquo;t. Time does almost all the work here; you only have to leave it alone.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="lsAmt">Amount invested</label><div class="xc-in"><span class="pre">$</span><input type="number" id="lsAmt" min="0" max="5000000" step="5000" value="250000"></div></div>
+              <input type="range" id="lsAmtR" min="0" max="5000000" step="5000" value="250000" style="width:100%;accent-color:var(--pine);margin:-2px 0 6px" aria-label="Amount invested slider">
+              <div class="xc-f"><label for="lsYears">Years invested</label><div class="xc-in"><input type="range" id="lsYears" min="1" max="47" step="1" value="47" style="width:150px"><b id="lsYearsV" style="margin-left:8px">47</b></div></div>
+              <div class="xc-f"><label for="lsRet">Annual return</label><div class="xc-in"><input type="range" id="lsRet" min="1" max="12" step="0.5" value="8" style="width:150px"><b id="lsRetV" style="margin-left:8px">8%</b></div></div>
+              <div class="xc-f"><label for="lsInfl">Show in today&rsquo;s dollars</label><div class="xc-in" style="border:0;background:transparent"><input type="checkbox" id="lsInfl" style="width:18px;height:18px;accent-color:var(--pine)"></div></div>
+            </div>
+            <div class="xc-res"><div class="k" id="lsK">What it becomes</div><div class="v" id="lsOut">$0</div><div class="sub" id="lsSub"></div></div>
+          </div>
+          <svg class="x-svg sm" id="lsChart" viewBox="0 0 340 160" role="img" aria-label="Growth of a single lump sum over time"></svg>
+          <p class="x-note">47 years is the run from age 18 to 65. Nothing is added along the way&mdash;every dollar above the deposit is growth. Today&rsquo;s dollars discounts by 3% a year so you can see real buying power.</p>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>The day your money works instead of you.</h3><p>Live on the return and the principal never runs out.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Spend the principal and it drains. Spend only what the principal <b>earns</b> and the balance is still there next year, and the year after. $1M earning 10% pays $100,000 a year&mdash;forever&mdash;and you still have the $1M.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="piBal">Invested balance</label><div class="xc-in"><span class="pre">$</span><input type="number" id="piBal" min="0" max="20000000" step="50000" value="1000000"></div></div>
+              <div class="xc-f"><label for="piRet">Annual return</label><div class="xc-in"><input type="range" id="piRet" min="1" max="12" step="0.5" value="10" style="width:150px"><b id="piRetV" style="margin-left:8px">10%</b></div></div>
+              <div class="xc-f"><label for="piDraw">You withdraw</label><div class="xc-in"><input type="range" id="piDraw" min="0" max="12" step="0.5" value="10" style="width:150px"><b id="piDrawV" style="margin-left:8px">10%</b></div></div>
+            </div>
+            <div class="xc-res"><div class="k">Income, every year</div><div class="v" id="piOut">$100,000</div><div class="sub" id="piSub"></div></div>
+          </div>
+          <svg class="x-svg sm" id="piChart" viewBox="0 0 340 160" role="img" aria-label="Portfolio balance over 40 years while withdrawing the return"></svg>
+          <p class="x-note">Withdraw <b>less</b> than you earn and the balance grows. Exactly what you earn and it holds flat forever. More, and the line bends toward zero. Real returns bounce around this average, and inflation raises what you need&mdash;which is why most plans withdraw well under the return.</p>
+        </div></div>
+      </details>
+
       <!-- ========== 3 · LIQUIDITY & ASSETS ========== -->
       <h3 class="xcat reveal"><span class="xnum">3</span>Liquidity &amp; Assets</h3>
       <p class="xcat-sub reveal">Wealth you can&rsquo;t reach in an emergency isn&rsquo;t doing its job. This is about keeping enough within arm&rsquo;s reach for life&rsquo;s surprises&mdash;without parking everything in cash.</p>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Liquidity scorecard.</h3><p>How fast can you reach money when life happens?</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Liquidity is what stops a bad month from becoming a bad decade&mdash;selling investments at the bottom, or borrowing at 24%. <b>Click a box</b> to mark where you are.</div>
+          <div class="sc-legend"><span><i class="sc-w"></i>Warning</span><span><i class="sc-m"></i>Moderate</span><span><i class="sc-o"></i>Optimal</span></div>
+          <table class="scard" data-scard>
+            <thead><tr><th>Position</th><th>Warning</th><th>Moderate</th><th>Optimal</th></tr></thead>
+            <tbody>
+              <tr data-row><td>Emergency fund (months of expenses)</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Cash earning a competitive rate</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Money reachable without a penalty</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Not over-concentrated in one asset</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Credit line open <i>before</i> it&rsquo;s needed</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Sinking funds for known costs</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </details>
 
       <details class="collapse reveal">
         <summary>
@@ -1273,27 +1699,67 @@
 
       <details class="collapse reveal">
         <summary>
-          <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Savings &amp; wealth-building scorecard.</h3><p>Are your saving habits set up to win?</p></div>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>How much house can you actually carry?</h3><p>The payment, the fees, and what the down payment costs you.</p></div>
           <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
         </summary>
         <div class="collapse-body"><div class="x-tool">
-          <div class="x-why"><b>Why it matters:</b> Assets are the <i>result</i>; habits are the <i>engine</i>. This checks whether the machine that builds your wealth is actually running. <b>Click a box</b> to mark where you are.</div>
-          <div class="sc-legend"><span><i class="sc-w"></i>Warning</span><span><i class="sc-m"></i>Moderate</span><span><i class="sc-o"></i>Optimal</span></div>
-          <table class="scard" data-scard>
-            <thead><tr><th>Habit</th><th>Warning</th><th>Moderate</th><th>Optimal</th></tr></thead>
-            <tbody>
-              <tr data-row><td>Savings rate</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o on"></div></td></tr>
-              <tr data-row><td>Wealth-building account</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
-              <tr data-row><td>WBA target funding</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
-              <tr data-row><td>Lifestyle costs mapped</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
-            </tbody>
-          </table>
+          <div class="x-why"><b>Why it matters:</b> A lender will approve you for far more than a planner would. The payment is only half the story&mdash;the down payment is a large sum of money leaving the market, and it never compounds again. Both numbers decide how early you get to stop working.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="hmPrice">Home price</label><div class="xc-in"><span class="pre">$</span><input type="number" id="hmPrice" min="0" max="10000000" step="10000" value="450000"></div></div>
+              <div class="xc-f"><label for="hmDown">Down payment</label><div class="xc-in"><input type="range" id="hmDown" min="0" max="50" step="1" value="13" style="width:130px"><b id="hmDownV" style="margin-left:8px">13%</b></div></div>
+              <div class="xc-f"><label for="hmRate">Interest rate</label><div class="xc-in"><input type="range" id="hmRate" min="2" max="10" step="0.125" value="6.5" style="width:130px"><b id="hmRateV" style="margin-left:8px">6.5%</b></div></div>
+              <div class="xc-f"><label for="hmTerm">Loan term</label>
+                <select id="hmTerm" class="xc-in" style="padding:7px 8px"><option value="30">30 years</option><option value="15">15 years</option></select>
+              </div>
+              <div class="xc-f"><label for="hmFees">Tax, insurance &amp; HOA / mo</label><div class="xc-in"><span class="pre">$</span><input type="number" id="hmFees" min="0" step="25" value="550"></div></div>
+              <div class="xc-f"><label for="hmClose">Closing costs</label><div class="xc-in"><input type="range" id="hmClose" min="0" max="6" step="0.5" value="3" style="width:130px"><b id="hmCloseV" style="margin-left:8px">3%</b></div></div>
+              <div class="xc-f"><label for="hmInc">Annual income</label><div class="xc-in"><span class="pre">$</span><input type="number" id="hmInc" min="0" max="5000000" step="1000" value="125000"></div></div>
+            </div>
+            <div class="xc-res"><div class="k">All-in monthly payment</div><div class="v" id="hmPay">$0</div><div class="sub" id="hmSub"></div></div>
+          </div>
+
+          <p class="x-note" style="margin-top:18px;font-size:.86rem;color:var(--ink)"><b>The optimal scale.</b> What this house costs you as a share of gross income:</p>
+          <div class="bscale">
+            <div class="bband k-pine"   id="hmB0">Retire early<small>under 20%</small></div>
+            <div class="bband k-green"  id="hmB1">Comfortable<small>20&ndash;28%</small></div>
+            <div class="bband k-amber"  id="hmB2">Stretched<small>28&ndash;36%</small></div>
+            <div class="bband k-red"    id="hmB3">House poor<small>over 36%</small></div>
+          </div>
+          <p class="x-note" id="hmScale" style="margin-top:12px"></p>
+
+          <div class="x-why" style="margin-top:18px;background:#f3f0e6"><b>What that down payment could have been:</b> <span id="hmOpp"></span></div>
+
+          <p class="x-note">Principal and interest only on the loan itself; tax, insurance and HOA are your figure. No PMI, which most lenders add under 20% down. Buying isn&rsquo;t simply worse than investing&mdash;you&rsquo;d be paying rent either way, and the house can appreciate on its full price, not just your deposit. The point is that the trade is <b>real</b>, and worth seeing before you sign.</p>
+          <p class="x-note"><a href="https://www.redfin.com/" target="_blank" rel="noopener" style="color:var(--pine);font-weight:700">Browse real listings on Redfin &rarr;</a></p>
         </div></div>
       </details>
 
       <!-- ========== 4 · TAX & DEBT ========== -->
       <h3 class="xcat reveal"><span class="xnum">4</span>Tax &amp; Debt</h3>
       <p class="xcat-sub reveal">Two of the biggest leaks in any plan. You can&rsquo;t build wealth efficiently while taxes and the wrong kind of debt quietly bleed your cash flow.</p>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Tax &amp; debt scorecard.</h3><p>The two leaks that never show up on a statement.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Tax is usually the single largest expense of a lifetime, and high-rate debt compounds against you exactly the way investing compounds for you. Both are fixable&mdash;but only once you look. <b>Click a box</b> to mark where you are.</div>
+          <div class="sc-legend"><span><i class="sc-w"></i>Warning</span><span><i class="sc-m"></i>Moderate</span><span><i class="sc-o"></i>Optimal</span></div>
+          <table class="scard" data-scard>
+            <thead><tr><th>Position</th><th>Warning</th><th>Moderate</th><th>Optimal</th></tr></thead>
+            <tbody>
+              <tr data-row><td>You know your marginal &amp; effective rate</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Tax-advantaged accounts being used</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Mix of pre-tax and after-tax savings</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>No revolving credit-card balance</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Debt payoff order set by interest rate</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Withholding roughly matches the bill</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </details>
 
       <details class="collapse reveal">
         <summary>
@@ -1318,9 +1784,58 @@
         </div></div>
       </details>
 
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>Which bracket are you actually in?</h3><p>Nobody pays their top rate on all of it.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> &ldquo;I&rsquo;m in the 24% bracket&rdquo; almost never means you pay 24%. Brackets are <b>slices</b>&mdash;each layer of income is taxed at its own rate, so your real (effective) rate lands well below the top one. Knowing both numbers is what makes a raise, a bonus, or a Roth conversion easy to judge.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="tbInc">Gross income</label><div class="xc-in"><span class="pre">$</span><input type="number" id="tbInc" min="0" max="5000000" step="1000" value="125000"></div></div>
+              <div class="xc-f"><label for="tbStatus">Filing status</label>
+                <select id="tbStatus" class="xc-in" style="padding:7px 8px"><option value="single">Single</option><option value="married">Married, filing jointly</option></select>
+              </div>
+              <div class="xc-f"><label for="tbDed">Deduction</label>
+                <select id="tbDed" class="xc-in" style="padding:7px 8px"><option value="std">Standard</option><option value="none">None (itemize $0)</option></select>
+              </div>
+            </div>
+            <div class="xc-res">
+              <div class="k">Effective tax rate</div><div class="v" id="tbEff">0%</div>
+              <div class="sub" id="tbSub"></div>
+            </div>
+          </div>
+          <table class="brk"><thead><tr><th>Bracket</th><th>Income taxed here</th><th>Tax</th></tr></thead><tbody id="tbRows"></tbody></table>
+          <p class="x-note">2025 federal brackets and standard deduction. <b>Federal income tax only</b>&mdash;no state tax, no Social Security or Medicare payroll tax, no credits. Your <b>marginal</b> rate is what the next dollar costs; your <b>effective</b> rate is what the whole thing cost.</p>
+        </div></div>
+      </details>
+
       <!-- ========== 5 · RETIREMENT ========== -->
       <h3 class="xcat reveal"><span class="xnum">5</span>Retirement</h3>
       <p class="xcat-sub reveal">Retirement isn&rsquo;t an age or a number&mdash;it&rsquo;s the day your income no longer depends on your job. These tools ask the two real questions: is it <i>enough</i>, and how <i>certain</i> is it?</p>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Retirement readiness scorecard.</h3><p>Not just the balance&mdash;the whole runway.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> A balance alone doesn&rsquo;t tell you whether you can retire. What matters is the income it produces, how much of that is guaranteed, and what happens if markets misbehave in your first few years. <b>Click a box</b> to mark where you are.</div>
+          <div class="sc-legend"><span><i class="sc-w"></i>Warning</span><span><i class="sc-m"></i>Moderate</span><span><i class="sc-o"></i>Optimal</span></div>
+          <table class="scard" data-scard>
+            <thead><tr><th>Position</th><th>Warning</th><th>Moderate</th><th>Optimal</th></tr></thead>
+            <tbody>
+              <tr data-row><td>You have a target retirement income</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Saving enough to reach it</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Guaranteed income covers essentials</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Investment mix matches your timeline</td><td><div class="sc-cell w"></div></td><td><div class="sc-cell m on"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Withdrawal plan for the first 10 years</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+              <tr data-row><td>Health-care &amp; long-term-care planned for</td><td><div class="sc-cell w on"></div></td><td><div class="sc-cell m"></div></td><td><div class="sc-cell o"></div></td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </details>
 
       <details class="collapse reveal">
         <summary>
@@ -1348,6 +1863,82 @@
             <div class="gauge-scale"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%+</span></div>
           </div>
           <p class="x-note" id="rPct" style="margin-top:14px"></p>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Survey</span><h3>What&rsquo;s your risk tolerance?</h3><p>Six questions. Answer honestly, not aspirationally.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Risk tolerance isn&rsquo;t only how brave you feel&mdash;it&rsquo;s how much a bad year would actually cost you. Time, income stability and cash reserves decide how much volatility you can <i>afford</i> to sit through, and sitting through it is the whole game.</div>
+
+          <div id="rtQs">
+            <div class="rt-q" data-q>
+              <p>1 &middot; When do you expect to start spending this money?</p>
+              <div class="rt-opts">
+                <button type="button" class="rt-opt" data-s="1">Within 3 years</button>
+                <button type="button" class="rt-opt" data-s="2">3&ndash;10 years</button>
+                <button type="button" class="rt-opt" data-s="3">10&ndash;20 years</button>
+                <button type="button" class="rt-opt" data-s="4">20+ years</button>
+              </div>
+            </div>
+            <div class="rt-q" data-q>
+              <p>2 &middot; Your account drops 25% over six months. You&hellip;</p>
+              <div class="rt-opts">
+                <button type="button" class="rt-opt" data-s="1">Sell, move to cash</button>
+                <button type="button" class="rt-opt" data-s="2">Sell some of it</button>
+                <button type="button" class="rt-opt" data-s="3">Change nothing</button>
+                <button type="button" class="rt-opt" data-s="4">Buy more</button>
+              </div>
+            </div>
+            <div class="rt-q" data-q>
+              <p>3 &middot; Your income is&hellip;</p>
+              <div class="rt-opts">
+                <button type="button" class="rt-opt" data-s="1">Unpredictable</button>
+                <button type="button" class="rt-opt" data-s="2">Somewhat variable</button>
+                <button type="button" class="rt-opt" data-s="3">Steady</button>
+                <button type="button" class="rt-opt" data-s="4">Steady and rising</button>
+              </div>
+            </div>
+            <div class="rt-q" data-q>
+              <p>4 &middot; Cash you could reach tomorrow without selling anything:</p>
+              <div class="rt-opts">
+                <button type="button" class="rt-opt" data-s="1">Not much</button>
+                <button type="button" class="rt-opt" data-s="2">About a month</button>
+                <button type="button" class="rt-opt" data-s="3">Three to six months</button>
+                <button type="button" class="rt-opt" data-s="4">Six months or more</button>
+              </div>
+            </div>
+            <div class="rt-q" data-q>
+              <p>5 &middot; Which sentence fits you better?</p>
+              <div class="rt-opts">
+                <button type="button" class="rt-opt" data-s="1">Protect what I have</button>
+                <button type="button" class="rt-opt" data-s="2">Mostly protect, some growth</button>
+                <button type="button" class="rt-opt" data-s="3">Mostly growth, some protection</button>
+                <button type="button" class="rt-opt" data-s="4">Grow it as fast as it will go</button>
+              </div>
+            </div>
+            <div class="rt-q" data-q>
+              <p>6 &middot; Your experience with market downturns:</p>
+              <div class="rt-opts">
+                <button type="button" class="rt-opt" data-s="1">First time investing</button>
+                <button type="button" class="rt-opt" data-s="2">Some experience</button>
+                <button type="button" class="rt-opt" data-s="3">Lived through one</button>
+                <button type="button" class="rt-opt" data-s="4">Lived through several, stayed in</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bscale" style="margin-top:22px">
+            <div class="bband k-slate" id="rtB0">Conservative</div>
+            <div class="bband k-green" id="rtB1">Moderate</div>
+            <div class="bband k-pine"  id="rtB2">Growth</div>
+            <div class="bband k-red"   id="rtB3">Aggressive Growth</div>
+          </div>
+          <p class="x-note" id="rtOut" style="margin-top:14px"></p>
+          <p class="x-note">Written from scratch as a teaching tool&mdash;not a licensed suitability questionnaire, and not investment advice. A real allocation also weighs taxes, held assets, and everything else in your plan.</p>
         </div></div>
       </details>
 
@@ -1615,6 +2206,51 @@
     show(pages.includes(start)?start:'home', false, false);
   })();
 
+  /* ---- Federal tax, shared ----
+     2025 brackets + standard deduction. Bump these when 2026 figures are
+     confirmed. Federal only — no state or payroll tax. Declared above the
+     calculators because several of them call it during their first render:
+     the compound teacher, the Roth-vs-pre-tax comparison, the wealth
+     calculator (indexed forward by its inflation slider, idx > 1) and the
+     bracket calculator in Tools (idx = 1, current year). ---- */
+  const FED={
+    single:{sd:15000,b:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]]},
+    married:{sd:30000,b:[[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]]}
+  };
+  function fedTax(income,status,idx){
+    const t=FED[status]; if(!t) return 0;
+    idx=idx||1;
+    let ti=Math.max(0,income-t.sd*idx), tax=0, prev=0;
+    for(let k=0;k<t.b.length && ti>prev;k++){
+      const cap=t.b[k][0]===Infinity?Infinity:t.b[k][0]*idx;
+      tax+=(Math.min(ti,cap)-prev)*t.b[k][1];
+      prev=cap;
+    }
+    return tax;
+  }
+  /* Top rate the next dollar hits — the rate that decides Roth vs pre-tax. */
+  function marginalRate(income,status){
+    const t=FED[status]||FED.single;
+    const ti=Math.max(0,income-t.sd);
+    for(let k=0;k<t.b.length;k++) if(ti<=t.b[k][0]) return t.b[k][1];
+    return t.b[t.b.length-1][1];
+  }
+  /* One rung down/up the bracket ladder. Shared so the compound teacher's
+     after-tax line and the comparison card below it never disagree. */
+  const LADDER=[.10,.12,.22,.24,.32,.35,.37];
+  function retireRate(now,pick){
+    let i=LADDER.indexOf(now); if(i<0) i=2;
+    if(pick==='lower') i=Math.max(0,i-1);
+    if(pick==='higher') i=Math.min(LADDER.length-1,i+1);
+    return LADDER[i];
+  }
+  /* The retirement rate both the teacher and the comparison assume: the
+     visitor's marginal rate on the master income, nudged by the select. */
+  function assumedRetireRate(){
+    const inc=document.getElementById('mInc'), sel=document.getElementById('rvtRate');
+    return retireRate(marginalRate(+(inc&&inc.value)||75000,'single'), sel?sel.value:'same');
+  }
+
   // ---- Compound interest chart (age-aware + interactive) ----
   (function(){
     const RATE=0.08, RETIRE=65;
@@ -1629,6 +2265,7 @@
     const yearsS=document.getElementById('years'), yearsAmt=document.getElementById('yearsAmt');
     const retireF=document.getElementById('retire'), startNote=document.getElementById('startNote'), rkLine=document.getElementById('rkLine');
     const finalEl=document.getElementById('finalVal'), contribEl=document.getElementById('contribVal'), growthEl=document.getElementById('growthVal');
+    const seedLab=document.getElementById('seedLab'), afterTaxEl=document.getElementById('afterTax'), blurbEl=document.getElementById('ciBlurb');
     const scrub=document.getElementById('scrub');
     const vGuide=document.getElementById('vGuide'), hoverDot=document.getElementById('hoverDot');
     const tipPos=document.getElementById('tipPos'), tip=document.getElementById('tip');
@@ -1638,11 +2275,36 @@
     const fmtK=n=> n>=1000 ? '$'+(Math.round(n/100)/10).toLocaleString('en-US')+'k' : '$'+Math.round(n);
     const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 
-    const S={P:1000, years:43, retire:65, startAge:22, ff:Math.pow(1.08,43)};
+    /* "Today's dollars" discounts the whole curve by inflation, so 8% nominal
+       becomes ~4.85% real. One rate change drives the line, gridlines, node
+       labels, tooltip and totals — nothing else needs to know about the mode. */
+    const INFL=0.03;
+
+    /* Account types (Batch 5 #28/#29). Limits are 2025, under age 50 — bump
+       them alongside FED when the new figures land. `pre` marks the accounts
+       funded with pre-tax dollars, which are taxed on withdrawal. The chart
+       itself always plots the raw balance; tax only affects the sub-line. */
+    const ACCT={
+      roth:{name:'Roth IRA',  limit:7000,  pre:false,
+        blurb:'A Roth IRA grows <b style="color:#fff">completely tax-free</b>. You pay tax on the way in, then never again&mdash;not on the growth, not on the withdrawal. <b style="color:#fff">The earlier you start, the more the math does for you.</b>'},
+      trad:{name:'Traditional IRA', limit:7000, pre:true,
+        blurb:'A Traditional IRA gives you the <b style="color:#fff">deduction now</b>. Every dollar goes in untaxed and grows untouched&mdash;but the IRS takes its share when you withdraw. <b style="color:#fff">Best when your tax rate today beats your rate in retirement.</b>'},
+      k401:{name:'401(k)', limit:23500, pre:true,
+        blurb:'A 401(k) is pre-tax like a Traditional IRA, with one big edge: you can put in <b style="color:#fff">more than three times as much</b> each year. <b style="color:#fff">Room to contribute is itself a form of return.</b>'}
+    };
+    const S={P:1000, years:43, retire:65, startAge:22, finalV:1, today:false, acct:'roth', every:false};
+    const growth=()=> S.today ? (1+RATE)/(1+INFL) : (1+RATE);
     const xOf=t=>VB.x0+(t/S.years)*(VB.x1-VB.x0);
-    const yOf=f=>VB.y1-((f-1)/(S.ff-1))*(VB.y1-VB.y0);
-    const factorAt=t=>Math.pow(1+RATE,t);
-    const valAt=t=>S.P*factorAt(t);
+    const yOf=v=>VB.y1-((v-S.P)/((S.finalV-S.P)||1))*(VB.y1-VB.y0);
+
+    /* One-time: the deposit compounds alone. Every year: a contribution lands
+       at the start of each year, so the year-0 dollar gets the full run. */
+    function valAt(t){
+      const g=growth();
+      if(!S.every) return S.P*Math.pow(g,t);
+      return S.P*(Math.pow(g,t+1)-1)/(g-1);
+    }
+    const paidIn=t=> S.every ? S.P*(Math.floor(t)+1) : S.P;
 
     // Build skeleton once: 3 h-lines+labels, 5 v-lines+xlabels, 5 nodes
     const hFracs=[0.25,0.5,0.75];
@@ -1678,7 +2340,7 @@
     let pinned=null;
 
     function showAt(t, snap){
-      const f=factorAt(t), px=xOf(t), py=yOf(f), val=valAt(t);
+      const val=valAt(t), px=xOf(t), py=yOf(val);
       const ageHere=Math.round(S.startAge+t);
       vGuide.setAttribute('x1',px); vGuide.setAttribute('x2',px);
       vGuide.setAttribute('y1',VB.y0-8); vGuide.setAttribute('y2',VB.y1);
@@ -1695,15 +2357,15 @@
       S.P=parseInt(seed.value,10)||0;
       S.years=parseInt(yearsS.value,10);
       let rv=parseInt(retireF.value,10); if(isNaN(rv)) rv=65; rv=clamp(rv,50,80);
-      S.retire=rv; S.startAge=S.retire-S.years; S.ff=Math.pow(1+RATE,S.years);
+      S.retire=rv; S.startAge=S.retire-S.years; S.finalV=valAt(S.years);
       seedAmt.textContent=fmt(S.P);
       yearsAmt.textContent=S.years+' yrs';
       startNote.textContent='from age '+S.startAge;
-      rkLine.textContent='By age '+S.retire+', it becomes';
+      rkLine.textContent='By age '+S.retire+', it becomes'+(S.today?" — in today's dollars":'');
 
       // path + area
       let d='';
-      for(let y=0;y<=S.years;y++){ d+=(y===0?'M':'L')+xOf(y).toFixed(1)+','+yOf(factorAt(y)).toFixed(1)+' '; }
+      for(let y=0;y<=S.years;y++){ d+=(y===0?'M':'L')+xOf(y).toFixed(1)+','+yOf(valAt(y)).toFixed(1)+' '; }
       d=d.trim();
       line.setAttribute('d',d);
       area.setAttribute('d',d+` L${xOf(S.years).toFixed(1)},${VB.y1} L${xOf(0).toFixed(1)},${VB.y1} Z`);
@@ -1719,7 +2381,7 @@
       // vertical year/age marks + nodes
       for(let i=0;i<NMARK;i++){
         const t=(i/(NMARK-1))*S.years;
-        const px=xOf(t), f=factorAt(t), py=yOf(f), ageHere=Math.round(S.startAge+t);
+        const px=xOf(t), py=yOf(valAt(t)), ageHere=Math.round(S.startAge+t);
         vEls[i].setAttribute('x1',px); vEls[i].setAttribute('x2',px);
         xLab[i].setAttribute('x',px); xLab[i].textContent=(i===0?'Now · '+S.startAge : 'Age '+ageHere);
         const n=nodes[i]; n.t=t;
@@ -1728,7 +2390,19 @@
         n.v.setAttribute('x',lx); n.v.setAttribute('y',py-18); n.v.textContent=fmt(valAt(t));
       }
 
-      finalEl.textContent=fmt(final); contribEl.textContent=fmt(S.P); growthEl.textContent=fmt(final-S.P);
+      const put=paidIn(S.years);
+      finalEl.textContent=fmt(final); contribEl.textContent=fmt(put); growthEl.textContent=fmt(Math.max(0,final-put));
+
+      /* Pre-tax accounts owe income tax on the way out, so the headline number
+         isn't what you keep. Uses the same assumed retirement rate as the
+         comparison card below, so the two never show different tax answers. */
+      const A=ACCT[S.acct];
+      if(A.pre){
+        const rr=assumedRetireRate();
+        afterTaxEl.style.display='';
+        afterTaxEl.innerHTML='Taxed on withdrawal &mdash; roughly <b>'+fmt(final*(1-rr))+'</b> at a '+Math.round(rr*100)+'% retirement rate.';
+      }
+      else { afterTaxEl.style.display='none'; }
       if(pinned!=null) showPinned();
     }
 
@@ -1750,6 +2424,39 @@
     scrub.addEventListener('pointerleave',()=>{ if(pinned==null) hideHover(); else showPinned(); });
     scrub.addEventListener('touchmove',e=>{ onMove(e); e.preventDefault(); },{passive:false});
 
+    document.querySelectorAll('.ci-tab').forEach(function(b){
+      b.addEventListener('click',function(){
+        S.today = b.dataset.ci==='today';
+        document.querySelectorAll('.ci-tab').forEach(x=>x.classList.toggle('active',x===b));
+        render();
+      });
+    });
+
+    /* Account + contribution-mode pills. Switching account re-caps the deposit
+       slider to that account's annual limit and clamps a now-illegal value. */
+    function setAccount(key){
+      S.acct=key;
+      const A=ACCT[key];
+      seed.max=A.limit;
+      if(+seed.value>A.limit) seed.value=A.limit;
+      blurbEl.innerHTML=A.blurb;
+      render();
+    }
+    document.querySelectorAll('.ac-tab[data-acct]').forEach(function(b){
+      b.addEventListener('click',function(){
+        document.querySelectorAll('.ac-tab[data-acct]').forEach(x=>x.classList.toggle('active',x===b));
+        setAccount(b.dataset.acct);
+      });
+    });
+    document.querySelectorAll('.ac-tab[data-mode]').forEach(function(b){
+      b.addEventListener('click',function(){
+        document.querySelectorAll('.ac-tab[data-mode]').forEach(x=>x.classList.toggle('active',x===b));
+        S.every = b.dataset.mode==='every';
+        seedLab.textContent = S.every ? 'Every year' : 'One-time deposit';
+        render();
+      });
+    });
+
     seed.addEventListener('input',render);
     yearsS.addEventListener('input',render);
     retireF.addEventListener('input',render);
@@ -1770,16 +2477,81 @@
     } else { area.style.opacity='1'; }
   })();
 
+  /* ---- Roth vs Traditional vs 401(k) (Batch 5 #30) ----
+     Its own IIFE rather than part of the compound teacher, because it needs
+     FED, which is declared below that block. Reads the teacher's sliders
+     live, so there are no duplicate inputs to keep in sync. ---- */
+  (function(){
+    const $=id=>document.getElementById(id);
+    const seed=$('seed'), yearsS=$('years'), rateSel=$('rvtRate'), mInc=$('mInc');
+    const amtEl=$('rvtAmt'), yrsEl=$('rvtYrs'), verdict=$('rvtVerdict');
+    const cols=[$('rvtC0'),$('rvtC1'),$('rvtC2')];
+    if(!verdict||!seed) return;
+    const RATE=0.08, MAXBAR=170;
+    const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+    const shortM=n=>{const a=Math.abs(n);if(a>=1e6)return '$'+(a/1e6).toFixed(2)+'M';if(a>=1e3)return '$'+Math.round(a/1e3)+'k';return '$'+Math.round(a);};
+    /* Same annuity-due formula the compound teacher uses, so the two agree. */
+    function grow(c,n){ const g=1+RATE; return c*(Math.pow(g,n+1)-1)/(g-1); }
+
+    function run(){
+      const P=+seed.value||0, N=+yearsS.value||0;
+      const rNow=marginalRate(+(mInc&&mInc.value)||75000,'single');
+      const rRet=assumedRetireRate();
+      amtEl.textContent=money(P); yrsEl.textContent=N;
+
+      /* P is gross pay set aside. Pre-tax accounts take it whole; a Roth is
+         funded after tax, so the same paycheck buys a smaller contribution —
+         but the limit then holds after-tax dollars, which is its real edge. */
+      const specs=[
+        {limit:7000,  pre:false, note:'$7,000 limit'},
+        {limit:7000,  pre:true,  note:'$7,000 limit'},
+        {limit:23500, pre:true,  note:'$23,500 limit'}
+      ];
+      const res=specs.map(s=>{
+        const c=Math.min(s.pre?P:P*(1-rNow), s.limit);
+        const gross=grow(c,N);
+        return {c:c, capped:(s.pre?P:P*(1-rNow))>s.limit, net:s.pre?gross*(1-rRet):gross, note:s.note};
+      });
+      const best=Math.max(...res.map(r=>r.net))||1;
+      res.forEach((r,i)=>{
+        const col=cols[i];
+        col.classList.toggle('win', r.net>=best-1);
+        col.querySelector('.rvt-val').textContent=shortM(r.net);
+        col.querySelector('.rvt-bar').style.height=Math.max(4,(r.net/best)*MAXBAR)+'px';
+        col.querySelector('.rvt-note').innerHTML=money(r.c)+'/yr in'+(r.capped?'<br>capped by the '+r.note:'');
+      });
+
+      const pct=Math.round(rNow*100), pctR=Math.round(rRet*100);
+      let v;
+      if(res[2].net>res[0].net+1 && res[2].c>res[1].c)
+        v='At '+money(P)+' a year you outgrow what an IRA will hold. The <b>401(k)</b> takes the whole amount, and that extra room is worth '+shortM(res[2].net-res[1].net)+' more than the same plan squeezed into a Traditional IRA.';
+      else if(rRet<rNow)
+        v='You expect to drop from <b>'+pct+'%</b> today to <b>'+pctR+'%</b> in retirement, so deducting now and paying tax later wins &mdash; <b>pre-tax</b> comes out ahead.';
+      else if(rRet>rNow)
+        v='You expect to rise from <b>'+pct+'%</b> today to <b>'+pctR+'%</b> in retirement, so paying tax now at the cheaper rate wins &mdash; <b>Roth</b> comes out ahead.';
+      else
+        v='At the same <b>'+pct+'%</b> rate both ways, pre-tax and Roth land within a rounding error of each other. The tie-breaker is what you believe about <b>future</b> tax rates &mdash; and the Roth limit holds already-taxed dollars, so it quietly fits more real money.';
+      verdict.innerHTML=v;
+    }
+    [seed,yearsS,rateSel,mInc].forEach(el=>{ if(el){el.addEventListener('input',run);el.addEventListener('change',run);} });
+    /* The teacher's after-tax line reads the same select, so nudge it to
+       re-render — it exposes no handle of its own, but it listens on #seed. */
+    rateSel.addEventListener('change',()=>seed.dispatchEvent(new Event('input',{bubbles:true})));
+    run();
+  })();
+
   // ---- Wealth Building Calculator ----
   (function(){
     const $=id=>document.getElementById(id);
     const yrs=$('wcYears'), inc=$('wcInc'), grow=$('wcGrow'), ret=$('wcRet'), life=$('wcLife'), infl=$('wcInfl');
     const yrsV=$('wcYearsV'), growV=$('wcGrowV'), retV=$('wcRetV'), lifeV=$('wcLifeV'), inflV=$('wcInflV'), saveV=$('wcSave');
     const wealthEl=$('wcWealth'), incomeEl=$('wcIncome'), chart=$('wcChart');
+    const wealthSub=$('wcWealthSub'), taxSub=$('wcTaxSub'), spendEl=$('wcSpend');
+    const advBtn=$('wcAdvBtn'), advPanel=$('wcAdv'), taxSel=$('wcTax');
     if(!chart) return;
-    let mode='future';
+    let mode='future', advOn=false;
     const wcTip=document.createElement('div'); wcTip.className='wc-tip'; wcTip.style.display='none'; document.body.appendChild(wcTip);
-    function wcShowTip(ev,year,d){ wcTip.style.display='block'; wcTip.innerHTML='<b>Year '+year+'</b><br><span class="t-g">Wealth built: '+fmt(d.green)+'</span><br><span class="t-r">Lifestyle spent: '+fmt(d.red)+'</span>'; wcTip.style.left=(ev.clientX+14)+'px'; wcTip.style.top=(ev.clientY+14)+'px'; }
+    function wcShowTip(ev,year,d){ wcTip.style.display='block'; wcTip.innerHTML='<b>Year '+year+'</b><br>Income: '+fmt(d.income)+(d.tax>0?' &rarr; '+fmt(d.net)+' after tax':'')+'<br><span class="t-g">Wealth built: '+fmt(d.green)+'</span><br><span class="t-r">Lifestyle spent: '+fmt(d.red)+'</span>'; wcTip.style.left=(ev.clientX+14)+'px'; wcTip.style.top=(ev.clientY+14)+'px'; }
     function wcHideTip(){ wcTip.style.display='none'; }
     const NS="http://www.w3.org/2000/svg";
     const VB={w:1000,h:460,padL:70,padR:14,padT:16,padB:36};
@@ -1789,19 +2561,64 @@
       if(a>=1e3) return s+Math.round(a/1e3)+'k';
       return s+Math.round(a); };
 
+    // --- income steps: [{y,amt,g}] sorted by year. Year 1 is always the base
+    //     wcInc / wcGrow pair; extra steps are user-added and removable.
+    let steps=[];
+    const stepsBox=$('wcSteps'), addBtn=$('wcAddStep');
+    function allSteps(){
+      const base={y:1,amt:+inc.value||0,g:(+grow.value)/100};
+      return [base].concat(steps.map(s=>({y:s.y,amt:s.amt,g:s.g/100}))).sort((a,b)=>a.y-b.y);
+    }
+    function incomeAt(y,list){
+      let s=list[0];
+      for(let k=0;k<list.length;k++){ if(list[k].y<=y) s=list[k]; else break; }
+      return s.amt*Math.pow(1+s.g,y-s.y);
+    }
+    function renderSteps(){
+      stepsBox.innerHTML='';
+      steps.forEach((s,idx)=>{
+        const row=document.createElement('div'); row.className='wc-step';
+        row.innerHTML='Year <input type="number" class="sy" min="2" max="45" step="1" value="'+s.y+'">'
+          +'<span class="wc-num"><span class="pre">$</span><input type="number" class="sa" min="0" max="5000000" step="1000" value="'+Math.round(s.amt)+'"></span>'
+          +'<input type="number" class="sg" min="0" max="15" step="0.5" value="'+s.g+'">%'
+          +'<button type="button" class="wc-step-x" aria-label="Remove step">&times;</button>';
+        row.querySelector('.sy').addEventListener('input',e=>{ s.y=Math.max(2,Math.min(45,+e.target.value||2)); draw(); });
+        row.querySelector('.sa').addEventListener('input',e=>{ s.amt=+e.target.value||0; draw(); });
+        row.querySelector('.sg').addEventListener('input',e=>{ s.g=+e.target.value||0; draw(); });
+        row.querySelector('.wc-step-x').addEventListener('click',()=>{ steps.splice(idx,1); renderSteps(); draw(); });
+        stepsBox.appendChild(row);
+      });
+    }
+    if(addBtn) addBtn.addEventListener('click',function(){
+      const list=allSteps(), last=list[list.length-1];
+      const y=Math.min(45,last.y===1?10:last.y+10);
+      steps.push({y:y,amt:Math.round(incomeAt(y,list)/1000)*1000,g:+grow.value||0});
+      renderSteps(); draw();
+    });
+
+    // Brackets live in the shared FED table / fedTax() above this IIFE.
+
     function compute(){
-      const N=+yrs.value, inc1=+inc.value||0, g=(+grow.value)/100, r=(+ret.value)/100, lifeR=(+life.value)/100, saveR=1-lifeR, i=(+infl.value)/100;
+      const N=+yrs.value, r=(+ret.value)/100, lifeR=(+life.value)/100, saveR=1-lifeR, i=(+infl.value)/100;
+      const status=(advOn && taxSel)?taxSel.value:'off';
+      const list=allSteps();
       let green=0, red=0; const data=[];
       for(let y=1;y<=N;y++){
-        const income=inc1*Math.pow(1+g,y-1);
-        green=(green+income*saveR)*(1+r);   // saved money is invested & compounds
-        red=red+income*lifeR;               // spent money is just spent — no compounding
+        const income=incomeAt(y,list);
+        const idx=Math.pow(1+i,y-1);          // brackets drift with inflation
+        const tax=fedTax(income,status,idx);
+        const net=income-tax;
+        green=(green+net*saveR)*(1+r);        // saved money is invested & compounds
+        red=red+net*lifeR;                    // spent money is just spent — no compounding
         const defl=mode==='today'?Math.pow(1+i,y):1;
-        data.push({green:green/defl,red:red/defl});
+        data.push({green:green/defl,red:red/defl,income:income/defl,net:net/defl,tax:tax/defl});
       }
-      const deflN=mode==='today'?Math.pow(1+i,N):1;
-      const realized=green/deflN;
-      return {N,data,realized,retInc:realized*0.05};
+      const deflN=Math.pow(1+i,N);
+      const realized=mode==='today'?green/deflN:green;
+      const flip=mode==='today'?green:green/deflN;   // the same number in the other tab's units
+      const y1=data[0];
+      return {N,data,realized,flip,retInc:realized*0.05,spend:data[N-1].red,
+              effRate:y1.income>0?y1.tax/y1.income:0,status:status};
     }
 
     function draw(){
@@ -1814,6 +2631,9 @@
       const R=compute();
       wealthEl.textContent=fmt(R.realized);
       incomeEl.textContent=fmt(R.retInc);
+      wealthSub.textContent=fmtM(R.flip)+(mode==='today'?' in future dollars':' in today’s dollars');
+      taxSub.textContent=R.status==='off'?'':'Year-1 tax: '+Math.round(R.effRate*100)+'% effective';
+      spendEl.textContent=fmt(R.spend);
 
       while(chart.firstChild) chart.removeChild(chart.firstChild);
       const maxUp=Math.max(...R.data.map(d=>d.green),1);
@@ -1855,6 +2675,14 @@
     }
 
     [yrs,inc,grow,ret,life,infl].forEach(el=>{el.addEventListener('input',draw);el.addEventListener('change',draw);});
+    if(taxSel) taxSel.addEventListener('change',draw);
+    if(advBtn) advBtn.addEventListener('click',function(){
+      advOn=!advOn;
+      advBtn.classList.toggle('active',advOn);
+      advBtn.setAttribute('aria-expanded',advOn?'true':'false');
+      advPanel.hidden=!advOn;
+      draw();
+    });
     document.querySelectorAll('.wc-tab').forEach(function(b){
       b.addEventListener('click',function(){
         mode=b.getAttribute('data-mode');
@@ -1914,9 +2742,10 @@
     const money=n=>'$'+Math.round(n).toLocaleString('en-US');
     const moneyM=n=>{const a=Math.abs(n);if(a>=1e6)return '$'+(a/1e6).toFixed(2)+'M';if(a>=1e3)return '$'+Math.round(a/1e3)+'k';return '$'+Math.round(a);};
 
-    // Level of protection checker
+    // Level of protection checker — four household totals, wills/trusts as yes/no
     (function(){
-      const life=$('lpLife'), dis=$('lpDis'), liab=$('lpLiab'), wills=$('lpWills');
+      const life=$('lpLife'), dis=$('lpDis'), liab=$('lpLiab');
+      const willY=$('lpWillY'), trustY=$('lpTrustY');
       const score=$('lpScore'), msg=$('lpMsg'), flags=$('lpFlags');
       if(!score) return;
       function run(){
@@ -1924,14 +2753,89 @@
         if((+life.value||0)<=0) f.push('No life insurance &mdash; income replacement for your family is missing.');
         if((+dis.value||0)<=0) f.push('No disability coverage &mdash; your paycheck itself is unprotected.');
         if((+liab.value||0)<250000) f.push('Thin liability/umbrella cover &mdash; one lawsuit could reach your assets.');
-        if(wills.value==='no') f.push('No will or trust &mdash; the state decides how your estate passes.');
-        else if(wills.value==='partial') f.push('A will but no trust &mdash; worth reviewing how assets transfer.');
+        if(!willY.checked) f.push('No will &mdash; the state decides how your estate passes.');
+        else if(!trustY.checked) f.push('A will but no trust &mdash; worth reviewing how assets transfer.');
         score.textContent=f.length;
         msg.textContent=f.length===0?'All four pillars look covered. Nice.':(f.length+' area'+(f.length>1?'s':'')+' worth a closer look.');
         flags.innerHTML=f.map(x=>'<li>'+x+'</li>').join('');
       }
-      [life,dis,liab,wills].forEach(el=>{el.addEventListener('input',run);el.addEventListener('change',run);});
+      [life,dis,liab,willY,$('lpWillN'),trustY,$('lpTrustN')].forEach(el=>{el.addEventListener('input',run);el.addEventListener('change',run);});
       run();
+    })();
+
+    /* ---- Life insurance qualification (#38) ----
+       Same age->multiple rule as lesson-protection.html. Keep the two in step. */
+    (function(){
+      const age=$('liAge'), inc=$('liInc'), nw=$('liNw'), debt=$('liDebt'), have=$('liHave');
+      const nwF=$('liNwF'), out=$('liMax'), basis=$('liBasis'), flag=$('liFlag');
+      if(!out) return;
+      function rule(a){
+        if(a<=40) return {m:30,b:'income',l:'30&times; income'};
+        if(a<=50) return {m:20,b:'income',l:'20&times; income'};
+        if(a<=60) return {m:15,b:'income',l:'15&times; income'};
+        if(a<=65) return {m:10,b:'income',l:'10&times; income'};
+        if(a<=70) return {m:1, b:'worth', l:'1&times; net worth'};
+        if(a<=80) return {m:.5,b:'worth', l:'&frac12;&times; net worth'};
+        return {m:0,b:'case',l:'case by case'};
+      }
+      function run(){
+        const a=+age.value, r=rule(a);
+        $('liAgeV').textContent=a;
+        nwF.style.display=r.b==='worth'?'':'none';
+        const base=r.b==='income'?(+inc.value||0)*r.m:r.b==='worth'?(+nw.value||0)*r.m:0;
+        const max=base+(+debt.value||0), left=Math.max(0,max-(+have.value||0));
+        out.textContent=r.b==='case'?'Case by case':money(max);
+        basis.innerHTML='Age '+a+' &middot; '+r.l+(r.b==='case'?'':' + debt');
+        $('liL1').textContent=r.b==='case'?'—':money(max);
+        $('liL2').textContent='−'+money(+have.value||0);
+        $('liL3').textContent=r.b==='case'?'—':money(left);
+        if(r.b==='case'){ flag.style.display=''; flag.textContent='Age 81+ — no standard multiple. Requires individual underwriting.'; }
+        else if((+have.value||0)>=max&&max>0){ flag.style.display=''; flag.textContent='Already at or above the qualification ceiling.'; }
+        else flag.style.display='none';
+      }
+      [age,inc,nw,debt,have].forEach(el=>{el.addEventListener('input',run);el.addEventListener('change',run);});
+      run();
+    })();
+
+    /* ---- Disability gap (#38) ---- */
+    (function(){
+      const inc=$('diInc'), ben=$('diBen'), pct=$('diPct'), cap=$('diCap'), need=$('diNeed');
+      const gapEl=$('diGap'), flag=$('diFlag');
+      if(!gapEl) return;
+      function run(fromSlider){
+        const monthly=(+inc.value||0)/12, capAmt=+cap.value||0, p=+pct.value;
+        $('diMo').textContent=money(monthly);
+        $('diPctV').textContent=p+'%';
+        if(fromSlider){
+          let est=monthly*p/100;
+          if(capAmt>0) est=Math.min(est,capAmt);
+          ben.value=Math.round(est);
+        }
+        let b=+ben.value||0;
+        if(capAmt>0&&b>capAmt) b=capAmt;
+        const gap=Math.max(0,monthly-b);
+        const cov=monthly>0?Math.min(100,b/monthly*100):0;
+        gapEl.textContent=money(gap);
+        $('diSub').textContent=Math.round(cov)+'% of your income would be replaced';
+        $('diBarCov').style.width=cov+'%';
+        $('diBarGap').style.width=(100-cov)+'%';
+        $('diL1').textContent=money(monthly);
+        $('diL2').textContent=money(b);
+        $('diL3').textContent=money(gap);
+        $('diL4').textContent=money(Math.max(0,(+need.value||0)-b));
+        // the cap only "binds" if it actually costs a point of replacement rate
+        const nominal=p||60, uncapped=monthly*nominal/100;
+        if(capAmt>0&&uncapped-capAmt>1&&Math.round(cov)<nominal){
+          flag.style.display='';
+          flag.textContent='The '+money(capAmt)+'/mo cap is binding — your effective replacement rate is '+Math.round(cov)+'%, not '+nominal+'%.';
+        } else if(b<(+need.value||0)){
+          flag.style.display='';
+          flag.textContent='Benefit falls short of essential expenses by '+money((+need.value||0)-b)+' per month.';
+        } else flag.style.display='none';
+      }
+      [inc,ben,cap,need].forEach(el=>{el.addEventListener('input',()=>run(false));el.addEventListener('change',()=>run(false));});
+      pct.addEventListener('input',()=>run(true));
+      run(false);
     })();
 
     // Clickable scorecards (one status per row)
@@ -2070,6 +2974,455 @@
       if(rerun) rerun.addEventListener('click',run);
       run();
     })();
+
+    /* ---- Shared line chart for the Batch 4 calculators ----
+       340x160 viewBox to match the other .x-svg blocks. Takes one series of
+       yearly values and draws axis, filled area, line and an end label. ---- */
+    const NS3='http://www.w3.org/2000/svg';
+    function lineChart(svg,vals,color,endLab){
+      if(!svg) return;
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      const W=340,H=160,pl=6,pr=52,pt=12,pb=20;
+      const N=vals.length-1;
+      const maxV=Math.max(1,...vals);
+      const x=i=>pl+(N?i/N:0)*(W-pl-pr);
+      const y=v=>H-pb-(v/maxV)*(H-pt-pb);
+      function el(t,a){const e=document.createElementNS(NS3,t);for(const k in a)e.setAttribute(k,a[k]);svg.appendChild(e);return e;}
+      el('line',{x1:pl,y1:H-pb,x2:W-pr,y2:H-pb,stroke:'#cfd4ca'});
+      const pts=vals.map((v,i)=>x(i)+','+y(v)).join(' ');
+      el('polygon',{points:pl+','+(H-pb)+' '+pts+' '+x(N)+','+(H-pb),fill:color,opacity:'.12'});
+      el('polyline',{points:pts,fill:'none',stroke:color,'stroke-width':'2.5'});
+      el('text',{x:pl,y:H-6,'font-size':'8.5',fill:'#8b958d'}).textContent='today';
+      el('text',{x:x(N),y:H-6,'font-size':'8.5',fill:'#8b958d','text-anchor':'middle'}).textContent=N+' yrs';
+      el('circle',{cx:x(N),cy:y(vals[N]),r:'3.5',fill:color});
+      const t=el('text',{x:W-pr+7,y:y(vals[N])+3.5,'font-size':'10','font-weight':'700',fill:color});
+      t.textContent=endLab;
+    }
+
+    /* Fixed-dollar withdrawal against a compounding balance. Draw exactly what
+       it earns and the line is flat forever; draw more and it bends to zero. */
+    function drawdown(bal,r,income,years){
+      const out=[bal];
+      for(let i=0;i<years;i++){ bal=Math.max(0,bal*(1+r)-income); out.push(bal); }
+      return out;
+    }
+    function yearsToZero(path){
+      for(let i=1;i<path.length;i++) if(path[i]<=0) return i;
+      return null;
+    }
+
+    // Lump sum, left alone
+    (function(){
+      const amt=$('lsAmt'), amtR=$('lsAmtR'), yrs=$('lsYears'), ret=$('lsRet'), infl=$('lsInfl');
+      const yrsV=$('lsYearsV'), retV=$('lsRetV'), out=$('lsOut'), sub=$('lsSub'), k=$('lsK'), chart=$('lsChart');
+      if(!out) return;
+      function run(){
+        const P=+amt.value||0, N=+yrs.value, r=(+ret.value)/100, real=infl.checked;
+        const g=real?(1+r)/1.03:(1+r);
+        yrsV.textContent=N; retV.textContent=(+ret.value)+'%';
+        const vals=[]; for(let i=0;i<=N;i++) vals.push(P*Math.pow(g,i));
+        const final=vals[N];
+        k.textContent=real?'What it becomes, in today’s dollars':'What it becomes';
+        out.textContent=moneyM(final);
+        sub.innerHTML=P>0
+          ? money(P)+' in, <b>'+money(Math.max(0,final-P))+'</b> of pure growth &mdash; '+(final/P).toFixed(1)+'&times; your money'
+          : 'Enter an amount to invest.';
+        lineChart(chart,vals,'#2e8b57',moneyM(final));
+      }
+      amtR.addEventListener('input',()=>{ amt.value=amtR.value; run(); });
+      amt.addEventListener('input',()=>{ amtR.value=Math.min(+amt.value||0,+amtR.max); run(); });
+      [yrs,ret,infl].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
+      run();
+    })();
+
+    // Passive income — live on the return, keep the principal
+    (function(){
+      const bal=$('piBal'), ret=$('piRet'), draw=$('piDraw');
+      const retV=$('piRetV'), drawV=$('piDrawV'), out=$('piOut'), sub=$('piSub'), chart=$('piChart');
+      if(!out) return;
+      function run(){
+        const B=+bal.value||0, r=(+ret.value)/100, d=(+draw.value)/100;
+        retV.textContent=(+ret.value)+'%'; drawV.textContent=(+draw.value)+'%';
+        const income=B*d;
+        out.textContent=money(income);
+        const path=drawdown(B,r,income,40), zero=yearsToZero(path);
+        if(B<=0) sub.textContent='Enter a balance.';
+        else if(zero) sub.innerHTML='<b>Runs out in year '+zero+'.</b> You’re drawing more than it earns.';
+        else if(d<r) sub.innerHTML=money(income/12)+'/mo &mdash; and the balance still <b>grows</b> to '+moneyM(path[40])+' in 40 years.';
+        else sub.innerHTML=money(income/12)+'/mo &mdash; and after 40 years you <b>still have '+moneyM(path[40])+'</b>.';
+        lineChart(chart,path,zero?'#c0392b':'#2e8b57',moneyM(path[40]));
+      }
+      [bal,ret,draw].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
+      run();
+    })();
+
+    // Death benefit as income replacement (same drawdown math as above)
+    (function(){
+      const ben=$('dbBen'), inc=$('dbInc'), ret=$('dbRet');
+      const retV=$('dbRetV'), out=$('dbOut'), sub=$('dbSub'), chart=$('dbChart');
+      if(!out) return;
+      function run(){
+        const B=+ben.value||0, need=+inc.value||0, r=(+ret.value)/100;
+        retV.textContent=(+ret.value)+'%';
+        const earns=B*r;
+        out.textContent=money(earns);
+        const path=drawdown(B,r,need,40), zero=yearsToZero(path);
+        out.classList.toggle('warn',need>earns);
+        if(B<=0||need<=0) sub.textContent='Enter a benefit and an income.';
+        else if(zero) sub.innerHTML='Replacing '+money(need)+' <b>drains it in year '+zero+'</b> &mdash; short by '+money(need-earns)+'/yr.';
+        else if(need<earns) sub.innerHTML='Covers '+money(need)+' with '+money(earns-need)+'/yr to spare &mdash; and the benefit <b>grows</b>.';
+        else sub.innerHTML='Covers '+money(need)+' <b>forever</b>, principal untouched.';
+        lineChart(chart,path,zero?'#c0392b':'#2e8b57',moneyM(path[40]));
+      }
+      [ben,inc,ret].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
+      run();
+    })();
+
+    /* Risk tolerance survey (Batch 5 #32). Written from scratch — published
+       instruments are copyrighted. Six questions, 1-4 each, so the range is
+       6-24; the bands below split that evenly. Scores only once every
+       question is answered, so a half-finished survey can't mislabel anyone. */
+    (function(){
+      const wrap=$('rtQs'), out=$('rtOut');
+      const bands=[$('rtB0'),$('rtB1'),$('rtB2'),$('rtB3')];
+      if(!wrap) return;
+      const RES=[
+        {lo:6, name:'Conservative', mix:'roughly 30% stocks / 70% bonds and cash',
+         txt:'Your priority is not losing ground, and something in your situation &mdash; a short horizon, uneven income, or a thin cash cushion &mdash; means a bad year would genuinely hurt. Steadier is the right call.'},
+        {lo:12,name:'Moderate', mix:'roughly 55% stocks / 45% bonds and cash',
+         txt:'You can carry real market risk, but not all of it. A balanced mix gives you most of the long-run growth with drops shallow enough that you&rsquo;ll actually stay invested.'},
+        {lo:16,name:'Growth', mix:'roughly 80% stocks / 20% bonds and cash',
+         txt:'Time and stability are on your side, so volatility is a cost you can afford to pay for growth. Expect losing years &mdash; they&rsquo;re the price of the average, not a sign to leave.'},
+        {lo:21,name:'Aggressive Growth', mix:'roughly 95%+ stocks',
+         txt:'You have a long horizon and the temperament to sit through steep drops. That&rsquo;s the profile that captures the most growth &mdash; provided the plan behind it is real and you don&rsquo;t sell at the bottom.'}
+      ];
+      function run(){
+        const qs=[...wrap.querySelectorAll('[data-q]')];
+        const picked=qs.map(q=>q.querySelector('.rt-opt.on'));
+        const done=picked.filter(Boolean).length;
+        if(done<qs.length){
+          bands.forEach(b=>b.classList.remove('on'));
+          out.innerHTML='<b>'+done+' of '+qs.length+' answered.</b> Finish the survey to see where you land.';
+          return;
+        }
+        const score=picked.reduce((a,b)=>a+ +b.dataset.s,0);
+        let i=0; for(let k=0;k<RES.length;k++) if(score>=RES[k].lo) i=k;
+        bands.forEach((b,k)=>b.classList.toggle('on',k===i));
+        out.innerHTML='<b>'+score+' of 24 &mdash; '+RES[i].name+'.</b> '+RES[i].txt+' A portfolio matching this usually looks like <b>'+RES[i].mix+'</b>.';
+      }
+      wrap.addEventListener('click',function(e){
+        const b=e.target.closest('.rt-opt'); if(!b) return;
+        b.closest('[data-q]').querySelectorAll('.rt-opt').forEach(x=>x.classList.toggle('on',x===b));
+        run();
+      });
+      run();
+    })();
+
+    /* Home affordability (Batch 5 #31). Two questions in one tool: can the
+       cash flow carry it, and what does the deposit cost in foregone growth. */
+    (function(){
+      const price=$('hmPrice'), down=$('hmDown'), rate=$('hmRate'), term=$('hmTerm');
+      const fees=$('hmFees'), close=$('hmClose'), inc=$('hmInc');
+      const downV=$('hmDownV'), rateV=$('hmRateV'), closeV=$('hmCloseV');
+      const pay=$('hmPay'), sub=$('hmSub'), scale=$('hmScale'), opp=$('hmOpp');
+      const bands=[$('hmB0'),$('hmB1'),$('hmB2'),$('hmB3')];
+      if(!pay) return;
+      function run(){
+        const P=+price.value||0, d=(+down.value)/100, r=(+rate.value)/100;
+        const N=+term.value, F=+fees.value||0, c=(+close.value)/100, I=+inc.value||0;
+        downV.textContent=(+down.value)+'%'; rateV.textContent=(+rate.value)+'%'; closeV.textContent=(+close.value)+'%';
+
+        const loan=P*(1-d), i=r/12, n=N*12;
+        // Standard amortisation; the i=0 branch keeps a 0% rate from dividing by zero.
+        const pi = i>0 ? loan*i/(1-Math.pow(1+i,-n)) : (n?loan/n:0);
+        const all=pi+F;
+        pay.textContent=money(all);
+        const interest=pi*n-loan;
+        sub.innerHTML=money(pi)+' loan + '+money(F)+' fees &mdash; <b>'+moneyM(interest)+'</b> of interest over '+N+' years';
+
+        /* Down payment plus closing costs is the cash that leaves the market.
+           Grown at 8% over the same term, it's the honest comparison. */
+        const upfront=P*d+P*c, invested=upfront*Math.pow(1.08,N), home=P*Math.pow(1.04,N);
+        opp.innerHTML=money(upfront)+' upfront, invested at 8% for '+N+' years, becomes <b>'+moneyM(invested)+'</b>. Over the same stretch the house at 4% a year reaches about <b>'+moneyM(home)+'</b>.';
+
+        const pct=I>0?(all*12/I)*100:0;
+        const idx = pct<20?0 : pct<28?1 : pct<36?2 : 3;
+        bands.forEach((b,k)=>b.classList.toggle('on',k===idx&&I>0));
+        pay.classList.toggle('warn',idx>=2&&I>0);
+        const lab=['Under 20% leaves real room to invest the difference &mdash; this is the band where retiring early stays on the table.',
+                   'A comfortable load. The plan still has room for retirement saving and a cash reserve.',
+                   'Stretched. It works on paper, but a job change or a bad year gets uncomfortable fast.',
+                   'House poor. The payment starts crowding out the saving that actually builds wealth.'][idx];
+        scale.innerHTML=I>0
+          ? '<b>'+pct.toFixed(0)+'% of gross income.</b> '+lab
+          : 'Enter an income to place yourself on the scale.';
+      }
+      [price,down,rate,term,fees,close,inc].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
+      run();
+    })();
+
+    // Marginal vs effective tax brackets
+    (function(){
+      const inc=$('tbInc'), status=$('tbStatus'), ded=$('tbDed');
+      const eff=$('tbEff'), sub=$('tbSub'), rows=$('tbRows');
+      if(!eff) return;
+      function run(){
+        const I=+inc.value||0, st=status.value, t=FED[st];
+        const sd=ded.value==='std'?t.sd:0;
+        const ti=Math.max(0,I-sd);
+        // Pass 1: how much income lands in each band, and what the top band is.
+        let prev=0, total=0, topIdx=-1;
+        const bands=t.b.map((b,i)=>{
+          const cap=b[0]===Infinity?Infinity:b[0];
+          const inBand=Math.max(0,Math.min(ti,cap)-prev);
+          total+=inBand*b[1];
+          if(inBand>0) topIdx=i;
+          const row={rate:b[1],lo:prev,cap:cap,amt:inBand,tax:inBand*b[1]};
+          prev=cap; return row;
+        });
+        const marg=topIdx>=0?bands[topIdx].rate:0;
+        const widest=Math.max(1,...bands.map(b=>b.amt));
+        rows.innerHTML=bands.map((b,i)=>
+          '<tr class="'+(b.amt>0?'spent':'unused')+(i===topIdx?' top':'')+'">'
+          + '<td>'+Math.round(b.rate*100)+'% &middot; <span style="color:#8b958d">'+money(b.lo)
+          + (b.cap===Infinity?'+':'&ndash;'+money(b.cap))+'</span>'
+          + '<span class="bar" style="width:'+Math.max(2,Math.round(b.amt/widest*100))+'%"></span></td>'
+          + '<td>'+(b.amt>0?money(b.amt):'&mdash;')+'</td>'
+          + '<td>'+(b.amt>0?money(b.tax):'&mdash;')+'</td></tr>'
+        ).join('');
+        eff.textContent=I>0?(total/I*100).toFixed(1)+'%':'0%';
+        sub.innerHTML=I>0
+          ? money(total)+' of federal tax &mdash; but your <b>top bracket is '+Math.round(marg*100)+'%</b>'+(sd?', after a '+money(sd)+' standard deduction':'')+'.'
+          : 'Enter an income.';
+      }
+      [inc,status,ded].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
+      run();
+    })();
+  })();
+
+  /* ---- Interactive balance sheet ----
+     Every line is a button; clicking opens one shared pop-up whose fields are
+     built from GROUPS. State is a flat bag of numbers so totals are trivial. ---- */
+  (function(){
+    var sheet=document.getElementById('balancesheet'), modal=document.getElementById('bsModal');
+    if(!sheet||!modal) return;
+    var KEY='tr-bsheet';
+
+    /* Illustrative mid-career household - also the "reset" target. */
+    var DEF={liability:300000,umbrella:1000000,health:2000000,disMo:4000,
+      will:1,trust:1,poa:1,lwill:0,term:1000000,perm:0,
+      personal:45000,cashSav:30000,cvli:5000,invest:120000,preTax:130000,roth:55000,
+      realestate:420000,business:25000,
+      cards:3000,autoLoan:3000,student:0,taxowed:4000,mortgage:310000,heloc:0,bizdebt:0,
+      earn:200000,pHome:1800,pAuto:2200,pHealth:2400,pDis:900,pTerm:700,pPerm:0,
+      bRetire:25000,bInvest:10000,bCash:5000,cTax:46000,cDebt:24000};
+    var S={};
+    for(var k in DEF) S[k]=DEF[k];
+
+    var M=function(k,l){return {k:k,l:l,t:'money'};},
+        Y=function(k,l){return {k:k,l:l,t:'yn'};};
+
+    var GROUPS={
+      sued:{t:'If you\'re sued',tone:'protect',f:[M('liability','Liability limit'),M('umbrella','Umbrella policy')]},
+      sick:{t:'If you get sick',tone:'protect',f:[M('health','Health coverage max'),M('disMo','Disability benefit / month')],
+            show:function(){return money(S.disMo)+'/mo';}},
+      wills:{t:'Wills & trusts',tone:'protect',f:[Y('will','Will'),Y('trust','Trust'),Y('poa','Power of attorney'),Y('lwill','Living will')],
+            show:function(){return (S.will+S.trust+S.poa+S.lwill)+' of 4';}},
+      death:{t:'At death',tone:'protect',f:[M('term','Term life'),M('perm','Permanent life')]},
+
+      personal:{t:'Personal property',tone:'assets',f:[M('personal','Vehicles, belongings')]},
+      savings:{t:'Savings & cash',tone:'assets',f:[M('cashSav','Savings & checking'),M('cvli','Cash value life insurance')]},
+      invest:{t:'Investments',tone:'assets',f:[M('invest','Taxable investments')]},
+      retire:{t:'Retirement',tone:'assets',f:[M('preTax','Pre-tax (401k / IRA)'),M('roth','Roth')]},
+      realestate:{t:'Real estate',tone:'assets',f:[M('realestate','Market value')]},
+      business:{t:'Business',tone:'assets',f:[M('business','Ownership value')]},
+
+      short:{t:'Short term',tone:'liab',f:[M('cards','Credit cards'),M('autoLoan','Auto loans'),M('student','Student loans')]},
+      taxowed:{t:'Taxes owed',tone:'liab',f:[M('taxowed','Balance owed')]},
+      mortgage:{t:'Mortgage',tone:'liab',f:[M('mortgage','Mortgage'),M('heloc','HELOC')]},
+      bizdebt:{t:'Business debt',tone:'liab',f:[M('bizdebt','Balance owed')]},
+
+      earn:{t:'Earnings',tone:'cash',f:[M('earn','Annual gross income')],
+            hint:'Set by the age & income card above, or override it here.'},
+      protcost:{t:'Protection costs',tone:'cash',f:[M('pHome','Home'),M('pAuto','Auto'),M('pHealth','Health'),
+            M('pDis','Disability'),M('pTerm','Term life'),M('pPerm','Permanent life')]},
+      build:{t:'Asset building',tone:'cash',f:[M('bRetire','Retirement contributions'),M('bInvest','Other investing'),M('bCash','Cash savings')]},
+      debttax:{t:'Debts & taxes',tone:'cash',f:[M('cTax','Income & payroll tax'),M('cDebt','Debt payments')]}
+    };
+
+    function money(v){return '$'+Math.round(v).toLocaleString('en-US');}
+    function compact(v){
+      var a=Math.abs(v);
+      if(a>=1e6) return (v<0?'-$':'$')+(Math.abs(v)/1e6).toFixed(1).replace(/\.0$/,'')+'M';
+      if(a>=1e4) return (v<0?'-$':'$')+Math.round(Math.abs(v)/1e3)+'K';
+      return money(v);
+    }
+    function sum(g){var t=0;g.f.forEach(function(f){if(f.t==='money')t+=+S[f.k]||0;});return t;}
+
+    /* ---- render ---- */
+    var outs={};
+    sheet.querySelectorAll('[data-bs-out]').forEach(function(el){outs[el.getAttribute('data-bs-out')]=el;});
+
+    function totals(){
+      var assets=S.personal+S.cashSav+S.cvli+S.invest+S.preTax+S.roth+S.realestate+S.business;
+      var liab=S.cards+S.autoLoan+S.student+S.taxowed+S.mortgage+S.heloc+S.bizdebt;
+      var out=sum(GROUPS.protcost)+sum(GROUPS.build)+sum(GROUPS.debttax);
+      return {assets:assets,liab:liab,net:assets-liab,life:S.earn-out};
+    }
+
+    function render(){
+      sheet.querySelectorAll('[data-bs]').forEach(function(el){
+        var g=GROUPS[el.getAttribute('data-bs')]; if(!g) return;
+        /* Compact only for policy face amounts - the cash band sits beside
+           dollar totals, so mixing $8,000 with $40K reads as a bug. */
+        var big=g.tone==='protect';
+        el.querySelector('b').textContent=g.show?g.show():(big?compact(sum(g)):money(sum(g)));
+        if(!el.querySelector('.bs-edit')) el.querySelector('b').insertAdjacentHTML('beforeend','<span class="bs-edit">&#9998;</span>');
+      });
+      var t=totals();
+      outs.assets.textContent=money(t.assets);
+      outs.liab.textContent=money(t.liab);
+      outs.net.textContent=money(t.net);
+      outs.life.textContent=money(t.life);
+      try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+    }
+
+    /* ---- pop-up ---- */
+    var head=document.getElementById('bsmHead'), title=document.getElementById('bsmTitle'),
+        body=document.getElementById('bsmBody'), open=null, last=null;
+
+    function build(key){
+      var g=GROUPS[key];
+      head.className='bsm-head '+g.tone;
+      title.textContent=g.t;
+      var h='';
+      g.f.forEach(function(f){
+        if(f.t==='yn'){
+          h+='<div class="xc-f"><label>'+f.l+'</label><div class="bsm-yn" data-yn="'+f.k+'">'+
+             '<button type="button" data-v="1">Yes</button><button type="button" data-v="0">No</button></div></div>';
+        }else{
+          h+='<div class="xc-f"><label>'+f.l+'</label><div class="xc-in"><span class="pre">$</span>'+
+             '<input type="text" inputmode="numeric" data-f="'+f.k+'"></div></div>';
+        }
+      });
+      var moneyFields=g.f.filter(function(f){return f.t==='money';}).length;
+      if(moneyFields>1) h+='<div class="bsm-sum"><span>'+g.t+'</span><b data-sum></b></div>';
+      if(g.hint) h+='<p class="bsm-hint">'+g.hint+'</p>';
+      body.innerHTML=h;
+      body.querySelectorAll('input[data-f]').forEach(function(i){
+        i.value=(+S[i.getAttribute('data-f')]||0).toLocaleString('en-US');
+      });
+      syncYN(); syncSum(key);
+    }
+    function syncYN(){
+      body.querySelectorAll('[data-yn]').forEach(function(row){
+        var v=S[row.getAttribute('data-yn')]?1:0;
+        row.querySelectorAll('button').forEach(function(b){b.classList.toggle('on',+b.getAttribute('data-v')===v);});
+      });
+    }
+    function syncSum(key){
+      var el=body.querySelector('[data-sum]');
+      if(el) el.textContent=money(sum(GROUPS[key]));
+    }
+
+    function show(key,btn){
+      open=key; last=btn; build(key);
+      modal.classList.add('open');
+      var first=body.querySelector('input,button'); if(first) first.focus();
+    }
+    function close(){
+      modal.classList.remove('open'); open=null;
+      if(last) last.focus();
+    }
+
+    sheet.addEventListener('click',function(e){
+      var btn=e.target.closest('button[data-bs]'); if(!btn) return;
+      show(btn.getAttribute('data-bs'),btn);
+    });
+    body.addEventListener('input',function(e){
+      var i=e.target.closest('input[data-f]'); if(!i) return;
+      S[i.getAttribute('data-f')]=+String(i.value).replace(/[^0-9.]/g,'')||0;
+      syncSum(open); render();
+    });
+    body.addEventListener('blur',function(e){
+      var i=e.target.closest('input[data-f]'); if(!i) return;
+      i.value=(+S[i.getAttribute('data-f')]||0).toLocaleString('en-US');
+    },true);
+    body.addEventListener('click',function(e){
+      var b=e.target.closest('[data-yn] button'); if(!b) return;
+      S[b.parentNode.getAttribute('data-yn')]=+b.getAttribute('data-v');
+      syncYN(); render();
+    });
+    document.getElementById('bsmX').addEventListener('click',close);
+    modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) close(); });
+
+    document.getElementById('bsReset').addEventListener('click',function(){
+      for(var k in DEF) S[k]=DEF[k];
+      if(open) build(open);
+      render();
+    });
+
+    /* Master card feeds earnings, one-way like every other calculator. */
+    var mInc=document.getElementById('mInc');
+    if(mInc){
+      mInc.addEventListener('input',function(){
+        S.earn=+mInc.value||0;
+        if(open==='earn') build('earn');
+        render();
+      });
+    }
+
+    try{
+      var saved=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(saved) for(var sk in DEF) if(typeof saved[sk]==='number') S[sk]=saved[sk];
+      var m=JSON.parse(localStorage.getItem('tr-master')||'null');
+      if(m&&m.income) S.earn=m.income;
+    }catch(e){}
+    render();
+  })();
+
+  /* ---- Master age & income -> every calculator ----
+     One-way by design: the master writes into the calculators, they never
+     write back, so editing one calculator can't move the others. ---- */
+  (function(){
+    var KEY='tr-master';
+    var mAge=document.getElementById('mAge'), mInc=document.getElementById('mInc');
+    if(!mAge||!mInc) return;
+    var incomeIds=['wcInc','hlvInc','lcInc','lqInc','dbInc','hmInc','liInc','diInc'], ageIds=['hlvAge','liAge'];
+
+    function fire(el,v){
+      if(!el) return;
+      var lo=el.min===''?-Infinity:+el.min, hi=el.max===''?Infinity:+el.max;
+      v=Math.round(Math.min(Math.max(v,lo),hi));
+      if(+el.value===v) return;
+      el.value=v;
+      el.dispatchEvent(new Event('input',{bubbles:true}));
+      el.dispatchEvent(new Event('change',{bubbles:true}));
+    }
+
+    function apply(save){
+      var age=+mAge.value||30, income=+mInc.value||0;
+      if(save){ try{ localStorage.setItem(KEY,JSON.stringify({age:age,income:income})); }catch(e){} }
+      incomeIds.forEach(function(id){ fire(document.getElementById(id),income); });
+      ageIds.forEach(function(id){ fire(document.getElementById(id),age); });
+      /* The compound teacher has no age field - it derives one from retirement age minus years. */
+      var yrs=document.getElementById('years'), ret=document.getElementById('retire');
+      if(yrs&&ret) fire(yrs,(+ret.value||65)-age);
+    }
+
+    try{
+      var s=JSON.parse(localStorage.getItem(KEY)||'null');
+      if(s){ if(s.age) mAge.value=s.age; if(s.income) mInc.value=s.income; }
+    }catch(e){}
+
+    mAge.addEventListener('input',function(){apply(true);});
+    mInc.addEventListener('input',function(){apply(true);});
+    window.addEventListener('storage',function(e){
+      if(e.key!==KEY||!e.newValue) return;
+      try{ var v=JSON.parse(e.newValue); if(v.age)mAge.value=v.age; if(v.income)mInc.value=v.income; apply(false); }catch(err){}
+    });
+    apply(false);
   })();
 </script>
 

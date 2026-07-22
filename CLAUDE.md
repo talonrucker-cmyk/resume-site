@@ -49,7 +49,8 @@ Line numbers drift as edits land — treat as approximate and confirm with Grep.
 | 663–681 | `#about` |
 | 682–750 | Compound interest teacher + chart |
 | 752–844 | `#experience` — resume/job history |
-| 847–1075 | `#tools` — calculators + `#balancesheet` (~1022) |
+| 847–1075 | `#tools` — calculators + `#balancesheet` (~1150) |
+| ~1204 | `#bsModal` — balance-sheet pop-up; fields come from `GROUPS` in the script |
 | 1076–1097 | `#guide` — embedded PDF |
 | 1099–1116 | `#contact` |
 | 1118–1558 | **Page 3: Tools & Demos** — six numbered subsections |
