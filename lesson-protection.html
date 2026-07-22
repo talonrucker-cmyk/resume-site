@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protection Planning — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:-.01em;color:inherit;text-decoration:none;transition:opacity .18s}
+  .brand:hover{opacity:.72}
+  .brand .mark{transition:transform .18s}
+  .brand:hover .mark{transform:translateX(-2px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:52px 62px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:4.1rem;line-height:1.02;letter-spacing:-.028em;margin:18px 0 20px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.5rem;line-height:1.08;letter-spacing:-.022em;margin:14px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  .lede{font-size:1.15rem;color:var(--ink-soft);max-width:62ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* title slide */
+  .title-grid{display:grid;grid-template-columns:1.3fr .85fr;gap:52px;align-items:center;flex:1}
+  .title-card{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:32px;box-shadow:var(--shadow)}
+  .title-card .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .agenda{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .agenda li{display:flex;gap:12px;align-items:flex-start;font-size:.98rem;color:#C9D9D2}
+  .agenda b{font-family:var(--mono);font-size:.72rem;color:var(--amber-soft);padding-top:.28em;flex:none}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.15fr .85fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.98rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:22px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.3rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+
+  /* guideline table — rebuilt as stacked rows */
+  .gtable{display:flex;flex-direction:column;gap:7px}
+  .grow{display:grid;grid-template-columns:112px 1fr;align-items:center;gap:14px;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:11px 15px;transition:.2s;cursor:default}
+  .grow:hover{border-color:var(--pine);transform:translateX(3px)}
+  .grow.hot{background:linear-gradient(90deg,rgba(240,194,119,.28),var(--white) 70%);border-color:var(--amber)}
+  .grow .age{font-family:var(--mono);font-size:.86rem;font-weight:500;color:var(--pine)}
+  .grow .mult{font-family:var(--display);font-weight:600;font-size:1.02rem;display:flex;align-items:center;gap:10px}
+  .grow .bar{height:7px;border-radius:99px;background:var(--pine);opacity:.85;flex:none}
+  .grow.nw .bar{background:var(--amber)}
+  .grow .tag{font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);letter-spacing:.04em}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:30px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:15px;overflow:auto}
+  /* denser variant for panels carrying five or more fields */
+  .inputs.tight{gap:9px;padding:16px 24px}
+  .inputs.tight .ih{padding-bottom:9px}
+  .inputs.tight .hint{font-size:.72rem;margin-top:4px}
+  .inputs.tight .inwrap input{padding-top:8px;padding-bottom:8px;font-size:1.05rem}
+  .inputs.tight .fld label{margin-bottom:4px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.12rem;color:var(--ink);padding:11px 13px 11px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:56px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.brick{color:#F0A093}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.35rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.3rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px}
+
+  /* growth mini-chart */
+  .spark{margin:12px 0 2px}
+  .spark svg{display:block;width:100%;height:auto}
+  .sp-area{fill:rgba(240,194,119,.16)}
+  .sp-line{fill:none;stroke:var(--amber-soft);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .sp-ax{stroke:rgba(255,255,255,.16);stroke-width:1}
+  .sp-lab{font-family:var(--mono);font-size:11px;fill:#7FA295}
+
+  /* gap meter */
+  .meter{margin:18px 0 6px}
+  .meter .track{height:16px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;display:flex}
+  .meter .track i{display:block;height:100%;background:var(--pine);transition:width .4s cubic-bezier(.2,.85,.25,1)}
+  .meter .track i.cov{background:linear-gradient(90deg,#2E8C6E,#4FB08D)}
+  .meter .track i.gap{background:repeating-linear-gradient(45deg,#A23A2D,#A23A2D 6px,#8E3226 6px,#8E3226 12px)}
+  .meter .key{display:flex;gap:18px;margin-top:11px;font-family:var(--mono);font-size:.67rem;letter-spacing:.05em;color:#7FA295}
+  .meter .key i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;vertical-align:baseline}
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.3rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.95rem;color:var(--ink-soft);flex:1}
+  .rcard .rv{font-family:var(--display);font-weight:700;font-size:1.9rem;color:var(--pine);margin-top:14px;letter-spacing:-.02em}
+
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ----------
+     Below this width the 16:9 stage would have to scale down so far that the
+     text stops being legible, so we drop the slide framing entirely: one
+     lesson step at a time, stacked in a single column at full reading size. */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .brand{font-size:.88rem}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:30px 20px 34px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.3rem;margin:14px 0 16px}
+    h2.st{font-size:1.75rem}
+    .lede{font-size:1.02rem}
+    .pull{font-size:1.1rem}
+
+    /* every side-by-side layout becomes a single column */
+    .title-grid,.two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.6rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="brand" href="index.html" title="Back to talonrucker.com"><span class="mark">TR</span> <span class="brand-tx">Making money make sense</span></a>
+    <div class="deck-title">Lesson 01 · Protection Planning</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 9</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TITLE -->
+      <section class="slide on">
+        <div class="title-grid">
+          <div>
+            <span class="eyebrow">Interactive lesson</span>
+            <h1 class="big">Protecting the <em>income</em> you haven't <span class="amber">earned yet</span>.</h1>
+            <p class="lede">Most of your wealth isn't in your accounts — it's in the paychecks still ahead of you. This lesson covers how the industry sizes that number, and how much of it you can actually insure.</p>
+          </div>
+          <div class="title-card">
+            <div class="rk">What we'll cover</div>
+            <ul class="agenda">
+              <li><b>01</b><span>Why coverage is capped by age</span></li>
+              <li><b>02</b><span>The qualification table, explained</span></li>
+              <li><b>03</b><span>Calculator — how much you qualify for</span></li>
+              <li><b>04</b><span>Human capital: your future earnings</span></li>
+              <li><b>05</b><span>Calculator — lifetime earnings vs. the cap</span></li>
+              <li><b>06</b><span>The disability gap nobody checks</span></li>
+              <li><b>07</b><span>Calculator — your monthly exposure</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> or click Next</span></div>
+      </section>
+
+      <!-- 2 — CONCEPT: WHY CAPPED -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Insurance replaces a <span class="pine">paycheck</span>, not a lifestyle.</h2>
+        <div class="two" style="margin-top:20px">
+          <div>
+            <ul class="points">
+              <li><span class="num">1</span><span class="tx">A carrier will only insure an <b>economic loss</b> they can measure. If you die, the measurable loss is the income your family stops receiving.</span></li>
+              <li><span class="num">2</span><span class="tx">A 25-year-old has <b>40 more years</b> of paychecks ahead. A 62-year-old has three. Same salary, very different loss.</span></li>
+              <li><span class="num">3</span><span class="tx">So underwriters cap coverage as a <b>multiple of income</b> — and that multiple shrinks as you age.</span></li>
+              <li><span class="num">4</span><span class="tx">Past retirement age the math flips to <b>net worth</b>, because there's no paycheck left to replace — only an estate to settle.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="pull">You can't buy $10M of coverage on a $60k salary. The cap isn't the carrier being difficult — it's the carrier refusing to insure a loss that doesn't exist.</div>
+            <div class="card">
+              <h3>The one exception</h3>
+              <p>Debt is insurable on top of the income multiple. A mortgage, business loan, or co-signed obligation is a real dollar figure your family inherits — so carriers will add it to the cap.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>02 — WHY COVERAGE IS CAPPED</span><span>PROTECTION PLANNING</span></div>
+      </section>
+
+      <!-- 3 — THE TABLE -->
+      <section class="slide">
+        <span class="eyebrow">Reference</span>
+        <h2 class="st">Industry qualification guidelines</h2>
+        <div class="two wide-left" style="margin-top:18px;align-items:start">
+          <div class="gtable" id="gtable">
+            <div class="grow" data-lo="18" data-hi="40"><span class="age">18 – 40</span><span class="mult"><i class="bar" style="width:120px"></i>30&times; income</span></div>
+            <div class="grow" data-lo="41" data-hi="50"><span class="age">41 – 50</span><span class="mult"><i class="bar" style="width:80px"></i>20&times; income</span></div>
+            <div class="grow" data-lo="51" data-hi="60"><span class="age">51 – 60</span><span class="mult"><i class="bar" style="width:60px"></i>15&times; income</span></div>
+            <div class="grow" data-lo="61" data-hi="65"><span class="age">61 – 65</span><span class="mult"><i class="bar" style="width:40px"></i>10&times; income</span></div>
+            <div class="grow nw" data-lo="66" data-hi="70"><span class="age">66 – 70</span><span class="mult"><i class="bar" style="width:20px"></i>1&times; net worth</span></div>
+            <div class="grow nw" data-lo="71" data-hi="80"><span class="age">71 – 80</span><span class="mult"><i class="bar" style="width:12px"></i>&frac12;&times; net worth</span></div>
+            <div class="grow nw" data-lo="81" data-hi="120"><span class="age">81 +</span><span class="mult"><span class="tag">CASE BY CASE</span></span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <h3>How to read it</h3>
+              <p>Find the age band, multiply by <b>gross annual income</b>, then add outstanding debt. That's the ceiling — not a recommendation. What you actually need is usually less.</p>
+            </div>
+            <div class="card">
+              <h3>Green vs. amber</h3>
+              <p>Green bands are priced off <b>income</b>. Amber bands are priced off <b>net worth</b> — the switch happens at retirement, when the paycheck stops being the thing at risk.</p>
+            </div>
+            <div class="pull" style="font-size:1.12rem">The table sets the ceiling. The next slide sets the number.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>03 — QUALIFICATION TABLE</span><span>GUIDELINES VARY BY CARRIER</span></div>
+      </section>
+
+      <!-- 4 — CALC 1: QUALIFICATION -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">How much would you qualify for?</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your numbers</div>
+            <div class="fld">
+              <label for="q_age">Current age</label>
+              <div class="slider">
+                <input type="range" id="q_age" min="18" max="85" value="34">
+                <span class="amt" id="q_age_v">34</span>
+              </div>
+            </div>
+            <div class="fld">
+              <label for="q_inc">Gross annual income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="q_inc" inputmode="numeric" value="120,000"></div>
+            </div>
+            <div class="fld" id="q_nw_fld" style="display:none">
+              <label for="q_nw">Total net worth</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="q_nw" inputmode="numeric" value="2,500,000"></div>
+              <div class="hint">Past 65, carriers price coverage off net worth instead of income.</div>
+            </div>
+            <div class="fld">
+              <label for="q_debt">Outstanding debt</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="q_debt" inputmode="numeric" value="340,000"></div>
+              <div class="hint">Mortgage, student loans, business debt — anything your family would inherit.</div>
+            </div>
+            <div class="fld">
+              <label for="q_have">Coverage already in force</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="q_have" inputmode="numeric" value="500,000"></div>
+              <div class="hint">Include group coverage through work.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Maximum qualified coverage</div>
+            <div class="big" id="q_max">$3,940,000</div>
+            <div class="sub" id="q_basis">Age 34 · 30&times; income + debt</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn" id="q_frominc">$3,600,000</div><div class="bl" id="q_frominc_l">From income (30&times;)</div></div>
+              <div class="bd"><div class="bn amber" id="q_fromdebt">$340,000</div><div class="bl">From debt</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Maximum qualified</span><b id="q_l1">$3,940,000</b></div>
+              <div class="lrow"><span>Already in force</span><b id="q_l2">&minus;$500,000</b></div>
+              <div class="lrow tot"><span>Remaining insurable capacity</span><b id="q_l3">$3,440,000</b></div>
+            </div>
+            <div class="flag" id="q_flag" style="display:none"></div>
+            <div class="disclaim">Educational estimate only. Final underwriting depends on carrier, health, occupation, and financial documentation.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>04 — QUALIFICATION CALCULATOR</span><span>ADJUST ANY FIELD &mdash; RESULTS UPDATE LIVE</span></div>
+      </section>
+
+      <!-- 5 — CONCEPT: HUMAN CAPITAL -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Your largest asset doesn't show up on a <span class="pine">statement</span>.</h2>
+        <div class="two" style="margin-top:20px">
+          <div>
+            <ul class="points">
+              <li><span class="num">1</span><span class="tx">Economists call it <b>human capital</b> — the present and future value of every paycheck between now and retirement.</span></li>
+              <li><span class="num">2</span><span class="tx">Early in a career it dwarfs everything else. A 25-year-old earning $80k has a portfolio of roughly <b>$8M in future wages</b> and maybe $10k in the bank.</span></li>
+              <li><span class="num">3</span><span class="tx">Raises compound. A steady <b>4% annual increase</b> roughly doubles your salary every 18 years — so late-career years carry the most weight.</span></li>
+              <li><span class="num">4</span><span class="tx">Which is why the qualification cap almost always lands <b>well below</b> lifetime earnings. Coverage replaces the loss; it doesn't reproduce the career.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="pull">You insure your car, your house, and your phone — and leave the eight-figure asset uninsured because it doesn't come with a statement.</div>
+            <div class="card">
+              <h3>What the next slide does</h3>
+              <p>It totals every remaining paycheck at your growth rate, then sets it beside the coverage cap from the table. The distance between the two numbers is the conversation.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>05 — HUMAN CAPITAL</span><span>PROTECTION PLANNING</span></div>
+      </section>
+
+      <!-- 6 — CALC 2: FUTURE EARNINGS -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">Future earnings vs. the coverage cap</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Earnings assumptions</div>
+            <div class="fld">
+              <label for="f_age">Current age</label>
+              <div class="slider"><input type="range" id="f_age" min="18" max="70" value="23"><span class="amt" id="f_age_v">23</span></div>
+            </div>
+            <div class="fld">
+              <label for="f_inc">Starting annual income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="f_inc" inputmode="numeric" value="200,000"></div>
+            </div>
+            <div class="row2">
+              <div class="fld">
+                <label for="f_growth">Growth rate</label>
+                <div class="slider"><input type="range" id="f_growth" min="0" max="10" step="0.5" value="4"><span class="amt" id="f_growth_v">4%</span></div>
+              </div>
+              <div class="fld">
+                <label for="f_ret">Retirement age</label>
+                <div class="slider"><input type="range" id="f_ret" min="50" max="75" value="65"><span class="amt" id="f_ret_v">65</span></div>
+              </div>
+            </div>
+            <div class="fld">
+              <label>Working years remaining</label>
+              <div class="inwrap"><input type="text" id="f_years" value="42 years" readonly style="background:var(--paper-2);color:var(--ink-soft)"></div>
+              <div class="hint">Total earnings assume each year's salary grows by the rate above, with no gaps in employment.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Total future earnings</div>
+            <div class="big amber" id="f_total">$20,963,920</div>
+            <div class="sub" id="f_sub">42 years of income growing 4% annually until age 65</div>
+
+            <div class="spark">
+              <svg viewBox="0 0 460 110" preserveAspectRatio="none" id="f_svg">
+                <path class="sp-area" id="f_area"></path>
+                <path class="sp-line" id="f_line"></path>
+                <line class="sp-ax" x1="0" y1="96" x2="460" y2="96"></line>
+                <text class="sp-lab" x="0" y="108" id="f_lab_a">age 23</text>
+                <text class="sp-lab" x="460" y="108" text-anchor="end" id="f_lab_b">age 65</text>
+              </svg>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Final-year salary</span><b id="f_last">$1,006,000</b></div>
+              <div class="lrow"><span>Qualification multiple</span><b id="f_mult">30&times; income</b></div>
+              <div class="lrow tot"><span>Maximum life insurance</span><b id="f_cap">$6,000,000</b></div>
+              <div class="lrow gap"><span>Earnings left uninsured</span><b id="f_gap">$14,963,920</b></div>
+            </div>
+            <div class="disclaim">Nominal dollars, not adjusted for inflation or taxes. Illustrative only.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>06 — HUMAN CAPITAL CALCULATOR</span><span>CAP USES CURRENT-AGE MULTIPLE</span></div>
+      </section>
+
+      <!-- 7 — CONCEPT: DISABILITY -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">The more likely event is that you <span class="pine">survive</span> it.</h2>
+        <div class="two" style="margin-top:20px">
+          <div>
+            <ul class="points">
+              <li><span class="num">1</span><span class="tx">A working adult is <b>far more likely</b> to miss a long stretch of work from illness or injury than to die during their career.</span></li>
+              <li><span class="num">2</span><span class="tx">Disability insurance replaces a slice of monthly income — typically <b>60% of base pay</b>, often capped in dollars.</span></li>
+              <li><span class="num">3</span><span class="tx">Group coverage through work usually <b>excludes bonus and commission</b>, so high earners are covered on a fraction of what they actually make.</span></li>
+              <li><span class="num">4</span><span class="tx">Whatever the policy doesn't replace is the <b>gap</b> — the monthly shortfall your savings absorbs until you're back.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="pull">Life insurance protects your family from your death. Disability insurance protects them from your life.</div>
+            <div class="card">
+              <h3>Check the policy, not the assumption</h3>
+              <p>Most people assume they have coverage and have never read the benefit amount. The next slide takes the real number off your policy and shows what's left exposed.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>07 — DISABILITY BASICS</span><span>PROTECTION PLANNING</span></div>
+      </section>
+
+      <!-- 8 — CALC 3: DI GAP -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">Your monthly disability gap</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Income &amp; existing coverage</div>
+            <div class="fld">
+              <label for="d_inc">Gross annual income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="d_inc" inputmode="numeric" value="200,000"></div>
+              <div class="hint">Monthly equivalent: <b id="d_mo">$16,667</b></div>
+            </div>
+            <div class="fld">
+              <label for="d_ben">Current monthly DI benefit</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="d_ben" inputmode="numeric" value="0"></div>
+              <div class="hint">Check your benefits portal. Enter <b>0</b> if you have none, or use the estimator below.</div>
+            </div>
+            <div class="fld">
+              <label for="d_pct">Or estimate it: policy replaces</label>
+              <div class="slider"><input type="range" id="d_pct" min="0" max="80" step="5" value="0"><span class="amt" id="d_pct_v">0%</span></div>
+              <div class="hint">Group policies commonly replace 60% of base salary, capped at a monthly maximum.</div>
+            </div>
+            <div class="fld">
+              <label for="d_cap">Monthly benefit cap on the policy</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="d_cap" inputmode="numeric" value="10,000"></div>
+              <div class="hint">Set to 0 for no cap. Caps quietly strand high earners.</div>
+            </div>
+            <div class="fld">
+              <label for="d_need">Essential monthly expenses</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="d_need" inputmode="numeric" value="9,000"></div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Potential monthly gap</div>
+            <div class="big brick" id="d_gap">$16,667</div>
+            <div class="sub" id="d_gapsub">0% of your income would be replaced</div>
+
+            <div class="meter">
+              <div class="track"><i class="cov" id="d_bar_cov" style="width:0%"></i><i class="gap" id="d_bar_gap" style="width:100%"></i></div>
+              <div class="key"><span><i style="background:#4FB08D"></i>COVERED</span><span><i style="background:#A23A2D"></i>EXPOSED</span></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Current monthly income</span><b id="d_l1">$16,667</b></div>
+              <div class="lrow"><span>Current monthly DI benefit</span><b id="d_l2">$0</b></div>
+              <div class="lrow tot gap"><span>Potential disability gap</span><b id="d_l3">$16,667</b></div>
+              <div class="lrow"><span>Essential expenses shortfall</span><b id="d_l4">$9,000</b></div>
+            </div>
+            <div class="flag" id="d_flag"></div>
+            <div class="disclaim">Benefit taxation varies: employer-paid premiums generally make benefits taxable, which widens the real gap.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>08 — DISABILITY GAP CALCULATOR</span><span>BEFORE-TAX FIGURES</span></div>
+      </section>
+
+      <!-- 9 — RECAP -->
+      <section class="slide">
+        <span class="eyebrow">Recap</span>
+        <h2 class="st">Three numbers worth knowing</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">01 — Qualification</div>
+            <h3>The ceiling</h3>
+            <p>Your age band sets an income multiple. Add debt. That's the most any carrier will issue — a hard limit set before your needs are ever discussed.</p>
+            <div class="rv" id="r1">$3,940,000</div>
+            <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">MAX QUALIFIED COVERAGE</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">02 — Human capital</div>
+            <h3>The asset</h3>
+            <p>Every paycheck between now and retirement, compounded by raises. It's the largest thing you own and the one nobody puts on a balance sheet.</p>
+            <div class="rv" id="r2">$20,963,920</div>
+            <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">TOTAL FUTURE EARNINGS</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">03 — Disability</div>
+            <h3>The exposure</h3>
+            <p>The monthly shortfall if you couldn't work tomorrow. It's the number that decides how long your savings last, and almost nobody has checked it.</p>
+            <div class="rv" id="r3">$16,667</div>
+            <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">MONTHLY GAP</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>09 — RECAP · VALUES PULL FROM YOUR ENTRIES</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var cur = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ go(i); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function go(i){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ go(cur - 1); });
+  nextBtn.addEventListener('click', function(){ go(cur + 1); });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  /* Scale the 1280x720 stage to fit the available space.
+     Below 860px the stylesheet switches to a stacked, full-size reading
+     layout instead — scaling that far down makes the text illegible — so
+     the fit math stands down and clears anything it previously set. */
+  var fitBox = document.getElementById('stageFit');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;              // container not laid out yet — a later event will catch it
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';   // the fit box carries the scaled footprint
+    fitBox.style.height = (720 * s) + 'px';
+  }
+
+  /* Belt and braces: some embedding contexts resize the viewport without
+     firing a usable resize event on every layer, so listen broadly. */
+  var pending = false;
+  function scheduleFit(){
+    /* rAF is paused in background tabs, so a lesson opened in one would never
+       size itself. Fall back to sizing straight away when hidden. */
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function group(n){ return Math.round(n || 0).toLocaleString('en-US'); }
+
+  /* parse "1,234" / "$1,234" -> 1234 */
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+
+  /* money inputs re-format with commas as you type, preserving caret position */
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      // restore caret after the same number of digits
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function bindRange(id, onChange){
+    document.getElementById(id).addEventListener('input', onChange);
+  }
+
+  /* age -> qualification rule from the guideline table */
+  function rule(age){
+    if (age <= 40) return {mult:30, basis:'income', label:'30× income'};
+    if (age <= 50) return {mult:20, basis:'income', label:'20× income'};
+    if (age <= 60) return {mult:15, basis:'income', label:'15× income'};
+    if (age <= 65) return {mult:10, basis:'income', label:'10× income'};
+    if (age <= 70) return {mult:1,  basis:'worth',  label:'1× net worth'};
+    if (age <= 80) return {mult:.5, basis:'worth',  label:'½× net worth'};
+    return {mult:0, basis:'case', label:'case by case'};
+  }
+
+  /* highlight the matching row on the reference slide */
+  var gRows = Array.prototype.slice.call(document.querySelectorAll('#gtable .grow'));
+  function highlightRow(age){
+    gRows.forEach(function(r){
+      var lo = +r.dataset.lo, hi = +r.dataset.hi;
+      r.classList.toggle('hot', age >= lo && age <= hi);
+    });
+  }
+
+  /* ---------- CALC 1: QUALIFICATION ---------- */
+  function calcQual(){
+    var age  = +document.getElementById('q_age').value;
+    var inc  = val('q_inc');
+    var nw   = val('q_nw');
+    var debt = val('q_debt');
+    var have = val('q_have');
+    var r    = rule(age);
+
+    document.getElementById('q_age_v').textContent = age;
+    document.getElementById('q_nw_fld').style.display = (r.basis === 'worth') ? '' : 'none';
+    highlightRow(age);
+
+    var base = r.basis === 'income' ? inc * r.mult
+             : r.basis === 'worth'  ? nw * r.mult
+             : 0;
+    var max  = base + debt;
+    var left = Math.max(0, max - have);
+
+    document.getElementById('q_max').textContent   = r.basis === 'case' ? 'Case by case' : money(max);
+    document.getElementById('q_basis').textContent = 'Age ' + age + ' · ' + r.label + (r.basis === 'case' ? '' : ' + debt');
+    document.getElementById('q_frominc').textContent   = r.basis === 'case' ? '—' : money(base);
+    document.getElementById('q_frominc_l').textContent = r.basis === 'income' ? 'From income (' + r.label + ')'
+                                                       : r.basis === 'worth'  ? 'From net worth (' + r.label + ')'
+                                                       : 'Individual review';
+    document.getElementById('q_fromdebt').textContent = money(debt);
+    document.getElementById('q_l1').textContent = r.basis === 'case' ? '—' : money(max);
+    document.getElementById('q_l2').textContent = '−' + money(have);
+    document.getElementById('q_l3').textContent = r.basis === 'case' ? '—' : money(left);
+
+    var flag = document.getElementById('q_flag');
+    if (r.basis === 'case') {
+      flag.style.display = '';
+      flag.textContent = 'AGE 81+ — NO STANDARD MULTIPLE. REQUIRES INDIVIDUAL UNDERWRITING.';
+    } else if (have >= max && max > 0) {
+      flag.style.display = '';
+      flag.textContent = 'ALREADY AT OR ABOVE THE QUALIFICATION CEILING.';
+    } else {
+      flag.style.display = 'none';
+    }
+
+    document.getElementById('r1').textContent = r.basis === 'case' ? 'Case by case' : money(max);
+  }
+  bindRange('q_age', calcQual);
+  ['q_inc','q_nw','q_debt','q_have'].forEach(function(id){ bindMoney(id, calcQual); });
+
+  /* ---------- CALC 2: FUTURE EARNINGS ---------- */
+  function calcFuture(){
+    var age    = +document.getElementById('f_age').value;
+    var ret    = +document.getElementById('f_ret').value;
+    var g      = +document.getElementById('f_growth').value / 100;
+    var inc    = val('f_inc');
+    var years  = Math.max(0, ret - age);
+
+    document.getElementById('f_age_v').textContent    = age;
+    document.getElementById('f_ret_v').textContent    = ret;
+    document.getElementById('f_growth_v').textContent = (+document.getElementById('f_growth').value) + '%';
+    document.getElementById('f_years').value = years + (years === 1 ? ' year' : ' years');
+
+    /* sum of inc * (1+g)^n for n = 0 .. years-1, collecting the curve as we go */
+    var total = 0, salary = inc, pts = [], running = [];
+    for (var n = 0; n < years; n++){
+      total += salary;
+      pts.push(salary);
+      running.push(total);
+      salary *= (1 + g);
+    }
+    var last = years > 0 ? pts[years - 1] : 0;
+
+    document.getElementById('f_total').textContent = money(total);
+    document.getElementById('f_sub').textContent   = years === 0
+      ? 'Already at or past the selected retirement age'
+      : years + ' years of income growing ' + (g * 100) + '% annually until age ' + ret;
+    document.getElementById('f_last').textContent  = money(last);
+
+    var r = rule(age);
+    var cap = r.basis === 'income' ? inc * r.mult : 0;
+    document.getElementById('f_mult').textContent = r.label;
+    document.getElementById('f_cap').textContent  = r.basis === 'income' ? money(cap) : 'Net-worth based';
+    document.getElementById('f_gap').textContent  = money(Math.max(0, total - cap));
+
+    /* cumulative-earnings sparkline */
+    var W = 460, H = 96, area = document.getElementById('f_area'), line = document.getElementById('f_line');
+    if (running.length > 1){
+      var peak = running[running.length - 1];
+      var d = '';
+      for (var i = 0; i < running.length; i++){
+        var x = (i / (running.length - 1)) * W;
+        var y = H - (running[i] / peak) * (H - 10);
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+      }
+      line.setAttribute('d', d);
+      area.setAttribute('d', d + 'L' + W + ' ' + H + ' L0 ' + H + ' Z');
+    } else {
+      line.setAttribute('d', '');
+      area.setAttribute('d', '');
+    }
+    document.getElementById('f_lab_a').textContent = 'age ' + age;
+    document.getElementById('f_lab_b').textContent = 'age ' + ret;
+
+    document.getElementById('r2').textContent = money(total);
+  }
+  ['f_age','f_ret','f_growth'].forEach(function(id){ bindRange(id, calcFuture); });
+  bindMoney('f_inc', calcFuture);
+
+  /* keep retirement age above current age */
+  document.getElementById('f_age').addEventListener('input', function(){
+    var a = +this.value, ret = document.getElementById('f_ret');
+    if (+ret.value < a) { ret.value = a; }
+    calcFuture();
+  });
+
+  /* ---------- CALC 3: DISABILITY GAP ---------- */
+  var diPct = document.getElementById('d_pct');
+  var diBen = document.getElementById('d_ben');
+
+  function calcDI(usingSlider){
+    var inc     = val('d_inc');
+    var monthly = inc / 12;
+    var capAmt  = val('d_cap');
+    var need    = val('d_need');
+
+    document.getElementById('d_mo').textContent = money(monthly);
+
+    /* the slider is a convenience estimator: moving it writes into the benefit field */
+    var pct = +diPct.value;
+    document.getElementById('d_pct_v').textContent = pct + '%';
+    if (usingSlider){
+      var est = monthly * pct / 100;
+      if (capAmt > 0) est = Math.min(est, capAmt);
+      diBen.value = group(est);
+    }
+
+    var benefit = val('d_ben');
+    if (capAmt > 0 && benefit > capAmt) { benefit = capAmt; }
+
+    var gap     = Math.max(0, monthly - benefit);
+    var covered = monthly > 0 ? Math.min(100, benefit / monthly * 100) : 0;
+
+    document.getElementById('d_gap').textContent    = money(gap);
+    document.getElementById('d_gapsub').textContent = Math.round(covered) + '% of your income would be replaced';
+    document.getElementById('d_bar_cov').style.width = covered + '%';
+    document.getElementById('d_bar_gap').style.width = (100 - covered) + '%';
+
+    document.getElementById('d_l1').textContent = money(monthly);
+    document.getElementById('d_l2').textContent = money(benefit);
+    document.getElementById('d_l3').textContent = money(gap);
+    document.getElementById('d_l4').textContent = money(Math.max(0, need - benefit));
+
+    var flag = document.getElementById('d_flag');
+    /* the cap only "binds" if it actually costs you a point of replacement rate */
+    var nominal   = pct || 60;
+    var uncapped  = monthly * nominal / 100;
+    var capBinds  = capAmt > 0 && uncapped - capAmt > 1 && Math.round(covered) < nominal;
+    if (capBinds){
+      flag.style.display = '';
+      flag.textContent = 'THE ' + money(capAmt) + '/MO CAP IS BINDING — YOUR EFFECTIVE REPLACEMENT RATE IS ' + Math.round(covered) + '%, NOT ' + nominal + '%.';
+    } else if (benefit < need){
+      flag.style.display = '';
+      flag.textContent = 'BENEFIT FALLS SHORT OF ESSENTIAL EXPENSES BY ' + money(need - benefit) + ' PER MONTH.';
+    } else {
+      flag.style.display = 'none';
+    }
+
+    document.getElementById('r3').textContent = money(gap);
+  }
+  ['d_inc','d_ben','d_cap','d_need'].forEach(function(id){ bindMoney(id, function(){ calcDI(false); }); });
+  diPct.addEventListener('input', function(){ calcDI(true); });
+
+  /* ---------- INIT ---------- */
+  calcQual();
+  calcFuture();
+  calcDI(false);
+  go(0);
+})();
+</script>
+</body>
+</html>
