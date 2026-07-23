@@ -1,6 +1,8 @@
 # Website edit list
 
-Source: `Prompts for Claude Pt.3.docx` (22 Jul 2026). 45 items, grouped into batches.
+Source: `Prompts for Claude Pt.3.docx` (22 Jul 2026). 45 items — Batches 1–10, all done.
+Source: `Prompts from Claude pt.4.docx` (23 Jul 2026). 20 items (#49–68) — Batches 11–18.
+Batches 11–16 done; Batches 17–18 **outstanding**.
 
 **How to use this:** start a new thread and say *"do Batch N from EDITS.md"*.
 Read `CLAUDE.md` first — it has the section map and the publishing gotcha.
@@ -448,12 +450,320 @@ Separate files — these never touch `index.html`, so this is the cheapest batch
 
 ---
 
+# Pt.4 — outstanding (23 Jul 2026)
+
+New source doc, 20 items. Screenshots: `../Backups/edit-screenshots-pt4/`
+(`tax-color-chart.png` → #50, `lifestyle-creep-gap.png` → #56). Same rules apply —
+read `CLAUDE.md` first, one batch per thread, edit **both** index files.
+
+---
+
+## Batch 11 — Home calculators: limits, master, inflation ✅ DONE
+
+The three big home-page calculator jobs. All touch the compound/Roth teacher, the
+"Your savings potential" calculator, and the master start-here card — done in one
+thread so the shared inflation / today's-dollars plumbing stays consistent.
+
+- [x] 49. **2026 contribution limits + "your age" input** (Roth teacher).
+      - Roth & Traditional one-time-deposit slider → cap **$7,500**; 401(k) → **$24,500**.
+      - Confirm the "today's dollars" math is right at **3%/yr** inflation.
+      - Rename the **"from age"** control to **"your age"** and make it a typeable
+        number that auto-drives the "years to grow" slider (e.g. type 24 → 41 years
+        to reach retirement age 65). Visitors mistook "years to grow" for their age.
+- [x] 50. **Wealth calculator: drop the inflation slider, fix the math.**
+      - Remove the inflation **slider** but keep the **"Today's dollars"** button
+        (currently flaky — sometimes works, sometimes not). Default 3%, verify correct.
+      - In Advanced, make the **taxes bar change colour** like `tax-color-chart.png`.
+- [x] 51. **Master start-here + savings-potential fixes.**
+      - Changing age in the start-here section must also re-run **"Your savings
+        potential"** (it doesn't today).
+      - Confirm dialog when editing master age/income: "Are you sure? This changes
+        every calculator." (yes / no).
+      - On first load, default **after-tax return = 0** and **lifestyle spend = 0**,
+        so realized wealth equals the "your paycheck is your biggest asset" figure
+        (only years, income, raise% in play). Fix the calc so this actually holds.
+
+**How it was built.**
+
+- **#49 limits** — the `ACCT` table (compound teacher IIFE) went Roth/Trad $7,000→
+  **$7,500** and 401(k) $23,500→**$24,500**; the seed slider's HTML `max` bumped to
+  7500 (Roth is the default account, so it sets the initial ceiling). The two "2025
+  limits" notes now read 2026. **Contribution limits are 2026; the `FED` bracket
+  table is still 2025** — they're separate, bump each when its figures land.
+- **#49 today's dollars** — verified correct: `growth()` returns `(1+.08)/(1+.03)`,
+  the standard real-return discount at a fixed `INFL=0.03`. No change needed.
+- **#49 "your age"** — the old "from age X" was a *display span* under a Years-to-grow
+  slider, which visitors read as their age. Added a typeable **`#ciAge`** "Your age"
+  field. Age is the anchor: `years = retire − age`, fully bidirectional — typing an
+  age drives the years slider, moving the slider writes the age back, changing
+  retirement age keeps the age fixed and moves years. Values clamp to the slider's
+  5–47 and normalise on blur. The `startNote` span was repurposed to show **"to age
+  65"** (the retirement target). The master card still drives the *years* slider, so
+  its age flows straight into the mirrored `#ciAge`.
+- **#50 inflation slider** — removed outright; inflation is now the fixed `INFL=0.03`
+  constant. **This is the "flaky Today's dollars" fix**: when a visitor dragged the
+  old slider to 0%, today's = future dollars and the toggle looked dead. At a fixed
+  3% it always visibly changes the number. Verified: future $18.1M ↔ today $5.56M,
+  stable across repeated toggles, sub-lines cross-referencing correctly.
+- **#50 tax bar colour** — matches `tax-color-chart.png`: the downward bars now
+  **stack lifestyle (brick red, at the zero line) then taxes (dark maroon `#5e1f16`,
+  below it)**. `compute()` tracks cumulative `taxCum`; `maxDn` scales on `red+taxCum`;
+  a `.wc-bar-tax` rect draws under each red one. A **Taxes** legend entry and a
+  tooltip "Taxes paid" line appear only when Advanced taxes are on (0-height/hidden
+  otherwise, so the default view is unchanged). Verified the tax rect sits exactly
+  at `redY + redHeight`.
+- **#51 age re-runs savings potential** — `wcYears` (study period) was never fed by
+  the master. Added `fire(wcYears, 65−age)` to the master's `apply()`, so age now
+  drives the savings-potential horizon the same way it drives the compound teacher.
+- **#51 confirm dialog** — the master now broadcasts on **`change` (commit), not per
+  keystroke**: a native confirm ("Are you sure? This changes every calculator on the
+  page.") gates each committed edit; **No** reverts the field to its last confirmed
+  value and re-syncs live listeners (the balance sheet reads `#mInc` on input). Load
+  and cross-tab `storage` syncs call `apply(false)` and skip the confirm.
+- **#51 zero defaults** — HTML defaults are now **after-tax return 0%, lifestyle 0%
+  (save 100%)**. With `r=0, lifeR=0` the calc already yields `realized = Σ net income`
+  = total career earnings, i.e. the "your paycheck is your biggest asset" figure
+  (only years, income, raise% in play). Verified: age 25, $250k @4% over 40 yrs →
+  **$23.76M** realized, matching the closed-form sum.
+
+---
+
+## Batch 12 — Account explainer & compliance ✅ DONE
+
+- [x] 52. **Replace the "same money, three accounts" demo.** Delete it from beneath
+      the Roth calculator on the home page. Build a clearer version under **Cash Flow**
+      (Tools) explaining: Roth = tax **now**, Traditional = tax **later**, 401(k) =
+      work restrictions & contribution limits. Design is open — pick the clearest form.
+- [x] 53. **Compliance disclaimer pop-up.** On a visitor's **first** calculator click,
+      show a pop-up with an **Accept** button: "these calculators are for conceptual
+      purposes only, not financial-planning advice." Confirm whether a footer line is
+      also needed for compliance (context: future Series 7 / 66 + broker-dealer).
+
+**How it was built.**
+
+- **#52** — the old `.rvt` "Same money. Three accounts." bar chart (Talon found it
+  confusing) is **deleted from the home page** and replaced by a plain three-card
+  comparison under **Tools ▸ Cash Flow** (`.acct3`, after "Where does your income
+  actually go?"). Each card leads with a **tax-timing pill** — Roth *Taxed now*,
+  Traditional / 401(k) *Taxed later* — then the 2026 limit ($7,500 / $7,500 /
+  $24,500) and a one-line "best when." A "your retirement tax rate" select drives a
+  verdict and highlights the winning card(s): lower → Traditional + 401(k), higher →
+  Roth, same → Roth edges it. **Cheaper than the old bar demo and reads at a glance.**
+- **The select kept its `#rvtRate` id on purpose.** `assumedRetireRate()` (and the
+  compound teacher's after-tax sub-line) read it; it now lives on Page 3 but is still
+  in the DOM, so the after-tax line still updates when it changes — verified live
+  across pages (32% → 35% retirement rate flows through). The `.rvt` CSS is now dead
+  but left in place, matching the project's practice for retired components.
+- **#53 first-use pop-up** — `#discModal` reuses the `.egg-modal` styles. A document-
+  level capturing listener watches for the first **trusted** `input`/`change` on any
+  form control (or click on a scorecard / balance-sheet / gauge). **`isTrusted` is the
+  key**: the master card's programmatic broadcast on load fires synthetic events, and
+  the guard makes those a no-op so the pop-up never shows itself on load (verified).
+  Accept (or Esc) records `tr-disclaimer-ok` in `localStorage`, so it shows **once**.
+- **#53 footer** — resolved the open question by **adding both** (safe default). The
+  footer disclosure now explicitly covers "the calculators and figures … are
+  hypothetical illustrations for conceptual and educational purposes only — not
+  investment or financial-planning advice," alongside the first-use pop-up.
+
+---
+
+## Batch 13 — Cash flow: spending circuit & lifestyle creep ✅ DONE
+
+- [x] 54. **Interrupt the spending circuit → side by side (home).** Currently the
+      better solution is hidden behind a click. Show the typical setup and the
+      interrupted version **side by side**, with a reveal button next to the typical
+      one so the fix appears once they understand the default.
+- [x] 55. **Match it on the Tools page** — the tools-page spending circuit should look
+      and behave exactly like the reworked home-page one (#54).
+- [x] 56. **Merge the two lifestyle visuals.** Combine the **"engineering an increased
+      savings rate"** drop-down into the **1% lifestyle-creep test** (they teach the
+      same thing). Keep the creep test's big gap visual (see `lifestyle-creep-gap.png`):
+      raise expenses 3% on a 4% raise → large lifetime difference.
+
+**How it was built.**
+
+- **#54 / #55 — one new `.scircuit2` component** replaces the old tabbed `.scircuit`
+  in **both** places (home Cash-flow drawer + Tools ▸ Cash Flow), so the two can never
+  drift. Two columns: the **typical setup** (Income → Checking → Lifestyle) always
+  visible on the left; the right column shows a "**Show the fix →**" button until
+  clicked, then reveals the **interrupted** flow (Income → Wealth-Building Account →
+  Checking → Lifestyle). The reveal is one-way and un-remembered — the point is to see
+  the default *first*, then the fix beside it. Reuses the existing `.sc-node` /
+  `.sc-arrow` / `.sc-allocs` styling; collapses to one column below 640px. The old
+  `.sc-tab` CSS is now dead but left in place. JS is one IIFE over `[data-sc2]`.
+- **#56 — merged into the 1% test, dropped the "Engineering" card.** The two taught the
+  same lesson, so "Engineering an increasing savings rate" (a static `engChart`) is
+  gone and its idea folded into **"The 1% lifestyle-creep test."** The test now models
+  the **gap**: income rises at your raise (default 4%), lifestyle rises slower by the
+  amount you hold back (default 1% → 3%), and each year's widening gap is invested and
+  compounds. The chart is the **big gap visual** from `lifestyle-creep-gap.png` (green
+  income line, orange lifestyle line, shaded "wealth-building room," future-wealth
+  badge) via `creepChart`'s `gapTo` mode — replacing the old accumulation area chart.
+  New sliders: raise % and "hold lifestyle below your raise" (the 1%). Verified
+  monotonic: 0.5% → $2.23M, 1% → $4.28M, 4% → $13.50M at $200k / 30 yrs / 6%.
+  `lcInc` kept its id, so the master card still feeds income.
+
+---
+
+## Batch 14 — Protection section ✅ DONE
+
+Two of these are questions Talon wants answered, not just edits (#57, #59).
+
+- [x] 57. **Explain the outstanding-debt field** in "how much life insurance would you
+      qualify for" — Talon doesn't see how it applies. Answer first; keep, reword, or
+      remove based on the answer.
+- [x] 58. **Rework "what a death benefit replaces."** The 40-year chart swings too hard
+      on tiny input changes. Reframe around the core idea: $1M benefit at 10% return
+      throws off $100k/yr to cover expenses **indefinitely**. Use a short horizon
+      (~3 years), maybe a click-through to the next section. Apply the **same
+      treatment** to "the day your money works instead of you" — change both together.
+- [x] 59. **Term vs whole life: cap cash value at the death benefit.** The graph shows
+      cash value growing **above** the death benefit — confirm that's wrong and fix it.
+- [x] 60. **Move the monthly disability-gap calculator** next to the other disability
+      drop-downs.
+
+**How it was built.**
+
+- **#57 answered: kept.** Outstanding debt *is* a legitimate underwriting input — financial
+  underwriting lets you insure enough to **both** replace income and clear debts the family
+  would inherit (mortgage, loans), so it's added on top of the age×income multiple. The tool
+  already did this math (`max = base + debt`); the confusion was that nothing explained *why*.
+  Fix is copy, not code: a one-line hint under the debt field ("Mortgage and loans your family
+  would inherit — coverage can clear these on top of replacing income") and a reworded
+  guideline note. Field stays.
+- **#58 reframed both tools.** The 40-year `lineChart` auto-scaled to a peak or crash, so tiny
+  input changes swung the whole curve. New shared **`foreverChart`** (script top level, beside
+  `drawdown`) draws a **3-year** view: a blue balance ribbon anchored to the starting balance
+  (flat when you draw exactly the return) over a few equal green income bars trailing into "…".
+  Draw the return → ribbon flat + "…" = the paycheck reads *indefinite*; over-draw → ribbon
+  tilts down, bars turn red, "runs out". Both `dbChart` (death benefit) and `piChart` ("the day
+  your money works instead of you") now call it, and their sub-lines/notes say "indefinitely"
+  instead of "after 40 years". The full 40-yr `drawdown`/`yearsToZero` is still computed for the
+  "runs out in year N" wording. No click-through added — the short-horizon reframe carries it.
+- **#59 confirmed wrong, fixed.** Real whole-life cash value grows *toward* the death benefit
+  and converges to it at maturity — it never exceeds it. The SVG's blue cash-value curve ended
+  at y=26, above the yellow death-benefit curve's y=44 (lower y = higher value). Redrew the
+  cash-value path to end at y=49, just below the benefit, staying under it the whole way. Bullet
+  now reads "climbs toward the death benefit, never above it."
+- **#60** — the "Your monthly disability gap" calculator moved from slot 3 (right after the
+  life-insurance qualifier) to sit **directly above "Disability: group vs. individual"**, so all
+  three disability pieces (gap calc, group-vs-individual, two-contracts) are now adjacent. Pure
+  block move; no id or JS change.
+
+---
+
+## Batch 15 — Scorecards, liquidity & housing ✅ DONE
+
+- [x] 61. **Savings & wealth-building scorecard** relabels/reorder:
+      - Put "credit saving is automatic" directly under "wealth building account".
+      - "wealth building account target funding" → **"investments selected"**.
+      - "lifestyle costs mapped" → **"fixed expenses mapped"**, and **add** a separate
+        "lifestyle expenses mapped" row.
+- [x] 62. **Liquidity scorecard:** rename "sinking funds for known costs" →
+      **"prepared funding for known costs"**; add a **stabilized-income** row (for
+      volatile/commission earners — steady cash through the year vs feast-or-famine;
+      name it as you see fit).
+- [x] 63. **Life-event funds side by side** — most liquid on the **left**, least liquid
+      on the **right**.
+- [x] 64. **"What home can you afford"** — rename "how much house can you actually carry"
+      to something that rings better. Add a **Predict** button next to the tax /
+      insurance / HOA monthly field that estimates it from home price, down payment,
+      interest rate and income — but keep the manual override.
+
+**How it was built.**
+
+- **#61** — the scorecard is `table[data-scard]` markup, so this was rows only. New order/labels:
+  Savings rate · Wealth-building account · **Saving is automatic** (moved up, directly under the
+  account row) · **Investments selected** (was "WBA target funding") · Employer match captured ·
+  **Fixed expenses mapped** (was "Lifestyle costs mapped") · **Lifestyle expenses mapped** (new).
+  Each row keeps its existing default mark; the new row defaults to Moderate. No JS change — the
+  one click handler picks up rows generically.
+- **#62** — "Sinking funds for known costs" → **"Prepared funding for known costs"**, and a new
+  **"Uneven income smoothed across the year"** row (the stabilized-income check for
+  commission/volatile earners), defaulting to Warning like its neighbour. Markup only.
+- **#63** — the life-event funds tool stacked Most-liquid then Least-liquid in one column. Now a
+  new **`.lqcols`** 2-col grid puts **Most liquid on the left, Least liquid on the right**, with
+  Annual income full-width beneath and the result panel still on the right of `.xc-grid`. All
+  eight `lq*` ids unchanged, so the `lqMost`/`lqLeast` JS needs no edit. `.lqcols` collapses to
+  one column under 720px (added to the existing media query).
+- **#64** — heading "How much house can you actually carry?" → **"What home can you actually
+  afford?"** A **Predict** button under the "Tax, insurance & HOA / mo" field estimates that
+  figure from the home price and down payment: property tax ~1.1%/yr + homeowners insurance
+  ~0.35%/yr + **PMI ~0.6%/yr of the loan when under 20% down**, ÷12, rounded to $25. It writes
+  into `hmFees` and re-runs, so the visitor can still **override** by typing. The bottom note now
+  says Predict includes a PMI estimate under 20% down (previously the tool excluded PMI).
+
+---
+
+## Batch 16 — Fun page polish ✅ DONE
+
+- [x] 65. Make the floating fish hook **a little bigger**.
+- [x] 66. **"DO NOT PRESS" upgrade** — bigger payoff: fireworks + confetti lasting a few
+      seconds, with **4 different random effects** it cycles through per click.
+
+**How it was built.**
+
+- **#65** — pure CSS in the `.fish-egg` block. The 🪝 hook (`.fish-egg` font-size)
+  went **2.1rem → 2.7rem**, with the line (34→42px) and the $10 bill (.8→.92rem)
+  scaled to match so the bait stays in proportion. Both index files.
+- **#66** — the old single centre-burst `burst()` became a **four-payoff system the
+  button cycles through** (`fxIdx` advances one step per press, so repeated presses
+  reliably show all four): **fxCannon** (central confetti explosion), **fxFireworks**
+  (7 staggered shells over ~1.75s, each a radial ring of glowing round *sparks* —
+  new `shape:1` particle drawn as a shadow-blurred `arc`), **fxRain** (6 waves of
+  confetti falling the full width over ~1.3s) and **fxSides** (two bottom-corner
+  cannons firing inward). Staggered waves use a `later()` helper that tracks a
+  `pending` count, so `tick()` keeps the canvas alive while `parts.length || pending>0`
+  — that plus ~1.5–3s particle lifetimes makes each payoff **last a few seconds**.
+  Still library-free canvas; reduced-motion cuts the counts/waves but keeps all four.
+  New bright `SPARK` palette for the fireworks; the confetti keeps the site `COLORS`.
+
+---
+
+## Batch 17 — Fun page: Flappy-Talon game (big, own thread)
+
+- [ ] 67. **Flappy Bird clone** on the Fun page: an **eagle with large talons** (Talon's
+      name — the joke). Dollar bills instead of coins, pipe-style obstacles, a
+      **fullscreen** toggle, and a **score**. Bonus idea: collect fifteen $15 bills →
+      offer $15 to start a Roth IRA (tie into the existing Roth-egg flow).
+
+---
+
+## Batch 18 — Lesson 03: HOV lane
+
+- [ ] 68. In the **investing lesson's HOV-lane analogy**, make the **HOV lane slightly
+      faster than the far-left lane**, and make it **work on mobile** (only the HOV
+      lane is broken on mobile; the others work).
+
+---
+
 ## Open questions
 
-- None outstanding.
+- **#53** — ~~Does compliance need a persistent footer disclaimer in addition to the
+  first-click pop-up?~~ **RESOLVED (safe default): built both** — first-use pop-up +
+  a footer line explicitly covering the calculators. Talon can pare back if counsel
+  says only one is needed.
+- **#57** — ~~Awaiting Talon's read on whether outstanding debt stays in the life-
+  insurance qualifier once explained.~~ **RESOLVED: kept.** Debt is a real financial-
+  underwriting input (coverage can clear inherited debt on top of replacing income); the
+  field stays, with a hint that now explains why. Talon can still ask to remove it.
+- **#67** — Confirm the "$15 bills → $15 Roth" reward mechanic vs. just a high-score.
 
 ## Decisions log
 
+- **23 Jul 2026** — Life-insurance qualifier keeps the **outstanding-debt** field: it's a
+  legitimate underwriting input (insure enough to replace income **and** clear inherited
+  debt). The fix was an explanatory hint, not removal. (#57)
+- **23 Jul 2026** — Death-benefit and passive-income charts reframed from a 40-year balance
+  line (which swung on tiny input changes) to a shared **`foreverChart`** 3-year view: a flat
+  balance ribbon over equal income bars trailing into "…", so drawing the return reads as
+  *indefinite* income. Both tools share it so they can't drift. (#58)
+- **23 Jul 2026** — Whole-life **cash value capped at the death benefit** — it converges toward
+  the benefit and never exceeds it. The old SVG drew it crossing above; confirmed wrong, redrawn
+  to end just below. (#59)
+- **23 Jul 2026** — Home-affordability **Predict** button estimates tax + insurance (+ PMI under
+  20% down) from the home price and down payment as a starting figure the visitor can override —
+  it does not lock the field. (#64)
 - **22 Jul 2026** — Wealth calculator income steps are **user-defined and
   unlimited** (add/remove a step at any year), not fixed Year 1/10/20 slots.
   Income jumps at each step, then grows at that step's own raise. (#23)
@@ -517,6 +827,37 @@ Separate files — these never touch `index.html`, so this is the cheapest batch
   the whole `.compound` section, because a section taller than the viewport pushed
   the pop card off-screen. First visit shows a pulse on the trigger, never an
   auto-launch. (#45)
+- **23 Jul 2026** — 2026 contribution limits (Roth/Trad $7,500, 401(k) $24,500) are
+  **separate from the `FED` tax-bracket table**, which is still 2025. Bump each when
+  its own figures are confirmed. (#49)
+- **23 Jul 2026** — Compound teacher's "your age" is the anchor; `years = retire −
+  age`, fully bidirectional. The master card keeps driving the *years* slider (the
+  age field mirrors it), so no new master target was needed. (#49, #51)
+- **23 Jul 2026** — Wealth calculator inflation is now a fixed 3% constant, slider
+  removed. A visitor-set 0% inflation was the real cause of the "flaky Today's
+  dollars" toggle — at a fixed 3% it always changes the number. (#50)
+- **23 Jul 2026** — Wealth calculator defaults to **0% return, 0% lifestyle** so the
+  opening view shows total career earnings ("your paycheck is your biggest asset");
+  the visitor then adds return / lifestyle to watch wealth build. (#51)
+- **23 Jul 2026** — The master card confirms on **`change` (commit), not per
+  keystroke** — one native confirm per committed edit, **No** reverts. A confirm on
+  every spinner tick was rejected as too noisy; typing is the primary path. (#51)
+- **23 Jul 2026** — The "same money, three accounts" bar demo (Talon: confusing) was
+  **replaced, not tuned** — a plain three-card `.acct3` comparison under Cash Flow,
+  keyed on *when you're taxed* (now vs later). The retirement-rate select kept its
+  `#rvtRate` id so the compound teacher's after-tax line still reads it cross-page. (#52)
+- **23 Jul 2026** — Compliance: built **both** a first-use pop-up (once, via
+  `tr-disclaimer-ok`) **and** a footer disclaimer, the safe default for the open
+  question. The pop-up triggers only on **trusted** events, so the master card's
+  load-time broadcast can't spring it. (#53)
+- **23 Jul 2026** — Spending circuit is now **side-by-side with a reveal** (`.scircuit2`),
+  not a tab toggle — typical setup always visible, the fix revealed beside it. One
+  component for both home and Tools, so they can't drift (supersedes the Batch 8 tabbed
+  `.scircuit`). (#54, #55)
+- **23 Jul 2026** — Merged the savings-rate concept into the 1% creep test and deleted
+  the standalone "Engineering" card. The test now shows the **gap visual** (income @
+  raise% vs lifestyle held lower, shaded room, future-wealth badge) per
+  `lifestyle-creep-gap.png`, replacing its old accumulation area chart. (#56)
 - **22 Jul 2026** — Fun-page fishing egg and confetti are both **library-free**
   (rAF tween + canvas). The egg is gated to the Fun page via a `MutationObserver`
   on `#top`'s `data-active`, since its markup is fixed-position outside the page
