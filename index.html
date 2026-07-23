@@ -784,6 +784,35 @@
   .book-suggest{font-size:.86rem;color:var(--ink-soft);margin-top:14px;text-align:center}
   .book-suggest a{color:var(--pine);font-weight:700;border-bottom:1px solid var(--sage)}
   .book-suggest a:hover{border-color:var(--pine)}
+
+  /* ============ FLAPPY TALON GAME (#67) ============ */
+  .game-wrap{position:relative;max-width:460px;margin:0 auto;border-radius:16px;overflow:hidden;
+    line-height:0;box-shadow:0 18px 44px -18px rgba(10,30,22,.5);border:1px solid var(--line);background:#bfe3ff}
+  .game-cv{display:block;width:100%;height:auto;aspect-ratio:4/5;touch-action:none;cursor:pointer}
+  .game-hud{position:absolute;top:12px;left:0;right:0;display:flex;justify-content:space-between;
+    padding:0 16px;pointer-events:none;font-family:var(--display);font-weight:700;color:#fff;
+    text-shadow:0 2px 6px rgba(0,0,0,.4);font-size:1rem;letter-spacing:.02em}
+  .game-hud .g-score{font-size:1.7rem;line-height:1}
+  .game-fs{position:absolute;bottom:12px;right:12px;z-index:3;background:rgba(9,26,20,.55);border:0;
+    color:#fff;font-size:1.1rem;line-height:1;width:38px;height:38px;border-radius:10px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;transition:background .15s ease}
+  .game-fs:hover{background:rgba(9,26,20,.8)}
+  .game-overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:12px;text-align:center;padding:24px;line-height:1.5;
+    background:rgba(9,26,20,.5);color:#fff;transition:opacity .2s ease}
+  .game-overlay[hidden]{display:none}
+  .game-overlay h4{font-family:var(--display);font-weight:600;font-size:1.5rem;margin:0}
+  .game-overlay p{font-size:.9rem;margin:0;color:#e7f0ea;max-width:24ch}
+  .game-overlay .g-big{font-family:var(--display);font-size:2.4rem;font-weight:700;line-height:1;margin:4px 0}
+  .game-btn{font-family:var(--display);font-weight:700;font-size:1rem;letter-spacing:.02em;color:#0b2a1e;
+    background:linear-gradient(#F0C277,#d38b26);border:0;border-bottom:4px solid #a86a13;border-radius:12px;
+    padding:13px 30px;cursor:pointer;margin-top:4px;box-shadow:0 8px 20px -8px rgba(211,139,38,.7);
+    transition:transform .08s ease}
+  .game-btn:hover{transform:translateY(-2px)}
+  .game-btn:active{transform:translateY(2px);border-bottom-width:2px}
+  .game-wrap:fullscreen{max-width:none;width:100%;height:100%;border:0;border-radius:0;
+    display:flex;align-items:center;justify-content:center;background:#0b1a14}
+  .game-wrap:fullscreen .game-cv{width:auto;height:100%;max-width:100%}
 </style>
 </head>
 <body>
@@ -2240,6 +2269,22 @@
           <div class="soon-block">
             <span class="soon-pill">Coming soon</span>
             <p class="sub" style="margin-top:14px">I'm filming these now. Once they're up, they'll embed right here.</p>
+          </div>
+        </div>
+
+        <!-- FLAPPY TALON (#67) -->
+        <div class="embed-card reveal" style="grid-column:1 / -1;text-align:center">
+          <h3>🦅 Flappy Talon</h3>
+          <p class="sub" style="margin-bottom:18px">An eagle with big talons&mdash;fly it through the pipes and grab the bills. Reach <b>15</b> and I&rsquo;ll help fund a Roth.</p>
+          <div class="game-wrap" id="gameWrap">
+            <canvas class="game-cv" id="gameCv" aria-label="Flappy Talon game"></canvas>
+            <div class="game-hud"><span class="g-score" id="gScore">0</span><span id="gBest">Best 0</span></div>
+            <button type="button" class="game-fs" id="gameFs" aria-label="Toggle fullscreen" title="Fullscreen">&#9974;</button>
+            <div class="game-overlay" id="gameOver">
+              <h4 id="goTitle">Flappy Talon</h4>
+              <p id="goText">Tap, click, or press space to fly. Dodge the pipes, grab the bills.</p>
+              <button type="button" class="game-btn" id="gameStart">Start</button>
+            </div>
           </div>
         </div>
 
@@ -3905,6 +3950,252 @@
     }).observe(main,{attributes:true,attributeFilter:['data-active']});
     if(onFun()){ active=true; swimT=setTimeout(swim,2500); }
   }
+})();
+</script>
+
+<!-- ============ FLAPPY TALON reward (#67) — ties into the Roth-egg flow ============ -->
+<div class="egg-modal" id="gameModal" role="dialog" aria-modal="true" aria-label="You hit 15">
+  <div class="egg-card">
+    <div class="egg-ico">🦅</div>
+    <h3>You hit 15!</h3>
+    <p>Nice flying. You already caught the <b>$10</b> on the fishing hook&mdash;so I&rsquo;ll add <b>another $5</b>. That&rsquo;s <b>$15 total</b> toward your very first Roth IRA. Want a hand opening one?</p>
+    <div class="egg-actions">
+      <a class="btn btn-primary" href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener">Watch the 10-min walkthrough &#8594;</a>
+      <a class="btn btn-ghost" href="mailto:talonrucker@gmail.com?subject=I%20hit%2015%20in%20Flappy%20Talon%20%E2%80%94%20help%20me%20open%20a%20Roth%20IRA">Email me to claim it</a>
+    </div>
+    <button type="button" class="egg-close" id="gameModalClose">Keep flying</button>
+  </div>
+</div>
+<script>
+/* ============ FLAPPY TALON (#67): library-free canvas game, Fun page only ============ */
+(function(){
+  var wrap=document.getElementById('gameWrap'), cv=document.getElementById('gameCv');
+  if(!wrap||!cv) return;
+  var ctx=cv.getContext('2d'), main=document.getElementById('top');
+  var scoreEl=document.getElementById('gScore'), bestEl=document.getElementById('gBest'),
+      overlay=document.getElementById('gameOver'), goTitle=document.getElementById('goTitle'),
+      goText=document.getElementById('goText'), startBtn=document.getElementById('gameStart'),
+      fsBtn=document.getElementById('gameFs'), modal=document.getElementById('gameModal'),
+      modalClose=document.getElementById('gameModalClose');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* fixed virtual world; CSS scales the canvas, so physics never depend on display size */
+  var VW=400, VH=500, GROUND=54, GOAL=15;
+  var dpr=Math.min(2, window.devicePixelRatio||1);
+  cv.width=VW*dpr; cv.height=VH*dpr; ctx.scale(dpr,dpr);
+
+  var BX=124, R=17;                                   // bird x, collision radius
+  var GRAV=0.52, FLAP=-8.0, SPD=2.5, PW=60, GAP=168, SPACING=214;
+  var best=0; try{ best=parseInt(localStorage.getItem('tr-flappy-best'),10)||0; }catch(e){}
+  bestEl.textContent='Best '+best;
+
+  var state='ready';                                  // ready | play | over | won
+  var bird, pipes, wing, raf=0, spawnX;
+
+  function reset(){
+    bird={y:VH*0.44, v:0, rot:0};
+    pipes=[]; wing=0; score=0; scoreEl.textContent='0';
+    spawnX=VW+40; addPipe(); addPipe();
+  }
+  var score=0;
+  function addPipe(){
+    var margin=70, gc=margin+GAP/2+Math.random()*(VH-GROUND-margin*2-GAP);
+    pipes.push({x:spawnX, gc:gc, scored:false});
+    spawnX+=SPACING;
+  }
+  function flap(){ bird.v=FLAP; }
+
+  function showOverlay(title,text,btn){
+    goTitle.textContent=title; goText.textContent=text; startBtn.textContent=btn;
+    overlay.hidden=false;
+  }
+  function begin(){
+    reset(); state='play'; overlay.hidden=true; flap();
+    if(!raf) loop();
+  }
+  function die(){
+    state='over';
+    if(score>best){ best=score; try{localStorage.setItem('tr-flappy-best',best);}catch(e){} }
+    bestEl.textContent='Best '+best;
+    showOverlay('Game over','You grabbed '+score+' '+(score===1?'bill':'bills')+'. Best: '+best+'.','Try again');
+  }
+  function win(){
+    state='won';
+    if(score>best){ best=score; try{localStorage.setItem('tr-flappy-best',best);}catch(e){} }
+    bestEl.textContent='Best '+best;
+    modal.classList.add('on');
+  }
+
+  function onFun(){ return main.getAttribute('data-active')==='fun'; }
+
+  /* ---- physics ---- */
+  function update(){
+    bird.v+=GRAV; bird.y+=bird.v;
+    if(bird.y<R){ bird.y=R; if(bird.v<0) bird.v=0; }        // clamp ceiling
+    bird.rot=Math.max(-0.5, Math.min(1.15, bird.v/13));
+    wing+=(bird.v<0?0.6:0.22);
+    var floorY=VH-GROUND;
+    if(bird.y+R>=floorY){ bird.y=floorY-R; return die(); }
+    for(var i=0;i<pipes.length;i++){
+      var p=pipes[i]; p.x-=SPD;
+      var top=p.gc-GAP/2, bot=p.gc+GAP/2;
+      if(hit(p.x,0,PW,top)||hit(p.x,bot,PW,floorY-bot)) return die();
+      if(!p.scored && p.x+PW<BX){ p.scored=true; score++; scoreEl.textContent=score;
+        if(score>=GOAL) return win(); }
+    }
+    if(pipes.length && pipes[pipes.length-1].x<VW-SPACING) addPipe();
+    while(pipes.length && pipes[0].x<-PW-4) pipes.shift();
+  }
+  /* circle (BX,bird.y,R) vs rect */
+  function hit(rx,ry,rw,rh){
+    var cx=Math.max(rx,Math.min(BX,rx+rw)), cy=Math.max(ry,Math.min(bird.y,ry+rh));
+    var dx=BX-cx, dy=bird.y-cy; return dx*dx+dy*dy < R*R;
+  }
+
+  /* ---- drawing ---- */
+  var clouds=[{x:70,y:90,s:1},{x:250,y:60,s:.8},{x:330,y:150,s:1.1},{x:160,y:190,s:.7}];
+  function bg(){
+    var g=ctx.createLinearGradient(0,0,0,VH);
+    g.addColorStop(0,'#8fd0ff'); g.addColorStop(1,'#dff3ea');
+    ctx.fillStyle=g; ctx.fillRect(0,0,VW,VH);
+    ctx.fillStyle='rgba(255,255,255,.85)';
+    for(var i=0;i<clouds.length;i++){ var c=clouds[i]; cloud(c.x,c.y,c.s); }
+  }
+  function cloud(x,y,s){
+    ctx.beginPath();
+    ctx.arc(x,y,16*s,0,6.28); ctx.arc(x+18*s,y+4*s,20*s,0,6.28);
+    ctx.arc(x+40*s,y,15*s,0,6.28); ctx.rect(x,y,40*s,16*s); ctx.fill();
+  }
+  function ground(){
+    var floorY=VH-GROUND;
+    ctx.fillStyle='#c9a86a'; ctx.fillRect(0,floorY,VW,GROUND);
+    ctx.fillStyle='#8fbf6a'; ctx.fillRect(0,floorY,VW,8);
+    ctx.fillStyle='#75a555';
+    for(var x=0;x<VW;x+=16){ ctx.fillRect(x,floorY+4,8,4); }
+  }
+  function pipe(p){
+    var floorY=VH-GROUND, top=p.gc-GAP/2, bot=p.gc+GAP/2;
+    var g=ctx.createLinearGradient(p.x,0,p.x+PW,0);
+    g.addColorStop(0,'#3f9b57'); g.addColorStop(.5,'#63c47c'); g.addColorStop(1,'#2f7a43');
+    ctx.fillStyle=g;
+    ctx.fillRect(p.x,0,PW,top); ctx.fillRect(p.x,bot,PW,floorY-bot);
+    ctx.fillStyle='#2f7a43';
+    ctx.fillRect(p.x-4,top-18,PW+8,18); ctx.fillRect(p.x-4,bot,PW+8,18);
+    if(!p.scored) bill(p.x+PW/2, p.gc);               // dollar bill in the gap
+  }
+  function bill(x,y){
+    ctx.save(); ctx.translate(x,y);
+    ctx.fillStyle='#bfe6c8'; ctx.strokeStyle='#2e8b57'; ctx.lineWidth=1.6;
+    roundRect(-15,-10,30,20,4); ctx.fill(); ctx.stroke();
+    ctx.fillStyle='#0b5a2b'; ctx.font='700 13px Georgia,serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('$1',0,1); ctx.restore();
+  }
+  function roundRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  }
+  /* the eagle — bald-eagle colours, oversized talons (the joke) */
+  function eagle(){
+    var S=R*1.15, flapA=Math.sin(wing)*0.5;
+    ctx.save(); ctx.translate(BX,bird.y); ctx.rotate(bird.rot);
+    /* tail (white) */
+    ctx.fillStyle='#f3f4f0';
+    ctx.beginPath(); ctx.moveTo(-1.1*S,-0.2*S); ctx.lineTo(-1.9*S,0.05*S); ctx.lineTo(-1.1*S,0.4*S); ctx.closePath(); ctx.fill();
+    /* big talons out front */
+    talons(0.55*S, 0.55*S, S);
+    /* body */
+    ctx.fillStyle='#6b4423';
+    ctx.beginPath(); ctx.ellipse(0,0,1.25*S,0.9*S,0,0,6.28); ctx.fill();
+    /* far wing */
+    ctx.fillStyle='#5a3a1e';
+    wingShape(-0.1*S,0.1*S,S,flapA*0.6);
+    /* head (white) */
+    ctx.fillStyle='#f3f4f0';
+    ctx.beginPath(); ctx.arc(0.95*S,-0.35*S,0.62*S,0,6.28); ctx.fill();
+    /* beak (yellow, hooked) */
+    ctx.fillStyle='#f2a900';
+    ctx.beginPath(); ctx.moveTo(1.45*S,-0.5*S); ctx.lineTo(1.95*S,-0.28*S);
+    ctx.lineTo(1.5*S,-0.12*S); ctx.quadraticCurveTo(1.75*S,-0.28*S,1.45*S,-0.5*S); ctx.fill();
+    /* eye */
+    ctx.fillStyle='#1a1a1a';
+    ctx.beginPath(); ctx.arc(1.05*S,-0.45*S,0.09*S,0,6.28); ctx.fill();
+    /* near wing (flaps) */
+    ctx.fillStyle='#7a4e28';
+    wingShape(0.0,0.0,S,flapA);
+    ctx.restore();
+  }
+  function wingShape(ox,oy,S,a){
+    ctx.save(); ctx.translate(ox,oy); ctx.rotate(a);
+    ctx.beginPath(); ctx.ellipse(-0.15*S,0.15*S,0.95*S,0.5*S,-0.5,0,6.28); ctx.fill();
+    ctx.restore();
+  }
+  function talons(ox,oy,S){
+    ctx.strokeStyle='#f2a900'; ctx.fillStyle='#f2a900';
+    ctx.lineWidth=0.16*S; ctx.lineCap='round';
+    for(var i=0;i<2;i++){
+      var lx=ox+i*0.5*S, ly=oy;
+      ctx.beginPath(); ctx.moveTo(lx-0.1*S,ly-0.2*S); ctx.lineTo(lx,ly+0.7*S); ctx.stroke();   // leg
+      var ty=ly+0.7*S;
+      for(var c=-1;c<=1;c++){                                                                   // 3 big claws
+        ctx.beginPath(); ctx.moveTo(lx,ty);
+        ctx.quadraticCurveTo(lx+c*0.45*S,ty+0.35*S, lx+c*0.4*S,ty+0.75*S); ctx.stroke();
+      }
+    }
+  }
+  function draw(){
+    bg();
+    for(var i=0;i<pipes.length;i++) pipe(pipes[i]);
+    ground();
+    eagle();
+  }
+
+  function loop(){
+    raf=0;
+    if(!onFun()){ return; }                            // paused off-page; resumes on return
+    if(state==='play'){ update(); }
+    draw();
+    if(state==='play') raf=requestAnimationFrame(loop);
+  }
+
+  /* ---- input ---- */
+  function tap(e){
+    if(e){ e.preventDefault(); }
+    if(state==='ready'||state==='over'){ begin(); }
+    else if(state==='play'){ flap(); }
+  }
+  cv.addEventListener('pointerdown', tap);
+  startBtn.addEventListener('click', function(e){ e.stopPropagation(); begin(); });
+  document.addEventListener('keydown', function(e){
+    if(!onFun()) return;
+    if(e.code==='Space'||e.key===' '||e.code==='ArrowUp'){
+      if(state==='play'||state==='ready'){ tap(e); }
+    }
+  });
+
+  /* fullscreen toggle */
+  fsBtn.addEventListener('click', function(){
+    if(document.fullscreenElement){ document.exitFullscreen(); }
+    else if(wrap.requestFullscreen){ wrap.requestFullscreen().catch(function(){}); }
+  });
+
+  /* reward modal */
+  function closeModal(){
+    modal.classList.remove('on');
+    state='over';
+    showOverlay('You did it! 🎉','You grabbed all 15. Best: '+best+'. Fly again?','Play again');
+    draw();
+  }
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
+
+  /* pause when the Fun page isn't active; resume where it left off */
+  new MutationObserver(function(){
+    if(onFun()){ if(state==='play' && !raf) raf=requestAnimationFrame(loop); else draw(); }
+  }).observe(main,{attributes:true,attributeFilter:['data-active']});
+
+  reset(); showOverlay('Flappy Talon','Tap, click, or press space to fly. Dodge the pipes, grab the bills.','Start');
+  draw();
 })();
 </script>
 

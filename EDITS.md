@@ -2,7 +2,7 @@
 
 Source: `Prompts for Claude Pt.3.docx` (22 Jul 2026). 45 items — Batches 1–10, all done.
 Source: `Prompts from Claude pt.4.docx` (23 Jul 2026). 20 items (#49–68) — Batches 11–18.
-Batches 11–16 done; Batches 17–18 **outstanding**.
+Batches 11–17 done; Batch 18 **outstanding**.
 
 **How to use this:** start a new thread and say *"do Batch N from EDITS.md"*.
 Read `CLAUDE.md` first — it has the section map and the publishing gotcha.
@@ -720,12 +720,41 @@ Two of these are questions Talon wants answered, not just edits (#57, #59).
 
 ---
 
-## Batch 17 — Fun page: Flappy-Talon game (big, own thread)
+## Batch 17 — Fun page: Flappy-Talon game (big, own thread) ✅ DONE
 
-- [ ] 67. **Flappy Bird clone** on the Fun page: an **eagle with large talons** (Talon's
+- [x] 67. **Flappy Bird clone** on the Fun page: an **eagle with large talons** (Talon's
       name — the joke). Dollar bills instead of coins, pipe-style obstacles, a
       **fullscreen** toggle, and a **score**. Bonus idea: collect fifteen $15 bills →
       offer $15 to start a Roth IRA (tie into the existing Roth-egg flow).
+
+**How it was built.**
+
+- **One library-free canvas game**, in the pattern of the other Fun-page gags
+  (`#46`/`#47`): a `.game-wrap` card between "Talon's Tips" and DO NOT PRESS, its own
+  `<script>` IIFE, and a reward modal reusing the `.egg-modal` styles.
+- **Fixed virtual world (400×500), CSS scales the canvas** — the backing buffer is
+  `VW×VH×dpr` and CSS controls display size (`aspect-ratio:4/5`), so **all physics are
+  resolution-independent** and fullscreen needs no world-resize maths. `.game-wrap`
+  goes fullscreen (letterboxed on `#0b1a14`); the `⛶` button toggles it.
+- **The eagle is hand-drawn on canvas** (bald-eagle brown body / white head, yellow
+  hooked beak, flapping wing, tilt from velocity) with **deliberately oversized talons**
+  — that's the joke. **Dollar bills sit in each pipe gap**; passing a pipe collects the
+  bill and scores +1. Input: tap / click / Space / ArrowUp.
+- **Reward = the clarified mechanic (#67 open question).** Reaching **score 15** opens
+  `#gameModal`: *"You already caught the $10 on the fishing hook — so I'll add another
+  $5. That's $15 total toward your first Roth IRA."* It reuses the fishing-egg's Roth
+  walkthrough (same YouTube link) and a pre-filled `mailto`. **The $15 is $10 (the
+  existing hook egg) + $5 new**, awarded at score 15 — not fifteen separate $15 bills.
+- **rAF loop is gated to the Fun page** (a `MutationObserver` on `#top`'s `data-active`
+  pauses/resumes it, matching the fishing egg). Best score persists in
+  `localStorage` as `tr-flappy-best`. Reduced-motion is respected implicitly (no
+  auto-motion outside the running game).
+- **Difficulty is tuned to be fairly winnable**: verified in a deterministic sim of the
+  exact update/collision code — a competent centre-seeking pilot clears all 15 ~57% of
+  runs and the score-15 → win trigger fires; a do-nothing bird dies on the ground.
+  Live rAF can't be exercised in the file:// preview (it reports `document.hidden`, which
+  pauses rAF — same known constraint as the lesson decks), but rendering, the start
+  transition, and the full reward-modal open/close path were all verified in-browser.
 
 ---
 
@@ -747,10 +776,18 @@ Two of these are questions Talon wants answered, not just edits (#57, #59).
   insurance qualifier once explained.~~ **RESOLVED: kept.** Debt is a real financial-
   underwriting input (coverage can clear inherited debt on top of replacing income); the
   field stays, with a hint that now explains why. Talon can still ask to remove it.
-- **#67** — Confirm the "$15 bills → $15 Roth" reward mechanic vs. just a high-score.
+- **#67** — ~~Confirm the "$15 bills → $15 Roth" reward mechanic vs. just a high-score.~~
+  **RESOLVED (Talon, 23 Jul 2026): reward at score 15.** The $15 is the existing **$10
+  fishing-hook egg plus a new $5** — awarded once the player reaches a **score of 15**,
+  not fifteen separate bills. Modal ties into the same Roth walkthrough.
 
 ## Decisions log
 
+- **23 Jul 2026** — Flappy Talon reward fires at **score 15**, worth **$15 = the $10
+  fishing-hook egg + $5 new** (Talon's clarification), not fifteen $15 bills. Built as a
+  library-free canvas game with a fixed 400×500 virtual world (CSS scales the canvas, so
+  fullscreen needs no world-resize), a hand-drawn eagle with oversized talons, dollar
+  bills in each pipe gap, and a reward modal reusing the Roth-egg flow. (#67)
 - **23 Jul 2026** — Life-insurance qualifier keeps the **outstanding-debt** field: it's a
   legitimate underwriting input (insure enough to replace income **and** clear inherited
   debt). The fix was an explanatory hint, not removal. (#57)
