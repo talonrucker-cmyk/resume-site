@@ -297,41 +297,96 @@ reference version — **Lesson 02 (#42) should reuse this math**, not reinvent i
 
 ---
 
-## Batch 8 — Cash flow section rework
+## Batch 8 — Cash flow section rework ✅ DONE
 
-- [ ] 40. "Interrupt the spending circuit": show the original
+- [x] 40. "Interrupt the spending circuit": show the original
       *income → checking → lifestyle* flow first, then progress to
       *income → wealth building → checking → lifestyle*.
-- [ ] 41. Lifestyle-creep visual renders badly — rebuild it. Whatever design lands
+- [x] 41. Lifestyle-creep visual renders badly — rebuild it. Whatever design lands
       in the Batch 9 cash-flow lesson should be reused here (and in
       "engineering an increased savings rate").
 
+**How it was built.**
+
+- **#40 — one interactive `.scircuit` widget**, used in both places the section
+  appears (home Tools drawer and Page 3 ▸ Cash Flow). A two-tab segmented control:
+  "The typical setup" shows *Income → Checking → Lifestyle*; "Interrupt it" splices
+  a **Wealth-Building Account** node (with its allocation pills) between Income and
+  Checking, animating in via a `max-height`/`opacity` transition. The caption swaps
+  per state. The old side-by-side `.cf-grid` (home) and single `.flow` (tools) and
+  their CSS are gone — one component replaces both, so the diagram can never drift
+  between pages. JS is one IIFE over every `[data-scircuit]`; add a node to the
+  markup and it just works.
+- **#41 — one shared `creepChart(svg, opts)`** replaces the crude hand-drawn
+  three-`<path>` SVG. It draws a clean computed chart with a shaded region, curve
+  labels with a white halo (so text stays legible over lines), and YEAR 1 / YEAR N
+  axis labels. Two modes from one function:
+  - *Engineering an increasing savings rate* — `gapTo` mode: income @4%, expenses
+    @4% (red dashed), expenses held @3% (orange), with the widening
+    **wealth-building room** shaded between income and the constrained line.
+    Matches `image12` (top). Illustrative, drawn once.
+  - *1% lifestyle-creep test* — `area` mode: the redirected savings compounding to
+    a green **wealth badge** at the endpoint, tied live to the calculator (badge =
+    the "Extra wealth" headline, so they can't disagree). Matches `image12` (bottom).
+    The test previously had no chart at all.
+  `creepChart` carries its own SVG namespace constant, so it's safe to call from the
+  earlier-positioned creep-test IIFE (no TDZ on the shared `NS3`). **Reuse this same
+  function in the Batch 9 cash-flow lesson** rather than reinventing the chart.
+
 ---
 
-## Batch 9 — Lessons 02 & 03
+## Batch 9 — Lessons 02 & 03 ✅ DONE
 
 Separate files — these never touch `index.html`, so this is the cheapest batch.
+(Nav repoint is the one exception — see below.)
 
-- [ ] 42. **Lesson 02 — Cash flow.** Core topic: the power of a wealth-building
-      account (reuse the site's existing demo). Also: dangers of lifestyle creep
-      (`image12.png`), 401(k) matches and work benefits, a simple explanation of
-      what a rollover is, and the passive income calculator from #26.
-- [ ] 43. **Lesson 03 — Investing & risk.** Built around the freeway analogy:
-      - Right lanes near entrances/exits = short-term money (1–3 yrs), slow and
-        congested because people are entering and exiting.
-      - Middle lanes = medium term (~5 yrs), faster, but be ready to exit on time.
-      - Far-left lanes = retirement accounts, full speed, highest risk tolerance.
-      - HOV lane = having a financial planner alongside you.
-      - A crash slows everyone regardless of lane — uncontrollable, and inevitable.
-      Talon's line: *"Great stock risk and return analogy. I'm the Google Maps."*
-      Numbers in the docx are illustrative — verify before using.
-- [ ] 44. **Buy low / sell high** — find a good analogy with strong visuals.
+- [x] 42. **Lesson 02 — Cash flow.** `lesson-cashflow.html`, 8 slides. Wealth-building
+      account (interrupt-the-circuit toggle), lifestyle creep (`image12`), the 1% test,
+      401(k) match & work benefits, what a rollover is, passive income (#26 model).
+- [x] 43. **Lesson 03 — Investing & risk.** `lesson-investing.html`, 7 slides. Freeway
+      analogy with animated lanes, lane-matcher, the crash, and buy-low/sell-high.
+- [x] 44. **Buy low / sell high** — folded into Lesson 03 (slides 5–6): the emotion
+      cycle (euphoria = feels-like-buying / panic = actual-opportunity) plus a
+      two-investor interactive.
+
+**How it was built.**
+
+- Both decks are **self-contained copies** of `lesson-protection.html` — same chrome,
+  CSS, 1280×720 scale-to-fit, money-input helpers, mobile stacked fallback, and
+  `applyMaster()` reading `tr-master`. CLAUDE.md's "consider extracting shared
+  lesson.css / lesson.js" was **not** done: the primary instruction is to copy, and
+  refactoring a working deck to external files added risk for no user-visible gain.
+  If a 4th lesson lands, revisit extraction then.
+- **Lesson 02.** The spending-circuit toggle mirrors the site's `.scircuit` concept
+  (Batch 8 #40) rebuilt in deck style. The lifestyle-creep chart mirrors `creepChart`'s
+  gap-wedge design (Batch 8 #41) — hand-drawn here rather than imported, since decks
+  can't share the site's JS. The **1% test** calculator invests the gap between
+  spending-at-income-rate and spending-held-lower and compounds it; verified live
+  (income auto-filled from master → $5M from the gap over 30 yrs). **Passive income**
+  reuses the #26 `drawdown()` / `yearsToZero()` model verbatim: $1M at 10% withdrawing
+  $100k stays flat forever; push the draw past earnings and it names the year it dies.
+- **Lesson 03.** Freeway is CSS lanes with animated `.car` cars (reduced-motion guard)
+  and an HOV diamond. Lane-matcher maps horizon → lane + a stock/bond/cash mix bar.
+  The crash and emotion-cycle charts are drawn SVGs. The **two-investor** interactive
+  runs one market path (crash at year 4, recovers to +40% regardless of depth) three
+  ways — Steady rides through (+40%), Panicker locks the bottom loss, Opportunist adds
+  $5k fresh cash at the low. Verified: 40% drop → Steady $14k / Panicker $6k / Opportunist
+  $25,667; deeper crash only hurts the Panicker, never the Steady.
+- **`lessons.html` hub** built because this is the **third** lesson (CLAUDE.md rule).
+  Three cards, site design language, links to each deck; nav "Lessons" tab and the hero
+  "Lessons" button now point at the hub (changed in **both** index files, still `cmp`
+  identical). Line ~1323's "Same math as the Protection lesson" deep-link was left
+  pointing at `lesson-protection.html` — it's a specific reference, not navigation.
+- **All three decks now return to the hub** ("← All lessons" → `lessons.html`).
+  Lesson 01's back-link was the Batch 1 "Home → index.html" button; with a hub now
+  in place, the hub is the lessons' home and the hub's own "Back to site" returns to
+  index. See decisions log.
 
 ---
 
-## Batch 10 — Fun page & tutorial
+## Batch 10 — Fun page & tutorial ✅ DONE
 
-- [ ] 45. **Site tutorial — spotlight the tabs.** DECIDED 22 Jul 2026.
+- [x] 45. **Site tutorial — spotlight the tabs.** DECIDED 22 Jul 2026.
       - Delete the `#explore` "Jump straight to what matters" section outright
         (confirmed via `image9.png`). Let the page close up — shorter is better.
       - Tour trigger goes in the **hero**, next to the Lessons button.
@@ -349,13 +404,47 @@ Separate files — these never touch `index.html`, so this is the cheapest batch
       Note: in the source docx, screenshots appear *above* the text that
       refers to them. `image10.png` belongs to the wealth calculator tax
       request in Batch 3, not to this item.
-- [ ] 46. Easter egg: a $10 bill on a fishing hook that swims across the screen.
+- [x] 46. Easter egg: a $10 bill on a fishing hook that swims across the screen.
       Clicking it offers to help open a Roth IRA, with Talon contributing $10.
       **Fun page only.**
-- [ ] 47. Red "DO NOT PRESS" button → full-screen confetti celebration.
-- [ ] 48. Favourite books: let visitors suggest additions.
+- [x] 47. Red "DO NOT PRESS" button → full-screen confetti celebration.
+- [x] 48. Favourite books: let visitors suggest additions.
       **A static site can't accept submissions** — resolved as text/email
       (confirmed with Talon).
+
+**How it was built.**
+
+- **#45 spotlight tour.** `#explore` deleted outright (its `.link-card`/`.link-grid`
+  CSS is now dead but left in place — harmless, and removing it risked the shared
+  media-query blocks). Trigger is a third hero button, `#tourBtn` "☼ Take the tour",
+  beside Lessons. The tour is **one IIFE** at the end of `<body>`: a transparent
+  full-screen `.tour-back` catches clicks, a `.tour-spot` rectangle does the dimming
+  via a huge `box-shadow` with a "hole" over the target (pointer-events none, so the
+  spotlighted tab can't be clicked mid-tour), and a `.tour-pop` card shows the step
+  counter, name, one-line why, Skip / Next. Steps are a **selector-driven `STEPS`
+  array** — missing targets are skipped, so it degrades gracefully. Five stops: the
+  four nav tabs (Home/Tools/Fun/Lessons, visible at every width — the "tabs hidden
+  below 860px" note was stale, they only shrink) plus `.comp-head` (the compound
+  teacher, a compact heading so a section taller than the viewport never pushes the
+  pop off-screen). `place()` flips the pop above the target when there's no room below
+  and clamps it inside the viewport both ways. Completion (Done **or** Skip **or** Esc)
+  writes `tr-tour-done`; first-time visitors get a `.pulse` on the trigger, **never an
+  auto-launch** — the pulse is the only "nag" and it clears once seen. Reduced-motion
+  guard on the spotlight transition and pulse. **Add a stop = add one row to `STEPS`.**
+- **#46 fishing egg.** Fun-page-only: a fixed `.fish-egg` button ($10 CSS banknote on a
+  🪝 hook with a swaying line) drifts across the viewport at a random depth via a rAF
+  tween, re-scheduling itself after each pass. A `MutationObserver` on `#top`'s
+  `data-active` starts it only while Fun is active and hides it elsewhere. Clicking
+  opens the `#eggModal` "You caught it!" card — Talon chips in $10 toward a first Roth,
+  with the Fidelity 10-min walkthrough (the same YouTube link the deleted `#explore`
+  used) and a pre-filled `mailto` to claim it. Reduced-motion stops the bob.
+- **#47 DO NOT PRESS.** Its own centred Fun-page card with a red `.dnp-btn`. Click fires
+  a **self-contained canvas confetti burst** (`#confetti`, no library): ~160 rects
+  (70 under reduced-motion) in the site palette, gravity + spin, fading out, and the
+  canvas hides itself once the last particle clears. rAF-driven, pointer-events none.
+- **#48 book suggestions.** No backend, so a one-line `.book-suggest` invite under the
+  reading list: "Text it" (`sms:` prefilled) or "email it" (`mailto:` prefilled). Text
+  only, per the decision — matches the "Not doing: visitor-editable book list" note.
 
 ---
 
@@ -406,6 +495,32 @@ Separate files — these never touch `index.html`, so this is the cheapest batch
 - **22 Jul 2026** — Home affordability shows the house appreciating at 4%
   alongside the down payment's opportunity cost at 8%. Showing only the
   opportunity cost would be a misleading argument against ever buying. (#31)
+- **22 Jul 2026** — Buy low / sell high (#44) folded into Lesson 03 rather than
+  built as a standalone piece — it's an investing-behaviour topic and lands
+  naturally beside the freeway/crash material.
+- **22 Jul 2026** — Lesson decks kept as self-contained copies; shared
+  `lesson.css` / `lesson.js` **not** extracted at three lessons. Copying is the
+  primary CLAUDE.md instruction; extraction would risk a working deck for no
+  visible gain. Revisit if a 4th lesson appears. (#42, #43)
+- **22 Jul 2026** — At the third lesson, built `lessons.html` as the hub and
+  repointed the nav "Lessons" tab + hero button at it (both index files). All
+  three decks now back-link to the hub ("All lessons"); the hub backs out to the
+  site. This supersedes the Batch 1 "Lesson deck back-link → Home/index.html"
+  decision, now that a hub exists to be home. (#42–44, #2)
+- **22 Jul 2026** — Lesson 03 two-investor demo uses one market path that always
+  recovers to +40%, so crash *depth* only changes the Panicker's locked-in loss,
+  never the Steady's outcome — that's the teaching point. Opportunist adds $5k of
+  fresh cash at the low (called out in the disclaimer so the comparison is honest).
+- **22 Jul 2026** — Tour spotlights the four nav tabs + the compound teacher only.
+  The tabs stay visible at every width (the "hidden below 860px" note was stale),
+  so no mobile-specific target was needed. The 5th stop targets `.comp-head`, not
+  the whole `.compound` section, because a section taller than the viewport pushed
+  the pop card off-screen. First visit shows a pulse on the trigger, never an
+  auto-launch. (#45)
+- **22 Jul 2026** — Fun-page fishing egg and confetti are both **library-free**
+  (rAF tween + canvas). The egg is gated to the Fun page via a `MutationObserver`
+  on `#top`'s `data-active`, since its markup is fixed-position outside the page
+  sections. (#46, #47)
 
 ## Not doing
 

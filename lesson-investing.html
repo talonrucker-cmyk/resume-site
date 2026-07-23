@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investing &amp; Risk — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:52px 62px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:4.1rem;line-height:1.02;letter-spacing:-.028em;margin:18px 0 20px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.5rem;line-height:1.08;letter-spacing:-.022em;margin:14px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  .lede{font-size:1.15rem;color:var(--ink-soft);max-width:62ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* title slide */
+  .title-grid{display:grid;grid-template-columns:1.3fr .85fr;gap:52px;align-items:center;flex:1}
+  .title-card{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:32px;box-shadow:var(--shadow)}
+  .title-card .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .agenda{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .agenda li{display:flex;gap:12px;align-items:flex-start;font-size:.98rem;color:#C9D9D2}
+  .agenda b{font-family:var(--mono);font-size:.72rem;color:var(--amber-soft);padding-top:.28em;flex:none}
+  .quote-tag{margin-top:22px;font-family:var(--display);font-weight:500;font-size:1.05rem;color:#EAF3EE;line-height:1.4}
+  .quote-tag span{color:var(--amber-soft)}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.15fr .85fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.98rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:22px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.3rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+
+  /* ---------- FREEWAY ---------- */
+  .fway{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .lane{display:grid;grid-template-columns:225px 1fr 158px;align-items:stretch;background:var(--white);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;transition:.22s}
+  .lane.hot{border-color:var(--amber);box-shadow:0 0 0 2px rgba(211,139,38,.3),var(--shadow);transform:translateX(3px)}
+  .lane .lname{padding:13px 18px;display:flex;flex-direction:column;justify-content:center}
+  .lane .lt{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--ink)}
+  .lane .lh{font-family:var(--mono);font-size:.64rem;letter-spacing:.05em;color:var(--ink-soft);text-transform:uppercase;margin-top:3px}
+  .lane .road{position:relative;background:#2b352f;overflow:hidden}
+  .lane .road::before{content:"";position:absolute;top:50%;left:0;right:0;height:3px;transform:translateY(-50%);background:repeating-linear-gradient(90deg,#EAD98A 0 22px,transparent 22px 44px);opacity:.85}
+  .lane .car{position:absolute;top:50%;left:-10%;width:26px;height:13px;border-radius:4px;transform:translateY(-50%);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+  .lane .ltag{padding:13px 16px;display:flex;flex-direction:column;justify-content:center;text-align:right;background:var(--paper);border-left:1px solid var(--line)}
+  .lane .risk{font-family:var(--display);font-weight:700;font-size:1rem;white-space:nowrap}
+  .lane .spd{font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--ink-soft);text-transform:uppercase;margin-top:2px}
+  /* per-lane accents */
+  .lane.hov{grid-template-columns:225px 1fr 158px}
+  .lane.hov .lname{background:linear-gradient(180deg,rgba(215,225,216,.6),var(--white))}
+  .lane.hov .road{background:#123f31}
+  .lane.hov .road::before{background:repeating-linear-gradient(90deg,#EAD98A 0 8px,transparent 8px 20px)}
+  .lane.hov .diamond{position:absolute;top:50%;left:50%;width:18px;height:18px;transform:translate(-50%,-50%) rotate(45deg);border:2px solid #EAD98A;opacity:.9}
+  .car.c-fast{background:#7FE0B0;animation:drive 2.4s linear infinite}
+  .car.c-med{background:#F0C277;animation:drive 4.2s linear infinite}
+  .car.c-slow{background:#E29A8C;animation:drive 7s linear infinite}
+  .car.c-hov{background:#EAF3EE;animation:drive 2.9s linear infinite}
+  .car.c2{opacity:.7}
+  @keyframes drive{from{left:-12%}to{left:108%}}
+  @media (prefers-reduced-motion:reduce){.car{animation:none!important;left:60%!important}}
+
+  /* ---------- LANE MATCHER ---------- */
+  .lm-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 8px}
+  .lm-btn{background:var(--white);border:1px solid var(--line-strong);border-radius:14px;padding:18px 16px;text-align:left;cursor:pointer;transition:.18s;box-shadow:var(--shadow)}
+  .lm-btn:hover{border-color:var(--pine);transform:translateY(-2px)}
+  .lm-btn.on{border-color:var(--pine);background:linear-gradient(180deg,rgba(215,225,216,.55),var(--white));box-shadow:0 0 0 2px rgba(14,82,64,.28),var(--shadow)}
+  .lm-btn .lb-when{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--ink)}
+  .lm-btn .lb-eg{font-size:.82rem;color:var(--ink-soft);margin-top:3px}
+  .lm-out{display:grid;grid-template-columns:1fr 1fr;gap:26px;flex:1;align-items:center;margin-top:4px}
+  .lm-panel{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow)}
+  .lm-panel .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .lm-panel .lane-name{font-family:var(--display);font-weight:700;font-size:2.2rem;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .lm-panel .lane-sub{font-size:.95rem;color:#B6C7BF}
+  .lm-panel .risk-line{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--amber-soft);text-transform:uppercase;margin-top:16px}
+  .mix{display:flex;height:26px;border-radius:8px;overflow:hidden;margin:10px 0 8px;border:1px solid rgba(255,255,255,.14)}
+  .mix i{display:block;height:100%;transition:width .4s cubic-bezier(.2,.85,.25,1)}
+  .mix .m-stk{background:#4FB08D}.mix .m-bnd{background:#F0C277}.mix .m-csh{background:#8fa39a}
+  .mixkey{display:flex;gap:16px;font-family:var(--mono);font-size:.66rem;color:#B6C7BF;flex-wrap:wrap}
+  .mixkey i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:baseline}
+
+  /* ---------- CHART PANELS (crash / investors) ---------- */
+  .chartwrap{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:18px 20px 10px;box-shadow:var(--shadow)}
+  .chartwrap svg{display:block;width:100%;height:auto}
+  .cx-grid{stroke:var(--line);stroke-width:1}
+  .cx-lab{font-family:var(--mono);font-size:9px;fill:#8b958d}
+
+  /* emotion cycle */
+  .emo-line{fill:none;stroke:var(--pine);stroke-width:2.6}
+  .emo-dot{fill:var(--amber)}
+  .emo-lab{font-family:var(--display);font-weight:600;font-size:11px;fill:var(--ink)}
+  .emo-tag{font-family:var(--mono);font-size:8.5px;letter-spacing:.04em}
+
+  /* two-investor */
+  .inv-choices{display:flex;gap:10px;margin:2px 0 14px;flex-wrap:wrap}
+  .inv-btn{flex:1;min-width:120px;background:var(--white);border:1px solid var(--line-strong);border-radius:12px;padding:12px 14px;cursor:pointer;transition:.18s;box-shadow:var(--shadow);text-align:left}
+  .inv-btn:hover{border-color:var(--pine)}
+  .inv-btn.on{border-color:var(--pine);background:linear-gradient(180deg,rgba(215,225,216,.55),var(--white));box-shadow:0 0 0 2px rgba(14,82,64,.28),var(--shadow)}
+  .inv-btn .ib-t{font-family:var(--display);font-weight:600;font-size:.98rem;color:var(--ink)}
+  .inv-btn .ib-d{font-size:.76rem;color:var(--ink-soft);margin-top:2px}
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:24px 26px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.3rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.green{color:#7FE0B0}
+  .out .big.brick{color:#F0A093}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.good b{color:#7FE0B0}.lrow.bad b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .slider{display:flex;align-items:center;gap:13px;margin-top:4px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:#EAF3EE;min-width:52px;text-align:right}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:#7FA295;margin-bottom:2px}
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.3rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.95rem;color:var(--ink-soft);flex:1}
+  .rcard .rv{font-family:var(--display);font-weight:700;font-size:1.6rem;color:var(--pine);margin-top:14px;letter-spacing:-.01em}
+
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:30px 20px 34px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.3rem;margin:14px 0 16px}
+    h2.st{font-size:1.75rem}
+    .lede{font-size:1.02rem}
+    .pull{font-size:1.1rem}
+
+    .title-grid,.two,.two.wide-left,.lm-out,.recap{grid-template-columns:1fr;gap:20px}
+    .lane{grid-template-columns:1fr;}
+    .lane .road{height:40px}
+    .lane .ltag{text-align:left;border-left:none;border-top:1px solid var(--line);flex-direction:row;justify-content:space-between;align-items:baseline}
+    .lm-choices{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 03 · Investing &amp; Risk</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 7</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TITLE -->
+      <section class="slide on">
+        <div class="title-grid">
+          <div>
+            <span class="eyebrow">Interactive lesson</span>
+            <h1 class="big">Risk isn't the enemy. Being in the <span class="amber">wrong lane</span> is.</h1>
+            <p class="lede">Think of the market as a freeway. Every dollar you invest belongs in a lane that matches when you'll need it — and knowing which lane is the whole game.</p>
+          </div>
+          <div class="title-card">
+            <div class="rk">What we'll cover</div>
+            <ul class="agenda">
+              <li><b>01</b><span>The freeway: lanes and time horizons</span></li>
+              <li><b>02</b><span>Interactive — match your money to a lane</span></li>
+              <li><b>03</b><span>The crash that slows every lane</span></li>
+              <li><b>04</b><span>Buy low, sell high — why it's so hard</span></li>
+              <li><b>05</b><span>Interactive — two investors, one crash</span></li>
+            </ul>
+            <div class="quote-tag">“Great stock risk and return analogy.<br><span>I'm the Google Maps.”</span></div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> or click Next</span></div>
+      </section>
+
+      <!-- 2 — THE FREEWAY -->
+      <section class="slide">
+        <span class="eyebrow">The analogy</span>
+        <h2 class="st">Pick your lane by <span class="pine">when</span> you exit, not how you feel.</h2>
+        <div class="fway" style="margin-top:14px">
+          <div class="lane hov">
+            <div class="lname"><span class="lt">◆ HOV lane</span><span class="lh">A financial planner beside you</span></div>
+            <div class="road"><span class="diamond"></span><span class="car c-hov"></span></div>
+            <div class="ltag"><span class="risk" style="color:var(--pine)">Co-pilot</span><span class="spd">Reads the road ahead</span></div>
+          </div>
+          <div class="lane">
+            <div class="lname"><span class="lt">Far-left lanes</span><span class="lh">Retirement · 10+ years</span></div>
+            <div class="road"><span class="car c-fast"></span><span class="car c-fast c2" style="animation-delay:-1.2s"></span></div>
+            <div class="ltag"><span class="risk" style="color:#2E8C6E">Full speed</span><span class="spd">Highest risk tolerance</span></div>
+          </div>
+          <div class="lane">
+            <div class="lname"><span class="lt">Middle lanes</span><span class="lh">Medium goals · ~5 years</span></div>
+            <div class="road"><span class="car c-med"></span><span class="car c-med c2" style="animation-delay:-2.5s"></span></div>
+            <div class="ltag"><span class="risk" style="color:var(--amber)">Steady</span><span class="spd">Be ready to exit on time</span></div>
+          </div>
+          <div class="lane">
+            <div class="lname"><span class="lt">Right lanes</span><span class="lh">Short-term · 1–3 years</span></div>
+            <div class="road"><span class="car c-slow"></span><span class="car c-slow c2" style="animation-delay:-3.5s"></span></div>
+            <div class="ltag"><span class="risk" style="color:var(--brick)">Slow &amp; congested</span><span class="spd">Cars entering &amp; exiting</span></div>
+          </div>
+        </div>
+        <p class="lede" style="margin-top:16px;max-width:none">The right lanes crawl because everyone's merging on and off — that's short-term money, where safety beats speed. The far left runs fast because no one's exiting soon. Put money in the wrong lane and a crash forces you to exit at the worst possible moment.</p>
+        <div class="slide-foot"><span>02 — THE FREEWAY</span><span>INVESTING &amp; RISK</span></div>
+      </section>
+
+      <!-- 3 — LANE MATCHER -->
+      <section class="slide">
+        <span class="eyebrow">Interactive</span>
+        <h2 class="st" style="margin-bottom:10px">When do you need this money?</h2>
+        <div class="lm-choices" id="lmChoices">
+          <button type="button" class="lm-btn" data-lm="0"><span class="lb-when">1–3 years</span><span class="lb-eg">Emergency fund, a house down payment, next year's tuition</span></button>
+          <button type="button" class="lm-btn" data-lm="1"><span class="lb-when">About 5 years</span><span class="lb-eg">A future car, a wedding, starting a business</span></button>
+          <button type="button" class="lm-btn on" data-lm="2"><span class="lb-when">10+ years</span><span class="lb-eg">Retirement, a newborn's college fund</span></button>
+        </div>
+        <div class="lm-out">
+          <div class="lm-panel">
+            <div class="rk">Recommended lane</div>
+            <div class="lane-name" id="lm_lane">Far-left lanes</div>
+            <div class="lane-sub" id="lm_sub">10+ years — no exit in sight, so ride full speed.</div>
+            <div class="risk-line" id="lm_risk">Risk posture: aggressive growth</div>
+            <div class="mix" id="lm_mix" style="margin-top:14px">
+              <i class="m-stk" style="width:90%"></i><i class="m-bnd" style="width:8%"></i><i class="m-csh" style="width:2%"></i>
+            </div>
+            <div class="mixkey"><span><i class="m-stk"></i>Stocks <b id="lm_stk" style="color:#fff">90%</b></span><span><i class="m-bnd"></i>Bonds <b id="lm_bnd" style="color:#fff">8%</b></span><span><i class="m-csh"></i>Cash <b id="lm_csh" style="color:#fff">2%</b></span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <h3 id="lm_ctitle">Why full speed</h3>
+              <p id="lm_ctext">With a decade or more before you exit, short-term crashes have time to recover. Volatility is the price of the market's highest long-run returns — and time is what makes it affordable.</p>
+            </div>
+            <div class="pull" style="font-size:1.1rem">The mix is a starting point, not a prescription — the HOV lane helps you tune it.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>03 — MATCH YOUR MONEY TO A LANE</span><span>ILLUSTRATIVE MIXES — NOT ADVICE</span></div>
+      </section>
+
+      <!-- 4 — THE CRASH -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">A crash slows <span class="pine">every</span> lane — and you can't schedule it.</h2>
+        <div class="two wide-left" style="margin-top:18px;align-items:center">
+          <div class="chartwrap">
+            <svg viewBox="0 0 460 220" id="crashSvg"></svg>
+          </div>
+          <div>
+            <ul class="points" style="margin-top:0">
+              <li><span class="num">1</span><span class="tx">Downturns are <b>uncontrollable and inevitable</b>. Nobody knows when — only that another one is coming, the way traffic eventually jams.</span></li>
+              <li><span class="num">2</span><span class="tx">The crash hits all lanes at once. What differs is <b>who's forced to exit</b> in it — and short-term money is riding right next to the off-ramp.</span></li>
+              <li><span class="num">3</span><span class="tx">Money with years left simply <b>waits out</b> the jam. The road always cleared before; the whole market has recovered from every crash in history.</span></li>
+              <li><span class="num">4</span><span class="tx">So the danger isn't the crash — it's <b>needing to sell during one</b>. Lane choice decides whether you have to.</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-foot"><span>04 — THE CRASH</span><span>MARKETS HAVE RECOVERED FROM EVERY DOWNTURN</span></div>
+      </section>
+
+      <!-- 5 — BUY LOW / SELL HIGH -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Everyone agrees: buy low, sell high. Then feelings <span class="pine">flip</span> it.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:center">
+          <div class="chartwrap">
+            <svg viewBox="0 0 480 250" id="emoSvg"></svg>
+          </div>
+          <div>
+            <ul class="points" style="margin-top:0">
+              <li><span class="num">1</span><span class="tx">At the <b>top</b>, everything feels great and safe — so people pile in. That's <b>euphoria</b>, and it's exactly where prices are highest.</span></li>
+              <li><span class="num">2</span><span class="tx">At the <b>bottom</b>, everything feels terrifying — so people sell to make the pain stop. That's <b>panic</b>, and it's exactly where prices are lowest.</span></li>
+              <li><span class="num">3</span><span class="tx">Follow the feeling and you <b>buy high and sell low</b> — the precise opposite of the rule everyone claims to believe.</span></li>
+              <li><span class="num">4</span><span class="tx">The fix is a <b>plan you set before the emotion</b>: keep investing on schedule, and let the far-left lane ignore the noise.</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-foot"><span>05 — BUY LOW, SELL HIGH</span><span>THE HARDEST EASY RULE IN INVESTING</span></div>
+      </section>
+
+      <!-- 6 — TWO INVESTORS -->
+      <section class="slide">
+        <span class="eyebrow">Interactive</span>
+        <h2 class="st" style="margin-bottom:12px">Two investors. One crash. Same market.</h2>
+        <div class="two" style="align-items:stretch;gap:26px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="inv-choices" id="invChoices">
+              <button type="button" class="inv-btn on" data-inv="steady"><span class="ib-t">The Steady</span><span class="ib-d">Does nothing. Rides it out.</span></button>
+              <button type="button" class="inv-btn" data-inv="panic"><span class="ib-t">The Panicker</span><span class="ib-d">Sells at the bottom.</span></button>
+              <button type="button" class="inv-btn" data-inv="buyer"><span class="ib-t">The Opportunist</span><span class="ib-d">Adds cash at the bottom.</span></button>
+            </div>
+            <div class="chartwrap" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+              <svg viewBox="0 0 460 210" id="invSvg"></svg>
+            </div>
+            <div class="fld">
+              <label for="i_drop" style="color:var(--ink-soft)">How deep does the crash feel? — drop of <b id="i_drop_v" style="color:var(--brick)">40%</b></label>
+              <div class="slider"><input type="range" id="i_drop" min="20" max="60" step="5" value="40"><span class="amt" style="color:var(--brick)" id="i_drop_a">40%</span></div>
+            </div>
+          </div>
+          <div class="out">
+            <div class="rk" id="i_rk">The Steady — 10 years later</div>
+            <div class="big green" id="i_out">$14,000</div>
+            <div class="sub" id="i_sub">Rode the crash down and all the way back up.</div>
+            <div class="ledger">
+              <div class="lrow"><span>Started with</span><b id="i_l1">$10,000</b></div>
+              <div class="lrow"><span>At the bottom it fell to</span><b id="i_l2">$6,000</b></div>
+              <div class="lrow good" id="i_l3row"><span>Ended at</span><b id="i_l3">$14,000</b></div>
+              <div class="lrow" id="i_l4row"><span>vs. the Steady</span><b id="i_l4">even</b></div>
+            </div>
+            <div class="disclaim">Illustrative single-crash path; the market fully recovers and grows. Real timelines vary. The Opportunist adds $5,000 of fresh cash at the low.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>06 — TWO INVESTORS, ONE CRASH</span><span>SAME MARKET — DIFFERENT DECISIONS</span></div>
+      </section>
+
+      <!-- 7 — RECAP -->
+      <section class="slide">
+        <span class="eyebrow">Recap</span>
+        <h2 class="st">Three rules of the road</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">01 — Choose the lane</div>
+            <h3>Match risk to time</h3>
+            <p>Money you need soon rides the slow right lane; money you won't touch for a decade runs full speed on the left. The horizon picks the lane, not your mood.</p>
+            <div class="rv">Time = lane</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">02 — Expect the crash</div>
+            <h3>Don't exit in traffic</h3>
+            <p>A downturn is inevitable and hits every lane. If your money has years left, you wait it out — the road has always cleared.</p>
+            <div class="rv">Wait, don't sell</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">03 — Beat the instinct</div>
+            <h3>Buy low, sell high</h3>
+            <p>Fear says sell at the bottom; greed says buy at the top. A plan set in advance — and an HOV-lane co-pilot — keeps feelings from driving.</p>
+            <div class="rv">Plan &gt; panic</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>07 — RECAP</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var cur = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ go(i); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function go(i){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ go(cur - 1); });
+  nextBtn.addEventListener('click', function(){ go(cur + 1); });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  /* Scale the 1280x720 stage to fit; stand down below 860px (stacked layout). */
+  var fitBox = document.getElementById('stageFit');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';
+    fitBox.style.height = (720 * s) + 'px';
+  }
+
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var NS = 'http://www.w3.org/2000/svg';
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function el(svg,t,a,txt){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]); if(txt!=null) e.textContent=txt; svg.appendChild(e); return e; }
+  function clear(svg){ while(svg.firstChild) svg.removeChild(svg.firstChild); }
+
+  /* ---------- SLIDE 3: LANE MATCHER ---------- */
+  (function(){
+    var LANES = [
+      {lane:'Right lanes', sub:'1–3 years — riding next to the off-ramp, so play it safe.',
+       risk:'Risk posture: conservative', stk:10, bnd:30, csh:60,
+       ctitle:'Why slow and safe', ctext:'You’ll exit soon, so a crash could force you to sell at a loss with no time to recover. Cash and short bonds keep the money there when you reach for it.'},
+      {lane:'Middle lanes', sub:'~5 years — moving well, but watch for your exit.',
+       risk:'Risk posture: moderate / balanced', stk:55, bnd:35, csh:10,
+       ctitle:'Why balanced', ctext:'Five years is enough to recover from a dip but not from a deep one right before you exit. A stock-and-bond blend earns real growth while staying ready to get off on time.'},
+      {lane:'Far-left lanes', sub:'10+ years — no exit in sight, so ride full speed.',
+       risk:'Risk posture: aggressive growth', stk:90, bnd:8, csh:2,
+       ctitle:'Why full speed', ctext:'With a decade or more before you exit, short-term crashes have time to recover. Volatility is the price of the market’s highest long-run returns — and time is what makes it affordable.'}
+    ];
+    function pick(i){
+      var L = LANES[i];
+      document.querySelectorAll('#lmChoices .lm-btn').forEach(function(b){ b.classList.toggle('on', (+b.dataset.lm)===i); });
+      document.getElementById('lm_lane').textContent = L.lane;
+      document.getElementById('lm_sub').textContent  = L.sub;
+      document.getElementById('lm_risk').textContent = L.risk;
+      document.getElementById('lm_ctitle').textContent = L.ctitle;
+      document.getElementById('lm_ctext').textContent  = L.ctext;
+      var mix = document.getElementById('lm_mix');
+      mix.children[0].style.width = L.stk + '%';
+      mix.children[1].style.width = L.bnd + '%';
+      mix.children[2].style.width = L.csh + '%';
+      document.getElementById('lm_stk').textContent = L.stk + '%';
+      document.getElementById('lm_bnd').textContent = L.bnd + '%';
+      document.getElementById('lm_csh').textContent = L.csh + '%';
+    }
+    document.querySelectorAll('#lmChoices .lm-btn').forEach(function(b){
+      b.addEventListener('click', function(){ pick(+b.dataset.lm); });
+    });
+    pick(2);
+  })();
+
+  /* ---------- SLIDE 4: CRASH CHART ----------
+     A market path that dips hard then recovers past its old high. */
+  (function(){
+    var svg = document.getElementById('crashSvg');
+    var W=460,H=220,pl=10,pr=12,pt=16,pb=26;
+    var v=[100,116,128,120,132,96,74,88,104,120,134,146];
+    var N=v.length-1, maxV=155;
+    function x(i){ return pl+(i/N)*(W-pl-pr); }
+    function y(val){ return H-pb-(val/maxV)*(H-pt-pb); }
+    el(svg,'line',{x1:pl,y1:H-pb,x2:W-pr,y2:H-pb,class:'cx-grid'});
+    /* shade the crash region */
+    var lo=6;
+    el(svg,'rect',{x:x(4),y:pt,width:x(7)-x(4),height:(H-pb)-pt,fill:'#A23A2D',opacity:'.08'});
+    el(svg,'polyline',{points:v.map(function(val,i){return x(i)+','+y(val);}).join(' '),fill:'none',stroke:'#0E5240','stroke-width':2.8,'stroke-linecap':'round','stroke-linejoin':'round'});
+    el(svg,'circle',{cx:x(lo),cy:y(v[lo]),r:4,fill:'#A23A2D'});
+    el(svg,'circle',{cx:x(N),cy:y(v[N]),r:4,fill:'#2E8C6E'});
+    var HALO={'paint-order':'stroke',stroke:'#fbfaf6','stroke-width':'2.8','font-family':"'Space Grotesk',sans-serif",'font-size':'11','font-weight':'700'};
+    el(svg,'text',Object.assign({x:x(lo),y:y(v[lo])+20,fill:'#A23A2D','text-anchor':'middle'},HALO),'The crash');
+    el(svg,'text',Object.assign({x:x(N),y:y(v[N])-9,fill:'#2E8C6E','text-anchor':'end'},HALO),'Full recovery');
+    el(svg,'text',{x:pl,y:H-8,class:'cx-lab'},'TIME →');
+    el(svg,'text',{x:W-pr,y:H-8,class:'cx-lab','text-anchor':'end'},'MARKET VALUE');
+  })();
+
+  /* ---------- SLIDE 5: EMOTION CYCLE ---------- */
+  (function(){
+    var svg = document.getElementById('emoSvg');
+    var W=480,H=250,pl=14,pr=14,pt=40,pb=34;
+    /* a rise to a peak, fall to a trough, rise again */
+    var pts=[];
+    for(var i=0;i<=120;i++){
+      var t=i/120;
+      /* two humps: euphoria peak ~0.28, panic trough ~0.6 */
+      var yv = 0.5 + 0.42*Math.sin((t*2.15+0.15)*Math.PI);
+      pts.push([pl+t*(W-pl-pr), (H-pb) - yv*(H-pt-pb)]);
+    }
+    el(svg,'polyline',{points:pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' '),class:'emo-line'});
+    function at(t){ var idx=Math.round(t*120); return pts[idx]; }
+    function mark(t,lab,tag,tagColor,labDy,anchor){
+      var p=at(t);
+      el(svg,'circle',{cx:p[0],cy:p[1],r:4,class:'emo-dot'});
+      el(svg,'text',{x:p[0],y:p[1]+labDy,class:'emo-lab','text-anchor':anchor||'middle'},lab);
+      if(tag) el(svg,'text',{x:p[0],y:p[1]+labDy+13,class:'emo-tag',fill:tagColor,'text-anchor':anchor||'middle','font-weight':'700'},tag);
+    }
+    mark(0.08,'Optimism','', '', -12,'start');
+    mark(0.28,'Euphoria','← YOU FEEL LIKE BUYING','#A23A2D',-14,'middle');
+    mark(0.60,'Panic','← ACTUAL OPPORTUNITY','#2E8C6E',26,'middle');
+    mark(0.90,'Hope','', '', -12,'end');
+    el(svg,'text',{x:pl,y:22,class:'emo-lab',fill:'#8b958d','font-size':'10'},'How it FEELS to invest — and where the money actually is');
+  })();
+
+  /* ---------- SLIDE 6: TWO INVESTORS ---------- */
+  (function(){
+    var svg = document.getElementById('invSvg');
+    var START = 10000, BOTTOM_YR = 4, N = 10, ADD = 5000;
+    var who = 'steady';
+    var dropEl = document.getElementById('i_drop');
+
+    /* market index path, normalized so it ends at +40% regardless of crash depth.
+       shape: up, then crash to (1-drop) at year 4, then recover to 1.40 at year 10 */
+    function marketPath(drop){
+      var pre=[1,1.08,1.16,1.10], bottom=1-drop;
+      var path=pre.slice();
+      path.push(bottom);                    /* year 4 = bottom */
+      var end=1.40, steps=N-BOTTOM_YR;       /* years 5..10 recover */
+      for(var k=1;k<=steps;k++){
+        path.push(bottom + (end-bottom)*(k/steps));
+      }
+      return path;                           /* length N+1 */
+    }
+
+    function run(){
+      var drop = +dropEl.value/100;
+      document.getElementById('i_drop_v').textContent = Math.round(drop*100)+'%';
+      document.getElementById('i_drop_a').textContent = Math.round(drop*100)+'%';
+      var m = marketPath(drop);
+      var shares0 = START;                    /* $ invested; value = START * index */
+      var steady = m.map(function(f){ return START*f; });
+
+      /* panicker: tracks market to bottom, then sits in cash (flat) */
+      var panic = m.map(function(f,i){ return i<=BOTTOM_YR ? START*f : START*m[BOTTOM_YR]; });
+
+      /* opportunist: like steady, plus ADD invested at the bottom, riding the recovery */
+      var bottomF = m[BOTTOM_YR];
+      var buyer = m.map(function(f,i){
+        var base = START*f;
+        if(i>=BOTTOM_YR){ base += ADD*(f/bottomF); }  /* ADD grows from the bottom */
+        return base;
+      });
+
+      var series = {steady:steady, panic:panic, buyer:buyer};
+      draw(m, series, who);
+      report(steady, panic, buyer, who);
+    }
+
+    function draw(m, series, active){
+      clear(svg);
+      var W=460,H=210,pl=10,pr=12,pt=14,pb=24;
+      var all=[].concat(series.steady,series.panic,series.buyer);
+      var maxV=Math.max.apply(null,all)*1.05, Np=m.length-1;
+      function x(i){ return pl+(i/Np)*(W-pl-pr); }
+      function y(v){ return H-pb-(v/maxV)*(H-pt-pb); }
+      el(svg,'line',{x1:pl,y1:H-pb,x2:W-pr,y2:H-pb,class:'cx-grid'});
+      el(svg,'rect',{x:x(BOTTOM_YR)-3,y:pt,width:6,height:(H-pb)-pt,fill:'#A23A2D',opacity:'.10'});
+      var COL={steady:'#2E8C6E',panic:'#A23A2D',buyer:'#D38B26'};
+      ['steady','panic','buyer'].forEach(function(key){
+        var on = key===active;
+        el(svg,'polyline',{points:series[key].map(function(v,i){return x(i)+','+y(v);}).join(' '),
+          fill:'none',stroke:COL[key],'stroke-width':on?3.2:1.6,opacity:on?1:0.28,
+          'stroke-linecap':'round','stroke-linejoin':'round','stroke-dasharray':(key==='panic'&&on)?'':''});
+      });
+      var pv=series[active];
+      el(svg,'circle',{cx:x(Np),cy:y(pv[Np]),r:4.5,fill:COL[active]});
+      el(svg,'circle',{cx:x(BOTTOM_YR),cy:y(m[BOTTOM_YR]*START),r:3.5,fill:'#A23A2D'});
+      var HALO={'paint-order':'stroke',stroke:'#fbfaf6','stroke-width':'2.6','font-family':"'JetBrains Mono',monospace",'font-size':'9'};
+      el(svg,'text',Object.assign({x:x(BOTTOM_YR),y:y(m[BOTTOM_YR]*START)+16,fill:'#A23A2D','text-anchor':'middle','font-weight':'700'},HALO),'BOTTOM');
+      el(svg,'text',{x:pl,y:H-7,class:'cx-lab'},'YEAR 0');
+      el(svg,'text',{x:W-pr,y:H-7,class:'cx-lab','text-anchor':'end'},'YEAR 10');
+    }
+
+    function report(steady,panic,buyer,active){
+      var end={steady:steady[N],panic:panic[N],buyer:buyer[N]};
+      var bottomVal={steady:steady[BOTTOM_YR],panic:panic[BOTTOM_YR],buyer:steady[BOTTOM_YR]};
+      var invested={steady:START,panic:START,buyer:START+ADD};
+      var META={
+        steady:{rk:'The Steady — 10 years later', cls:'green', sub:'Rode the crash down and all the way back up.'},
+        panic :{rk:'The Panicker — 10 years later', cls:'brick', sub:'Sold at the bottom and locked in the loss.'},
+        buyer :{rk:'The Opportunist — 10 years later', cls:'green', sub:'Held on and bought more while it was cheap.'}
+      };
+      var M=META[active];
+      var out=document.getElementById('i_out');
+      out.className='big '+M.cls;
+      out.textContent=money(end[active]);
+      document.getElementById('i_rk').textContent=M.rk;
+      document.getElementById('i_sub').textContent=M.sub;
+      document.getElementById('i_l1').textContent=money(invested[active]) + (active==='buyer'?' incl. dip buy':'');
+      document.getElementById('i_l2').textContent=money(bottomVal[active]);
+      document.getElementById('i_l3').textContent=money(end[active]);
+      document.getElementById('i_l3row').className='lrow '+(end[active]>=invested[active]?'good':'bad');
+
+      var diff = end[active]-end.steady;
+      var l4=document.getElementById('i_l4'), l4row=document.getElementById('i_l4row');
+      if(active==='steady'){ l4row.style.display='none'; }
+      else {
+        l4row.style.display='';
+        l4row.className='lrow '+(diff>=0?'good':'bad');
+        l4.textContent=(diff>=0?'+':'−')+money(Math.abs(diff)).replace('$','$');
+        l4row.querySelector('span').textContent = diff>=0 ? 'ahead of the Steady' : 'behind the Steady';
+      }
+    }
+
+    document.querySelectorAll('#invChoices .inv-btn').forEach(function(b){
+      b.addEventListener('click', function(){
+        who=b.dataset.inv;
+        document.querySelectorAll('#invChoices .inv-btn').forEach(function(x){ x.classList.toggle('on', x===b); });
+        run();
+      });
+    });
+    dropEl.addEventListener('input', run);
+    run();
+  })();
+
+  /* ---------- INIT ---------- */
+  go(0);
+})();
+</script>
+</body>
+</html>

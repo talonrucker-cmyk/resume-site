@@ -28,7 +28,10 @@ Never stage `.claude/` (local tooling). Never stage `index1.html` (old, unused).
 |---|---|
 | `index.html` | Published site — 4 pages in one file, toggled by JS |
 | `index-BACKUP.html` | Canonical edit source (see above) |
-| `lesson-protection.html` | Standalone lesson deck — insurance |
+| `lessons.html` | Lessons hub — cards linking to each deck; nav "Lessons" tab points here |
+| `lesson-protection.html` | Lesson 01 deck — insurance |
+| `lesson-cashflow.html` | Lesson 02 deck — cash flow |
+| `lesson-investing.html` | Lesson 03 deck — investing & risk |
 | `images/` | Photo gallery assets |
 | `why-you-need-a-financial-planner.pdf` | Embedded guide |
 | `EDITS.md` | The outstanding work list, batched |
@@ -80,8 +83,16 @@ Lesson decks scale a fixed 1280×720 stage to fit. Below 860px they switch to a
 stacked reading layout — scaling that far down makes text illegible. Sizing falls
 back to a synchronous path when `document.hidden`, since rAF pauses in background tabs.
 
-At three or more lessons, build a `lessons.html` hub and repoint the nav tab at it.
-Once a third lesson exists, consider extracting shared `lesson.css` / `lesson.js`.
+There are now **three lessons** (01 protection, 02 cash flow, 03 investing) behind a
+`lessons.html` **hub**. The nav "Lessons" tab and the hero button point at the hub;
+each deck's "← All lessons" button returns to it, and the hub backs out to `index.html`.
+A new lesson = a new `lesson-<topic>.html` file **plus a card in `lessons.html`**.
+
+Each deck is still a **self-contained copy** — shared `lesson.css` / `lesson.js` were
+deliberately not extracted (copying is simpler and lower-risk). Revisit extraction if a
+4th lesson lands. The two calculators shared with the site (passive income `drawdown`,
+lifestyle-creep chart) are hand-ported into the decks, not imported — keep them in step
+with their `index.html` originals by hand if the math changes.
 
 ## Contact
 

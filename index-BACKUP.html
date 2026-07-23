@@ -503,33 +503,29 @@
     .nav .btn{display:none}
   }
 
-  /* CASH FLOW CONCEPTS */
-  .cf-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-  .cf-panel{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:var(--shadow)}
-  .cf-panel.accent{border-color:var(--pine);box-shadow:0 22px 54px -26px rgba(14,82,64,.55)}
-  .cf-tag{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:20px}
-  .cf-panel.accent .cf-tag{color:var(--pine)}
-  .cf-flow{display:flex;flex-direction:column;align-items:center}
-  .cf-box{width:100%;max-width:290px;text-align:center;padding:13px 16px;border-radius:12px;font-family:var(--display);font-weight:600;font-size:1rem}
-  .cf-box.income{background:var(--pine);color:#fff}
-  .cf-box.neutral{background:var(--paper-2);color:var(--ink);border:1px solid var(--line-strong)}
-  .cf-box.wealth{background:var(--amber);color:var(--pine-deep)}
-  .cf-box.wealth small{display:block;font-family:var(--body);font-weight:600;font-size:.74rem;opacity:.9;margin-top:3px}
-  .cf-box.lifestyle{background:var(--brick);color:#fff}
-  .cf-bolt{filter:grayscale(1) brightness(3)}
-  .cf-arrow{position:relative;width:2px;height:24px;background:var(--line-strong)}
-  .cf-arrow::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line-strong)}
-  .cf-arrow.red{background:var(--brick)}
-  .cf-arrow.red::after{border-top-color:var(--brick)}
-  .cf-allocs{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0 2px;max-width:290px}
-  .cf-allocs span{font-family:var(--mono);font-size:.7rem;background:var(--sage);color:var(--pine-deep);border-radius:999px;padding:4px 10px}
-  .cf-save{text-align:center;margin-top:14px;font-family:var(--mono);font-size:.78rem;color:var(--ink-soft)}
-  .cf-save em{font-style:normal;opacity:.8}
-  .cf-points{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:9px}
-  .cf-points li{position:relative;padding-left:20px;color:var(--ink-soft);font-size:.9rem}
-  .cf-points li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:2px;background:var(--amber)}
-  .cf-note{margin-top:18px;padding-top:15px;border-top:1px dashed var(--line);font-size:.9rem;color:var(--ink-soft);line-height:1.55}
-  @media(max-width:900px){.cf-grid{grid-template-columns:1fr}}
+  /* SPENDING CIRCUIT (interactive) */
+  .scircuit{max-width:360px;margin:8px auto 0}
+  .sc-tabs{display:flex;gap:6px;justify-content:center;margin-bottom:16px}
+  .sc-tab{font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink-soft);cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+  .sc-tab.on{background:var(--pine);border-color:var(--pine);color:#fff}
+  .sc-stage{display:flex;flex-direction:column;align-items:center}
+  .sc-node{width:100%;max-width:300px;text-align:center;padding:13px 16px;border-radius:12px;font-family:var(--display);font-weight:600;font-size:1rem;color:#fff}
+  .sc-node small{display:block;font-family:var(--body);font-weight:600;font-size:.74rem;opacity:.92;margin-top:2px}
+  .sc-node.income{background:var(--pine)}
+  .sc-node.wba{background:var(--amber);color:var(--pine-deep)}
+  .sc-node.checking{background:var(--paper-2);color:var(--ink);border:1px solid var(--line-strong)}
+  .sc-node.lifestyle{background:var(--brick)}
+  .sc-arrow{width:2px;height:20px;background:var(--line-strong);position:relative;flex:none}
+  .sc-arrow::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--line-strong)}
+  .sc-allocs{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:9px}
+  .sc-allocs span{font-family:var(--mono);font-size:.66rem;background:var(--pine-deep);color:#fff;border-radius:999px;padding:3px 8px}
+  /* the wealth-building node + its outgoing arrow collapse in the "typical" state */
+  .sc-wba,.sc-wba-arrow{overflow:hidden;transition:max-height .4s ease,opacity .3s ease,padding .3s ease}
+  .scircuit[data-state="0"] .sc-wba{max-height:0;opacity:0;padding-top:0;padding-bottom:0}
+  .scircuit[data-state="0"] .sc-wba-arrow{max-height:0;opacity:0}
+  .scircuit[data-state="1"] .sc-wba{max-height:200px;opacity:1}
+  .scircuit[data-state="1"] .sc-wba-arrow{max-height:20px;opacity:1}
+  .sc-caption{text-align:center;margin-top:16px;font-size:.9rem;color:var(--ink-soft);line-height:1.55;min-height:3.3em}
 
   /* HUMAN LIFE VALUE */
   .hlv{display:grid;grid-template-columns:.85fr 1.15fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
@@ -685,14 +681,6 @@
   .tw-legend{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;font-size:.76rem;color:var(--ink-soft);margin-top:8px}
   .tw-legend i{display:inline-block;width:12px;height:3px;margin-right:5px;vertical-align:3px;border-radius:2px}
 
-  /* flow diagram */
-  .flow{display:flex;flex-direction:column;align-items:center;gap:7px;max-width:330px;margin:6px auto 0}
-  .flow-box{width:100%;text-align:center;padding:12px;border-radius:10px;font-weight:700;color:#fff}
-  .flow-box small{display:block;font-weight:500;font-size:.72rem;opacity:.92;margin-top:2px}
-  .fb-income{background:#2e8b57}.fb-wba{background:var(--pine)}.fb-check{background:#5b6b7a}.fb-life{background:#c0392b}
-  .flow-arrow{width:2px;height:15px;background:var(--ink-soft)}
-  .flow-allocs{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
-  .flow-allocs span{background:var(--sage);color:var(--pine);font-size:.72rem;font-weight:700;padding:4px 9px;border-radius:999px}
 
   @media(max-width:720px){
     .xc-grid,.cmp2,.tw-wrap{grid-template-columns:1fr}
@@ -701,6 +689,66 @@
     .rvt-bars{gap:9px}
     .rvt-name{font-size:.78rem}
   }
+
+  /* ============ SPOTLIGHT TOUR (#45) ============ */
+  .tour-start{position:relative}
+  /* First-visit nudge only — cleared once the tour is seen (localStorage). */
+  .tour-start.pulse{animation:tourPulse 1.8s ease-in-out infinite}
+  @keyframes tourPulse{0%,100%{box-shadow:0 0 0 0 rgba(211,139,38,.55)}50%{box-shadow:0 0 0 8px rgba(211,139,38,0)}}
+  .tour-back{position:fixed;inset:0;z-index:80;display:none}
+  .tour-back.on{display:block}
+  /* The box-shadow is the dimmer; the transparent rect is the "hole". */
+  .tour-spot{position:fixed;z-index:81;border-radius:12px;pointer-events:none;
+    box-shadow:0 0 0 9999px rgba(10,20,16,.74);outline:2px solid var(--amber-soft);outline-offset:3px;
+    transition:top .32s cubic-bezier(.4,0,.2,1),left .32s cubic-bezier(.4,0,.2,1),width .32s cubic-bezier(.4,0,.2,1),height .32s cubic-bezier(.4,0,.2,1);display:none}
+  .tour-spot.on{display:block}
+  .tour-pop{position:fixed;z-index:82;width:min(320px,calc(100vw - 28px));background:var(--white);
+    border-radius:14px;box-shadow:0 20px 50px -12px rgba(0,0,0,.5);padding:18px 18px 16px;display:none}
+  .tour-pop.on{display:block}
+  .tour-pop .tp-step{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine)}
+  .tour-pop h4{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:4px 0 5px;color:var(--ink)}
+  .tour-pop p{font-size:.9rem;color:var(--ink-soft);line-height:1.5;margin-bottom:14px}
+  .tour-pop .tp-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .tour-pop .tp-skip{background:none;border:0;cursor:pointer;font-family:var(--body);font-size:.84rem;color:var(--ink-soft);padding:6px 2px}
+  .tour-pop .tp-skip:hover{color:var(--ink)}
+  .tour-pop .tp-next{font-family:var(--body);font-weight:600;font-size:.88rem;padding:9px 18px;border-radius:999px;border:0;cursor:pointer;background:var(--pine);color:#fff}
+  .tour-pop .tp-next:hover{background:var(--pine-deep)}
+  @media(prefers-reduced-motion:reduce){.tour-spot{transition:none}.tour-start.pulse{animation:none}}
+
+  /* ============ DO NOT PRESS + CONFETTI (#47) ============ */
+  .dnp-btn{font-family:var(--display);font-weight:700;font-size:1.15rem;letter-spacing:.03em;color:#fff;
+    background:linear-gradient(#d0402f,#a3241a);border:0;border-bottom:5px solid #7c1a12;border-radius:14px;
+    padding:18px 40px;cursor:pointer;box-shadow:0 10px 24px -8px rgba(162,36,29,.6);
+    transition:transform .08s ease,box-shadow .12s ease}
+  .dnp-btn:hover{transform:translateY(-2px);box-shadow:0 14px 30px -8px rgba(162,36,29,.7)}
+  .dnp-btn:active{transform:translateY(2px);border-bottom-width:2px}
+  #confetti{position:fixed;inset:0;width:100%;height:100%;z-index:120;pointer-events:none;display:none}
+
+  /* ============ FISHING-HOOK EASTER EGG (#46) ============ */
+  .fish-egg{position:fixed;top:22%;left:-140px;z-index:70;cursor:pointer;font-size:2.1rem;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));display:none;line-height:1;user-select:none;
+    background:none;border:0;padding:0}
+  .fish-egg .line{display:block;width:2px;height:34px;margin:0 auto -2px;background:linear-gradient(#9aa6a0,rgba(154,166,160,0))}
+  .fish-egg .bait{display:flex;align-items:center;gap:1px;transform-origin:top center;animation:baitBob 2.4s ease-in-out infinite}
+  .fish-egg .bill{font-family:var(--display);font-weight:700;font-size:.8rem;color:#0b5a2b;background:linear-gradient(#dcf3e0,#bfe6c8);
+    border:1.5px solid #2e8b57;border-radius:4px;padding:3px 6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.5)}
+  @keyframes baitBob{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+  .egg-modal{position:fixed;inset:0;z-index:130;background:rgba(10,20,16,.62);display:none;align-items:center;justify-content:center;padding:20px}
+  .egg-modal.on{display:flex}
+  .egg-card{background:var(--white);border-radius:18px;max-width:400px;width:100%;padding:30px 28px;text-align:center;box-shadow:0 24px 60px -16px rgba(0,0,0,.5)}
+  .egg-card .egg-ico{font-size:2.6rem}
+  .egg-card h3{font-family:var(--display);font-weight:600;font-size:1.35rem;margin:8px 0 6px;color:var(--ink)}
+  .egg-card p{font-size:.94rem;color:var(--ink-soft);line-height:1.55;margin-bottom:20px}
+  .egg-card p b{color:var(--pine)}
+  .egg-actions{display:flex;flex-direction:column;gap:10px}
+  .egg-close{background:none;border:0;cursor:pointer;color:var(--ink-soft);font-size:.84rem;margin-top:6px;font-family:var(--body)}
+  .egg-close:hover{color:var(--ink)}
+  @media(prefers-reduced-motion:reduce){.fish-egg .bait{animation:none}}
+
+  /* book suggestions (#48) */
+  .book-suggest{font-size:.86rem;color:var(--ink-soft);margin-top:14px;text-align:center}
+  .book-suggest a{color:var(--pine);font-weight:700;border-bottom:1px solid var(--sage)}
+  .book-suggest a:hover{border-color:var(--pine)}
 </style>
 </head>
 <body>
@@ -712,7 +760,7 @@
       <a href="#home" data-nav="home" class="active">Home</a>
       <a href="#extras" data-nav="extras">Tools</a>
       <a href="#fun" data-nav="fun">Fun</a>
-      <a href="lesson-protection.html">Lessons</a>
+      <a href="lessons.html">Lessons</a>
     </nav>
     <div class="nav-actions">
       <a href="https://www.linkedin.com/in/talonrucker" target="_blank" rel="noopener" class="btn btn-ghost nav-linkedin">
@@ -736,7 +784,8 @@
           <p class="lede reveal" style="--d:.2s">A finance grad and systems thinker turning the overwhelming parts of money into a plan that's simple, repeatable, and built to compound.</p>
           <div class="hero-cta reveal" style="--d:.28s">
             <a href="tel:+14805892068" class="btn btn-primary">Text or call (480) 589-2068</a>
-            <a href="lesson-protection.html" class="btn btn-ghost">Lessons &#8594;</a>
+            <a href="lessons.html" class="btn btn-ghost">Lessons &#8594;</a>
+            <button type="button" class="btn btn-ghost tour-start" id="tourBtn">&#9788; Take the tour</button>
           </div>
         </div>
         <div class="portrait-wrap reveal" style="--d:.24s">
@@ -749,37 +798,6 @@
             <div class="pc-meta">B.S. Finance · <b>3.90 GPA</b></div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- QUICK ACCESS (jump into the tools) -->
-  <section id="explore" class="block" data-page="home">
-    <div class="wrap">
-      <div class="sec-head reveal"><span class="eyebrow">Explore</span><h2>Jump straight to what matters.</h2></div>
-      <div class="link-grid">
-
-        <a href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg></div>
-          <h3>Start your Roth IRA</h3>
-          <p>Fidelity's official walkthrough for opening a Roth IRA in the app—the first move I'd make at your age.</p>
-          <span class="link-go">Watch the tutorial <span class="arrow">→</span></span>
-        </a>
-
-        <a href="#tools" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="13" y2="18"/></svg></div>
-          <h3>Financial calculators</h3>
-          <p>Wealth building, human life value, the spending circuit, and a living balance sheet &#8212; all in one place.</p>
-          <span class="link-go">Run the numbers <span class="arrow">&#8594;</span></span>
-        </a>
-
-        <a href="#guide" class="link-card reveal">
-          <div class="link-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
-          <h3>Why you need a financial planner</h3>
-          <p>The short guide on what a planner actually does and how the right plan pays for itself.</p>
-          <span class="link-go">Read the guide <span class="arrow">→</span></span>
-        </a>
-
       </div>
     </div>
   </section>
@@ -1092,47 +1110,24 @@
           <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
         </summary>
         <div class="collapse-body">
-          <p style="color:var(--ink-soft);margin-top:14px;max-width:64ch">Most Americans wire their whole paycheck straight into checking—so spending happens by default and saving only happens if there's willpower left over. Flip the wiring: pay your future self first, automatically, before the money ever touches checking.</p>
-      <div class="cf-grid reveal">
-
-        <div class="cf-panel">
-          <div class="cf-tag">The typical setup</div>
-          <div class="cf-flow">
-            <div class="cf-box income"><span class="cf-bolt">⚡</span> Income</div>
-            <div class="cf-arrow"></div>
-            <div class="cf-box neutral">Checking</div>
-            <div class="cf-arrow red"></div>
-            <div class="cf-box lifestyle">Lifestyle</div>
-          </div>
-          <div class="cf-save">Save? <em>Only if there's money left over.</em></div>
-          <ul class="cf-points">
-            <li>Lifestyle is plugged straight into income</li>
-            <li>Spend by default, save only by decision</li>
-            <li>A quiet, phantom drain on income over time</li>
-          </ul>
-          <p class="cf-note">This is where most paychecks land: direct-deposited into checking, where whatever you didn't spend is what you "saved." For most people, that isn't much.</p>
+          <p style="color:var(--ink-soft);margin-top:14px;max-width:64ch">Most paychecks pour straight into checking—so spending happens by default and saving only if there's willpower left. Flip the wiring: pay your future self first, automatically. Toggle below to interrupt the circuit.</p>
+      <div class="scircuit reveal" data-scircuit data-state="0">
+        <div class="sc-tabs">
+          <button type="button" class="sc-tab on" data-sc="0">The typical setup</button>
+          <button type="button" class="sc-tab" data-sc="1">Interrupt it</button>
         </div>
-
-        <div class="cf-panel accent">
-          <div class="cf-tag">The wealth-building setup</div>
-          <div class="cf-flow">
-            <div class="cf-box income"><span class="cf-bolt">⚡</span> Income</div>
-            <div class="cf-arrow"></div>
-            <div class="cf-box wealth">Wealth-Building Account<small>auto-saves 15–20% first</small></div>
-            <div class="cf-allocs"><span>Cash</span><span>Investments</span><span>Retirement</span><span>Real estate</span><span>Businesses</span></div>
-            <div class="cf-arrow"></div>
-            <div class="cf-box neutral">Checking</div>
-            <div class="cf-arrow red"></div>
-            <div class="cf-box lifestyle">Lifestyle</div>
+        <div class="sc-stage">
+          <div class="sc-node income">Income</div>
+          <div class="sc-arrow"></div>
+          <div class="sc-node wba sc-wba">Wealth-Building Account<small>auto-saves 15–20% first</small>
+            <div class="sc-allocs"><span>Cash</span><span>Investments</span><span>Retirement</span><span>Real estate</span><span>Business</span></div>
           </div>
-          <ul class="cf-points">
-            <li>Your saving rate rises automatically as income grows</li>
-            <li>Spending now takes a deliberate decision</li>
-            <li>Built for tax efficiency, risk balance, and liquidity</li>
-          </ul>
-          <p class="cf-note">Automate the save first—15–20% swept into a wealth-building account before it ever reaches checking. It takes the pain (and the willpower) out of saving, and quietly compounds in the background.</p>
+          <div class="sc-arrow sc-wba-arrow"></div>
+          <div class="sc-node checking">Checking</div>
+          <div class="sc-arrow"></div>
+          <div class="sc-node lifestyle">Lifestyle</div>
         </div>
-
+        <p class="sc-caption" data-sc-caption></p>
       </div>
         </div>
       </details>
@@ -1545,17 +1540,24 @@
         </summary>
         <div class="collapse-body"><div class="x-tool">
           <div class="x-why"><b>Why it matters:</b> Wire income straight into checking and spending happens by default&mdash;saving only if there&rsquo;s willpower left. Insert a wealth-building account <b>first</b> and saving becomes automatic while spending takes a decision.</div>
-          <div class="flow">
-            <div class="flow-box fb-income">Income</div>
-            <div class="flow-arrow"></div>
-            <div class="flow-box fb-wba">Wealth-Building Account<small>auto-saves 15&ndash;20% first</small></div>
-            <div class="flow-allocs"><span>Cash</span><span>Investments</span><span>Retirement</span><span>Real estate</span><span>Business</span></div>
-            <div class="flow-arrow"></div>
-            <div class="flow-box fb-check">Checking</div>
-            <div class="flow-arrow"></div>
-            <div class="flow-box fb-life">Lifestyle</div>
+          <div class="scircuit" data-scircuit data-state="0">
+            <div class="sc-tabs">
+              <button type="button" class="sc-tab on" data-sc="0">The typical setup</button>
+              <button type="button" class="sc-tab" data-sc="1">Interrupt it</button>
+            </div>
+            <div class="sc-stage">
+              <div class="sc-node income">Income</div>
+              <div class="sc-arrow"></div>
+              <div class="sc-node wba sc-wba">Wealth-Building Account<small>auto-saves 15&ndash;20% first</small>
+                <div class="sc-allocs"><span>Cash</span><span>Investments</span><span>Retirement</span><span>Real estate</span><span>Business</span></div>
+              </div>
+              <div class="sc-arrow sc-wba-arrow"></div>
+              <div class="sc-node checking">Checking</div>
+              <div class="sc-arrow"></div>
+              <div class="sc-node lifestyle">Lifestyle</div>
+            </div>
+            <p class="sc-caption" data-sc-caption></p>
           </div>
-          <p class="x-note" style="text-align:center">As income rises, the saving rate rises automatically&mdash;and lifestyle creep now takes a deliberate decision.</p>
         </div></div>
       </details>
 
@@ -1566,16 +1568,7 @@
         </summary>
         <div class="collapse-body"><div class="x-tool">
           <div class="x-why"><b>Why it matters:</b> If income grows 4% and you let expenses grow 4% too, your saving rate never moves. Hold expense growth just below income growth and the gap&mdash;your wealth-building room&mdash;widens every single year.</div>
-          <svg class="x-svg" viewBox="0 0 340 170" role="img" aria-label="Income rising faster than constrained expenses, widening the savings gap">
-            <line x1="24" y1="8" x2="24" y2="150" stroke="#cfd4ca"/><line x1="24" y1="150" x2="330" y2="150" stroke="#cfd4ca"/>
-            <path d="M24,146 Q180,120 320,24" fill="none" stroke="#2e8b57" stroke-width="4"/>
-            <path d="M24,148 Q190,132 320,60" fill="none" stroke="#c0392b" stroke-width="4"/>
-            <path d="M24,149 Q210,142 320,104" fill="none" stroke="#e08a1e" stroke-width="4"/>
-            <text x="300" y="20" font-size="9" fill="#2e8b57" text-anchor="end">Income @4%</text>
-            <text x="300" y="56" font-size="9" fill="#c0392b" text-anchor="end">Expenses @4%</text>
-            <text x="300" y="118" font-size="9" fill="#e08a1e" text-anchor="end">Expenses held @3%</text>
-            <text x="326" y="88" font-size="9" fill="#3a6b8f" text-anchor="end">↕ growing gap</text>
-          </svg>
+          <svg class="x-svg" id="engChart" viewBox="0 0 340 175" role="img" aria-label="Income rising faster than constrained expenses, widening the wealth-building gap"></svg>
         </div></div>
       </details>
 
@@ -1595,6 +1588,7 @@
             </div>
             <div class="xc-res"><div class="k">Extra wealth at the end</div><div class="v" id="lcOut">$0</div><div id="lcSub" style="font-size:.82rem;opacity:.9;margin-top:8px;line-height:1.4"></div></div>
           </div>
+          <svg class="x-svg sm" id="lcChart" viewBox="0 0 340 175" role="img" aria-label="Redirected savings compounding into wealth over time"></svg>
           <p class="x-note">Assumes the extra savings is invested at the chosen return and grows each year. That&rsquo;s the true cost of every &ldquo;small&rdquo; lifestyle upgrade.</p>
         </div></div>
       </details>
@@ -2145,6 +2139,7 @@
               </ul>
             </details>
           </div>
+          <p class="book-suggest">Read something I&rsquo;d love? <a href="sms:+14805892068?&body=Book%20for%20Talon%3A%20">Text it</a> or <a href="mailto:talonrucker@gmail.com?subject=A%20book%20for%20your%20list">email it</a> &mdash; I add the good ones.</p>
         </div>
 
         <!-- PRODUCTIVITY VIDEOS -->
@@ -2155,6 +2150,13 @@
             <span class="soon-pill">Coming soon</span>
             <p class="sub" style="margin-top:14px">I'm filming these now. Once they're up, they'll embed right here.</p>
           </div>
+        </div>
+
+        <!-- DO NOT PRESS (#47) -->
+        <div class="embed-card reveal" style="grid-column:1 / -1;text-align:center">
+          <h3>🚫 Whatever you do&hellip;</h3>
+          <p class="sub" style="margin-bottom:18px">Don&rsquo;t press this button.</p>
+          <button type="button" class="dnp-btn" id="dnpBtn">DO NOT PRESS</button>
         </div>
       </div>
     </div>
@@ -2870,10 +2872,12 @@
       function run(){
         const I=+inc.value||0, b=(+bump.value)/100, N=+yrs.value, r=(+ret.value)/100;
         const annual=I*b;
-        let bal=0; for(let y=0;y<N;y++){ bal=(bal+annual)*(1+r); }
+        const arr=[0]; let bal=0;
+        for(let y=0;y<N;y++){ bal=(bal+annual)*(1+r); arr.push(bal); }
         bumpV.textContent=(+bump.value)+'%'; yrsV.textContent=N; retV.textContent=(+ret.value)+'%';
         out.textContent=moneyM(bal);
         sub.textContent='from just '+money(annual)+'/yr redirected';
+        creepChart($('lcChart'),{series:[{vals:arr,color:'#2e8b57'}],area:true,x0:'YEAR 1',xN:'YEAR '+N,badge:moneyM(bal)});
       }
       [inc,bump,yrs,ret].forEach(el=>{el.addEventListener('input',run);el.addEventListener('change',run);});
       run();
@@ -3010,6 +3014,94 @@
       for(let i=1;i<path.length;i++) if(path[i]<=0) return i;
       return null;
     }
+
+    /* ---- Shared cash-flow "creep" chart (Batch 8) ----
+       One design for the savings-rate concept and the lifestyle-creep test, so
+       the two never drift. Reuse this in the Batch 9 cash-flow lesson too.
+       opts.series: [{vals, color, label?, width?, dash?}]  (index 0 = income)
+       opts.area   : fill series[0] down to the baseline (accumulation view)
+       opts.gapTo  : index of the curve to shade the gap down to (concept view)
+       opts.gapLabel, opts.gapColor, opts.badge, opts.x0, opts.xN ---- */
+    function creepChart(svg,opts){
+      if(!svg) return;
+      const NS='http://www.w3.org/2000/svg';
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      const W=340,H=175,pl=8,pr=10,pt=18,pb=22;
+      const S=opts.series, N=S[0].vals.length-1;
+      let maxV=1; S.forEach(s=>s.vals.forEach(v=>{ if(v>maxV) maxV=v; }));
+      maxV*=1.08;
+      const x=i=>pl+(N?i/N:0)*(W-pl-pr);
+      const y=v=>H-pb-(v/maxV)*(H-pt-pb);
+      function el(t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e;}
+      el('line',{x1:pl,y1:H-pb,x2:W-pr,y2:H-pb,stroke:'#cfd4ca','stroke-width':1});
+      if(opts.area){
+        let pts=S[0].vals.map((v,i)=>x(i)+','+y(v)).join(' ');
+        el('polygon',{points:pl+','+(H-pb)+' '+pts+' '+x(N)+','+(H-pb),fill:S[0].color,opacity:'.13'});
+      } else if(opts.gapTo!=null){
+        const a=S[0].vals, b=S[opts.gapTo].vals;
+        let pts=a.map((v,i)=>x(i)+','+y(v)).join(' ');
+        for(let i=N;i>=0;i--) pts+=' '+x(i)+','+y(b[i]);
+        el('polygon',{points:pts,fill:opts.gapColor||S[0].color,opacity:'.15'});
+      }
+      S.forEach(s=>{
+        const pts=s.vals.map((v,i)=>x(i)+','+y(v)).join(' ');
+        const at={points:pts,fill:'none',stroke:s.color,'stroke-width':s.width||3,'stroke-linecap':'round','stroke-linejoin':'round'};
+        if(s.dash) at['stroke-dasharray']=s.dash;
+        el('polyline',at);
+      });
+      const HALO={'paint-order':'stroke',stroke:'#fbfaf6','stroke-width':'2.8','stroke-linejoin':'round'};
+      function label(a,txt){ el('text',Object.assign({},HALO,a),txt); }
+      if(opts.gapLabel && opts.gapTo!=null){
+        const i=Math.round(N*0.46);
+        const midY=(y(S[0].vals[i])+y(S[opts.gapTo].vals[i]))/2+3;
+        label({x:x(i),y:midY,'font-size':'8.5','font-weight':'700',fill:opts.gapColor||S[0].color,'text-anchor':'middle'},opts.gapLabel);
+      }
+      S.forEach(s=>{ if(!s.label) return;
+        const yy=y(s.vals[N]);
+        label({x:x(N)-5,y:yy-5,'font-size':'8.5','font-weight':'700',fill:s.color,'text-anchor':'end'},s.label);
+      });
+      if(opts.badge){
+        const yy=y(S[0].vals[N]);
+        el('circle',{cx:x(N),cy:yy,r:'3.5',fill:S[0].color});
+        label({x:x(N)-6,y:yy-6,'font-size':'12','font-weight':'800',fill:S[0].color,'text-anchor':'end'},opts.badge);
+      }
+      el('text',{x:pl,y:H-7,'font-size':'8.5',fill:'#8b958d'},opts.x0||'YEAR 1');
+      el('text',{x:W-pr,y:H-7,'font-size':'8.5',fill:'#8b958d','text-anchor':'end'},opts.xN||('YEAR '+N));
+    }
+
+    // Engineering an increasing savings rate — illustrative (Batch 8, #41)
+    (function(){
+      const svg=$('engChart'); if(!svg) return;
+      const N=30, inc=[], expHi=[], expLo=[];
+      for(let t=0;t<=N;t++){ inc.push(100*Math.pow(1.04,t)); expHi.push(80*Math.pow(1.04,t)); expLo.push(80*Math.pow(1.03,t)); }
+      creepChart(svg,{
+        series:[
+          {vals:inc,color:'#2e8b57',label:'Income +4%/yr'},
+          {vals:expHi,color:'#c0392b',label:'Expenses +4%/yr',dash:'4 3',width:2.5},
+          {vals:expLo,color:'#e08a1e',label:'Held to +3%/yr'}
+        ],
+        gapTo:2, gapColor:'#2e8b57', gapLabel:'Wealth-building room',
+        x0:'YEAR 1', xN:'YEAR 30'
+      });
+    })();
+
+    // Interactive spending circuit — original flow, then interrupt it (Batch 8, #40)
+    (function(){
+      const CAP=[
+        'Income pours straight into checking, so spending happens by default—you save only if there’s willpower left over.',
+        'A wealth-building account skims 15–20% off the top first. Saving is automatic; spending now takes a deliberate decision.'
+      ];
+      document.querySelectorAll('[data-scircuit]').forEach(function(sc){
+        const cap=sc.querySelector('[data-sc-caption]');
+        function set(s){
+          sc.setAttribute('data-state',s);
+          sc.querySelectorAll('.sc-tab').forEach(t=>t.classList.toggle('on',(+t.dataset.sc)===s));
+          if(cap) cap.textContent=CAP[s];
+        }
+        sc.querySelectorAll('.sc-tab').forEach(t=>t.addEventListener('click',()=>set(+t.dataset.sc)));
+        set(0);
+      });
+    })();
 
     // Lump sum, left alone
     (function(){
@@ -3465,6 +3557,191 @@
     else if(e.key==='ArrowLeft') show(idx-1);
     else if(e.key==='ArrowRight') show(idx+1);
   });
+})();
+</script>
+
+<!-- ============ FUN-PAGE GAGS (#46 fishing egg, #47 confetti) ============ -->
+<canvas id="confetti"></canvas>
+<button class="fish-egg" id="fishEgg" aria-label="Catch the $10 bill">
+  <span class="line"></span>
+  <span class="bait">🪝<span class="bill">$10</span></span>
+</button>
+<div class="egg-modal" id="eggModal" role="dialog" aria-modal="true" aria-label="You caught it">
+  <div class="egg-card">
+    <div class="egg-ico">🎣</div>
+    <h3>You caught it!</h3>
+    <p><b>I&rsquo;ll chip in the $10</b> toward your very first Roth IRA. Want a hand opening one? It takes about ten minutes.</p>
+    <div class="egg-actions">
+      <a class="btn btn-primary" href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener">Watch the 10-min walkthrough &#8594;</a>
+      <a class="btn btn-ghost" href="mailto:talonrucker@gmail.com?subject=I%20caught%20the%20%2410%20%E2%80%94%20help%20me%20open%20a%20Roth%20IRA">Email me to claim it</a>
+    </div>
+    <button type="button" class="egg-close" id="eggClose">Maybe later</button>
+  </div>
+</div>
+<script>
+(function(){
+  var main=document.getElementById('top');
+  /* ---- #47 confetti: self-contained canvas burst, no library ---- */
+  var cv=document.getElementById('confetti'), ctx=cv&&cv.getContext('2d');
+  var dnp=document.getElementById('dnpBtn');
+  var parts=[], raf=0, running=false;
+  var COLORS=['#0E5240','#D38B26','#A23A2D','#2e8b57','#F0C277','#7c8f80'];
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  function size(){ cv.width=innerWidth; cv.height=innerHeight; }
+  function burst(){
+    if(!ctx) return;
+    size(); cv.style.display='block';
+    var n=reduce?70:160;
+    for(var k=0;k<n;k++){
+      parts.push({x:innerWidth/2+(Math.random()-.5)*140, y:innerHeight*0.36,
+        vx:(Math.random()-.5)*13, vy:-6-Math.random()*11,
+        g:.28+Math.random()*.14, s:6+Math.random()*7,
+        rot:Math.random()*6.28, vr:(Math.random()-.5)*.35,
+        c:COLORS[k%COLORS.length], life:90+Math.random()*40});
+    }
+    if(!running){ running=true; tick(); }
+  }
+  function tick(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    for(var k=parts.length-1;k>=0;k--){
+      var p=parts[k];
+      p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr; p.life--;
+      if(p.life<=0||p.y>cv.height+40){ parts.splice(k,1); continue; }
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle=p.c; ctx.globalAlpha=Math.max(0,Math.min(1,p.life/40));
+      ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6); ctx.restore();
+    }
+    if(parts.length){ raf=requestAnimationFrame(tick); }
+    else { running=false; cv.style.display='none'; }
+  }
+  if(dnp) dnp.addEventListener('click', burst);
+  addEventListener('resize', function(){ if(running) size(); });
+
+  /* ---- #46 fishing-hook $10 bill: Fun page only ---- */
+  var fish=document.getElementById('fishEgg'), modal=document.getElementById('eggModal'),
+      close=document.getElementById('eggClose');
+  var swimT=0, active=false, caught=false;
+  function onFun(){ return main.getAttribute('data-active')==='fun'; }
+  function swim(){
+    if(!onFun()){ fish.style.display='none'; return; }
+    fish.style.display='block'; fish.style.opacity='1';
+    var dir=Math.random()<0.5, top=14+Math.random()*46;              // random depth
+    fish.style.top=top+'%';
+    var from=dir?-140:innerWidth+140, to=dir?innerWidth+140:-140;
+    var t0=null, dur=13000+Math.random()*5000;
+    function step(ts){
+      if(!t0) t0=ts;
+      var k=Math.min(1,(ts-t0)/dur);
+      var x=from+(to-from)*k;
+      var bob=Math.sin(k*Math.PI*6)*10;
+      fish.style.left=x+'px'; fish.style.marginTop=bob+'px';
+      if(k<1 && !modal.classList.contains('on')) requestAnimationFrame(step);
+      else if(k>=1){ fish.style.display='none'; schedule(); }
+    }
+    requestAnimationFrame(step);
+  }
+  function schedule(){ clearTimeout(swimT); if(onFun()) swimT=setTimeout(swim, 6000+Math.random()*7000); }
+  if(fish){
+    fish.addEventListener('click', function(){ modal.classList.add('on'); fish.style.display='none'; });
+    close.addEventListener('click', function(){ modal.classList.remove('on'); schedule(); });
+    modal.addEventListener('click', function(e){ if(e.target===modal){ modal.classList.remove('on'); schedule(); } });
+    // React to page switches (router flips data-active on #top).
+    new MutationObserver(function(){
+      if(onFun()){ if(!active){ active=true; swimT=setTimeout(swim,2500); } }
+      else { active=false; clearTimeout(swimT); fish.style.display='none'; }
+    }).observe(main,{attributes:true,attributeFilter:['data-active']});
+    if(onFun()){ active=true; swimT=setTimeout(swim,2500); }
+  }
+})();
+</script>
+
+<!-- ============ SPOTLIGHT TOUR (#45) ============ -->
+<div class="tour-back" id="tourBack"></div>
+<div class="tour-spot" id="tourSpot"></div>
+<div class="tour-pop" id="tourPop" role="dialog" aria-modal="true" aria-label="Site tour">
+  <span class="tp-step" id="tpStep"></span>
+  <h4 id="tpName"></h4>
+  <p id="tpWhy"></p>
+  <div class="tp-row">
+    <button type="button" class="tp-skip" id="tpSkip">Skip tour</button>
+    <button type="button" class="tp-next" id="tpNext">Next</button>
+  </div>
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('tourBtn');
+  if(!btn) return;
+  var back=document.getElementById('tourBack'), spot=document.getElementById('tourSpot'),
+      pop=document.getElementById('tourPop'), stepEl=document.getElementById('tpStep'),
+      nameEl=document.getElementById('tpName'), whyEl=document.getElementById('tpWhy'),
+      nextB=document.getElementById('tpNext'), skipB=document.getElementById('tpSkip');
+  var DONE='tr-tour-done';
+
+  /* Each stop: a live element + its name and one-line "why it matters".
+     Nav tabs stay visible at every width, so the tour works on mobile too. */
+  var STEPS=[
+    {sel:'.page-tabs a[data-nav="home"]',   name:'Home',            why:'Start here — who I am and the one idea the whole plan is built on.'},
+    {sel:'.page-tabs a[data-nav="extras"]', name:'Tools',           why:'Plug in your real numbers and watch them compound.'},
+    {sel:'.page-tabs a[data-nav="fun"]',    name:'Fun',             why:'The human side — books, music, and a hidden surprise or two.'},
+    {sel:'.page-tabs a[href="lessons.html"]',name:'Lessons',        why:'Money concepts made visual — jargon left at the door.'},
+    {sel:'.comp-head',                       name:'Compound interest',why:'The big idea: start early and time does the heavy lifting.'}
+  ];
+  var live=[], i=0;
+
+  function place(){
+    var el=live[i]; if(!el) return;
+    var r=el.getBoundingClientRect(), pad=8;
+    spot.style.top=(r.top-pad)+'px'; spot.style.left=(r.left-pad)+'px';
+    spot.style.width=(r.width+pad*2)+'px'; spot.style.height=(r.height+pad*2)+'px';
+    // Prefer below the target; flip above if it would run off the bottom.
+    var pr=pop.getBoundingClientRect(), vh=window.innerHeight, vw=window.innerWidth, m=14;
+    var top=r.bottom+pad+12;
+    if(top+pr.height>vh-m) top=r.top-pad-12-pr.height;   // flip above if no room below
+    top=Math.max(m, Math.min(top, vh-pr.height-m));      // never let it leave the viewport
+    var left=r.left+r.width/2-pr.width/2;
+    left=Math.max(m, Math.min(left, vw-pr.width-m));
+    pop.style.top=top+'px'; pop.style.left=left+'px';
+  }
+  function show(){
+    var meta=liveMeta[i];
+    stepEl.textContent='Step '+(i+1)+' of '+live.length;
+    nameEl.textContent=meta.name; whyEl.textContent=meta.why;
+    nextB.textContent = i===live.length-1 ? 'Done' : 'Next';
+    live[i].scrollIntoView({block:'center',behavior:'smooth'});
+    // Let the smooth scroll settle before measuring.
+    setTimeout(place, 340);
+  }
+  var liveMeta=[];
+  function open(){
+    live=[]; liveMeta=[];
+    STEPS.forEach(function(s){ var el=document.querySelector(s.sel); if(el){ live.push(el); liveMeta.push(s); } });
+    if(!live.length) return;
+    i=0;
+    back.classList.add('on'); spot.classList.add('on'); pop.classList.add('on');
+    document.body.style.overflow='hidden';
+    btn.classList.remove('pulse');
+    show();
+  }
+  function close(){
+    back.classList.remove('on'); spot.classList.remove('on'); pop.classList.remove('on');
+    document.body.style.overflow='';
+    try{ localStorage.setItem(DONE,'1'); }catch(e){}
+  }
+  function next(){ if(i>=live.length-1){ close(); } else { i++; show(); } }
+
+  btn.addEventListener('click', open);
+  nextB.addEventListener('click', next);
+  skipB.addEventListener('click', close);
+  back.addEventListener('click', close);
+  window.addEventListener('keydown', function(e){
+    if(!back.classList.contains('on')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='Enter'||e.key==='ArrowRight') next();
+  });
+  window.addEventListener('resize', function(){ if(back.classList.contains('on')) place(); });
+
+  // First-time visitors get a gentle pulse on the trigger, never an auto-launch.
+  try{ if(!localStorage.getItem(DONE)) btn.classList.add('pulse'); }catch(e){}
 })();
 </script>
 

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:52px 62px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:4.1rem;line-height:1.02;letter-spacing:-.028em;margin:18px 0 20px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.5rem;line-height:1.08;letter-spacing:-.022em;margin:14px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  .lede{font-size:1.15rem;color:var(--ink-soft);max-width:62ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* title slide */
+  .title-grid{display:grid;grid-template-columns:1.3fr .85fr;gap:52px;align-items:center;flex:1}
+  .title-card{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:32px;box-shadow:var(--shadow)}
+  .title-card .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .agenda{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .agenda li{display:flex;gap:12px;align-items:flex-start;font-size:.98rem;color:#C9D9D2}
+  .agenda b{font-family:var(--mono);font-size:.72rem;color:var(--amber-soft);padding-top:.28em;flex:none}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.15fr .85fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.98rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:22px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.3rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:30px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:15px;overflow:auto}
+  .inputs.tight{gap:9px;padding:16px 24px}
+  .inputs.tight .ih{padding-bottom:9px}
+  .inputs.tight .hint{font-size:.72rem;margin-top:4px}
+  .inputs.tight .inwrap input{padding-top:8px;padding-bottom:8px;font-size:1.05rem}
+  .inputs.tight .fld label{margin-bottom:4px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.12rem;color:var(--ink);padding:11px 13px 11px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:56px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.green{color:#7FE0B0}
+  .out .big.brick{color:#F0A093}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.35rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.3rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .lrow.good b{color:#7FE0B0}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px}
+  .flag.good{background:rgba(127,224,176,.12);border-color:rgba(127,224,176,.35);color:#7FE0B0}
+
+  /* growth mini-chart */
+  .spark{margin:12px 0 2px}
+  .spark svg{display:block;width:100%;height:auto}
+  .sp-area{fill:rgba(240,194,119,.16)}
+  .sp-area.green{fill:rgba(127,224,176,.16)}
+  .sp-line{fill:none;stroke:var(--amber-soft);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .sp-line.green{stroke:#7FE0B0}
+  .sp-ax{stroke:rgba(255,255,255,.16);stroke-width:1}
+  .sp-lab{font-family:var(--mono);font-size:11px;fill:#7FA295}
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.3rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.95rem;color:var(--ink-soft);flex:1}
+  .rcard .rv{font-family:var(--display);font-weight:700;font-size:1.9rem;color:var(--pine);margin-top:14px;letter-spacing:-.02em}
+  .rcard .bl{font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px}
+
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+
+  /* ---------- LESSON-SPECIFIC: SPENDING CIRCUIT ---------- */
+  .ctabs{display:inline-flex;gap:5px;background:var(--paper-2);padding:5px;border-radius:12px;align-self:flex-start;margin:6px 0 22px}
+  .ctab{font-family:var(--body);font-weight:600;font-size:.9rem;padding:9px 18px;border-radius:9px;border:none;background:transparent;cursor:pointer;color:var(--ink-soft);transition:.18s}
+  .ctab.on{background:var(--white);color:var(--pine);box-shadow:var(--shadow)}
+  .cflow{display:flex;align-items:stretch;gap:0;flex-wrap:nowrap}
+  .cnode{flex:1 1 0;min-width:0;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px 14px;text-align:center;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center}
+  .cnode .cn-t{font-family:var(--display);font-weight:600;font-size:1.1rem;color:var(--ink)}
+  .cnode small{display:block;font-size:.72rem;color:var(--ink-soft);margin-top:4px}
+  .cnode.wba{background:var(--pine);border-color:var(--pine)}
+  .cnode.wba .cn-t{color:#fff}
+  .cnode.wba small{color:#B6D8CC}
+  .callocs{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:10px}
+  .callocs span{font-family:var(--mono);font-size:.6rem;color:#EAF3EE;background:rgba(255,255,255,.16);border-radius:99px;padding:3px 8px}
+  .carrow{flex:none;align-self:center;width:40px;text-align:center;color:var(--pine);font-size:1.4rem;font-weight:700}
+  .cwrap{display:flex;align-items:stretch;overflow:hidden;max-width:0;opacity:0;transition:max-width .5s cubic-bezier(.2,.85,.25,1),opacity .4s ease}
+  .cwrap .cnode{flex:1 1 300px}
+  .circuit[data-state="1"] .cwrap{max-width:460px;opacity:1}
+  .ccap{margin-top:22px;font-size:1.05rem;color:var(--ink-soft);max-width:74ch;min-height:2.4em}
+  .ccap b{color:var(--ink);font-weight:600}
+
+  /* benefit chips (401k / rollover) */
+  .chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+  .chip{display:flex;flex-direction:column;gap:3px;background:var(--white);border:1px solid var(--line);border-radius:13px;padding:15px 18px;box-shadow:var(--shadow);min-width:150px}
+  .chip .cv{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--pine);letter-spacing:-.02em}
+  .chip .cl{font-size:.82rem;color:var(--ink-soft)}
+
+  /* rollover flow */
+  .roll{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin-top:8px}
+  .rbox{flex:1 1 0;min-width:130px;background:var(--white);border:1px solid var(--line);border-radius:13px;padding:16px 14px;text-align:center;box-shadow:var(--shadow)}
+  .rbox .rt{font-family:var(--display);font-weight:600;font-size:1rem;color:var(--ink)}
+  .rbox .rd{font-size:.74rem;color:var(--ink-soft);margin-top:3px}
+  .rbox.keep{border-color:var(--pine);background:linear-gradient(180deg,rgba(215,225,216,.5),var(--white))}
+  .rarrow{flex:none;width:38px;text-align:center;color:var(--pine);font-size:1.3rem;font-weight:700}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:30px 20px 34px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.3rem;margin:14px 0 16px}
+    h2.st{font-size:1.75rem}
+    .lede{font-size:1.02rem}
+    .pull{font-size:1.1rem}
+
+    .title-grid,.two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.6rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    /* circuit + rollover stack vertically, arrows rotate down */
+    .cflow,.roll{flex-direction:column}
+    .carrow,.rarrow{transform:rotate(90deg);width:auto;padding:4px 0}
+    .cwrap{flex-direction:column;max-width:none!important;opacity:1!important;overflow:visible}
+    .circuit[data-state="0"] .cwrap{display:none}
+    .ccap{min-height:0}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 02 · Cash Flow</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 8</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TITLE -->
+      <section class="slide on">
+        <div class="title-grid">
+          <div>
+            <span class="eyebrow">Interactive lesson</span>
+            <h1 class="big">Pay your <em>future</em> before you pay your <span class="amber">lifestyle</span>.</h1>
+            <p class="lede">Wealth isn't what you earn — it's what you route somewhere useful before it disappears. This lesson is about controlling the flow of your paycheck on purpose.</p>
+          </div>
+          <div class="title-card">
+            <div class="rk">What we'll cover</div>
+            <ul class="agenda">
+              <li><b>01</b><span>The wealth-building account</span></li>
+              <li><b>02</b><span>Lifestyle creep, and the 1% test</span></li>
+              <li><b>03</b><span>Calculator — what the gap grows into</span></li>
+              <li><b>04</b><span>The match and other free money</span></li>
+              <li><b>05</b><span>What a rollover actually is</span></li>
+              <li><b>06</b><span>Calculator — income that never runs out</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> or click Next</span></div>
+      </section>
+
+      <!-- 2 — WEALTH-BUILDING ACCOUNT -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Interrupt the circuit before it reaches <span class="pine">lifestyle</span>.</h2>
+        <div class="circuit" id="circuit" data-state="0">
+          <div class="ctabs">
+            <button type="button" class="ctab on" data-c="0">The typical setup</button>
+            <button type="button" class="ctab" data-c="1">Interrupt it</button>
+          </div>
+          <div class="cflow">
+            <div class="cnode income"><span class="cn-t">Income</span><small>every paycheck</small></div>
+            <div class="carrow">&rarr;</div>
+            <div class="cwrap">
+              <div class="cnode wba">
+                <span class="cn-t">Wealth-Building Account</span><small>auto-saves 15–20% first</small>
+                <div class="callocs"><span>Cash</span><span>Investments</span><span>Retirement</span><span>Real estate</span><span>Business</span></div>
+              </div>
+              <div class="carrow">&rarr;</div>
+            </div>
+            <div class="cnode checking"><span class="cn-t">Checking</span><small>what's left to spend</small></div>
+            <div class="carrow">&rarr;</div>
+            <div class="cnode lifestyle"><span class="cn-t">Lifestyle</span><small>bills &amp; wants</small></div>
+          </div>
+          <p class="ccap" data-c-cap></p>
+        </div>
+        <div class="slide-foot"><span>02 — THE WEALTH-BUILDING ACCOUNT</span><span>CLICK THE TABS</span></div>
+      </section>
+
+      <!-- 3 — LIFESTYLE CREEP -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Every raise you fully spend is a raise you never <span class="pine">keep</span>.</h2>
+        <div class="two" style="margin-top:20px">
+          <div>
+            <ul class="points">
+              <li><span class="num">1</span><span class="tx"><b>Lifestyle creep</b> is spending rising to match income. The bigger paycheck arrives and the bigger life quietly arrives with it.</span></li>
+              <li><span class="num">2</span><span class="tx">Feel it or not, it caps you: a career of raises can end with the same savings rate as your first job — <b>zero</b>.</span></li>
+              <li><span class="num">3</span><span class="tx">The fix isn't sacrifice. It's letting spending grow <b>a little slower</b> than income and investing the gap.</span></li>
+              <li><span class="num">4</span><span class="tx"><b>The 1% test:</b> hold lifestyle growth one point under your raises. You'll never feel the difference — the market will.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="pull">You don't have to spend less than today. You just can't spend <em>all</em> of tomorrow's raise.</div>
+            <div class="card">
+              <h3>Where the gap comes from</h3>
+              <div class="spark" style="background:var(--ink);border-radius:12px;padding:14px 16px 6px">
+                <svg viewBox="0 0 340 168" preserveAspectRatio="none" id="creepSvg"></svg>
+              </div>
+              <p style="margin-top:8px">Income grows 4% a year. Hold spending to 3% and the shaded wedge — the wealth-building room — widens every year.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>03 — LIFESTYLE CREEP</span><span>CASH FLOW</span></div>
+      </section>
+
+      <!-- 4 — CALC 1: THE 1% TEST -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">What does the gap grow into?</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Your raises</div>
+            <div class="fld">
+              <label for="c_inc">Current annual income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="c_inc" inputmode="numeric" value="80,000"></div>
+            </div>
+            <div class="row2">
+              <div class="fld">
+                <label for="c_gi">Income grows</label>
+                <div class="slider"><input type="range" id="c_gi" min="1" max="8" step="0.5" value="4"><span class="amt" id="c_gi_v">4%</span></div>
+              </div>
+              <div class="fld">
+                <label for="c_gs">Hold spending to</label>
+                <div class="slider"><input type="range" id="c_gs" min="0" max="8" step="0.5" value="3"><span class="amt" id="c_gs_v">3%</span></div>
+              </div>
+            </div>
+            <div class="row2">
+              <div class="fld">
+                <label for="c_ret">Invested return</label>
+                <div class="slider"><input type="range" id="c_ret" min="2" max="12" step="0.5" value="8"><span class="amt" id="c_ret_v">8%</span></div>
+              </div>
+              <div class="fld">
+                <label for="c_yrs">Years</label>
+                <div class="slider"><input type="range" id="c_yrs" min="5" max="45" value="30"><span class="amt" id="c_yrs_v">30</span></div>
+              </div>
+            </div>
+            <div class="fld">
+              <label>The gap you invest</label>
+              <div class="inwrap"><input type="text" id="c_gapnow" value="—" readonly style="background:var(--paper-2);color:var(--ink-soft)"></div>
+              <div class="hint">Year 1 it's small. It grows every year as the two rates pull apart — and each year's deposit keeps compounding.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Wealth from the gap alone</div>
+            <div class="big green" id="c_out">$0</div>
+            <div class="sub" id="c_sub">Holding spending 1% under your raises</div>
+
+            <div class="spark">
+              <svg viewBox="0 0 460 110" preserveAspectRatio="none" id="c_svg">
+                <path class="sp-area green" id="c_area"></path>
+                <path class="sp-line green" id="c_line"></path>
+                <line class="sp-ax" x1="0" y1="96" x2="460" y2="96"></line>
+                <text class="sp-lab" x="0" y="108">year 1</text>
+                <text class="sp-lab" x="460" y="108" text-anchor="end" id="c_labb">year 30</text>
+              </svg>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Total you redirected</span><b id="c_l1">$0</b></div>
+              <div class="lrow"><span>Growth it earned</span><b id="c_l2">$0</b></div>
+              <div class="lrow tot good"><span>Ending wealth</span><b id="c_l3">$0</b></div>
+            </div>
+            <div class="disclaim">Nominal dollars. Assumes you never let spending catch back up. Illustrative only.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>04 — THE 1% TEST</span><span>ADJUST ANY FIELD — RESULTS UPDATE LIVE</span></div>
+      </section>
+
+      <!-- 5 — THE MATCH & BENEFITS -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Before you invest a dollar, collect the <span class="pine">free</span> ones.</h2>
+        <div class="two wide-left" style="margin-top:20px;align-items:start">
+          <div>
+            <ul class="points">
+              <li><span class="num">1</span><span class="tx"><b>The 401(k) match</b> is your employer paying you to save. A common "50% up to 6%" means every dollar you put in — up to 6% of pay — earns 50 cents on top, instantly.</span></li>
+              <li><span class="num">2</span><span class="tx">Not contributing enough to get the full match is a <b>guaranteed raise, declined.</b> No investment beats an immediate 50% return.</span></li>
+              <li><span class="num">3</span><span class="tx">Benefits are pay too: an <b>HSA</b>, cheaper group insurance, an <b>ESPP</b> discount, tuition help. Read the packet — the money is already budgeted for you.</span></li>
+              <li><span class="num">4</span><span class="tx">Watch the <b>vesting schedule.</b> Match dollars may not be fully yours until you've stayed a few years.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <h3>The match, in numbers</h3>
+              <p style="margin-bottom:4px">On a $80,000 salary, contributing 6%:</p>
+              <div class="chips">
+                <div class="chip"><span class="cv">$4,800</span><span class="cl">you contribute (6%)</span></div>
+                <div class="chip"><span class="cv" style="color:var(--amber)">+$2,400</span><span class="cl">employer adds (50%)</span></div>
+              </div>
+              <p style="margin-top:12px">That's <b>$2,400 a year</b> you'd walk past by not enrolling — before a cent of growth.</p>
+            </div>
+            <div class="pull" style="font-size:1.12rem">Free money first. Then your own.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>05 — THE MATCH &amp; WORK BENEFITS</span><span>CHECK YOUR BENEFITS PORTAL</span></div>
+      </section>
+
+      <!-- 6 — WHAT'S A ROLLOVER -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">A rollover just <span class="pine">moves</span> the account — it doesn't cash it out.</h2>
+        <div class="two wide-left" style="margin-top:18px;align-items:start">
+          <div>
+            <div class="roll">
+              <div class="rbox"><span class="rt">Old 401(k)</span><span class="rd">left at a former job</span></div>
+              <div class="rarrow">&rarr;</div>
+              <div class="rbox keep"><span class="rt">Rollover IRA</span><span class="rd">same money, your control</span></div>
+            </div>
+            <ul class="points" style="margin-top:26px">
+              <li><span class="num">1</span><span class="tx">When you leave a job, the 401(k) stays behind. A <b>rollover</b> moves that balance into an IRA — or your new employer's plan — <b>tax-free</b>.</span></li>
+              <li><span class="num">2</span><span class="tx">Done right (a <b>direct</b> rollover, custodian to custodian) you never touch the money, so there's no tax and no penalty.</span></li>
+              <li><span class="num">3</span><span class="tx">Why bother? <b>One account</b> instead of four, usually lower fees, and far more investment choices than a workplace menu.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="card">
+              <h3>Keep it "direct"</h3>
+              <p>Ask for a <b>direct</b> or trustee-to-trustee transfer. If the old plan mails <em>you</em> a check instead, the clock starts: miss the 60-day window and the IRS treats it as a withdrawal.</p>
+            </div>
+            <div class="card">
+              <h3>Match the tax type</h3>
+              <p>Roll <b>traditional into traditional</b>, <b>Roth into Roth</b>. Mixing them can trigger a tax bill you didn't plan for.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>06 — WHAT A ROLLOVER IS</span><span>NOT TAX ADVICE — CONFIRM WITH A PRO</span></div>
+      </section>
+
+      <!-- 7 — CALC 2: PASSIVE INCOME -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">Income that never runs out</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your nest egg</div>
+            <div class="fld">
+              <label for="p_bal">Amount invested</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="p_bal" inputmode="numeric" value="1,000,000"></div>
+            </div>
+            <div class="fld">
+              <label for="p_ret">Annual return</label>
+              <div class="slider"><input type="range" id="p_ret" min="2" max="12" step="0.5" value="10"><span class="amt" id="p_ret_v">10%</span></div>
+              <div class="hint">What the balance earns each year before you withdraw.</div>
+            </div>
+            <div class="fld">
+              <label for="p_draw">You withdraw each year</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="p_draw" inputmode="numeric" value="100,000"></div>
+              <div class="hint">Take only what it earns and the balance never shrinks — the classic $1M at 10% pays $100k forever.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk" id="p_rk">Withdrawal as a share of returns</div>
+            <div class="big green" id="p_out">100%</div>
+            <div class="sub" id="p_sub">You're spending exactly what it earns — the principal is untouched.</div>
+
+            <div class="spark">
+              <svg viewBox="0 0 460 120" preserveAspectRatio="none" id="p_svg">
+                <path class="sp-area green" id="p_area"></path>
+                <path class="sp-line green" id="p_line"></path>
+                <line class="sp-ax" x1="0" y1="106" x2="460" y2="106"></line>
+                <text class="sp-lab" x="0" y="118">today</text>
+                <text class="sp-lab" x="460" y="118" text-anchor="end">40 years</text>
+              </svg>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Balance earns each year</span><b id="p_l1">$100,000</b></div>
+              <div class="lrow"><span>You withdraw each year</span><b id="p_l2">$100,000</b></div>
+              <div class="lrow tot good"><span>Balance after 40 years</span><b id="p_l3">$1,000,000</b></div>
+            </div>
+            <div class="flag good" id="p_flag">DRAW ONLY THE RETURN AND THE MONEY OUTLIVES YOU.</div>
+            <div class="disclaim">Fixed return, no inflation or taxes. Real returns vary year to year — a cushion below 100% is what makes it durable.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>07 — PASSIVE INCOME</span><span>DRAW &gt; EARNINGS AND THE LINE BENDS TO ZERO</span></div>
+      </section>
+
+      <!-- 8 — RECAP -->
+      <section class="slide">
+        <span class="eyebrow">Recap</span>
+        <h2 class="st">Three habits that build the flow</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">01 — Route it first</div>
+            <h3>The wealth account</h3>
+            <p>Skim 15–20% off every paycheck before it reaches checking. Saving becomes the default and spending becomes the decision.</p>
+            <div class="rv">15–20%</div>
+            <div class="bl">OFF THE TOP, AUTOMATICALLY</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">02 — Beat the creep</div>
+            <h3>The 1% gap</h3>
+            <p>Let spending grow a point slower than your income and invest the difference. You never feel it; three decades later it's a fortune.</p>
+            <div class="rv" id="r_creep">$0</div>
+            <div class="bl">FROM THE GAP ALONE</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">03 — Free money &amp; forever money</div>
+            <h3>Match, then live off returns</h3>
+            <p>Collect the full employer match before anything else — then aim for a nest egg whose returns cover your life without touching principal.</p>
+            <div class="rv">∞</div>
+            <div class="bl">DRAW ONLY WHAT IT EARNS</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>08 — RECAP · VALUES PULL FROM YOUR ENTRIES</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var cur = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ go(i); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function go(i){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ go(cur - 1); });
+  nextBtn.addEventListener('click', function(){ go(cur + 1); });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  /* Scale the 1280x720 stage to fit; stand down below 860px (stacked layout). */
+  var fitBox = document.getElementById('stageFit');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';
+    fitBox.style.height = (720 * s) + 'px';
+  }
+
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var NS = 'http://www.w3.org/2000/svg';
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function group(n){ return Math.round(n || 0).toLocaleString('en-US'); }
+  /* compact $1.3M for headline balances */
+  function moneyK(n){
+    n = Math.round(n || 0);
+    if (n >= 1e6) return '$' + (n/1e6).toFixed(n >= 1e7 ? 0 : 2).replace(/\.?0+$/,'') + 'M';
+    if (n >= 1e4) return '$' + Math.round(n/1e3) + 'K';
+    return money(n);
+  }
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function bindRange(id, onChange){ document.getElementById(id).addEventListener('input', onChange); }
+
+  /* fill a cumulative-area sparkline path pair from a value series */
+  function sparkPath(vals, W, H, areaEl, lineEl){
+    if (vals.length < 2){ lineEl.setAttribute('d',''); if(areaEl) areaEl.setAttribute('d',''); return; }
+    var peak = Math.max.apply(null, vals) || 1;
+    var d = '';
+    for (var i = 0; i < vals.length; i++){
+      var x = (i / (vals.length - 1)) * W;
+      var y = H - (vals[i] / peak) * (H - 10);
+      d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+    }
+    lineEl.setAttribute('d', d);
+    if (areaEl) areaEl.setAttribute('d', d + 'L' + W + ' ' + H + ' L0 ' + H + ' Z');
+  }
+
+  /* ---------- SLIDE 2: SPENDING CIRCUIT ---------- */
+  (function(){
+    var box = document.getElementById('circuit');
+    var cap = box.querySelector('[data-c-cap]');
+    var CAP = [
+      'Income pours straight into checking, so spending happens by default — you save only if there’s willpower left over at the end of the month.',
+      'A wealth-building account skims 15–20% off the top first. Now saving is automatic, and spending is what takes a deliberate decision.'
+    ];
+    function set(s){
+      box.setAttribute('data-state', s);
+      box.querySelectorAll('.ctab').forEach(function(t){ t.classList.toggle('on', (+t.dataset.c) === s); });
+      cap.innerHTML = CAP[s];
+    }
+    box.querySelectorAll('.ctab').forEach(function(t){ t.addEventListener('click', function(){ set(+t.dataset.c); }); });
+    set(0);
+  })();
+
+  /* ---------- SLIDE 3: STATIC CREEP CHART ----------
+     Income @4%, spending held @3%; shade the widening gap between them. */
+  (function(){
+    var svg = document.getElementById('creepSvg');
+    var W = 340, H = 168, pl = 8, pr = 10, pt = 16, pb = 22, N = 30;
+    var inc = [], spend = [];
+    for (var t = 0; t <= N; t++){ inc.push(100*Math.pow(1.04,t)); spend.push(80*Math.pow(1.03,t)); }
+    var maxV = inc[N]*1.06;
+    function x(i){ return pl + (i/N)*(W-pl-pr); }
+    function y(v){ return H-pb - (v/maxV)*(H-pt-pb); }
+    function el(t,a,txt){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]); if(txt!=null) e.textContent=txt; svg.appendChild(e); return e; }
+    el('line',{x1:pl,y1:H-pb,x2:W-pr,y2:H-pb,stroke:'rgba(255,255,255,.18)','stroke-width':1});
+    /* gap wedge */
+    var pts = '';
+    for (var i=0;i<=N;i++) pts += x(i)+','+y(inc[i])+' ';
+    for (var j=N;j>=0;j--) pts += x(j)+','+y(spend[j])+' ';
+    el('polygon',{points:pts,fill:'#7FE0B0',opacity:'.20'});
+    el('polyline',{points:inc.map(function(v,i){return x(i)+','+y(v);}).join(' '),fill:'none',stroke:'#F0C277','stroke-width':2.6,'stroke-linecap':'round'});
+    el('polyline',{points:spend.map(function(v,i){return x(i)+','+y(v);}).join(' '),fill:'none',stroke:'#B6C7BF','stroke-width':2.2,'stroke-dasharray':'4 3','stroke-linecap':'round'});
+    var HALO={'paint-order':'stroke',stroke:'#14201C','stroke-width':'2.6','stroke-linejoin':'round','font-size':'8.5','font-weight':'700'};
+    el('text',Object.assign({x:x(N)-4,y:y(inc[N])-4,fill:'#F0C277','text-anchor':'end'},HALO),'Income +4%');
+    el('text',Object.assign({x:x(N)-4,y:y(spend[N])+11,fill:'#B6C7BF','text-anchor':'end'},HALO),'Spend +3%');
+    el('text',Object.assign({x:x(15),y:(y(inc[15])+y(spend[15]))/2+3,fill:'#7FE0B0','text-anchor':'middle'},HALO),'Wealth-building room');
+    el('text',{x:pl,y:H-7,'font-size':'8.5',fill:'#7FA295'},'YEAR 1');
+    el('text',{x:W-pr,y:H-7,'font-size':'8.5',fill:'#7FA295','text-anchor':'end'},'YEAR 30');
+  })();
+
+  /* ---------- SLIDE 4: THE 1% TEST ----------
+     Each year invest the gap between spending-at-income-rate and spending-held-lower.
+     Both start at today's income (you currently spend every raise). */
+  function calcCreep(){
+    var inc = val('c_inc');
+    var gi  = +document.getElementById('c_gi').value / 100;
+    var gs  = +document.getElementById('c_gs').value / 100;
+    var r   = +document.getElementById('c_ret').value / 100;
+    var N   = +document.getElementById('c_yrs').value;
+
+    document.getElementById('c_gi_v').textContent  = (+document.getElementById('c_gi').value) + '%';
+    document.getElementById('c_gs_v').textContent  = (+document.getElementById('c_gs').value) + '%';
+    document.getElementById('c_ret_v').textContent = (+document.getElementById('c_ret').value) + '%';
+    document.getElementById('c_yrs_v').textContent = N;
+    document.getElementById('c_labb').textContent  = 'year ' + N;
+
+    var contrib = 0, wealth = 0, running = [0], firstGap = 0;
+    for (var t = 1; t <= N; t++){
+      var spendHi = inc * Math.pow(1+gi, t);
+      var spendLo = inc * Math.pow(1+gs, t);
+      var gap = Math.max(0, spendHi - spendLo);
+      if (t === 1) firstGap = gap;
+      contrib += gap;
+      wealth = wealth * (1+r) + gap;   /* invest end of year, compound thereafter */
+      running.push(wealth);
+    }
+    var growth = Math.max(0, wealth - contrib);
+
+    document.getElementById('c_gapnow').value = firstGap > 0 ? money(firstGap) + ' in year 1' : 'no gap — rates are equal';
+    document.getElementById('c_out').textContent = moneyK(wealth);
+    document.getElementById('c_sub').textContent = (gi > gs)
+      ? 'Holding spending ' + ((gi-gs)*100).toFixed(1).replace(/\.0$/,'') + ' pts under your raises'
+      : 'Spending keeps pace with income — nothing is redirected';
+    document.getElementById('c_l1').textContent = money(contrib);
+    document.getElementById('c_l2').textContent = money(growth);
+    document.getElementById('c_l3').textContent = money(wealth);
+
+    sparkPath(running, 460, 96, document.getElementById('c_area'), document.getElementById('c_line'));
+    document.getElementById('r_creep').textContent = moneyK(wealth);
+  }
+  ['c_gi','c_gs','c_ret','c_yrs'].forEach(function(id){ bindRange(id, calcCreep); });
+  bindMoney('c_inc', calcCreep);
+
+  /* ---------- SLIDE 7: PASSIVE INCOME (drawdown) ----------
+     Fixed withdrawal against a compounding balance over 40 years. */
+  function drawdown(bal, r, income, years){
+    var out = [bal];
+    for (var i = 0; i < years; i++){ bal = Math.max(0, bal*(1+r) - income); out.push(bal); }
+    return out;
+  }
+  function yearsToZero(path){ for (var i=1;i<path.length;i++) if (path[i] <= 0) return i; return null; }
+
+  function calcPassive(){
+    var bal  = val('p_bal');
+    var r    = +document.getElementById('p_ret').value / 100;
+    var draw = val('p_draw');
+    var earns = bal * r;
+
+    document.getElementById('p_ret_v').textContent = (+document.getElementById('p_ret').value) + '%';
+
+    var path = drawdown(bal, r, draw, 40);
+    var dead = yearsToZero(path);
+    var endBal = path[path.length - 1];
+    var pct = earns > 0 ? Math.round(draw / earns * 100) : 0;
+
+    var out = document.getElementById('p_out');
+    var flag = document.getElementById('p_flag');
+    var line = document.getElementById('p_line');
+    var area = document.getElementById('p_area');
+
+    document.getElementById('p_l1').textContent = money(earns);
+    document.getElementById('p_l2').textContent = money(draw);
+
+    if (dead){
+      out.className = 'big brick';
+      out.textContent = 'Year ' + dead;
+      document.getElementById('p_rk').textContent = 'The money runs out in';
+      document.getElementById('p_sub').textContent = 'You’re withdrawing ' + pct + '% of what it earns — more than it makes back.';
+      document.getElementById('p_l3').textContent = '$0';
+      line.classList.remove('green'); area.classList.remove('green');
+      flag.className = 'flag';
+      flag.textContent = 'DRAWING ' + money(draw) + ' AGAINST ' + money(earns) + ' OF EARNINGS EATS THE PRINCIPAL.';
+    } else {
+      out.className = draw <= earns ? 'big green' : 'big amber';
+      out.textContent = pct + '%';
+      document.getElementById('p_rk').textContent = 'Withdrawal as a share of returns';
+      document.getElementById('p_sub').textContent = draw <= earns
+        ? 'You’re spending ' + pct + '% of what it earns — the principal keeps working.'
+        : 'You’re dipping into principal, but slowly enough to last 40+ years.';
+      document.getElementById('p_l3').textContent = money(endBal);
+      line.classList.add('green'); area.classList.add('green');
+      flag.className = draw <= earns ? 'flag good' : 'flag';
+      flag.textContent = draw <= earns
+        ? 'DRAW ONLY THE RETURN AND THE MONEY OUTLIVES YOU.'
+        : 'BALANCE STILL ' + money(endBal) + ' AFTER 40 YEARS — DURABLE, NOT INFINITE.';
+    }
+    sparkPath(path, 460, 106, area, line);
+  }
+  ['p_bal','p_draw'].forEach(function(id){ bindMoney(id, calcPassive); });
+  bindRange('p_ret', calcPassive);
+
+  /* ---------- MASTER AGE & INCOME (read-only from home page) ---------- */
+  function applyMaster(){
+    var m; try{ m = JSON.parse(localStorage.getItem('tr-master') || 'null'); }catch(e){ return; }
+    if (!m) return;
+    if (m.income > 0) {
+      var el = document.getElementById('c_inc');
+      el.value = group(m.income);
+      el.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+  }
+
+  /* ---------- INIT ---------- */
+  calcCreep();
+  calcPassive();
+  applyMaster();
+  go(0);
+})();
+</script>
+</body>
+</html>
