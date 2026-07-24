@@ -2,7 +2,7 @@
 
 Source: `Prompts for Claude Pt.3.docx` (22 Jul 2026). 45 items — Batches 1–10, all done.
 Source: `Prompts from Claude pt.4.docx` (23 Jul 2026). 20 items (#49–68) — Batches 11–18.
-Batches 11–17 done; Batch 18 **outstanding**.
+Plus three live asks (#69–71) done as Batch 18. Batches 11–18 done; **#68 outstanding** (Batch 18b).
 
 **How to use this:** start a new thread and say *"do Batch N from EDITS.md"*.
 Read `CLAUDE.md` first — it has the section map and the publishing gotcha.
@@ -758,7 +758,51 @@ Two of these are questions Talon wants answered, not just edits (#57, #59).
 
 ---
 
-## Batch 18 — Lesson 03: HOV lane
+## Batch 18 — Freeway analogy, toast bars, faster Flappy ✅ DONE
+
+Three live asks (23 Jul 2026), done in one thread. (#68 — the HOV-lane speed +
+mobile fix below — was **not** part of this ask and remains outstanding.)
+
+- [x] 69. **Freeway analogy: years = miles.** In Lesson 03's freeway slide, tie the
+      time horizon to distance — a 1–3 year investment means your exit is 1–3 miles
+      out — and add a **rush-hour** warning: don't merge into overhyped, overpriced
+      bets (Bitcoin at its peak) just because everyone's piling in.
+- [x] 70. **Pop-ups → highlighted bars.** Replace the first-use compliance pop-up
+      (#53) and the master age/income confirm dialog (#51) with a **bright toast bar**
+      that slides in at the top and auto-dismisses after a few seconds.
+- [x] 71. **Flappy Talon: faster + speeds up.** Pipes were "few and far between" and
+      slow. Make them come faster and closer, and **ramp the speed up as bills are
+      collected.**
+
+**How it was built.**
+
+- **#69 (lesson-investing.html only).** Added a lede above the lanes — *"One mile ≈
+  one year to your exit"* — and reworded each lane hint to distance ("exit in 1–3
+  miles", "exit ~5 miles out", "exit 10+ miles out"). A new `.rush` amber warning
+  strip below the lanes carries the rush-hour = hype point (overpriced on-ramp,
+  Bitcoin at its peak). Lesson files are standalone copies, so this touches **only**
+  `lesson-investing.html` — not the index files.
+- **#70.** One shared **`window.trToast(msg, opts)`** helper + `.tr-toast` CSS (a
+  fixed, top-centred bar; `tone:'warn'` amber / `tone:'info'` pine; auto-dismiss via
+  `opts.duration`, manual × close). The compliance script now fires an info toast on
+  the first **trusted** calculator interaction and records `tr-disclaimer-ok` so it
+  shows once (the blocking `#discModal` and its Accept button are gone). The master
+  card **no longer uses `window.confirm`/revert** — a committed age/income edit now
+  applies immediately and raises a warn toast that it feeds every calculator.
+- **#71 (index only).** Found the real cause of "few and far between": pipes were
+  placed from an unbounded `spawnX` cursor that never accounted for scrolling, so
+  after the first pair the spacing drifted to ~3× intended (leaving long empty
+  stretches). Rewrote placement to add each pipe exactly `SPACING` right of the
+  current last pipe, so spacing stays constant. Then made it quicker: base scroll
+  **2.5 → 3.1**, ramping **+0.11 per bill collected up to 5.6** (`curSpd()`), with
+  pipes closer (`SPACING` 214 → 184) and a slightly wider gap (168 → 190) to keep it
+  fair at the new pace. Verified in a deterministic sim of the exact update/collision
+  code: a competent pilot clears all 15 ~75–83% of runs, and the score-15 → Roth
+  reward still fires. (rAF can't run in the file:// preview — same known constraint.)
+
+---
+
+## Batch 18b — Lesson 03: HOV lane (outstanding)
 
 - [ ] 68. In the **investing lesson's HOV-lane analogy**, make the **HOV lane slightly
       faster than the far-left lane**, and make it **work on mobile** (only the HOV

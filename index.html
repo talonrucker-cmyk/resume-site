@@ -2310,34 +2310,56 @@
   </div>
 </footer>
 
-<!-- Batch 12 #53: first-use compliance disclaimer (reuses .egg-modal styles) -->
-<div class="egg-modal" id="discModal" role="dialog" aria-modal="true" aria-labelledby="discTitle">
-  <div class="egg-card">
-    <div class="egg-ico">📊</div>
-    <h3 id="discTitle">A quick note before you explore</h3>
-    <p>These calculators are for <b>conceptual and educational purposes only</b>&mdash;they show how the math works, not personalized financial-planning advice. Figures are hypothetical and not guarantees.</p>
-    <div class="egg-actions">
-      <button type="button" class="btn btn-primary" id="discAccept">I understand &mdash; continue</button>
-    </div>
-  </div>
-</div>
+<!-- Batch 18: shared toast bar. A bright highlighted bar that slides in at the
+     top of the screen and auto-dismisses after a few seconds. Replaces the
+     compliance pop-up (#53) and the master age/income confirm dialog (#51). -->
+<style>
+  .tr-toasts{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 12px;pointer-events:none}
+  .tr-toast{pointer-events:auto;max-width:660px;width:calc(100% - 24px);display:flex;align-items:flex-start;gap:12px;background:linear-gradient(180deg,#FFF6E4,var(--white));border:1px solid var(--amber);border-left:5px solid var(--amber);border-radius:12px;box-shadow:0 16px 38px -12px rgba(20,32,28,.45);padding:13px 16px;font-size:.92rem;color:var(--ink);transform:translateY(-20px);opacity:0;transition:transform .28s cubic-bezier(.2,.85,.25,1),opacity .28s}
+  .tr-toast.in{transform:translateY(0);opacity:1}
+  .tr-toast.info{border-color:var(--pine);border-left-color:var(--pine);background:linear-gradient(180deg,#E9F2ED,var(--white))}
+  .tr-toast .tt-ico{font-size:1.25rem;line-height:1.3}
+  .tr-toast .tt-msg{flex:1;line-height:1.45}
+  .tr-toast .tt-msg b{color:var(--pine)}
+  .tr-toast .tt-x{flex:none;background:none;border:none;cursor:pointer;font-size:1.15rem;line-height:1;color:var(--ink-soft);padding:2px 5px;border-radius:6px}
+  .tr-toast .tt-x:hover{background:rgba(20,32,28,.08)}
+  @media (prefers-reduced-motion:reduce){.tr-toast{transition:opacity .2s}}
+</style>
 <script>
-  /* Batch 12 #53 — show a one-time disclaimer on the visitor's first real
-     interaction with any calculator control. Trusted-events only, so the
-     master card's programmatic broadcast on load doesn't trip it. */
+  /* Batch 18 — one shared toast helper. window.trToast(msg, opts):
+     opts.tone 'warn'(amber, default) | 'info'(pine); opts.ico; opts.duration ms. */
+  window.trToast=function(msg,opts){
+    opts=opts||{};
+    var wrap=document.getElementById('trToasts');
+    if(!wrap){ wrap=document.createElement('div'); wrap.id='trToasts'; wrap.className='tr-toasts'; document.body.appendChild(wrap); }
+    var el=document.createElement('div');
+    el.className='tr-toast '+(opts.tone||'warn');
+    el.setAttribute('role','status');
+    el.innerHTML='<span class="tt-ico">'+(opts.ico||'⚠️')+'</span><span class="tt-msg">'+msg+'</span><button type="button" class="tt-x" aria-label="Dismiss">&times;</button>';
+    wrap.appendChild(el);
+    requestAnimationFrame(function(){ el.classList.add('in'); });
+    var timer;
+    function close(){ if(!el.parentNode) return; clearTimeout(timer); el.classList.remove('in'); setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); },320); }
+    el.querySelector('.tt-x').addEventListener('click',close);
+    timer=setTimeout(close, opts.duration||6000);
+    return close;
+  };
+</script>
+<script>
+  /* Batch 18 (was #53) — show a one-time compliance note as a toast bar on the
+     visitor's first real interaction with any calculator control. Trusted-events
+     only, so the master card's programmatic broadcast on load doesn't trip it. */
   (function(){
     var KEY='tr-disclaimer-ok';
     try{ if(localStorage.getItem(KEY)) return; }catch(e){}
-    var modal=document.getElementById('discModal'), ok=document.getElementById('discAccept');
-    if(!modal||!ok) return;
     var shown=false;
-    function accept(){ modal.classList.remove('on'); try{localStorage.setItem(KEY,'1');}catch(e){} }
     function show(){
       if(shown) return; shown=true;
-      modal.classList.add('on');
       document.removeEventListener('input',trigger,true);
       document.removeEventListener('change',trigger,true);
       document.removeEventListener('click',trigger,true);
+      try{localStorage.setItem(KEY,'1');}catch(e){}
+      if(window.trToast) window.trToast('<b>Just so you know:</b> these calculators are for conceptual and educational purposes only — they show how the math works, not personalized financial-planning advice. Figures are hypothetical.',{tone:'info',ico:'📊',duration:9000});
     }
     function trigger(e){
       if(!e.isTrusted) return;
@@ -2348,8 +2370,6 @@
     document.addEventListener('input',trigger,true);
     document.addEventListener('change',trigger,true);
     document.addEventListener('click',trigger,true);
-    ok.addEventListener('click',accept);
-    document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('on')) accept(); });
   })();
 </script>
 
@@ -3735,19 +3755,16 @@
       if(s){ if(s.age) mAge.value=s.age; if(s.income) mInc.value=s.income; }
     }catch(e){}
 
-    /* Editing the master cascades to every calculator, so confirm before it does.
-       Fires on `change` (commit), not per keystroke; a "no" reverts the field to
-       its last confirmed value. (Batch 11 #51) */
+    /* Editing the master cascades to every calculator. Batch 18 replaced the
+       blocking confirm dialog with a highlighted awareness toast: the change
+       applies immediately and a bar reminds the visitor it touches every
+       calculator. Fires on `change` (commit), not per keystroke. (was #51) */
     var lastAge=+mAge.value||0, lastInc=+mInc.value||0;
     function commit(){
       if((+mAge.value||0)===lastAge && (+mInc.value||0)===lastInc) return;
-      if(window.confirm('Are you sure? This changes every calculator on the page.')){
-        lastAge=+mAge.value||0; lastInc=+mInc.value||0;
-        apply(true);
-      } else {
-        mAge.value=lastAge; mInc.value=lastInc;
-        mInc.dispatchEvent(new Event('input',{bubbles:true}));   // re-sync live listeners (balance sheet)
-      }
+      lastAge=+mAge.value||0; lastInc=+mInc.value||0;
+      apply(true);
+      if(window.trToast) window.trToast('<b>Applied everywhere.</b> Your age and income here feed every calculator on the site — change them and the numbers update across the page.',{tone:'warn',ico:'⚙️',duration:6000});
     }
     mAge.addEventListener('change',commit);
     mInc.addEventListener('change',commit);
@@ -3985,23 +4002,28 @@
   cv.width=VW*dpr; cv.height=VH*dpr; ctx.scale(dpr,dpr);
 
   var BX=124, R=17;                                   // bird x, collision radius
-  var GRAV=0.52, FLAP=-8.0, SPD=2.5, PW=60, GAP=168, SPACING=214;
+  /* Batch 18: pipes come faster and closer, and the scroll ramps up with every
+     bill collected. SPD0 = base scroll, +SPD_RAMP per bill, capped at SPD_MAX. */
+  var GRAV=0.52, FLAP=-8.2, SPD0=3.1, SPD_RAMP=0.11, SPD_MAX=5.6, PW=60, GAP=190, SPACING=184;
+  function curSpd(){ return Math.min(SPD_MAX, SPD0 + score*SPD_RAMP); }
   var best=0; try{ best=parseInt(localStorage.getItem('tr-flappy-best'),10)||0; }catch(e){}
   bestEl.textContent='Best '+best;
 
   var state='ready';                                  // ready | play | over | won
-  var bird, pipes, wing, raf=0, spawnX;
+  var bird, pipes, wing, raf=0;
 
   function reset(){
     bird={y:VH*0.44, v:0, rot:0};
     pipes=[]; wing=0; score=0; scoreEl.textContent='0';
-    spawnX=VW+40; addPipe(); addPipe();
+    addPipe(VW+40); addPipe(VW+40+SPACING);
   }
   var score=0;
-  function addPipe(){
+  /* Place each pipe at an explicit world x. New pipes are added SPACING to the
+     right of the current last pipe, so spacing stays constant as the world
+     scrolls (the old running cursor drifted, making pipes far too sparse). */
+  function addPipe(x){
     var margin=70, gc=margin+GAP/2+Math.random()*(VH-GROUND-margin*2-GAP);
-    pipes.push({x:spawnX, gc:gc, scored:false});
-    spawnX+=SPACING;
+    pipes.push({x:x, gc:gc, scored:false});
   }
   function flap(){ bird.v=FLAP; }
 
@@ -4036,14 +4058,16 @@
     wing+=(bird.v<0?0.6:0.22);
     var floorY=VH-GROUND;
     if(bird.y+R>=floorY){ bird.y=floorY-R; return die(); }
+    var sp=curSpd();
     for(var i=0;i<pipes.length;i++){
-      var p=pipes[i]; p.x-=SPD;
+      var p=pipes[i]; p.x-=sp;
       var top=p.gc-GAP/2, bot=p.gc+GAP/2;
       if(hit(p.x,0,PW,top)||hit(p.x,bot,PW,floorY-bot)) return die();
       if(!p.scored && p.x+PW<BX){ p.scored=true; score++; scoreEl.textContent=score;
         if(score>=GOAL) return win(); }
     }
-    if(pipes.length && pipes[pipes.length-1].x<VW-SPACING) addPipe();
+    // queue the next pipe exactly SPACING right of the last one, as it enters view
+    if(pipes.length && pipes[pipes.length-1].x<VW) addPipe(pipes[pipes.length-1].x+SPACING);
     while(pipes.length && pipes[0].x<-PW-4) pipes.shift();
   }
   /* circle (BX,bird.y,R) vs rect */

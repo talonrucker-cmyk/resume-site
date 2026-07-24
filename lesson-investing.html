@@ -119,6 +119,11 @@
   .car.c2{opacity:.7}
   @keyframes drive{from{left:-12%}to{left:108%}}
   @media (prefers-reduced-motion:reduce){.car{animation:none!important;left:60%!important}}
+  /* rush hour warning */
+  .rush{margin-top:14px;display:flex;gap:14px;align-items:flex-start;background:linear-gradient(180deg,rgba(211,139,38,.12),var(--white));border:1px solid var(--amber);border-left-width:4px;border-radius:13px;padding:15px 18px;box-shadow:var(--shadow)}
+  .rush .ri{font-size:1.5rem;line-height:1}
+  .rush .rt{font-size:.98rem;color:var(--ink);line-height:1.5}
+  .rush .rt b{color:var(--brick)}
 
   /* ---------- LANE MATCHER ---------- */
   .lm-choices{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:6px 0 8px}
@@ -268,6 +273,7 @@
       <section class="slide">
         <span class="eyebrow">The analogy</span>
         <h2 class="st">Pick your lane by <span class="pine">when</span> you exit, not how you feel.</h2>
+        <p class="lede" style="margin-top:10px;max-width:none"><b>One mile ≈ one year</b> to your exit. Need the cash in 1–3 years? Your exit is 1–3 miles out — stay right, where a crash can't strand you.</p>
         <div class="fway" style="margin-top:14px">
           <div class="lane hov">
             <div class="lname"><span class="lt">◆ HOV lane</span><span class="lh">A financial planner beside you</span></div>
@@ -275,22 +281,23 @@
             <div class="ltag"><span class="risk" style="color:var(--pine)">Co-pilot</span><span class="spd">Reads the road ahead</span></div>
           </div>
           <div class="lane">
-            <div class="lname"><span class="lt">Far-left lanes</span><span class="lh">Retirement · 10+ years</span></div>
+            <div class="lname"><span class="lt">Far-left lanes</span><span class="lh">Retirement · exit 10+ miles out</span></div>
             <div class="road"><span class="car c-fast"></span><span class="car c-fast c2" style="animation-delay:-1.2s"></span></div>
             <div class="ltag"><span class="risk" style="color:#2E8C6E">Full speed</span><span class="spd">Highest risk tolerance</span></div>
           </div>
           <div class="lane">
-            <div class="lname"><span class="lt">Middle lanes</span><span class="lh">Medium goals · ~5 years</span></div>
+            <div class="lname"><span class="lt">Middle lanes</span><span class="lh">Medium goals · exit ~5 miles out</span></div>
             <div class="road"><span class="car c-med"></span><span class="car c-med c2" style="animation-delay:-2.5s"></span></div>
             <div class="ltag"><span class="risk" style="color:var(--amber)">Steady</span><span class="spd">Be ready to exit on time</span></div>
           </div>
           <div class="lane">
-            <div class="lname"><span class="lt">Right lanes</span><span class="lh">Short-term · 1–3 years</span></div>
+            <div class="lname"><span class="lt">Right lanes</span><span class="lh">Short-term · exit in 1–3 miles</span></div>
             <div class="road"><span class="car c-slow"></span><span class="car c-slow c2" style="animation-delay:-3.5s"></span></div>
             <div class="ltag"><span class="risk" style="color:var(--brick)">Slow &amp; congested</span><span class="spd">Cars entering &amp; exiting</span></div>
           </div>
         </div>
         <p class="lede" style="margin-top:16px;max-width:none">The right lanes crawl because everyone's merging on and off — that's short-term money, where safety beats speed. The far left runs fast because no one's exiting soon. Put money in the wrong lane and a crash forces you to exit at the worst possible moment.</p>
+        <div class="rush"><span class="ri">⚠</span><span class="rt"><b>Don't merge at rush hour.</b> Overhyped, overpriced bets — Bitcoin at its peak — are a jammed on-ramp: everyone's piling in, so you pay top dollar just to crawl. Don't get on a lane only because it's packed.</span></div>
         <div class="slide-foot"><span>02 — THE FREEWAY</span><span>INVESTING &amp; RISK</span></div>
       </section>
 
