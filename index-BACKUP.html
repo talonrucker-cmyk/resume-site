@@ -2275,7 +2275,7 @@
         <!-- FLAPPY TALON (#67) -->
         <div class="embed-card reveal" style="grid-column:1 / -1;text-align:center">
           <h3>🦅 Flappy Talon</h3>
-          <p class="sub" style="margin-bottom:18px">An eagle with big talons&mdash;fly it through the pipes and grab the bills. Reach <b>15</b> and I&rsquo;ll help fund a Roth.</p>
+          <p class="sub" style="margin-bottom:18px">An eagle with big talons&mdash;fly it through the pipes and grab the bills. How far can you fly?</p>
           <div class="game-wrap" id="gameWrap">
             <canvas class="game-cv" id="gameCv" aria-label="Flappy Talon game"></canvas>
             <div class="game-hud"><span class="g-score" id="gScore">0</span><span id="gBest">Best 0</span></div>
@@ -3970,19 +3970,7 @@
 })();
 </script>
 
-<!-- ============ FLAPPY TALON reward (#67) — ties into the Roth-egg flow ============ -->
-<div class="egg-modal" id="gameModal" role="dialog" aria-modal="true" aria-label="You hit 15">
-  <div class="egg-card">
-    <div class="egg-ico">🦅</div>
-    <h3>You hit 15!</h3>
-    <p>Nice flying. You already caught the <b>$10</b> on the fishing hook&mdash;so I&rsquo;ll add <b>another $5</b>. That&rsquo;s <b>$15 total</b> toward your very first Roth IRA. Want a hand opening one?</p>
-    <div class="egg-actions">
-      <a class="btn btn-primary" href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener">Watch the 10-min walkthrough &#8594;</a>
-      <a class="btn btn-ghost" href="mailto:talonrucker@gmail.com?subject=I%20hit%2015%20in%20Flappy%20Talon%20%E2%80%94%20help%20me%20open%20a%20Roth%20IRA">Email me to claim it</a>
-    </div>
-    <button type="button" class="egg-close" id="gameModalClose">Keep flying</button>
-  </div>
-</div>
+<!-- ============ FLAPPY TALON (#67): endless — no reward modal (Batch 18) ============ -->
 <script>
 /* ============ FLAPPY TALON (#67): library-free canvas game, Fun page only ============ */
 (function(){
@@ -3992,12 +3980,11 @@
   var scoreEl=document.getElementById('gScore'), bestEl=document.getElementById('gBest'),
       overlay=document.getElementById('gameOver'), goTitle=document.getElementById('goTitle'),
       goText=document.getElementById('goText'), startBtn=document.getElementById('gameStart'),
-      fsBtn=document.getElementById('gameFs'), modal=document.getElementById('gameModal'),
-      modalClose=document.getElementById('gameModalClose');
+      fsBtn=document.getElementById('gameFs');
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
   /* fixed virtual world; CSS scales the canvas, so physics never depend on display size */
-  var VW=400, VH=500, GROUND=54, GOAL=15;
+  var VW=400, VH=500, GROUND=54;
   var dpr=Math.min(2, window.devicePixelRatio||1);
   cv.width=VW*dpr; cv.height=VH*dpr; ctx.scale(dpr,dpr);
 
@@ -4041,13 +4028,6 @@
     bestEl.textContent='Best '+best;
     showOverlay('Game over','You grabbed '+score+' '+(score===1?'bill':'bills')+'. Best: '+best+'.','Try again');
   }
-  function win(){
-    state='won';
-    if(score>best){ best=score; try{localStorage.setItem('tr-flappy-best',best);}catch(e){} }
-    bestEl.textContent='Best '+best;
-    modal.classList.add('on');
-  }
-
   function onFun(){ return main.getAttribute('data-active')==='fun'; }
 
   /* ---- physics ---- */
@@ -4063,8 +4043,7 @@
       var p=pipes[i]; p.x-=sp;
       var top=p.gc-GAP/2, bot=p.gc+GAP/2;
       if(hit(p.x,0,PW,top)||hit(p.x,bot,PW,floorY-bot)) return die();
-      if(!p.scored && p.x+PW<BX){ p.scored=true; score++; scoreEl.textContent=score;
-        if(score>=GOAL) return win(); }
+      if(!p.scored && p.x+PW<BX){ p.scored=true; score++; scoreEl.textContent=score; }
     }
     // queue the next pipe exactly SPACING right of the last one, as it enters view
     if(pipes.length && pipes[pipes.length-1].x<VW) addPipe(pipes[pipes.length-1].x+SPACING);
@@ -4202,16 +4181,6 @@
     if(document.fullscreenElement){ document.exitFullscreen(); }
     else if(wrap.requestFullscreen){ wrap.requestFullscreen().catch(function(){}); }
   });
-
-  /* reward modal */
-  function closeModal(){
-    modal.classList.remove('on');
-    state='over';
-    showOverlay('You did it! 🎉','You grabbed all 15. Best: '+best+'. Fly again?','Play again');
-    draw();
-  }
-  modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', function(e){ if(e.target===modal) closeModal(); });
 
   /* pause when the Fun page isn't active; resume where it left off */
   new MutationObserver(function(){

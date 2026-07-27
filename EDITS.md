@@ -797,8 +797,14 @@ mobile fix below — was **not** part of this ask and remains outstanding.)
   **2.5 → 3.1**, ramping **+0.11 per bill collected up to 5.6** (`curSpd()`), with
   pipes closer (`SPACING` 214 → 184) and a slightly wider gap (168 → 190) to keep it
   fair at the new pace. Verified in a deterministic sim of the exact update/collision
-  code: a competent pilot clears all 15 ~75–83% of runs, and the score-15 → Roth
-  reward still fires. (rAF can't run in the file:// preview — same known constraint.)
+  code: a competent pilot clears 15 ~75–83% of runs. (rAF can't run in the file://
+  preview — same known constraint.)
+- **#71 follow-up — endless, no reward (Talon, later 23 Jul 2026).** Removed the
+  score-15 Roth reward entirely: deleted the `#gameModal` markup + its vars, the
+  `win()` function, the `GOAL`/`score>=GOAL` win check, and the `closeModal` handler.
+  The game no longer stops at 15 — it's an **endless high-score run** ("How far can
+  you fly?"); scoring continues until you crash. Intro copy updated to drop the Roth
+  line. The fishing-hook $10 Roth egg (#46) is unchanged.
 
 ---
 
