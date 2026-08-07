@@ -286,7 +286,7 @@
   .bs-band.protect .bs-band-title{background:var(--amber)}
   .bs-band.cash .bs-band-title{background:var(--pine)}
   .bs-cells{display:grid;grid-template-columns:repeat(4,1fr)}
-  .bs-band.cash .bs-cells{grid-template-columns:repeat(5,1fr)}
+  .bs-band.cash .bs-cells{grid-template-columns:repeat(6,1fr)}
   .bs-cell{padding:16px 14px;text-align:center;border-right:1px solid rgba(255,255,255,.18);color:#fff;display:flex;flex-direction:column;gap:5px}
   .bs-cell:last-child{border-right:none}
   .bs-cell span{font-size:.74rem;opacity:.86;font-family:var(--mono);letter-spacing:.02em}
@@ -338,6 +338,16 @@
   .bsm-sum span{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
   .bsm-sum b{font-family:var(--display);font-size:1.24rem}
   .bsm-hint{font-size:.76rem;color:var(--ink-soft);margin-top:10px}
+  /* dynamic "Fixed expenses" rows in the balance-sheet pop-up */
+  .fix-row{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+  .fix-row .fix-label{flex:1;min-width:0;border:1px solid #d9ddd4;border-radius:8px;padding:8px 9px;font-family:var(--body);font-size:.9rem;color:var(--ink);background:#fff}
+  .fix-row .xc-in{flex:none}
+  .fix-row .xc-in input{width:88px}
+  .fix-del{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);font-size:1.1rem;line-height:1;cursor:pointer}
+  .fix-del:hover{background:var(--brick);border-color:var(--brick);color:#fff}
+  .bsm-addfix{margin-top:2px;font-family:var(--mono);font-size:.74rem;letter-spacing:.03em;padding:9px 16px;border-radius:999px;border:1px dashed var(--line-strong);background:var(--paper-2);color:var(--pine);cursor:pointer}
+  .bsm-addfix:hover{background:var(--pine);color:#fff;border-style:solid;border-color:var(--pine)}
+  .bsm-empty{font-size:.82rem;color:var(--ink-soft);margin:2px 0 12px}
 
   /* TOOLS: WEALTH CALCULATOR */
   .wcalc{display:grid;grid-template-columns:.78fr 1.22fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
@@ -590,6 +600,30 @@
   .sc-steps a{color:var(--pine);font-weight:600}
   .sc-how-foot{text-align:center;font-size:.78rem;color:var(--ink-soft);margin:2px 0 0;line-height:1.5}
   @media(max-width:640px){.sa-buckets{grid-template-columns:1fr}.fnode{min-width:78px;font-size:.8rem}}
+
+  /* "See the solution" — savings-rate calculator under the interrupt fix */
+  .solve{margin:14px auto 0;max-width:720px}
+  .solve-body{margin-top:18px;border:1px solid var(--line);border-radius:16px;background:var(--white);padding:20px 18px}
+  .solve-lead{font-size:.86rem;color:var(--ink-soft);margin:0 0 16px;line-height:1.5}
+  .solve-lab{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px;font-weight:700}
+  .solve-f{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+  .solve-f span{font-size:.9rem;color:var(--ink);font-weight:600;display:flex;flex-direction:column}
+  .solve-f small{font-weight:600;font-size:.7rem;color:var(--ink-soft)}
+  .solve-fixed{margin:4px 0 14px}
+  .solve-out{margin-top:18px;border-top:1px solid var(--line);padding-top:16px}
+  .solve-bar{display:flex;height:26px;border-radius:8px;overflow:hidden;background:var(--paper-2);border:1px solid var(--line)}
+  .solve-bar .seg{height:100%;transition:width .25s}
+  .solve-bar .seg.ess{background:var(--brick)}
+  .solve-bar .seg.disc{background:var(--amber)}
+  .solve-bar .seg.sav{background:var(--pine)}
+  .solve-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:12px}
+  .solve-legend span{font-size:.78rem;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
+  .solve-legend i{width:10px;height:10px;border-radius:3px;flex:none;display:inline-block}
+  .solve-legend .k-ess{background:var(--brick)}.solve-legend .k-disc{background:var(--amber)}.solve-legend .k-sav{background:var(--pine)}
+  .solve-head{font-family:var(--display);font-weight:700;font-size:1.12rem;color:var(--ink);margin-top:16px;text-align:center}
+  .solve-head b{color:var(--pine)}
+  .solve-head.over b{color:var(--brick)}
+  .solve-note{text-align:center;font-size:.78rem;color:var(--ink-soft);margin:6px 0 0;line-height:1.5}
 
   /* HUMAN LIFE VALUE */
   .hlv{display:grid;grid-template-columns:.85fr 1.15fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
@@ -1280,6 +1314,20 @@
           <p class="sc-how-foot">Percentages are illustrations, not advice. Pick one method &mdash; the point is that saving happens before you can spend it.</p>
         </div>
       </div>
+      <div class="solve" data-solve hidden>
+        <button type="button" class="sc-how-btn" data-solve-reveal>See the solution &mdash; what can you actually save? &#x2193;</button>
+        <div class="solve-body" data-solve-body hidden>
+          <p class="solve-lead">Put in your income, your must-pay bills, and what you&rsquo;d like to spend on fun. Watch what&rsquo;s left to save.</p>
+          <label class="solve-f"><span>Take-home income / year</span><span class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-solve-income></span></label>
+          <div class="solve-fixed">
+            <div class="solve-lab">Essential fixed expenses (per year)</div>
+            <div data-solve-list></div>
+            <button type="button" class="bsm-addfix" data-solve-add>+ Add expense</button>
+          </div>
+          <label class="solve-f"><span>Discretionary spending / year<small>fun, dining, extras</small></span><span class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-solve-disc></span></label>
+          <div class="solve-out" data-solve-out></div>
+        </div>
+      </div>
         </div>
       </details>
 
@@ -1337,12 +1385,13 @@
             <button type="button" class="bs-cell" data-bs="protcost"><span>Protection costs</span><b></b></button>
             <button type="button" class="bs-cell" data-bs="build"><span>Asset building</span><b></b></button>
             <button type="button" class="bs-cell" data-bs="debttax"><span>Debts &amp; taxes</span><b></b></button>
+            <button type="button" class="bs-cell" data-bs="fixed"><span>Fixed expenses</span><b></b></button>
             <div class="bs-cell hi"><span>Left for lifestyle</span><b data-bs-out="life"></b></div>
           </div>
         </div>
         <div class="bs-foot">
           <p class="bs-note" style="padding:14px 0 4px">Click any line to enter your own numbers. Saved on this device only.</p>
-          <button type="button" class="bs-reset" id="bsReset">Reset to example</button>
+          <button type="button" class="bs-reset" id="bsReset">Clear all</button>
         </div>
       </div>
 
@@ -1819,6 +1868,20 @@
                 </ol>
               </div>
               <p class="sc-how-foot">Percentages are illustrations, not advice. Pick one method &mdash; the point is that saving happens before you can spend it.</p>
+            </div>
+          </div>
+          <div class="solve" data-solve hidden>
+            <button type="button" class="sc-how-btn" data-solve-reveal>See the solution &mdash; what can you actually save? &#x2193;</button>
+            <div class="solve-body" data-solve-body hidden>
+              <p class="solve-lead">Put in your income, your must-pay bills, and what you&rsquo;d like to spend on fun. Watch what&rsquo;s left to save.</p>
+              <label class="solve-f"><span>Take-home income / year</span><span class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-solve-income></span></label>
+              <div class="solve-fixed">
+                <div class="solve-lab">Essential fixed expenses (per year)</div>
+                <div data-solve-list></div>
+                <button type="button" class="bsm-addfix" data-solve-add>+ Add expense</button>
+              </div>
+              <label class="solve-f"><span>Discretionary spending / year<small>fun, dining, extras</small></span><span class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-solve-disc></span></label>
+              <div class="solve-out" data-solve-out></div>
             </div>
           </div>
         </div></div>
@@ -3468,11 +3531,13 @@
         const prompt=sc.querySelector('[data-sc2-prompt]');
         const fix=sc.querySelector('[data-sc2-fix]');
         const how=sc.parentElement?sc.parentElement.querySelector('[data-schow]'):null;
+        const solve=sc.parentElement?sc.parentElement.querySelector('[data-solve]'):null;
         if(btn&&fix){
           btn.addEventListener('click',function(){
             fix.hidden=false;
             if(prompt) prompt.style.display='none';
             if(how) how.hidden=false;
+            if(solve) solve.hidden=false;
           });
         }
         if(how){
@@ -3486,6 +3551,93 @@
             });
           }
         }
+      });
+    })();
+
+    // "See the solution" — savings-rate calculator under the interrupt fix
+    (function(){
+      document.querySelectorAll('[data-solve]').forEach(function(root){
+        var revealBtn=root.querySelector('[data-solve-reveal]'),
+            bodyEl=root.querySelector('[data-solve-body]'),
+            incEl=root.querySelector('[data-solve-income]'),
+            discEl=root.querySelector('[data-solve-disc]'),
+            listEl=root.querySelector('[data-solve-list]'),
+            addBtn=root.querySelector('[data-solve-add]'),
+            outEl=root.querySelector('[data-solve-out]');
+        if(!incEl||!listEl||!outEl) return;
+        var income=60000;
+        try{var m=JSON.parse(localStorage.getItem('tr-master')||'null'); if(m&&m.income) income=m.income;}catch(e){}
+        var list=[{label:'Rent',amt:18000},{label:'Car & insurance',amt:6000},{label:'Groceries & utilities',amt:9000}];
+        var disc=9000;
+        function money(v){return '$'+Math.round(v).toLocaleString('en-US');}
+        function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+        function fixTotal(){var t=0;list.forEach(function(x){t+=+x.amt||0;});return t;}
+        function pct(v,inc){return inc>0?Math.round(v/inc*100):0;}
+        function fmt(el,v){el.value=(+v||0).toLocaleString('en-US');}
+        function rIndex(el){var r=el.closest('[data-solverow]');return r?+r.getAttribute('data-solverow'):-1;}
+        function renderList(){
+          if(!list.length){listEl.innerHTML='<p class="bsm-empty">No essentials yet — add rent, groceries, insurance…</p>';return;}
+          var h='';
+          list.forEach(function(x,i){
+            h+='<div class="fix-row" data-solverow="'+i+'">'+
+               '<input type="text" class="fix-label" data-solvelabel placeholder="e.g. Rent" value="'+esc(x.label)+'">'+
+               '<div class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-solveamt value="'+(+x.amt||0).toLocaleString('en-US')+'"></div>'+
+               '<button type="button" class="fix-del" data-solvedel aria-label="Remove">&times;</button>'+
+               '</div>';
+          });
+          listEl.innerHTML=h;
+        }
+        function calc(){
+          var inc=income, ess=fixTotal(), d=+disc||0, sav=inc-ess-d;
+          var wEss=inc>0?Math.min(100,ess/inc*100):0;
+          var wDisc=inc>0?Math.min(Math.max(0,100-wEss),d/inc*100):0;
+          var wSav=Math.max(0,100-wEss-wDisc);
+          var savPct=inc>0?Math.round(sav/inc*100):0;
+          var h='<div class="solve-bar"><span class="seg ess" style="width:'+wEss+'%"></span>'+
+                '<span class="seg disc" style="width:'+wDisc+'%"></span>'+
+                '<span class="seg sav" style="width:'+wSav+'%"></span></div>'+
+                '<div class="solve-legend">'+
+                '<span><i class="k-ess"></i>Essentials '+money(ess)+' ('+pct(ess,inc)+'%)</span>'+
+                '<span><i class="k-disc"></i>Discretionary '+money(d)+' ('+pct(d,inc)+'%)</span>'+
+                '<span><i class="k-sav"></i>Savings '+money(Math.max(0,sav))+' ('+Math.max(0,savPct)+'%)</span></div>';
+          if(sav<0){
+            h+='<div class="solve-head over">You’re over by <b>'+money(-sav)+'</b> a year</div>'+
+               '<p class="solve-note">Trim essentials or discretionary until savings turns positive.</p>';
+          }else{
+            h+='<div class="solve-head">You could save <b>'+savPct+'%</b> — '+money(sav)+' this year</div>'+
+               '<p class="solve-note">After '+money(ess)+' of essentials you have '+money(inc-ess)+' left; spend '+money(d)+' on the fun stuff and the rest saves itself.</p>';
+          }
+          outEl.innerHTML=h;
+        }
+        fmt(incEl,income); fmt(discEl,disc); renderList(); calc();
+        if(revealBtn&&bodyEl){
+          revealBtn.addEventListener('click',function(){
+            var openNow=!bodyEl.hidden; bodyEl.hidden=openNow;
+            revealBtn.innerHTML=openNow?'See the solution — what can you actually save? ↓':'Hide the solution ↑';
+          });
+        }
+        incEl.addEventListener('input',function(){income=+String(incEl.value).replace(/[^0-9.]/g,'')||0;calc();});
+        incEl.addEventListener('blur',function(){fmt(incEl,income);});
+        discEl.addEventListener('input',function(){disc=+String(discEl.value).replace(/[^0-9.]/g,'')||0;calc();});
+        discEl.addEventListener('blur',function(){fmt(discEl,disc);});
+        listEl.addEventListener('input',function(e){
+          var a=e.target.closest('[data-solveamt]');
+          if(a){var i=rIndex(a);if(i>=0&&list[i]){list[i].amt=+String(a.value).replace(/[^0-9.]/g,'')||0;calc();}return;}
+          var l=e.target.closest('[data-solvelabel]');
+          if(l){var j=rIndex(l);if(j>=0&&list[j])list[j].label=l.value;return;}
+        });
+        listEl.addEventListener('blur',function(e){
+          var a=e.target.closest('[data-solveamt]');
+          if(a){var i=rIndex(a);if(i>=0&&list[i])a.value=(+list[i].amt||0).toLocaleString('en-US');}
+        },true);
+        listEl.addEventListener('click',function(e){
+          var d=e.target.closest('[data-solvedel]'); if(!d) return;
+          var i=rIndex(d); if(i>=0){list.splice(i,1);renderList();calc();}
+        });
+        if(addBtn) addBtn.addEventListener('click',function(){
+          list.push({label:'',amt:0}); renderList(); calc();
+          var ls=listEl.querySelectorAll('[data-solvelabel]'); if(ls.length) ls[ls.length-1].focus();
+        });
       });
     })();
 
@@ -3706,6 +3858,8 @@
       bRetire:25000,bInvest:10000,bCash:5000,cTax:46000,cDebt:24000};
     var S={};
     for(var k in DEF) S[k]=DEF[k];
+    /* Fixed expenses are a dynamic list, not a fixed field, so they live apart. */
+    S.fixedList=[{label:'Rent',amt:24000},{label:'Subscriptions',amt:1200}];
 
     var M=function(k,l){return {k:k,l:l,t:'money'};},
         Y=function(k,l){return {k:k,l:l,t:'yn'};};
@@ -3735,7 +3889,9 @@
       protcost:{t:'Protection costs',tone:'cash',f:[M('pHome','Home'),M('pAuto','Auto'),M('pHealth','Health'),
             M('pDis','Disability'),M('pTerm','Term life'),M('pPerm','Permanent life')]},
       build:{t:'Asset building',tone:'cash',f:[M('bRetire','Retirement contributions'),M('bInvest','Other investing'),M('bCash','Cash savings')]},
-      debttax:{t:'Debts & taxes',tone:'cash',f:[M('cTax','Income & payroll tax'),M('cDebt','Debt payments')]}
+      debttax:{t:'Debts & taxes',tone:'cash',f:[M('cTax','Income & payroll tax'),M('cDebt','Debt payments')]},
+      fixed:{t:'Fixed expenses',tone:'cash',dyn:true,
+            hint:'Rent, subscriptions, tuition &mdash; recurring bills you can’t skip. Add each one with its yearly cost. These come straight off what’s left for lifestyle.'}
     };
 
     function money(v){return '$'+Math.round(v).toLocaleString('en-US');}
@@ -3745,7 +3901,9 @@
       if(a>=1e4) return (v<0?'-$':'$')+Math.round(Math.abs(v)/1e3)+'K';
       return money(v);
     }
-    function sum(g){var t=0;g.f.forEach(function(f){if(f.t==='money')t+=+S[f.k]||0;});return t;}
+    function fixedTotal(){var t=0;(S.fixedList||[]).forEach(function(x){t+=+x.amt||0;});return t;}
+    function sum(g){if(g.dyn)return fixedTotal();var t=0;g.f.forEach(function(f){if(f.t==='money')t+=+S[f.k]||0;});return t;}
+    function escAttr(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
     /* ---- render ---- */
     var outs={};
@@ -3755,7 +3913,7 @@
       var assets=S.personal+S.cashSav+S.cvli+S.invest+S.preTax+S.roth+S.realestate+S.business;
       var liab=S.cards+S.autoLoan+S.student+S.taxowed+S.mortgage+S.heloc+S.bizdebt;
       var out=sum(GROUPS.protcost)+sum(GROUPS.build)+sum(GROUPS.debttax);
-      return {assets:assets,liab:liab,net:assets-liab,life:S.earn-out};
+      return {assets:assets,liab:liab,net:assets-liab,life:S.earn-out-fixedTotal()};
     }
 
     function render(){
@@ -3779,8 +3937,33 @@
     var head=document.getElementById('bsmHead'), title=document.getElementById('bsmTitle'),
         body=document.getElementById('bsmBody'), open=null, last=null;
 
+    function renderFixList(){
+      var wrap=body.querySelector('[data-fixlist]'); if(!wrap) return;
+      var list=S.fixedList||(S.fixedList=[]);
+      if(!list.length){wrap.innerHTML='<p class="bsm-empty">No fixed expenses yet — add rent, subscriptions, tuition…</p>';return;}
+      var h='';
+      list.forEach(function(x,i){
+        h+='<div class="fix-row" data-fixrow="'+i+'">'+
+           '<input type="text" class="fix-label" data-fixlabel placeholder="e.g. Rent" value="'+escAttr(x.label)+'">'+
+           '<div class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-fixamt value="'+(+x.amt||0).toLocaleString('en-US')+'"></div>'+
+           '<button type="button" class="fix-del" data-fixdel aria-label="Remove">&times;</button>'+
+           '</div>';
+      });
+      wrap.innerHTML=h;
+    }
+    function buildFixed(g){
+      head.className='bsm-head '+g.tone;
+      title.textContent=g.t;
+      body.innerHTML='<div data-fixlist></div>'+
+        '<button type="button" class="bsm-addfix" data-addfix>+ Add expense</button>'+
+        '<div class="bsm-sum"><span>'+g.t+'</span><b data-sum></b></div>'+
+        (g.hint?'<p class="bsm-hint">'+g.hint+'</p>':'');
+      renderFixList(); syncSum('fixed');
+    }
+
     function build(key){
       var g=GROUPS[key];
+      if(g.dyn){ buildFixed(g); return; }
       head.className='bsm-head '+g.tone;
       title.textContent=g.t;
       var h='';
@@ -3827,16 +4010,28 @@
       var btn=e.target.closest('button[data-bs]'); if(!btn) return;
       show(btn.getAttribute('data-bs'),btn);
     });
+    function rowIndex(el){var r=el.closest('[data-fixrow]');return r?+r.getAttribute('data-fixrow'):-1;}
     body.addEventListener('input',function(e){
-      var i=e.target.closest('input[data-f]'); if(!i) return;
-      S[i.getAttribute('data-f')]=+String(i.value).replace(/[^0-9.]/g,'')||0;
+      var fa=e.target.closest('[data-fixamt]');
+      if(fa){var i=rowIndex(fa);if(i>=0&&S.fixedList[i]){S.fixedList[i].amt=+String(fa.value).replace(/[^0-9.]/g,'')||0;syncSum('fixed');render();}return;}
+      var fl=e.target.closest('[data-fixlabel]');
+      if(fl){var j=rowIndex(fl);if(j>=0&&S.fixedList[j]){S.fixedList[j].label=fl.value;render();}return;}
+      var i2=e.target.closest('input[data-f]'); if(!i2) return;
+      S[i2.getAttribute('data-f')]=+String(i2.value).replace(/[^0-9.]/g,'')||0;
       syncSum(open); render();
     });
     body.addEventListener('blur',function(e){
-      var i=e.target.closest('input[data-f]'); if(!i) return;
-      i.value=(+S[i.getAttribute('data-f')]||0).toLocaleString('en-US');
+      var fa=e.target.closest('[data-fixamt]');
+      if(fa){var i=rowIndex(fa);if(i>=0&&S.fixedList[i])fa.value=(+S.fixedList[i].amt||0).toLocaleString('en-US');return;}
+      var i0=e.target.closest('input[data-f]'); if(!i0) return;
+      i0.value=(+S[i0.getAttribute('data-f')]||0).toLocaleString('en-US');
     },true);
     body.addEventListener('click',function(e){
+      var add=e.target.closest('[data-addfix]');
+      if(add){(S.fixedList||(S.fixedList=[])).push({label:'',amt:0});renderFixList();syncSum('fixed');render();
+        var labs=body.querySelectorAll('[data-fixlabel]');if(labs.length)labs[labs.length-1].focus();return;}
+      var del=e.target.closest('[data-fixdel]');
+      if(del){var i=rowIndex(del);if(i>=0){S.fixedList.splice(i,1);renderFixList();syncSum('fixed');render();}return;}
       var b=e.target.closest('[data-yn] button'); if(!b) return;
       S[b.parentNode.getAttribute('data-yn')]=+b.getAttribute('data-v');
       syncYN(); render();
@@ -3846,7 +4041,8 @@
     document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&open) close(); });
 
     document.getElementById('bsReset').addEventListener('click',function(){
-      for(var k in DEF) S[k]=DEF[k];
+      for(var k in DEF) S[k]=0;
+      S.fixedList=[];
       if(open) build(open);
       render();
     });
@@ -3863,7 +4059,10 @@
 
     try{
       var saved=JSON.parse(localStorage.getItem(KEY)||'null');
-      if(saved) for(var sk in DEF) if(typeof saved[sk]==='number') S[sk]=saved[sk];
+      if(saved){
+        for(var sk in DEF) if(typeof saved[sk]==='number') S[sk]=saved[sk];
+        if(Array.isArray(saved.fixedList)) S.fixedList=saved.fixedList.map(function(x){return {label:String((x&&x.label)||''),amt:+((x&&x.amt))||0};});
+      }
       var m=JSON.parse(localStorage.getItem('tr-master')||'null');
       if(m&&m.income) S.earn=m.income;
     }catch(e){}
