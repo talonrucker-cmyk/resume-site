@@ -558,6 +558,39 @@
   .sc2-btn:hover{background:var(--pine-deep)}
   @media(max-width:640px){.scircuit2{grid-template-columns:1fr}.sc2-prompt{min-height:0;padding:20px 10px}}
 
+  /* "How can I do this" — set-up methods under the interrupt fix */
+  .sc-how{margin:22px auto 0;max-width:720px}
+  .sc-how-btn{display:block;margin:0 auto;font-family:var(--mono);font-size:.78rem;letter-spacing:.03em;padding:11px 22px;border-radius:999px;border:1px solid var(--line-strong);background:var(--paper-2);color:var(--ink);cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+  .sc-how-btn:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .sc-how-body{margin-top:20px;display:grid;gap:18px}
+  .sc-method{border:1px solid var(--line);border-radius:16px;padding:20px 18px;background:var(--white)}
+  .sc-method-tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--pine);font-weight:700}
+  .sc-method h4{font-family:var(--display);font-weight:700;font-size:1.1rem;margin:6px 0 4px;color:var(--ink)}
+  .sc-method .m-sub{font-size:.85rem;color:var(--ink-soft);margin:0 0 16px;line-height:1.5}
+  .sc-flow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin:4px 0 16px}
+  .fnode{text-align:center;padding:10px 13px;border-radius:12px;font-family:var(--display);font-weight:600;font-size:.86rem;color:#fff;min-width:92px;line-height:1.15}
+  .fnode small{display:block;font-family:var(--body);font-weight:600;font-size:.66rem;opacity:.92;margin-top:3px}
+  .fnode.src{background:var(--pine)}
+  .fnode.hub{background:var(--paper-2);color:var(--ink);border:1px solid var(--line-strong)}
+  .fnode.invest{background:var(--amber);color:var(--pine-deep)}
+  .fsplit{display:flex;flex-direction:column;gap:8px}
+  .farrow{font-family:var(--mono);color:var(--ink-soft);font-size:1.05rem;font-weight:700}
+  .subacct{border:1px solid var(--line-strong);border-radius:14px;background:var(--paper-2);padding:14px;margin:2px 0 16px}
+  .sa-head{font-family:var(--display);font-weight:700;font-size:.94rem;color:var(--ink);display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .sa-head span{font-family:var(--mono);font-weight:600;font-size:.66rem;letter-spacing:.04em;color:var(--ink-soft);text-transform:uppercase}
+  .sa-sub{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin:10px 0 8px}
+  .sa-buckets{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .sa-bucket{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:10px 8px;text-align:center;display:flex;flex-direction:column;gap:4px}
+  .sa-bucket span{font-size:.76rem;color:var(--ink);font-weight:600}
+  .sa-bucket b{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft)}
+  .sa-bucket.invest{background:var(--amber);border-color:var(--amber)}
+  .sa-bucket.invest span,.sa-bucket.invest b{color:var(--pine-deep)}
+  .sc-steps{margin:0;padding-left:20px;display:grid;gap:8px}
+  .sc-steps li{font-size:.85rem;color:var(--ink);line-height:1.5}
+  .sc-steps a{color:var(--pine);font-weight:600}
+  .sc-how-foot{text-align:center;font-size:.78rem;color:var(--ink-soft);margin:2px 0 0;line-height:1.5}
+  @media(max-width:640px){.sa-buckets{grid-template-columns:1fr}.fnode{min-width:78px;font-size:.8rem}}
+
   /* HUMAN LIFE VALUE */
   .hlv{display:grid;grid-template-columns:.85fr 1.15fr;gap:0;background:var(--white);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
   .hlv-inputs{background:var(--paper-2);padding:22px 24px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
@@ -1193,6 +1226,60 @@
           </div>
         </div>
       </div>
+      <div class="sc-how reveal" data-schow hidden>
+        <button type="button" class="sc-how-btn" data-schow-reveal>How can I actually do this? &#x2193;</button>
+        <div class="sc-how-body" data-schow-body hidden>
+          <div class="sc-method">
+            <span class="sc-method-tag">Method 1 &middot; Split at the source</span>
+            <h4>Split payouts through your processor or payroll</h4>
+            <p class="m-sub">Best if clients pay you through Stripe, Square, PayPal, or a payroll tool like Gusto. Every payout is split before it ever reaches you.</p>
+            <div class="sc-flow">
+              <div class="fnode src">Client pays</div>
+              <span class="farrow">&rarr;</span>
+              <div class="fnode hub">Processor / payroll<small>Stripe &middot; Square &middot; PayPal &middot; Gusto</small></div>
+              <span class="farrow">&rarr;</span>
+              <div class="fsplit">
+                <div class="fnode invest">20% &rarr; Fidelity<small>auto-buys your funds</small></div>
+                <div class="fnode hub">80% &rarr; Checking<small>everyday spending</small></div>
+              </div>
+            </div>
+            <ol class="sc-steps">
+              <li>In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> &rarr; Account Details, copy the <b>routing</b> and <b>account number</b> for your brokerage or Solo&nbsp;401(k)&nbsp;/&nbsp;SEP-IRA.</li>
+              <li>In your payout portal &mdash; <a href="https://stripe.com" target="_blank" rel="noopener">Stripe</a>, <a href="https://squareup.com" target="_blank" rel="noopener">Square</a>, <a href="https://www.paypal.com" target="_blank" rel="noopener">PayPal</a>, or <a href="https://gusto.com" target="_blank" rel="noopener">Gusto</a> &mdash; add Fidelity as a deposit target and set the split to <b>20% Fidelity / 80% checking</b>.</li>
+              <li>In Fidelity &rarr; Trade &rarr; <b>Recurring Investments</b>, schedule automatic buys of your index funds, ETFs, or stocks.</li>
+            </ol>
+          </div>
+          <div class="sc-method">
+            <span class="sc-method-tag">Method 2 &middot; Best for variable income</span>
+            <h4>Smart rules inside a business bank account</h4>
+            <p class="m-sub">Best if clients pay by check, wire, or a mix. Modern business banks split every deposit by percentage into sub-accounts &mdash; buckets that live inside one account.</p>
+            <div class="subacct">
+              <div class="sa-head">Business checking <span>Relay &middot; Novo &middot; Mercury</span></div>
+              <div class="sa-sub">Sub-accounts (buckets)</div>
+              <div class="sa-buckets">
+                <div class="sa-bucket"><span>Operating</span><b>80%</b></div>
+                <div class="sa-bucket"><span>Taxes set-aside</span><b>hold</b></div>
+                <div class="sa-bucket invest"><span>Investing bucket</span><b>20%</b></div>
+              </div>
+            </div>
+            <div class="sc-flow">
+              <div class="fnode src">Revenue in<small>checks &middot; wires</small></div>
+              <span class="farrow">&rarr;</span>
+              <div class="fnode hub">Main account</div>
+              <span class="farrow">&rarr;</span>
+              <div class="fnode invest">Investing bucket<small>auto-rule: 20%</small></div>
+              <span class="farrow">&rarr;</span>
+              <div class="fnode invest">Fidelity<small>recurring pull</small></div>
+            </div>
+            <ol class="sc-steps">
+              <li>Route <b>100%</b> of revenue into one main business account &mdash; <a href="https://relayfi.com" target="_blank" rel="noopener">Relay</a>, <a href="https://www.novo.co" target="_blank" rel="noopener">Novo</a>, or <a href="https://mercury.com" target="_blank" rel="noopener">Mercury</a>.</li>
+              <li>Add a rule: <b>every deposit &rarr; 20% into an Investing bucket</b> (a sub-account).</li>
+              <li>Link that bucket to <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> and set a recurring pull into your portfolio.</li>
+            </ol>
+          </div>
+          <p class="sc-how-foot">Percentages are illustrations, not advice. Pick one method &mdash; the point is that saving happens before you can spend it.</p>
+        </div>
+      </div>
         </div>
       </details>
 
@@ -1678,6 +1765,60 @@
                 </div>
                 <p class="sc2-cap">A wealth-building account skims 15&ndash;20% off the top first. Saving is automatic; spending now takes a deliberate decision.</p>
               </div>
+            </div>
+          </div>
+          <div class="sc-how" data-schow hidden>
+            <button type="button" class="sc-how-btn" data-schow-reveal>How can I actually do this? &#x2193;</button>
+            <div class="sc-how-body" data-schow-body hidden>
+              <div class="sc-method">
+                <span class="sc-method-tag">Method 1 &middot; Split at the source</span>
+                <h4>Split payouts through your processor or payroll</h4>
+                <p class="m-sub">Best if clients pay you through Stripe, Square, PayPal, or a payroll tool like Gusto. Every payout is split before it ever reaches you.</p>
+                <div class="sc-flow">
+                  <div class="fnode src">Client pays</div>
+                  <span class="farrow">&rarr;</span>
+                  <div class="fnode hub">Processor / payroll<small>Stripe &middot; Square &middot; PayPal &middot; Gusto</small></div>
+                  <span class="farrow">&rarr;</span>
+                  <div class="fsplit">
+                    <div class="fnode invest">20% &rarr; Fidelity<small>auto-buys your funds</small></div>
+                    <div class="fnode hub">80% &rarr; Checking<small>everyday spending</small></div>
+                  </div>
+                </div>
+                <ol class="sc-steps">
+                  <li>In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> &rarr; Account Details, copy the <b>routing</b> and <b>account number</b> for your brokerage or Solo&nbsp;401(k)&nbsp;/&nbsp;SEP-IRA.</li>
+                  <li>In your payout portal &mdash; <a href="https://stripe.com" target="_blank" rel="noopener">Stripe</a>, <a href="https://squareup.com" target="_blank" rel="noopener">Square</a>, <a href="https://www.paypal.com" target="_blank" rel="noopener">PayPal</a>, or <a href="https://gusto.com" target="_blank" rel="noopener">Gusto</a> &mdash; add Fidelity as a deposit target and set the split to <b>20% Fidelity / 80% checking</b>.</li>
+                  <li>In Fidelity &rarr; Trade &rarr; <b>Recurring Investments</b>, schedule automatic buys of your index funds, ETFs, or stocks.</li>
+                </ol>
+              </div>
+              <div class="sc-method">
+                <span class="sc-method-tag">Method 2 &middot; Best for variable income</span>
+                <h4>Smart rules inside a business bank account</h4>
+                <p class="m-sub">Best if clients pay by check, wire, or a mix. Modern business banks split every deposit by percentage into sub-accounts &mdash; buckets that live inside one account.</p>
+                <div class="subacct">
+                  <div class="sa-head">Business checking <span>Relay &middot; Novo &middot; Mercury</span></div>
+                  <div class="sa-sub">Sub-accounts (buckets)</div>
+                  <div class="sa-buckets">
+                    <div class="sa-bucket"><span>Operating</span><b>80%</b></div>
+                    <div class="sa-bucket"><span>Taxes set-aside</span><b>hold</b></div>
+                    <div class="sa-bucket invest"><span>Investing bucket</span><b>20%</b></div>
+                  </div>
+                </div>
+                <div class="sc-flow">
+                  <div class="fnode src">Revenue in<small>checks &middot; wires</small></div>
+                  <span class="farrow">&rarr;</span>
+                  <div class="fnode hub">Main account</div>
+                  <span class="farrow">&rarr;</span>
+                  <div class="fnode invest">Investing bucket<small>auto-rule: 20%</small></div>
+                  <span class="farrow">&rarr;</span>
+                  <div class="fnode invest">Fidelity<small>recurring pull</small></div>
+                </div>
+                <ol class="sc-steps">
+                  <li>Route <b>100%</b> of revenue into one main business account &mdash; <a href="https://relayfi.com" target="_blank" rel="noopener">Relay</a>, <a href="https://www.novo.co" target="_blank" rel="noopener">Novo</a>, or <a href="https://mercury.com" target="_blank" rel="noopener">Mercury</a>.</li>
+                  <li>Add a rule: <b>every deposit &rarr; 20% into an Investing bucket</b> (a sub-account).</li>
+                  <li>Link that bucket to <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> and set a recurring pull into your portfolio.</li>
+                </ol>
+              </div>
+              <p class="sc-how-foot">Percentages are illustrations, not advice. Pick one method &mdash; the point is that saving happens before you can spend it.</p>
             </div>
           </div>
         </div></div>
@@ -3326,11 +3467,25 @@
         const btn=sc.querySelector('[data-sc2-reveal]');
         const prompt=sc.querySelector('[data-sc2-prompt]');
         const fix=sc.querySelector('[data-sc2-fix]');
-        if(!btn||!fix) return;
-        btn.addEventListener('click',function(){
-          fix.hidden=false;
-          if(prompt) prompt.style.display='none';
-        });
+        const how=sc.parentElement?sc.parentElement.querySelector('[data-schow]'):null;
+        if(btn&&fix){
+          btn.addEventListener('click',function(){
+            fix.hidden=false;
+            if(prompt) prompt.style.display='none';
+            if(how) how.hidden=false;
+          });
+        }
+        if(how){
+          const hbtn=how.querySelector('[data-schow-reveal]');
+          const hbody=how.querySelector('[data-schow-body]');
+          if(hbtn&&hbody){
+            hbtn.addEventListener('click',function(){
+              const open=!hbody.hidden;
+              hbody.hidden=open;
+              hbtn.innerHTML=open?'How can I actually do this? ↓':'Hide setup steps ↑';
+            });
+          }
+        }
       });
     })();
 
