@@ -135,6 +135,16 @@
   .ib-out .ib-left{font-family:var(--display);font-weight:700;font-size:1.3rem}
   .ib-out.pos .ib-left{color:var(--pine)} .ib-out.neg .ib-left{color:var(--brick)}
 
+  /* variable-vs-flat income chart (item: Balance a variable income) */
+  .impl-chart{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .impl-chart svg{width:100%;height:auto;display:block}
+  .impl-chart .ic-title{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px}
+  .impl-chart .ic-legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px}
+  .impl-chart .ic-legend span{font-size:.76rem;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
+  .impl-chart .ic-legend i{width:14px;height:10px;border-radius:2px;flex:none;display:inline-block}
+  .impl-chart .ic-legend i.k-var{background:var(--amber-soft)}
+  .impl-chart .ic-legend i.k-flat{background:var(--pine);height:3px}
+
   @media (max-width:640px){
     .impl-card h2{font-size:1.6rem}
     .impl-detail{padding-left:14px}
@@ -210,11 +220,7 @@
       <button class="impl-x" id="implX" type="button" aria-label="Close">&times;</button>
     </div>
     <div class="impl-sub">
-      <p>Work top to bottom. Tick each one as you go &mdash; progress saves on this device.</p>
-      <div class="impl-toggle" role="group" aria-label="Target level">
-        <button type="button" data-level="moderate" class="on">Moderate</button>
-        <button type="button" data-level="optimal">Optimal</button>
-      </div>
+      <p>Work top to bottom, in order. Tick each one as you go &mdash; progress saves on this device.</p>
     </div>
     <div class="impl-progress">
       <div class="impl-bartrack"><div class="impl-bar" id="implBar"></div></div>
@@ -227,51 +233,77 @@
 
 <script>
 (function(){
+  var incomeChart =
+    '<div class="impl-chart">'+
+      '<div class="ic-title">Variable income vs. a steady paycheck</div>'+
+      '<svg viewBox="0 0 480 210" role="img" aria-label="Monthly income swings up and down while a steady paycheck line stays flat">'+
+        '<rect x="50.5" y="20" width="22" height="150" rx="3" fill="#F0C277"/>'+
+        '<rect x="85.5" y="147.5" width="22" height="22.5" rx="3" fill="#F0C277"/>'+
+        '<rect x="120.5" y="90" width="22" height="80" rx="3" fill="#F0C277"/>'+
+        '<rect x="155.5" y="35" width="22" height="135" rx="3" fill="#F0C277"/>'+
+        '<rect x="190.5" y="140" width="22" height="30" rx="3" fill="#F0C277"/>'+
+        '<rect x="225.5" y="50" width="22" height="120" rx="3" fill="#F0C277"/>'+
+        '<rect x="260.5" y="20" width="22" height="150" rx="3" fill="#F0C277"/>'+
+        '<rect x="295.5" y="110" width="22" height="60" rx="3" fill="#F0C277"/>'+
+        '<rect x="330.5" y="150" width="22" height="20" rx="3" fill="#F0C277"/>'+
+        '<rect x="365.5" y="80" width="22" height="90" rx="3" fill="#F0C277"/>'+
+        '<rect x="400.5" y="40" width="22" height="130" rx="3" fill="#F0C277"/>'+
+        '<rect x="435.5" y="132.5" width="22" height="37.5" rx="3" fill="#F0C277"/>'+
+        '<line x1="44" y1="170" x2="464" y2="170" stroke="rgba(20,32,28,.22)" stroke-width="1"/>'+
+        '<line x1="44" y1="95" x2="464" y2="95" stroke="#0E5240" stroke-width="2.5" stroke-dasharray="6 4"/>'+
+        '<text x="44" y="186" font-family="\'JetBrains Mono\',monospace" font-size="9" fill="#8e9c96">Jan</text>'+
+        '<text x="464" y="186" text-anchor="end" font-family="\'JetBrains Mono\',monospace" font-size="9" fill="#8e9c96">Dec</text>'+
+      '</svg>'+
+      '<div class="ic-legend"><span><i class="k-var"></i>What you actually earn each month</span><span><i class="k-flat"></i>What you pay yourself &mdash; a steady ~$3,000/mo</span></div>'+
+    '</div>';
   var ITEMS=[
-    {id:'mm',title:'Open a money market account',
-     moderate:'~1 month of expenses',optimal:'3–6 months of expenses',
+    {id:'emergency',title:'Build a six-month emergency fund',
+     optimal:'6 months of expenses, liquid',
      steps:[
-       'Open a <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> account — brokerage or Cash Management, free and about five minutes.',
-       'Link your bank and move your starter cash in.',
-       'Buy a money-market fund (e.g. <b>SPAXX</b> or <b>FDLXX</b>) so idle cash earns interest instead of sitting flat.',
-       'This is your emergency fund: safe, liquid, boring on purpose.']},
-    {id:'roth',title:'Open a Roth IRA',
-     moderate:'Start at $50–100 / month',optimal:'Max it — $7,000 in 2026',
-     steps:[
-       'In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a>, open a <b>Roth IRA</b> (needs earned income; high earners phase out).',
-       'Set a monthly auto-transfer from checking.',
-       'Then actually invest the cash — an S&amp;P 500 or total-market index fund (e.g. <b>FXAIX</b>) is the common default. Money sitting in the account isn’t invested until you buy something.',
-       'Growth and retirement withdrawals come out <b>tax-free</b>.']},
+       'This comes first. Before you invest a dollar, keep about <b>six months of expenses</b> in cash you can reach the same day.',
+       '<b>Liquidity</b> is the whole point — money you can get instantly, without selling investments at a loss or reaching for a credit card. A market dip or a lost client shouldn’t force a bad decision.',
+       'Hold it in a <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> money market account (buy <b>SPAXX</b> or <b>FDLXX</b>) or a high-yield savings account, so idle cash still earns interest.',
+       'Keep it separate from checking so you’re not tempted to spend it — and refill it whenever you dip in.']},
     {id:'cc',title:'Open a credit card &amp; build credit',
-     moderate:'One card, autopay the balance',optimal:'Pay in full, usage under 10%',
+     optimal:'Pay in full, usage under 10%',
      steps:[
        'Your credit score is your borrowing reputation — it sets your mortgage and auto-loan rates and can save tens of thousands over a lifetime.',
        'Open one starter or cash-back card.',
        'Put one small recurring bill on it and turn on <b>autopay in full</b>.',
        'Never carry a balance. On-time payments plus low utilization build the score fastest.']},
-    {id:'tax',title:'Open a taxable brokerage account',
-     moderate:'Invest what’s left after the Roth',optimal:'Automate weekly / monthly buys',
+    {id:'roth',title:'Open a Roth IRA',
+     optimal:'Max it — $7,500 in 2026',
      steps:[
+       '<b>Fund your emergency fund first.</b> Without six months of cash set aside, go easy here — put in little or nothing until that cushion exists. Roth money is meant to sit for decades, so it isn’t your backup.',
+       'In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a>, open a <b>Roth IRA</b> (needs earned income; high earners phase out).',
+       'Set a monthly auto-transfer from checking.',
+       'Then actually invest the cash — an S&amp;P 500 or total-market index fund (e.g. <b>FXAIX</b>) is the common default. Money sitting in the account isn’t invested until you buy something.',
+       'Growth and retirement withdrawals come out <b>tax-free</b>.']},
+    {id:'tax',title:'Open a taxable brokerage account',
+     optimal:'Automate weekly / monthly buys',
+     steps:[
+       '<b>Emergency fund still comes first.</b> Only invest money you won’t need soon — if your six-month cushion isn’t built, be cautious about how much you lock into the market, since selling in a downturn can mean a loss.',
        'In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a>, open a regular <b>brokerage (taxable)</b> account — no contribution limits, withdraw anytime.',
        'Most people simply buy an <b>S&amp;P 500 index fund</b> (e.g. <b>FXAIX</b> or <b>VOO</b>) and hold.',
-       'Turn on <b>recurring investments</b> so buying happens automatically.',
+       'To make it automatic, open the <b>Transact</b> menu in Fidelity and hit <b>Automate</b> — set a recurring schedule that buys your fund every week or month.',
        'Use this once the Roth is funded, or for goals before retirement.']},
     {id:'auto',title:'Automate your savings',
-     moderate:'Start at 5–10% off the top',optimal:'Route 20% before it hits checking',
+     optimal:'Route 20% before it hits checking',
      steps:[
        '<b>Pay yourself first</b> — saving should happen before you can spend it.',
        '<b>Method 1 · Split at the source.</b> Paid through <a href="https://stripe.com" target="_blank" rel="noopener">Stripe</a>, <a href="https://squareup.com" target="_blank" rel="noopener">Square</a>, <a href="https://www.paypal.com" target="_blank" rel="noopener">PayPal</a>, or <a href="https://gusto.com" target="_blank" rel="noopener">Gusto</a>? Copy your Fidelity routing + account number (Account Details), add Fidelity as a payout target, split <b>20% Fidelity / 80% checking</b>, then set Fidelity → Trade → <b>Recurring Investments</b>.',
        '<b>Method 2 · Bank rules (variable income).</b> Route 100% of revenue into one business account (<a href="https://relayfi.com" target="_blank" rel="noopener">Relay</a>, <a href="https://www.novo.co" target="_blank" rel="noopener">Novo</a>, <a href="https://mercury.com" target="_blank" rel="noopener">Mercury</a>), add a rule “every deposit → 20% into an Investing bucket,” then link that bucket to Fidelity with a recurring pull.',
        'See the full visual flow on the <a href="index.html" target="_blank" rel="noopener">home page</a> under “Interrupt the spending circuit.”']},
     {id:'balance',title:'Balance a variable income',
-     moderate:'Bank big-month surplus for lean months',optimal:'Pay yourself a steady monthly salary',
+     optimal:'Pay yourself a steady monthly salary',
+     extra:incomeChart,
      steps:[
        'Some months you clear $6,000, some months a few hundred. The goal is to cover every month evenly.',
        'Keep a <b>buffer account</b>. In fat months, don’t spend the surplus — park it there.',
        'Pay yourself a fixed monthly “salary” into checking based on your <b>average</b> income, not this month’s.',
        'Lean months draw from the buffer; fat months refill it. Your lifestyle stops swinging with your paycheck.']},
     {id:'budget',title:'Budget your fixed expenses',
-     moderate:'Fixed costs under half your income',optimal:'Fixed costs under ~30%',
+     optimal:'Fixed costs under ~30% of income',
      lead:'List your must-pay bills against your income and see what’s actually left to save and spend.',
      budget:true,
      steps:[
@@ -285,8 +317,8 @@
   var listEl=document.getElementById('implList'),
       barEl=document.getElementById('implBar'),
       countEl=document.getElementById('implCount');
-  var KEY='tr-impl', st={level:'moderate',done:{}};
-  try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){if(s.level)st.level=s.level;if(s.done&&typeof s.done==='object')st.done=s.done;}}catch(e){}
+  var KEY='tr-impl', st={done:{}};
+  try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.done&&typeof s.done==='object')st.done=s.done;}catch(e){}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
   function money(v){v=Math.round(v);return (v<0?'-$':'$')+Math.abs(v).toLocaleString('en-US');}
 
@@ -299,13 +331,14 @@
             '<button class="impl-check" type="button" data-check aria-pressed="'+(done?'true':'false')+'" aria-label="Mark done"><span class="ck"></span></button>'+
             '<button class="impl-main" type="button" data-expand aria-expanded="false">'+
               '<span class="impl-name">'+(i+1)+' &middot; '+it.title+'</span>'+
-              '<span class="impl-target '+st.level+'" data-target>'+it[st.level]+'</span>'+
+              '<span class="impl-target optimal" data-target>'+it.optimal+'</span>'+
               '<span class="impl-chev">&#x25BE;</span>'+
             '</button>'+
           '</div>'+
           '<div class="impl-detail" data-detail hidden>'+
             (it.lead?'<p class="impl-lead">'+it.lead+'</p>':'')+
             '<ol>'+it.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
+            (it.extra||'')+
             (it.budget?'<div class="impl-budget" data-ibudget></div>':'')+
           '</div>'+
         '</div>';
@@ -319,15 +352,6 @@
     barEl.style.width=(n/ITEMS.length*100)+'%';
     countEl.textContent=n+' of '+ITEMS.length;
   }
-  function setLevel(lv){
-    st.level=lv; save();
-    modal.querySelectorAll('.impl-toggle button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-level')===lv);});
-    ITEMS.forEach(function(it){
-      var t=listEl.querySelector('[data-item="'+it.id+'"] [data-target]');
-      if(t){t.textContent=it[lv];t.className='impl-target '+lv;}
-    });
-  }
-
   listEl.addEventListener('click',function(e){
     var chk=e.target.closest('[data-check]');
     if(chk){
@@ -343,9 +367,6 @@
       var openNow=!d.hidden; d.hidden=openNow;
       ex.setAttribute('aria-expanded',openNow?'false':'true');
     }
-  });
-  modal.querySelector('.impl-toggle').addEventListener('click',function(e){
-    var b=e.target.closest('button[data-level]'); if(b) setLevel(b.getAttribute('data-level'));
   });
 
   function openModal(){modal.classList.add('open');document.body.style.overflow='hidden';}
@@ -392,7 +413,6 @@
   }
 
   render();
-  setLevel(st.level);
 })();
 </script>
 
