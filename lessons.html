@@ -173,7 +173,7 @@
         <span class="ic-eyebrow">Start here</span>
         <h2>Implementation</h2>
         <p>Not a lesson &mdash; a checklist. The exact accounts to open, the order to do them in, and step-by-step how-to for each. Toggle Moderate or Optimal to set your pace.</p>
-        <span class="impl-badges"><span>Money market</span><span>Roth IRA</span><span>Credit</span><span>Taxable</span><span>Automation</span><span>Variable income</span><span>Budgeting</span></span>
+        <span class="impl-badges"><span>Financial planner</span><span>Emergency fund</span><span>Debt payoff</span><span>Credit score</span><span>401(k) match</span><span>Roth IRA</span><span>Taxable</span><span>Automation</span><span>Variable income</span><span>Budgeting</span></span>
       </span>
       <span class="ic-cta">Open the checklist &#8594;</span>
     </button>
@@ -224,7 +224,7 @@
     </div>
     <div class="impl-progress">
       <div class="impl-bartrack"><div class="impl-bar" id="implBar"></div></div>
-      <span class="impl-count" id="implCount">0 of 7</span>
+      <span class="impl-count" id="implCount">0 of 10</span>
     </div>
     <div class="impl-list" id="implList"></div>
     <p class="impl-foot">Educational only &mdash; not individualized advice. Fidelity is one option; other brokerages work the same way.</p>
@@ -257,13 +257,29 @@
       '<div class="ic-legend"><span><i class="k-var"></i>What you actually earn each month</span><span><i class="k-flat"></i>What you pay yourself &mdash; a steady ~$3,000/mo</span></div>'+
     '</div>';
   var ITEMS=[
+    {id:'planner',title:'Meet with a financial planner',
+     optimal:'Get a real plan, not just a checklist',
+     steps:[
+       'A good planner does far more than this list — taxes, insurance, estate, buying a home, retirement timing, and the trade-offs between all of them.',
+       'Treat these checkboxes as the foundation to have handled; a planner helps you build the rest on top and sidestep expensive mistakes.',
+       'New to why it matters? Read <a href="why-you-need-a-financial-planner.pdf" target="_blank" rel="noopener">this short guide</a>.',
+       'Questions? Reach out — <a href="tel:+14805892068">(480) 589-2068</a> or <a href="mailto:talonrucker@gmail.com">talonrucker@gmail.com</a>.']},
     {id:'emergency',title:'Build a six-month emergency fund',
      optimal:'6 months of expenses, liquid',
      steps:[
-       'This comes first. Before you invest a dollar, keep about <b>six months of expenses</b> in cash you can reach the same day.',
+       'Your safety net, before you invest a dollar. Aim for about <b>six months of expenses</b> in cash you can reach the same day.',
+       'Start small: get a <b>$1,000 or one-month buffer</b> first — enough that a flat tire doesn’t become credit-card debt. If you carry high-interest debt, knock that out next (step 3), then come back and build the full six months.',
        '<b>Liquidity</b> is the whole point — money you can get instantly, without selling investments at a loss or reaching for a credit card. A market dip or a lost client shouldn’t force a bad decision.',
        'Hold it in a <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> money market account (buy <b>SPAXX</b> or <b>FDLXX</b>) or a high-yield savings account, so idle cash still earns interest.',
        'Keep it separate from checking so you’re not tempted to spend it — and refill it whenever you dip in.']},
+    {id:'debt',title:'Kill high-interest debt',
+     optimal:'Zero balances above ~8% interest',
+     steps:[
+       'Paying off a card at 22% is a <b>guaranteed 22% return</b> — better than any investment can promise. That’s why this comes before the Roth and taxable accounts.',
+       'List every debt with its interest rate. Anything high-interest — credit cards, payday loans, often ~8%+ — gets attacked first.',
+       'Two proven methods: <b>avalanche</b> (highest rate first, cheapest overall) or <b>snowball</b> (smallest balance first, best for momentum). Pick whichever keeps you going.',
+       'Keep paying minimums on everything, then throw every extra dollar at the target debt until it’s gone.',
+       'Low-rate debt — most mortgages, many student and auto loans — can wait; you can invest alongside it.']},
     {id:'cc',title:'Open a credit card &amp; build credit',
      optimal:'Pay in full, usage under 10%',
      steps:[
@@ -271,6 +287,13 @@
        'Open one starter or cash-back card.',
        'Put one small recurring bill on it and turn on <b>autopay in full</b>.',
        'Never carry a balance. On-time payments plus low utilization build the score fastest.']},
+    {id:'match',title:'Capture your employer 401(k) match',
+     optimal:'Contribute enough for the full match',
+     steps:[
+       'If your job offers a 401(k) match, it’s <b>free money</b> — often a 50–100% instant return you can’t get anywhere else.',
+       'In your payroll or benefits portal, set your contribution at least high enough to get the <b>full match</b> (many employers match up to 3–6% of pay).',
+       'Grab this before maxing a Roth IRA — take the free money first, then move on.',
+       'No match, or self-employed? Skip to the Roth — a Solo 401(k) or SEP-IRA is the self-employed version.']},
     {id:'roth',title:'Open a Roth IRA',
      optimal:'Max it — $7,500 in 2026',
      steps:[
