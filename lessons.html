@@ -64,6 +64,83 @@
     .hero{padding:40px 0 4px}
     .bar{padding:12px 18px}
   }
+
+  /* ---- Implementation banner + checklist modal ---- */
+  .impl-card{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:20px 30px;justify-content:space-between;background:linear-gradient(135deg,var(--pine),var(--pine-deep));color:#fff;border:0;border-radius:18px;padding:28px 30px;box-shadow:var(--shadow);cursor:pointer;text-align:left;font:inherit;transition:transform .2s ease,box-shadow .2s ease}
+  .impl-card:hover{transform:translateY(-4px);box-shadow:0 1px 2px rgba(10,40,30,.05),0 26px 54px -22px rgba(10,40,30,.55)}
+  .impl-card .ic-left{max-width:60ch}
+  .impl-card .ic-eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber-soft)}
+  .impl-card h2{font-family:var(--display);font-weight:700;font-size:1.9rem;letter-spacing:-.02em;margin:8px 0 8px;color:#fff}
+  .impl-card p{color:rgba(255,255,255,.85);font-size:1rem;margin:0}
+  .impl-badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .impl-badges span{font-family:var(--mono);font-size:.64rem;letter-spacing:.03em;color:#fff;background:rgba(255,255,255,.16);border-radius:99px;padding:4px 10px}
+  .ic-cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--pine);font-weight:700;padding:12px 22px;border-radius:999px;font-size:.95rem;white-space:nowrap}
+
+  .impl-modal{position:fixed;inset:0;z-index:60;display:none;align-items:flex-start;justify-content:center;padding:34px 16px;background:rgba(10,25,20,.55);backdrop-filter:blur(4px);overflow-y:auto}
+  .impl-modal.open{display:flex}
+  .impl-box{background:var(--paper);width:100%;max-width:640px;border-radius:20px;box-shadow:var(--shadow);overflow:hidden;margin:auto}
+  .impl-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px 14px;background:var(--white);border-bottom:1px solid var(--line)}
+  .impl-head .impl-eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .impl-head h2{font-family:var(--display);font-weight:700;font-size:1.5rem;margin-top:4px}
+  .impl-x{border:0;background:none;font-size:1.7rem;line-height:1;color:var(--ink-soft);cursor:pointer;padding:0 4px}
+  .impl-sub{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:14px 24px;background:var(--white);border-bottom:1px solid var(--line)}
+  .impl-sub p{font-size:.86rem;color:var(--ink-soft);margin:0;flex:1;min-width:190px}
+  .impl-toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper-2)}
+  .impl-toggle button{border:0;background:none;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;padding:8px 16px;cursor:pointer;color:var(--ink-soft)}
+  .impl-toggle button.on[data-level="moderate"]{background:var(--amber);color:#3a2a08}
+  .impl-toggle button.on[data-level="optimal"]{background:var(--pine);color:#fff}
+  .impl-progress{display:flex;align-items:center;gap:12px;padding:12px 24px;background:var(--white);border-bottom:1px solid var(--line)}
+  .impl-bartrack{flex:1;height:8px;background:var(--paper-2);border-radius:999px;overflow:hidden}
+  .impl-bar{height:100%;width:0;background:var(--pine);transition:width .25s}
+  .impl-count{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);white-space:nowrap}
+  .impl-list{padding:6px 16px 4px}
+  .impl-item{border-bottom:1px solid var(--line)}
+  .impl-item:last-child{border-bottom:0}
+  .impl-row{display:flex;align-items:center;gap:12px;padding:14px 8px}
+  .impl-check{flex:none;width:26px;height:26px;border:2px solid var(--line-strong);border-radius:8px;background:var(--white);cursor:pointer;display:grid;place-items:center;padding:0}
+  .impl-check .ck{width:12px;height:7px;border-left:2.6px solid #fff;border-bottom:2.6px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .impl-item.done .impl-check{background:var(--pine);border-color:var(--pine)}
+  .impl-item.done .impl-check .ck{opacity:1}
+  .impl-main{flex:1;display:flex;align-items:center;gap:12px;background:none;border:0;cursor:pointer;text-align:left;font:inherit;padding:4px 0;min-width:0}
+  .impl-name{font-family:var(--display);font-weight:600;font-size:1.02rem;color:var(--ink);flex:1;min-width:0}
+  .impl-item.done .impl-name{color:var(--ink-soft);text-decoration:line-through}
+  .impl-target{font-family:var(--mono);font-size:.64rem;letter-spacing:.02em;padding:4px 9px;border-radius:999px;white-space:nowrap}
+  .impl-target.moderate{background:var(--amber-soft);color:#3a2a08}
+  .impl-target.optimal{background:var(--sage);color:var(--pine-deep)}
+  .impl-chev{color:var(--ink-soft);transition:transform .2s;flex:none;font-size:.8rem}
+  .impl-main[aria-expanded="true"] .impl-chev{transform:rotate(180deg)}
+  .impl-detail{padding:2px 8px 18px 50px}
+  .impl-lead{font-size:.88rem;color:var(--ink-soft);margin:0 0 12px}
+  .impl-detail ol{margin:0;padding-left:18px;display:grid;gap:8px}
+  .impl-detail li{font-size:.88rem;color:var(--ink);line-height:1.5}
+  .impl-detail a{color:var(--pine);font-weight:600}
+  .impl-foot{padding:12px 24px 22px;font-size:.76rem;color:var(--ink-soft);text-align:center}
+
+  /* embedded fixed-expense budget calculator (item: Budgeting) */
+  .impl-budget{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .ib-f{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .ib-f span{font-size:.86rem;font-weight:600;color:var(--ink)}
+  .ib-in{display:flex;align-items:center;background:#fff;border:1px solid var(--line-strong);border-radius:8px;padding:2px 8px}
+  .ib-in .pre{color:var(--ink-soft);font-size:.9rem}
+  .ib-in input{border:0;outline:0;text-align:right;width:96px;padding:7px 4px;font-family:var(--body);font-size:.95rem;background:transparent;color:var(--ink)}
+  .ib-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .ib-row .ib-label{flex:1;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:8px 9px;font-family:var(--body);font-size:.88rem;background:#fff;color:var(--ink)}
+  .ib-row .ib-in input{width:78px}
+  .ib-del{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);font-size:1.1rem;line-height:1;cursor:pointer}
+  .ib-del:hover{background:var(--brick);border-color:var(--brick);color:#fff}
+  .ib-add{font-family:var(--mono);font-size:.72rem;padding:8px 14px;border-radius:999px;border:1px dashed var(--line-strong);background:var(--paper-2);color:var(--pine);cursor:pointer;margin-top:2px}
+  .ib-add:hover{background:var(--pine);color:#fff;border-style:solid;border-color:var(--pine)}
+  .ib-out{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .ib-out span{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+  .ib-out .ib-left{font-family:var(--display);font-weight:700;font-size:1.3rem}
+  .ib-out.pos .ib-left{color:var(--pine)} .ib-out.neg .ib-left{color:var(--brick)}
+
+  @media (max-width:640px){
+    .impl-card h2{font-size:1.6rem}
+    .impl-detail{padding-left:14px}
+    .impl-modal{padding:16px 10px}
+    .impl-name{font-size:.96rem}
+  }
 </style>
 </head>
 <body>
@@ -81,6 +158,16 @@
   </header>
 
   <main class="grid">
+    <button class="impl-card" id="implOpen" type="button">
+      <span class="ic-left">
+        <span class="ic-eyebrow">Start here</span>
+        <h2>Implementation</h2>
+        <p>Not a lesson &mdash; a checklist. The exact accounts to open, the order to do them in, and step-by-step how-to for each. Toggle Moderate or Optimal to set your pace.</p>
+        <span class="impl-badges"><span>Money market</span><span>Roth IRA</span><span>Credit</span><span>Taxable</span><span>Automation</span><span>Variable income</span><span>Budgeting</span></span>
+      </span>
+      <span class="ic-cta">Open the checklist &#8594;</span>
+    </button>
+
     <a class="lcard" href="lesson-protection.html">
       <div class="lc-top"><span class="lc-num">Lesson 01</span><span class="lc-mins">9 slides</span></div>
       <h2>Protection Planning</h2>
@@ -111,6 +198,203 @@
     <span>Questions? <a href="tel:+14805892068">(480) 589-2068</a> · <a href="mailto:talonrucker@gmail.com">talonrucker@gmail.com</a></span>
   </footer>
 </div>
+
+<!-- Implementation checklist modal -->
+<div class="impl-modal" id="implModal" role="dialog" aria-modal="true" aria-labelledby="implTitle">
+  <div class="impl-box">
+    <div class="impl-head">
+      <div>
+        <span class="impl-eyebrow">Implementation</span>
+        <h2 id="implTitle">Your money setup, in order</h2>
+      </div>
+      <button class="impl-x" id="implX" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div class="impl-sub">
+      <p>Work top to bottom. Tick each one as you go &mdash; progress saves on this device.</p>
+      <div class="impl-toggle" role="group" aria-label="Target level">
+        <button type="button" data-level="moderate" class="on">Moderate</button>
+        <button type="button" data-level="optimal">Optimal</button>
+      </div>
+    </div>
+    <div class="impl-progress">
+      <div class="impl-bartrack"><div class="impl-bar" id="implBar"></div></div>
+      <span class="impl-count" id="implCount">0 of 7</span>
+    </div>
+    <div class="impl-list" id="implList"></div>
+    <p class="impl-foot">Educational only &mdash; not individualized advice. Fidelity is one option; other brokerages work the same way.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  var ITEMS=[
+    {id:'mm',title:'Open a money market account',
+     moderate:'~1 month of expenses',optimal:'3–6 months of expenses',
+     steps:[
+       'Open a <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> account — brokerage or Cash Management, free and about five minutes.',
+       'Link your bank and move your starter cash in.',
+       'Buy a money-market fund (e.g. <b>SPAXX</b> or <b>FDLXX</b>) so idle cash earns interest instead of sitting flat.',
+       'This is your emergency fund: safe, liquid, boring on purpose.']},
+    {id:'roth',title:'Open a Roth IRA',
+     moderate:'Start at $50–100 / month',optimal:'Max it — $7,000 in 2026',
+     steps:[
+       'In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a>, open a <b>Roth IRA</b> (needs earned income; high earners phase out).',
+       'Set a monthly auto-transfer from checking.',
+       'Then actually invest the cash — an S&amp;P 500 or total-market index fund (e.g. <b>FXAIX</b>) is the common default. Money sitting in the account isn’t invested until you buy something.',
+       'Growth and retirement withdrawals come out <b>tax-free</b>.']},
+    {id:'cc',title:'Open a credit card &amp; build credit',
+     moderate:'One card, autopay the balance',optimal:'Pay in full, usage under 10%',
+     steps:[
+       'Your credit score is your borrowing reputation — it sets your mortgage and auto-loan rates and can save tens of thousands over a lifetime.',
+       'Open one starter or cash-back card.',
+       'Put one small recurring bill on it and turn on <b>autopay in full</b>.',
+       'Never carry a balance. On-time payments plus low utilization build the score fastest.']},
+    {id:'tax',title:'Open a taxable brokerage account',
+     moderate:'Invest what’s left after the Roth',optimal:'Automate weekly / monthly buys',
+     steps:[
+       'In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a>, open a regular <b>brokerage (taxable)</b> account — no contribution limits, withdraw anytime.',
+       'Most people simply buy an <b>S&amp;P 500 index fund</b> (e.g. <b>FXAIX</b> or <b>VOO</b>) and hold.',
+       'Turn on <b>recurring investments</b> so buying happens automatically.',
+       'Use this once the Roth is funded, or for goals before retirement.']},
+    {id:'auto',title:'Automate your savings',
+     moderate:'Start at 5–10% off the top',optimal:'Route 20% before it hits checking',
+     steps:[
+       '<b>Pay yourself first</b> — saving should happen before you can spend it.',
+       '<b>Method 1 · Split at the source.</b> Paid through <a href="https://stripe.com" target="_blank" rel="noopener">Stripe</a>, <a href="https://squareup.com" target="_blank" rel="noopener">Square</a>, <a href="https://www.paypal.com" target="_blank" rel="noopener">PayPal</a>, or <a href="https://gusto.com" target="_blank" rel="noopener">Gusto</a>? Copy your Fidelity routing + account number (Account Details), add Fidelity as a payout target, split <b>20% Fidelity / 80% checking</b>, then set Fidelity → Trade → <b>Recurring Investments</b>.',
+       '<b>Method 2 · Bank rules (variable income).</b> Route 100% of revenue into one business account (<a href="https://relayfi.com" target="_blank" rel="noopener">Relay</a>, <a href="https://www.novo.co" target="_blank" rel="noopener">Novo</a>, <a href="https://mercury.com" target="_blank" rel="noopener">Mercury</a>), add a rule “every deposit → 20% into an Investing bucket,” then link that bucket to Fidelity with a recurring pull.',
+       'See the full visual flow on the <a href="index.html" target="_blank" rel="noopener">home page</a> under “Interrupt the spending circuit.”']},
+    {id:'balance',title:'Balance a variable income',
+     moderate:'Bank big-month surplus for lean months',optimal:'Pay yourself a steady monthly salary',
+     steps:[
+       'Some months you clear $6,000, some months a few hundred. The goal is to cover every month evenly.',
+       'Keep a <b>buffer account</b>. In fat months, don’t spend the surplus — park it there.',
+       'Pay yourself a fixed monthly “salary” into checking based on your <b>average</b> income, not this month’s.',
+       'Lean months draw from the buffer; fat months refill it. Your lifestyle stops swinging with your paycheck.']},
+    {id:'budget',title:'Budget your fixed expenses',
+     moderate:'Fixed costs under half your income',optimal:'Fixed costs under ~30%',
+     lead:'List your must-pay bills against your income and see what’s actually left to save and spend.',
+     budget:true,
+     steps:[
+       'Add each recurring bill — rent, insurance, utilities, subscriptions.',
+       'Compare the total to your income; the leftover is your room to save and enjoy.',
+       'The bigger that gap, the faster you build wealth. Attack the largest fixed costs first.']}
+  ];
+
+  var card=document.getElementById('implOpen'), modal=document.getElementById('implModal');
+  if(!card||!modal) return;
+  var listEl=document.getElementById('implList'),
+      barEl=document.getElementById('implBar'),
+      countEl=document.getElementById('implCount');
+  var KEY='tr-impl', st={level:'moderate',done:{}};
+  try{var s=JSON.parse(localStorage.getItem(KEY)||'null');if(s){if(s.level)st.level=s.level;if(s.done&&typeof s.done==='object')st.done=s.done;}}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
+  function money(v){v=Math.round(v);return (v<0?'-$':'$')+Math.abs(v).toLocaleString('en-US');}
+
+  function render(){
+    var h='';
+    ITEMS.forEach(function(it,i){
+      var done=!!st.done[it.id];
+      h+='<div class="impl-item'+(done?' done':'')+'" data-item="'+it.id+'">'+
+          '<div class="impl-row">'+
+            '<button class="impl-check" type="button" data-check aria-pressed="'+(done?'true':'false')+'" aria-label="Mark done"><span class="ck"></span></button>'+
+            '<button class="impl-main" type="button" data-expand aria-expanded="false">'+
+              '<span class="impl-name">'+(i+1)+' &middot; '+it.title+'</span>'+
+              '<span class="impl-target '+st.level+'" data-target>'+it[st.level]+'</span>'+
+              '<span class="impl-chev">&#x25BE;</span>'+
+            '</button>'+
+          '</div>'+
+          '<div class="impl-detail" data-detail hidden>'+
+            (it.lead?'<p class="impl-lead">'+it.lead+'</p>':'')+
+            '<ol>'+it.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
+            (it.budget?'<div class="impl-budget" data-ibudget></div>':'')+
+          '</div>'+
+        '</div>';
+    });
+    listEl.innerHTML=h;
+    listEl.querySelectorAll('[data-ibudget]').forEach(initBudget);
+    updateProgress();
+  }
+  function updateProgress(){
+    var n=ITEMS.filter(function(it){return st.done[it.id];}).length;
+    barEl.style.width=(n/ITEMS.length*100)+'%';
+    countEl.textContent=n+' of '+ITEMS.length;
+  }
+  function setLevel(lv){
+    st.level=lv; save();
+    modal.querySelectorAll('.impl-toggle button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-level')===lv);});
+    ITEMS.forEach(function(it){
+      var t=listEl.querySelector('[data-item="'+it.id+'"] [data-target]');
+      if(t){t.textContent=it[lv];t.className='impl-target '+lv;}
+    });
+  }
+
+  listEl.addEventListener('click',function(e){
+    var chk=e.target.closest('[data-check]');
+    if(chk){
+      var item=chk.closest('[data-item]'), id=item.getAttribute('data-item');
+      st.done[id]=!st.done[id];
+      item.classList.toggle('done',!!st.done[id]);
+      chk.setAttribute('aria-pressed',st.done[id]?'true':'false');
+      save(); updateProgress(); return;
+    }
+    var ex=e.target.closest('[data-expand]');
+    if(ex){
+      var d=ex.closest('.impl-item').querySelector('[data-detail]');
+      var openNow=!d.hidden; d.hidden=openNow;
+      ex.setAttribute('aria-expanded',openNow?'false':'true');
+    }
+  });
+  modal.querySelector('.impl-toggle').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-level]'); if(b) setLevel(b.getAttribute('data-level'));
+  });
+
+  function openModal(){modal.classList.add('open');document.body.style.overflow='hidden';}
+  function closeModal(){modal.classList.remove('open');document.body.style.overflow='';}
+  card.addEventListener('click',openModal);
+  document.getElementById('implX').addEventListener('click',closeModal);
+  modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
+
+  /* embedded fixed-expense budget calculator */
+  function initBudget(wrap){
+    var income=60000;
+    var list=[{label:'Rent',amt:18000},{label:'Insurance',amt:3000},{label:'Utilities & phone',amt:3600},{label:'Subscriptions',amt:1200}];
+    function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+    function total(){var t=0;list.forEach(function(x){t+=+x.amt||0;});return t;}
+    function idx(el){var r=el.closest('[data-ibrow]');return r?+r.getAttribute('data-ibrow'):-1;}
+    function calc(){
+      var left=income-total(), o=wrap.querySelector('[data-ibout]');
+      o.className='ib-out '+(left<0?'neg':'pos');
+      o.innerHTML='<span>Fixed '+money(total())+' &middot; Income '+money(income)+'</span><span class="ib-left">'+money(left)+' left</span>';
+    }
+    function draw(){
+      var h='<div class="ib-f"><span>Take-home income / year</span><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibinc value="'+income.toLocaleString('en-US')+'"></span></div>';
+      list.forEach(function(x,i){
+        h+='<div class="ib-row" data-ibrow="'+i+'"><input type="text" class="ib-label" data-iblabel placeholder="e.g. Rent" value="'+esc(x.label)+'"><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibamt value="'+(+x.amt||0).toLocaleString('en-US')+'"></span><button type="button" class="ib-del" data-ibdel aria-label="Remove">&times;</button></div>';
+      });
+      h+='<button type="button" class="ib-add" data-ibadd>+ Add expense</button><div class="ib-out" data-ibout></div>';
+      wrap.innerHTML=h; calc();
+    }
+    draw();
+    wrap.addEventListener('input',function(e){
+      var inc=e.target.closest('[data-ibinc]'); if(inc){income=+String(inc.value).replace(/[^0-9.]/g,'')||0;calc();return;}
+      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i]){list[i].amt=+String(a.value).replace(/[^0-9.]/g,'')||0;calc();}return;}
+      var l=e.target.closest('[data-iblabel]'); if(l){var j=idx(l);if(j>=0&&list[j])list[j].label=l.value;return;}
+    });
+    wrap.addEventListener('blur',function(e){
+      var inc=e.target.closest('[data-ibinc]'); if(inc){inc.value=(+income||0).toLocaleString('en-US');return;}
+      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i])a.value=(+list[i].amt||0).toLocaleString('en-US');}
+    },true);
+    wrap.addEventListener('click',function(e){
+      var add=e.target.closest('[data-ibadd]'); if(add){list.push({label:'',amt:0});draw();var ls=wrap.querySelectorAll('[data-iblabel]');if(ls.length)ls[ls.length-1].focus();return;}
+      var del=e.target.closest('[data-ibdel]'); if(del){var i=idx(del);if(i>=0){list.splice(i,1);draw();}return;}
+    });
+  }
+
+  render();
+  setLevel(st.level);
+})();
+</script>
 
 </body>
 </html>
