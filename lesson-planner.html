@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Financial Planner — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  /* Deliberately loud: the way back to the site should never be hunted for. */
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:52px 62px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:4.1rem;line-height:1.02;letter-spacing:-.028em;margin:18px 0 20px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.5rem;line-height:1.08;letter-spacing:-.022em;margin:14px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  .lede{font-size:1.15rem;color:var(--ink-soft);max-width:62ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* title slide */
+  .title-grid{display:grid;grid-template-columns:1.3fr .85fr;gap:52px;align-items:center;flex:1}
+  .title-card{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:32px;box-shadow:var(--shadow)}
+  .title-card .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .agenda{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .agenda li{display:flex;gap:12px;align-items:flex-start;font-size:.98rem;color:#C9D9D2}
+  .agenda b{font-family:var(--mono);font-size:.72rem;color:var(--amber-soft);padding-top:.28em;flex:none}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.15fr .85fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px 26px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.2rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.98rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:16px;margin-top:22px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.3rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+
+  /* out-of-your-control chip cloud + the two levers you DO control */
+  .chipcloud{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .chipcloud span{font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;color:var(--ink-soft);background:var(--white);border:1px solid var(--line);border-radius:99px;padding:7px 12px}
+  .levers{display:flex;flex-direction:column;gap:14px}
+  .lever{background:var(--white);border:1px solid var(--line);border-left:3px solid var(--pine);border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  .lever .lk{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine)}
+  .lever h3{font-family:var(--display);font-weight:600;font-size:1.18rem;margin:3px 0 4px}
+  .lever p{font-size:.92rem;color:var(--ink-soft)}
+  .lever.amber{border-left-color:var(--amber)}
+  .lever.amber .lk{color:var(--amber)}
+
+  /* priority ladder */
+  .ladder{display:flex;flex-direction:column;gap:11px;margin-top:8px}
+  .rung{display:grid;grid-template-columns:46px 1fr;gap:16px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:13px;padding:14px 18px;box-shadow:var(--shadow);transition:.2s}
+  .rung:hover{border-color:var(--pine);transform:translateX(3px)}
+  .rung .rk2{width:46px;height:46px;border-radius:12px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:1.25rem}
+  .rung h3{font-family:var(--display);font-weight:600;font-size:1.14rem;letter-spacing:-.01em}
+  .rung p{font-size:.9rem;color:var(--ink-soft)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:30px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:22px 26px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:15px;overflow:auto}
+  /* denser variant for panels carrying five or more fields */
+  .inputs.tight{gap:9px;padding:16px 24px}
+  .inputs.tight .ih{padding-bottom:9px}
+  .inputs.tight .hint{font-size:.72rem;margin-top:4px}
+  .inputs.tight .inwrap input{padding-top:8px;padding-bottom:8px;font-size:1.05rem}
+  .inputs.tight .fld label{margin-bottom:4px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:12px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.12rem;color:var(--ink);padding:11px 13px 11px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:56px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:26px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.brick{color:#F0A093}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.35rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.3rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px}
+
+  /* growth mini-chart */
+  .spark{margin:12px 0 2px}
+  .spark svg{display:block;width:100%;height:auto}
+  .sp-area{fill:rgba(240,194,119,.16)}
+  .sp-line{fill:none;stroke:var(--amber-soft);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+  .sp-ax{stroke:rgba(255,255,255,.16);stroke-width:1}
+  .sp-lab{font-family:var(--mono);font-size:11px;fill:#7FA295}
+
+  /* ---------- GOALS PLANNER ---------- */
+  .g-head{display:grid;grid-template-columns:1fr 96px 62px 30px;gap:8px;font-family:var(--mono);font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;color:#8e9c96;padding:0 2px 2px}
+  .goals-wrap{display:flex;flex-direction:column;gap:8px}
+  .goalrow{display:grid;grid-template-columns:1fr 96px 62px 30px;gap:8px;align-items:center}
+  .goalrow .g-lab{min-width:0;border:1px solid var(--line-strong);border-radius:9px;padding:9px 10px;font-family:var(--body);font-size:.9rem;background:var(--paper);color:var(--ink)}
+  .goalrow .g-in{display:flex;align-items:center;background:var(--paper);border:1px solid var(--line-strong);border-radius:9px;padding:0 8px}
+  .goalrow .g-in .pre{color:#9aa6a1;font-size:.85rem}
+  .goalrow .g-in input{border:0;outline:0;background:transparent;width:100%;text-align:right;padding:9px 2px;font-family:var(--display);font-weight:600;font-size:.92rem;color:var(--ink)}
+  .goalrow .g-yr{border:1px solid var(--line-strong);border-radius:9px;padding:9px 4px;text-align:center;font-family:var(--display);font-weight:600;font-size:.92rem;background:var(--paper);color:var(--ink);width:100%}
+  .goalrow input:focus{outline:none;border-color:var(--pine)}
+  .g-del{width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);font-size:1.05rem;line-height:1;cursor:pointer}
+  .g-del:hover{background:var(--brick);border-color:var(--brick);color:#fff}
+  .g-add{font-family:var(--mono);font-size:.72rem;padding:8px 14px;border-radius:999px;border:1px dashed var(--line-strong);background:var(--paper-2);color:var(--pine);cursor:pointer;margin-top:2px;align-self:flex-start}
+  .g-add:hover{background:var(--pine);color:#fff;border-style:solid;border-color:var(--pine)}
+  .gbars{display:flex;flex-direction:column;gap:12px;margin:16px 0 4px;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .gbar .gb-top{display:flex;justify-content:space-between;align-items:baseline;font-size:.88rem;color:#B6C7BF;margin-bottom:6px;gap:10px}
+  .gbar .gb-top .gb-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gbar .gb-top b{color:#fff;font-family:var(--display);font-weight:600;flex:none}
+  .gbar .gb-track{height:9px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden}
+  .gbar .gb-track i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),#4FB08D);transition:width .35s}
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.3rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.95rem;color:var(--ink-soft);flex:1}
+  .rcard .rv{font-family:var(--display);font-weight:700;font-size:1.9rem;color:var(--pine);margin-top:14px;letter-spacing:-.02em}
+
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ----------
+     Below this width the 16:9 stage would have to scale down so far that the
+     text stops being legible, so we drop the slide framing entirely: one
+     lesson step at a time, stacked in a single column at full reading size. */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:30px 20px 34px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.3rem;margin:14px 0 16px}
+    h2.st{font-size:1.75rem}
+    .lede{font-size:1.02rem}
+    .pull{font-size:1.1rem}
+
+    /* every side-by-side layout becomes a single column */
+    .title-grid,.two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.6rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 01 · Your Financial Planner</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 9</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TITLE -->
+      <section class="slide on">
+        <div class="title-grid">
+          <div>
+            <span class="eyebrow">Interactive lesson</span>
+            <h1 class="big">A plan beats a <em>prediction</em>.</h1>
+            <p class="lede">You can't control the market, the tax code, or the economy. You can control two things &mdash; and a planner's whole job is to make those two things automatic. This lesson shows what those levers are and lets you price your own goals.</p>
+          </div>
+          <div class="title-card">
+            <div class="rk">What we'll cover</div>
+            <ul class="agenda">
+              <li><b>01</b><span>What you can &mdash; and can't &mdash; control</span></li>
+              <li><b>02</b><span>Start with your balance sheet</span></li>
+              <li><b>03</b><span>The order that actually works</span></li>
+              <li><b>04</b><span>Calculator &mdash; the rate of savings</span></li>
+              <li><b>05</b><span>Calculator &mdash; your future income</span></li>
+              <li><b>06</b><span>Set your goals &mdash; and price them</span></li>
+              <li><b>07</b><span>What a planner actually does</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> or click Next</span></div>
+      </section>
+
+      <!-- 2 — CONCEPT: CONTROL -->
+      <section class="slide">
+        <span class="eyebrow">Concept</span>
+        <h2 class="st">Two levers are <span class="pine">yours</span>. The rest is weather.</h2>
+        <div class="two" style="margin-top:20px">
+          <div>
+            <p style="color:var(--ink-soft);max-width:46ch">Most of what keeps people up at night is out of their hands. Trying to predict it usually just triggers knee-jerk decisions off the news.</p>
+            <div class="chipcloud">
+              <span>Market crashes</span><span>Inflation</span><span>Tax law</span><span>Interest rates</span><span>Recessions</span><span>Job cuts</span><span>Health events</span><span>Elections</span>
+            </div>
+            <div class="pull" style="margin-top:22px;font-size:1.12rem">Peace of mind doesn't come from predicting the future. It comes from controlling what you actually can.</div>
+          </div>
+          <div class="levers">
+            <div class="lever">
+              <div class="lk">Lever 01 &middot; in your control</div>
+              <h3>Protection</h3>
+              <p>Deciding today to insulate yourself from the risks that would wipe out a plan &mdash; a lost income, an illness, a lawsuit. A present-tense decision, not a prediction.</p>
+            </div>
+            <div class="lever amber">
+              <div class="lk">Lever 02 &middot; in your control</div>
+              <h3>Cash flow</h3>
+              <p>Not just saving &mdash; saving <b>effectively</b>, toward your goals. How much of each paycheck you keep, and where it goes, is 100% your call.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>02 — WHAT YOU CONTROL</span><span>PROTECTION &amp; CASH FLOW</span></div>
+      </section>
+
+      <!-- 3 — BALANCE SHEET / NET WORTH -->
+      <section class="slide">
+        <span class="eyebrow">Where planning begins</span>
+        <h2 class="st" style="margin-bottom:6px">Start with today, not a guess.</h2>
+        <p class="lede" style="margin-bottom:14px">Instead of guessing the future and working backward, begin with the one thing you know for certain: where you stand today. That's your balance sheet &mdash; and every plan aims to grow one number over time.</p>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your balance sheet</div>
+            <div class="fld">
+              <label for="nw_assets">Everything you own (assets)</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="nw_assets" inputmode="numeric" value="180,000"></div>
+              <div class="hint">Cash, savings, investments, retirement accounts, home, car, business.</div>
+            </div>
+            <div class="fld">
+              <label for="nw_liab">Everything you owe (liabilities)</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="nw_liab" inputmode="numeric" value="120,000"></div>
+              <div class="hint">Mortgage, student loans, car loans, credit cards.</div>
+            </div>
+            <div class="card" style="margin-top:auto">
+              <h3 style="font-size:1.05rem">Why a planner starts here</h3>
+              <p style="font-size:.9rem">Pulling every account into one picture is where forgotten money turns up &mdash; an old 401(k), a dormant account &mdash; and where the real starting line finally becomes clear.</p>
+            </div>
+          </div>
+          <div class="out">
+            <div class="rk">Your net worth today</div>
+            <div class="big" id="nw_val">$60,000</div>
+            <div class="sub" id="nw_sub">Assets minus what you owe &mdash; the number every plan works to grow.</div>
+            <div class="ledger">
+              <div class="lrow"><span>Assets</span><b id="nw_l1">$180,000</b></div>
+              <div class="lrow"><span>Liabilities</span><b id="nw_l2">&minus;$120,000</b></div>
+              <div class="lrow tot"><span>Net worth</span><b id="nw_l3">$60,000</b></div>
+            </div>
+            <div class="disclaim">Assets &minus; liabilities = net worth. The entire goal of planning is to move this up, year after year.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>03 — THE BALANCE SHEET</span><span>ADJUST ANY FIELD &mdash; RESULTS UPDATE LIVE</span></div>
+      </section>
+
+      <!-- 4 — PRIORITY ORDER -->
+      <section class="slide">
+        <span class="eyebrow">The hierarchy</span>
+        <h2 class="st">Seatbelt first, then the pedal.</h2>
+        <div class="two wide-left" style="margin-top:16px;align-items:start">
+          <div class="ladder">
+            <div class="rung"><span class="rk2">1</span><div><h3>Protection</h3><p>What's the first thing you do in a car? Buckle up. Grow wealth all you want &mdash; a financial crash undoes it if you're unprotected.</p></div></div>
+            <div class="rung"><span class="rk2">2</span><div><h3>Cash flow</h3><p>Seatbelt on, now press the pedal. A high savings rate &mdash; more than any hot return &mdash; is what moves the balance sheet.</p></div></div>
+            <div class="rung"><span class="rk2">3</span><div><h3>Liquidity &amp; wealth</h3><p>Steer those savings toward accounts that grow <b>and</b> stay reachable for the what-ifs and near-term goals.</p></div></div>
+            <div class="rung"><span class="rk2">4</span><div><h3>Eliminate debt</h3><p>Debt is usually a symptom, not the cause. Fix the first three and it's far less likely to come back.</p></div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="pull">Would you rather earn 50% on one dollar &mdash; or 10% on ten thousand? Rate of return is loud. Rate of <b>savings</b> is what actually builds wealth.</div>
+            <div class="card">
+              <h3>Order matters</h3>
+              <p>Each rung rests on the one below it. Chasing returns before you're protected, or attacking debt before you're saving, is building on sand. The next two slides put real numbers on rungs 2 and 3.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>04 — THE PRIORITY ORDER</span><span>PROTECT · SAVE · GROW · THEN PAY DOWN</span></div>
+      </section>
+
+      <!-- 5 — CALC 1: RATE OF SAVINGS -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">The lever you fully control: how much you save</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your savings habit</div>
+            <div class="fld">
+              <label for="sv_inc">Annual income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="sv_inc" inputmode="numeric" value="80,000"></div>
+            </div>
+            <div class="fld">
+              <label for="sv_rate">Savings rate</label>
+              <div class="slider"><input type="range" id="sv_rate" min="0" max="40" step="1" value="15"><span class="amt" id="sv_rate_v">15%</span></div>
+              <div class="hint">The share of income you pay yourself first &mdash; entirely your decision.</div>
+            </div>
+            <div class="row2">
+              <div class="fld">
+                <label for="sv_ret">Return</label>
+                <div class="slider"><input type="range" id="sv_ret" min="0" max="10" step="0.5" value="6"><span class="amt" id="sv_ret_v">6%</span></div>
+              </div>
+              <div class="fld">
+                <label for="sv_yrs">Years</label>
+                <div class="slider"><input type="range" id="sv_yrs" min="5" max="45" step="1" value="30"><span class="amt" id="sv_yrs_v">30</span></div>
+              </div>
+            </div>
+            <div class="fld">
+              <label>You invest each year</label>
+              <div class="inwrap"><input type="text" id="sv_peryr" value="$12,000 / yr" readonly style="background:var(--paper-2);color:var(--ink-soft)"></div>
+              <div class="hint">Flat income assumed, for a clean comparison. The point isn't the exact figure &mdash; it's how much the savings rate moves it.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Wealth built</div>
+            <div class="big amber" id="sv_total">$948,700</div>
+            <div class="sub" id="sv_sub">Saving 15% for 30 years at 6%</div>
+
+            <div class="spark">
+              <svg viewBox="0 0 460 110" preserveAspectRatio="none" id="sv_svg">
+                <path class="sp-area" id="sv_area"></path>
+                <path class="sp-line" id="sv_line"></path>
+                <line class="sp-ax" x1="0" y1="96" x2="460" y2="96"></line>
+                <text class="sp-lab" x="0" y="108" id="sv_lab_a">yr 1</text>
+                <text class="sp-lab" x="460" y="108" text-anchor="end" id="sv_lab_b">yr 30</text>
+              </svg>
+            </div>
+
+            <div class="split">
+              <div class="bd"><div class="bn" id="sv_contrib">$360,000</div><div class="bl">You put in</div></div>
+              <div class="bd"><div class="bn amber" id="sv_growth">$588,700</div><div class="bl">Growth on top</div></div>
+            </div>
+            <div class="flag" id="sv_flag"></div>
+            <div class="disclaim">Hypothetical, nominal dollars. What you contribute is fully in your control; the return isn't. Notice how far the savings-rate slider moves the result versus the return slider.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>05 — RATE OF SAVINGS</span><span>SLIDE THE SAVINGS RATE VS. THE RETURN</span></div>
+      </section>
+
+      <!-- 6 — CALC 2: FUTURE INCOME (HUMAN CAPITAL) -->
+      <section class="slide">
+        <span class="eyebrow">Calculator</span>
+        <h2 class="st" style="margin-bottom:16px">Your biggest asset: the paychecks still ahead</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Earnings assumptions</div>
+            <div class="fld">
+              <label for="h_age">Current age</label>
+              <div class="slider"><input type="range" id="h_age" min="18" max="70" value="30"><span class="amt" id="h_age_v">30</span></div>
+            </div>
+            <div class="fld">
+              <label for="h_inc">Annual income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="h_inc" inputmode="numeric" value="80,000"></div>
+            </div>
+            <div class="row2">
+              <div class="fld">
+                <label for="h_growth">Annual raise</label>
+                <div class="slider"><input type="range" id="h_growth" min="0" max="8" step="0.5" value="4"><span class="amt" id="h_growth_v">4%</span></div>
+              </div>
+              <div class="fld">
+                <label for="h_ret">Retirement age</label>
+                <div class="slider"><input type="range" id="h_ret" min="45" max="75" value="65"><span class="amt" id="h_ret_v">65</span></div>
+              </div>
+            </div>
+            <div class="fld">
+              <label>Working years remaining</label>
+              <div class="inwrap"><input type="text" id="h_years" value="35 years" readonly style="background:var(--paper-2);color:var(--ink-soft)"></div>
+              <div class="hint">This stream of income is what protection planning quietly guards &mdash; and what your goals are funded from.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Income left to earn</div>
+            <div class="big" id="h_total">$5,900,000</div>
+            <div class="sub" id="h_sub">35 years growing 4% a year until age 65</div>
+
+            <div class="spark">
+              <svg viewBox="0 0 460 110" preserveAspectRatio="none" id="h_svg">
+                <path class="sp-area" id="h_area"></path>
+                <path class="sp-line" id="h_line"></path>
+                <line class="sp-ax" x1="0" y1="96" x2="460" y2="96"></line>
+                <text class="sp-lab" x="0" y="108" id="h_lab_a">age 30</text>
+                <text class="sp-lab" x="460" y="108" text-anchor="end" id="h_lab_b">age 65</text>
+              </svg>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>This year's income</span><b id="h_first">$80,000</b></div>
+              <div class="lrow"><span>Final-year income</span><b id="h_last">$316,000</b></div>
+              <div class="lrow tot"><span>Total future earnings</span><b id="h_cap">$5,900,000</b></div>
+            </div>
+            <div class="disclaim">Nominal dollars, no gaps in employment. An illustration to size the conversation, not a projection of any one career.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>06 — YOUR FUTURE INCOME</span><span>THE ASSET NOBODY PUTS ON A STATEMENT</span></div>
+      </section>
+
+      <!-- 7 — GOALS PLANNER -->
+      <section class="slide">
+        <span class="eyebrow">Your goals</span>
+        <h2 class="st" style="margin-bottom:6px">Name a goal. See the monthly it takes.</h2>
+        <p class="lede" style="margin-bottom:14px">Retirement, a home, education, an estate to pass on &mdash; every goal is really a number and a deadline. Add your own, set a target and a timeline, and watch the monthly savings each one needs.</p>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your goals</div>
+            <div class="g-head"><span>Goal</span><span>Target</span><span>Years</span><span></span></div>
+            <div class="goals-wrap" id="goalsWrap"></div>
+            <button type="button" class="g-add" id="goalAdd">+ Add a goal</button>
+            <div class="fld" style="margin-top:6px">
+              <label for="g_ret">Assumed return while saving</label>
+              <div class="slider"><input type="range" id="g_ret" min="0" max="10" step="0.5" value="6"><span class="amt" id="g_ret_v">6%</span></div>
+              <div class="hint">A blended growth rate on the money as it's invested toward each goal.</div>
+            </div>
+          </div>
+          <div class="out">
+            <div class="rk">To fund every goal, save</div>
+            <div class="big amber" id="g_total">$0</div>
+            <div class="sub">per month, across the goals below</div>
+            <div class="gbars" id="goalBars"></div>
+            <div class="ledger">
+              <div class="lrow"><span>Combined target</span><b id="g_targ">$0</b></div>
+              <div class="lrow tot"><span>Total monthly</span><b id="g_l2">$0</b></div>
+            </div>
+            <div class="disclaim">Each monthly figure is what it takes to reach that target by its deadline at the return above. Educational estimate &mdash; a planner tunes the mix, the accounts, and the tax treatment.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>07 — GOALS PLANNER</span><span>ADD, EDIT, OR REMOVE ANY GOAL</span></div>
+      </section>
+
+      <!-- 8 — WHAT A PLANNER DOES -->
+      <section class="slide">
+        <span class="eyebrow">The value</span>
+        <h2 class="st">A planner turns a checklist into <span class="pine">momentum</span>.</h2>
+        <div class="two" style="margin-top:20px">
+          <div>
+            <ul class="points">
+              <li><span class="num">1</span><span class="tx">Kills <b>decision fatigue and procrastination</b> &mdash; the real reason good plans never get implemented.</span></li>
+              <li><span class="num">2</span><span class="tx">Coordinates the pieces most people juggle alone: <b>protection, cash flow, investments, taxes, and estate</b> &mdash; so they pull in the same direction.</span></li>
+              <li><span class="num">3</span><span class="tx">Organizes every account in one place, often surfacing <b>money you'd forgotten</b> you had.</span></li>
+              <li><span class="num">4</span><span class="tx">Keeps you from the <b>knee-jerk moves</b> &mdash; selling in a panic, chasing a tip &mdash; that quietly cost the most.</span></li>
+            </ul>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="pull">Money is like oxygen. When it flows to the right places, you have freedom. When it's disorganized, it's suffocating. A planner's job is keeping it flowing.</div>
+            <div class="card">
+              <h3>Straight talk on incentives</h3>
+              <p>A good planner is paid as your net worth grows and as you protect it and pay less in tax &mdash; so the incentive is to actually move you forward, not to sell you a product and vanish.</p>
+            </div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>08 — WHAT A PLANNER DOES</span><span>YOUR FINANCIAL PLANNER</span></div>
+      </section>
+
+      <!-- 9 — RECAP -->
+      <section class="slide">
+        <span class="eyebrow">Recap</span>
+        <h2 class="st">Three numbers to walk away with</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">01 — The habit</div>
+            <h3>What you save</h3>
+            <p>The one lever you fully control. Set a savings rate and let it compound &mdash; it does more heavy lifting than any return you can chase.</p>
+            <div class="rv" id="r1">$948,700</div>
+            <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">WEALTH BUILT FROM SAVING</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">02 — The asset</div>
+            <h3>What you'll earn</h3>
+            <p>The paychecks still ahead of you &mdash; the largest asset you own, the thing protection guards and goals are funded from.</p>
+            <div class="rv" id="r2">$5,900,000</div>
+            <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">TOTAL FUTURE INCOME</div>
+          </div>
+          <div class="rcard">
+            <div class="rn">03 — The plan</div>
+            <h3>What it takes</h3>
+            <p>Your goals, priced to a monthly number. That's where a planner takes over &mdash; making it automatic and tuning it as life changes.</p>
+            <div class="rv" id="r3">$0</div>
+            <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">MONTHLY TO FUND YOUR GOALS</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>09 — RECAP · VALUES PULL FROM YOUR ENTRIES</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var cur = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ go(i); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function go(i){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === slides.length - 1;
+  }
+  prevBtn.addEventListener('click', function(){ go(cur - 1); });
+  nextBtn.addEventListener('click', function(){ go(cur + 1); });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { e.preventDefault(); go(0); }
+    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  /* Scale the 1280x720 stage to fit the available space.
+     Below 860px the stylesheet switches to a stacked, full-size reading
+     layout instead — scaling that far down makes the text illegible — so
+     the fit math stands down and clears anything it previously set. */
+  var fitBox = document.getElementById('stageFit');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;              // container not laid out yet — a later event will catch it
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';   // the fit box carries the scaled footprint
+    fitBox.style.height = (720 * s) + 'px';
+  }
+
+  /* Belt and braces: some embedding contexts resize the viewport without
+     firing a usable resize event on every layer, so listen broadly. */
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function group(n){ return Math.round(n || 0).toLocaleString('en-US'); }
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function bindRange(id, onChange){
+    document.getElementById(id).addEventListener('input', onChange);
+  }
+  /* draw a cumulative sparkline from an array of running totals */
+  function spark(running, areaId, lineId){
+    var W = 460, H = 96, area = document.getElementById(areaId), line = document.getElementById(lineId);
+    if (running.length > 1){
+      var peak = running[running.length - 1] || 1;
+      var d = '';
+      for (var i = 0; i < running.length; i++){
+        var x = (i / (running.length - 1)) * W;
+        var y = H - (running[i] / peak) * (H - 10);
+        d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ' ' + y.toFixed(1) + ' ';
+      }
+      line.setAttribute('d', d);
+      area.setAttribute('d', d + 'L' + W + ' ' + H + ' L0 ' + H + ' Z');
+    } else {
+      line.setAttribute('d', ''); area.setAttribute('d', '');
+    }
+  }
+
+  /* ---------- SLIDE 3: NET WORTH ---------- */
+  function calcNW(){
+    var a = val('nw_assets'), l = val('nw_liab'), nw = a - l;
+    var el = document.getElementById('nw_val');
+    el.textContent = money(nw);
+    el.className = 'big' + (nw < 0 ? ' brick' : '');
+    document.getElementById('nw_l1').textContent = money(a);
+    document.getElementById('nw_l2').textContent = '−' + money(l);
+    document.getElementById('nw_l3').textContent = money(nw);
+  }
+  ['nw_assets','nw_liab'].forEach(function(id){ bindMoney(id, calcNW); });
+
+  /* ---------- SLIDE 5: RATE OF SAVINGS ---------- */
+  function calcSave(){
+    var inc  = val('sv_inc');
+    var rate = +document.getElementById('sv_rate').value;
+    var r    = +document.getElementById('sv_ret').value / 100;
+    var yrs  = +document.getElementById('sv_yrs').value;
+    var C    = inc * rate / 100;
+
+    document.getElementById('sv_rate_v').textContent = rate + '%';
+    document.getElementById('sv_ret_v').textContent  = (+document.getElementById('sv_ret').value) + '%';
+    document.getElementById('sv_yrs_v').textContent  = yrs;
+    document.getElementById('sv_peryr').value = money(C) + ' / yr';
+
+    /* contribute C at the end of each year, compounding the balance at r */
+    var bal = 0, running = [];
+    for (var n = 0; n < yrs; n++){ bal = bal * (1 + r) + C; running.push(bal); }
+    var contrib = C * yrs;
+    var growth  = Math.max(0, bal - contrib);
+
+    document.getElementById('sv_total').textContent   = money(bal);
+    document.getElementById('sv_sub').textContent     = 'Saving ' + rate + '% for ' + yrs + ' years at ' + (r*100) + '%';
+    document.getElementById('sv_contrib').textContent = money(contrib);
+    document.getElementById('sv_growth').textContent  = money(growth);
+    document.getElementById('sv_lab_a').textContent   = 'yr 1';
+    document.getElementById('sv_lab_b').textContent   = 'yr ' + yrs;
+    spark(running, 'sv_area', 'sv_line');
+
+    var flag = document.getElementById('sv_flag');
+    if (rate === 0){
+      flag.style.display = '';
+      flag.textContent = 'AT A 0% SAVINGS RATE, NO RETURN CAN BUILD ANYTHING — THE HABIT COMES FIRST.';
+    } else {
+      flag.style.display = 'none';
+    }
+
+    document.getElementById('r1').textContent = money(bal);
+  }
+  bindMoney('sv_inc', calcSave);
+  ['sv_rate','sv_ret','sv_yrs'].forEach(function(id){ bindRange(id, calcSave); });
+
+  /* ---------- SLIDE 6: FUTURE INCOME (HUMAN CAPITAL) ---------- */
+  function calcHuman(){
+    var age = +document.getElementById('h_age').value;
+    var ret = +document.getElementById('h_ret').value;
+    var g   = +document.getElementById('h_growth').value / 100;
+    var inc = val('h_inc');
+    var years = Math.max(0, ret - age);
+
+    document.getElementById('h_age_v').textContent    = age;
+    document.getElementById('h_ret_v').textContent    = ret;
+    document.getElementById('h_growth_v').textContent = (+document.getElementById('h_growth').value) + '%';
+    document.getElementById('h_years').value = years + (years === 1 ? ' year' : ' years');
+
+    var total = 0, salary = inc, running = [];
+    for (var n = 0; n < years; n++){ total += salary; running.push(total); salary *= (1 + g); }
+    var last = years > 0 ? salary / (1 + g) : 0;
+
+    document.getElementById('h_total').textContent = money(total);
+    document.getElementById('h_sub').textContent   = years === 0
+      ? 'Already at or past the selected retirement age'
+      : years + ' years growing ' + (g * 100) + '% a year until age ' + ret;
+    document.getElementById('h_first').textContent = money(inc);
+    document.getElementById('h_last').textContent  = money(last);
+    document.getElementById('h_cap').textContent   = money(total);
+    document.getElementById('h_lab_a').textContent = 'age ' + age;
+    document.getElementById('h_lab_b').textContent = 'age ' + ret;
+    spark(running, 'h_area', 'h_line');
+
+    document.getElementById('r2').textContent = money(total);
+  }
+  ['h_age','h_ret','h_growth'].forEach(function(id){ bindRange(id, calcHuman); });
+  bindMoney('h_inc', calcHuman);
+  document.getElementById('h_age').addEventListener('input', function(){
+    var a = +this.value, ret = document.getElementById('h_ret');
+    if (+ret.value < a) { ret.value = a; }
+    calcHuman();
+  });
+
+  /* ---------- SLIDE 7: GOALS PLANNER ---------- */
+  var goals = [
+    {label:'Retirement nest egg', target:1500000, years:30},
+    {label:'Home down payment',   target:80000,   years:5},
+    {label:'Kids’ education', target:120000,  years:15}
+  ];
+  var goalsWrap = document.getElementById('goalsWrap');
+  var goalBars  = document.getElementById('goalBars');
+
+  function esc(v){ return String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+  function gidx(el){ var r = el.closest('[data-grow]'); return r ? +r.getAttribute('data-grow') : -1; }
+
+  function monthly(target, years, annualPct){
+    var m = years * 12;
+    if (m <= 0) return target;
+    var i = annualPct / 100 / 12;
+    if (i === 0) return target / m;
+    return target * i / (Math.pow(1 + i, m) - 1);
+  }
+
+  function drawGoals(){
+    var h = '';
+    goals.forEach(function(g, i){
+      h += '<div class="goalrow" data-grow="'+i+'">'+
+             '<input class="g-lab" data-glab placeholder="e.g. Retirement" value="'+esc(g.label)+'">'+
+             '<span class="g-in"><span class="pre">$</span><input data-gtar inputmode="numeric" value="'+group(g.target)+'"></span>'+
+             '<input class="g-yr" data-gyr inputmode="numeric" value="'+(+g.years||0)+'">'+
+             '<button type="button" class="g-del" data-gdel aria-label="Remove">&times;</button>'+
+           '</div>';
+    });
+    goalsWrap.innerHTML = h;
+    calcGoals();
+  }
+
+  function calcGoals(){
+    var pct = +document.getElementById('g_ret').value;
+    document.getElementById('g_ret_v').textContent = pct + '%';
+    var rows = [], totMo = 0, totTarget = 0, maxMo = 0;
+    goals.forEach(function(g){
+      var mo = monthly(+g.target || 0, +g.years || 0, pct);
+      totMo += mo; totTarget += (+g.target || 0);
+      if (mo > maxMo) maxMo = mo;
+      rows.push({label:g.label || 'Goal', mo:mo});
+    });
+    var bh = '';
+    rows.forEach(function(r){
+      var w = maxMo > 0 ? (r.mo / maxMo * 100) : 0;
+      bh += '<div class="gbar"><div class="gb-top"><span class="gb-name">'+esc(r.label)+'</span><b>'+money(r.mo)+'/mo</b></div>'+
+            '<div class="gb-track"><i style="width:'+w.toFixed(1)+'%"></i></div></div>';
+    });
+    goalBars.innerHTML = bh;
+
+    document.getElementById('g_total').textContent = money(totMo);
+    document.getElementById('g_targ').textContent  = money(totTarget);
+    document.getElementById('g_l2').textContent    = money(totMo);
+    document.getElementById('r3').textContent      = money(totMo);
+  }
+
+  goalsWrap.addEventListener('input', function(e){
+    var lab = e.target.closest('[data-glab]');
+    if (lab){ var i = gidx(lab); if (i >= 0) { goals[i].label = lab.value; calcGoals(); } return; }
+    var tar = e.target.closest('[data-gtar]');
+    if (tar){
+      var j = gidx(tar);
+      var digitsBefore = (tar.value.slice(0, tar.selectionStart).match(/\d/g) || []).length;
+      var n = tar.value.replace(/[^0-9]/g, '');
+      tar.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < tar.value.length && seen < digitsBefore){ if (/\d/.test(tar.value[pos])) seen++; pos++; }
+      tar.setSelectionRange(pos, pos);
+      if (j >= 0){ goals[j].target = +n || 0; calcGoals(); }
+      return;
+    }
+    var yr = e.target.closest('[data-gyr]');
+    if (yr){
+      var k = gidx(yr);
+      yr.value = yr.value.replace(/[^0-9]/g, '');
+      if (k >= 0){ goals[k].years = +yr.value || 0; calcGoals(); }
+      return;
+    }
+  });
+  goalsWrap.addEventListener('click', function(e){
+    var del = e.target.closest('[data-gdel]');
+    if (del){ var i = gidx(del); if (i >= 0){ goals.splice(i, 1); drawGoals(); } }
+  });
+  document.getElementById('goalAdd').addEventListener('click', function(){
+    goals.push({label:'', target:0, years:10});
+    drawGoals();
+    var labs = goalsWrap.querySelectorAll('[data-glab]');
+    if (labs.length) labs[labs.length - 1].focus();
+  });
+  bindRange('g_ret', calcGoals);
+
+  /* ---------- MASTER AGE & INCOME ----------
+     Set on the home page, carried here through localStorage. Read only. */
+  function applyMaster(){
+    var m; try{ m = JSON.parse(localStorage.getItem('tr-master') || 'null'); }catch(e){ return; }
+    if (!m) return;
+    if (m.income > 0){
+      ['sv_inc','h_inc'].forEach(function(id){
+        var el = document.getElementById(id);
+        el.value = group(m.income);
+        el.dispatchEvent(new Event('input', {bubbles:true}));
+      });
+    }
+    if (m.age > 0){
+      var el = document.getElementById('h_age');
+      el.value = Math.min(Math.max(m.age, +el.min), +el.max);
+      el.dispatchEvent(new Event('input', {bubbles:true}));
+    }
+  }
+
+  /* ---------- INIT ---------- */
+  calcNW();
+  calcSave();
+  calcHuman();
+  drawGoals();
+  applyMaster();
+  go(0);
+})();
+</script>
+</body>
+</html>

@@ -29,9 +29,10 @@ Never stage `.claude/` (local tooling). Never stage `index1.html` (old, unused).
 | `index.html` | Published site — 4 pages in one file, toggled by JS |
 | `index-BACKUP.html` | Canonical edit source (see above) |
 | `lessons.html` | Lessons hub — cards linking to each deck; nav "Lessons" tab points here |
-| `lesson-protection.html` | Lesson 01 deck — insurance |
-| `lesson-cashflow.html` | Lesson 02 deck — cash flow |
-| `lesson-investing.html` | Lesson 03 deck — investing & risk |
+| `lesson-planner.html` | Lesson 01 deck — why a financial planner + goals planner |
+| `lesson-protection.html` | Lesson 02 deck — insurance |
+| `lesson-cashflow.html` | Lesson 03 deck — cash flow |
+| `lesson-investing.html` | Lesson 04 deck — investing & risk |
 | `images/` | Photo gallery assets |
 | `why-you-need-a-financial-planner.pdf` | Embedded guide |
 | `EDITS.md` | The outstanding work list, batched |
@@ -83,10 +84,12 @@ Lesson decks scale a fixed 1280×720 stage to fit. Below 860px they switch to a
 stacked reading layout — scaling that far down makes text illegible. Sizing falls
 back to a synchronous path when `document.hidden`, since rAF pauses in background tabs.
 
-There are now **three lessons** (01 protection, 02 cash flow, 03 investing) behind a
-`lessons.html` **hub**. The nav "Lessons" tab and the hero button point at the hub;
-each deck's "← All lessons" button returns to it, and the hub backs out to `index.html`.
-A new lesson = a new `lesson-<topic>.html` file **plus a card in `lessons.html`**.
+There are now **four lessons** (01 financial planner, 02 protection, 03 cash flow,
+04 investing) behind a `lessons.html` **hub**. The nav "Lessons" tab and the hero
+button point at the hub; each deck's "← All lessons" button returns to it, and the
+hub backs out to `index.html`. A new lesson = a new `lesson-<topic>.html` file **plus
+a card in `lessons.html`**. Lesson numbers live in two places per deck — the
+`lessons.html` card (`lc-num`) and the deck's own `deck-title` — keep them in sync.
 
 Each deck is still a **self-contained copy** — shared `lesson.css` / `lesson.js` were
 deliberately not extracted (copying is simpler and lower-risk). Revisit extraction if a
