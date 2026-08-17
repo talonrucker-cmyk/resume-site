@@ -123,9 +123,12 @@
   .ib-in{display:flex;align-items:center;background:#fff;border:1px solid var(--line-strong);border-radius:8px;padding:2px 8px}
   .ib-in .pre{color:var(--ink-soft);font-size:.9rem}
   .ib-in input{border:0;outline:0;text-align:right;width:96px;padding:7px 4px;font-family:var(--body);font-size:.95rem;background:transparent;color:var(--ink)}
-  .ib-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-  .ib-row .ib-label{flex:1;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:8px 9px;font-family:var(--body);font-size:.88rem;background:#fff;color:var(--ink)}
+  .ib-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .ib-row .ib-label{flex:1 1 120px;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:8px 9px;font-family:var(--body);font-size:.88rem;background:#fff;color:var(--ink)}
   .ib-row .ib-in input{width:78px}
+  .ib-per{flex:none;border:1px solid var(--line-strong);background:var(--paper-2);color:var(--pine);border-radius:8px;padding:7px 9px;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;line-height:1}
+  .ib-per:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .ib-conv{flex:none;font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);white-space:nowrap}
   .ib-del{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);font-size:1.1rem;line-height:1;cursor:pointer}
   .ib-del:hover{background:var(--brick);border-color:var(--brick);color:#fff}
   .ib-add{font-family:var(--mono);font-size:.72rem;padding:8px 14px;border-radius:999px;border:1px dashed var(--line-strong);background:var(--paper-2);color:var(--pine);cursor:pointer;margin-top:2px}
@@ -418,19 +421,23 @@
   /* embedded fixed-expense budget calculator */
   function initBudget(wrap){
     var income=60000;
-    var list=[{label:'Rent',amt:18000},{label:'Insurance',amt:3000},{label:'Utilities & phone',amt:3600},{label:'Subscriptions',amt:1200}];
+    // amt is stored ANNUAL (canonical); per is just how this row is displayed/typed
+    var list=[{label:'Rent',amt:18000,per:'mo'},{label:'Insurance',amt:3000,per:'mo'},{label:'Utilities & phone',amt:3600,per:'mo'},{label:'Subscriptions',amt:1200,per:'yr'}];
     function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
     function total(){var t=0;list.forEach(function(x){t+=+x.amt||0;});return t;}
     function idx(el){var r=el.closest('[data-ibrow]');return r?+r.getAttribute('data-ibrow'):-1;}
+    function shown(x){return x.per==='mo'?(+x.amt||0)/12:(+x.amt||0);}            // value in the row's period
+    function fmtIn(x){return Math.round(shown(x)).toLocaleString('en-US');}
+    function conv(x){return x.per==='mo'?('= '+money(+x.amt||0)+' / yr'):('= '+money((+x.amt||0)/12)+' / mo');}
     function calc(){
       var left=income-total(), o=wrap.querySelector('[data-ibout]');
       o.className='ib-out '+(left<0?'neg':'pos');
-      o.innerHTML='<span>Fixed '+money(total())+' &middot; Income '+money(income)+'</span><span class="ib-left">'+money(left)+' left</span>';
+      o.innerHTML='<span>Fixed '+money(total())+' / yr &middot; Income '+money(income)+'</span><span class="ib-left">'+money(left)+' left</span>';
     }
     function draw(){
       var h='<div class="ib-f"><span>Take-home income / year</span><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibinc value="'+income.toLocaleString('en-US')+'"></span></div>';
       list.forEach(function(x,i){
-        h+='<div class="ib-row" data-ibrow="'+i+'"><input type="text" class="ib-label" data-iblabel placeholder="e.g. Rent" value="'+esc(x.label)+'"><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibamt value="'+(+x.amt||0).toLocaleString('en-US')+'"></span><button type="button" class="ib-del" data-ibdel aria-label="Remove">&times;</button></div>';
+        h+='<div class="ib-row" data-ibrow="'+i+'"><input type="text" class="ib-label" data-iblabel placeholder="e.g. Rent" value="'+esc(x.label)+'"><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibamt value="'+fmtIn(x)+'"></span><button type="button" class="ib-per" data-ibper aria-label="Toggle monthly or annual">/ '+(x.per==='mo'?'mo':'yr')+'</button><span class="ib-conv" data-ibconv>'+conv(x)+'</span><button type="button" class="ib-del" data-ibdel aria-label="Remove">&times;</button></div>';
       });
       h+='<button type="button" class="ib-add" data-ibadd>+ Add expense</button><div class="ib-out" data-ibout></div>';
       wrap.innerHTML=h; calc();
@@ -438,15 +445,16 @@
     draw();
     wrap.addEventListener('input',function(e){
       var inc=e.target.closest('[data-ibinc]'); if(inc){income=+String(inc.value).replace(/[^0-9.]/g,'')||0;calc();return;}
-      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i]){list[i].amt=+String(a.value).replace(/[^0-9.]/g,'')||0;calc();}return;}
+      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i]){var v=+String(a.value).replace(/[^0-9.]/g,'')||0;list[i].amt=list[i].per==='mo'?v*12:v;var row=a.closest('[data-ibrow]'),c=row&&row.querySelector('[data-ibconv]');if(c)c.textContent=conv(list[i]);calc();}return;}
       var l=e.target.closest('[data-iblabel]'); if(l){var j=idx(l);if(j>=0&&list[j])list[j].label=l.value;return;}
     });
     wrap.addEventListener('blur',function(e){
       var inc=e.target.closest('[data-ibinc]'); if(inc){inc.value=(+income||0).toLocaleString('en-US');return;}
-      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i])a.value=(+list[i].amt||0).toLocaleString('en-US');}
+      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i])a.value=fmtIn(list[i]);}
     },true);
     wrap.addEventListener('click',function(e){
-      var add=e.target.closest('[data-ibadd]'); if(add){list.push({label:'',amt:0});draw();var ls=wrap.querySelectorAll('[data-iblabel]');if(ls.length)ls[ls.length-1].focus();return;}
+      var per=e.target.closest('[data-ibper]'); if(per){var i=idx(per);if(i>=0&&list[i]){list[i].per=list[i].per==='mo'?'yr':'mo';var row=per.closest('[data-ibrow]');row.querySelector('[data-ibamt]').value=fmtIn(list[i]);per.textContent='/ '+list[i].per;row.querySelector('[data-ibconv]').textContent=conv(list[i]);}return;}
+      var add=e.target.closest('[data-ibadd]'); if(add){list.push({label:'',amt:0,per:'mo'});draw();var ls=wrap.querySelectorAll('[data-iblabel]');if(ls.length)ls[ls.length-1].focus();return;}
       var del=e.target.closest('[data-ibdel]'); if(del){var i=idx(del);if(i>=0){list.splice(i,1);draw();}return;}
     });
   }

@@ -1533,14 +1533,12 @@
           <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
         </summary>
         <div class="collapse-body"><div class="x-tool">
-          <div class="x-why"><b>Why it matters:</b> You can&rsquo;t buy unlimited coverage. Carriers price off a multiple of income that <b>shrinks with age</b>, plus your debt. Knowing the ceiling tells you how much of your working life is still insurable&mdash;and it only gets smaller from here.</div>
+          <div class="x-why"><b>Why it matters:</b> You can&rsquo;t buy unlimited coverage. Carriers price off a multiple of income that <b>shrinks with age</b>. Knowing the ceiling tells you how much of your working life is still insurable&mdash;and it only gets smaller from here.</div>
           <div class="xc-grid">
             <div class="xc-fields">
               <div class="xc-f"><label for="liAge">Current age</label><div class="xc-in"><input type="range" id="liAge" min="18" max="85" value="34" style="width:130px"><b id="liAgeV" style="margin-left:8px">34</b></div></div>
               <div class="xc-f"><label for="liInc">Gross annual income</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liInc" min="0" max="5000000" step="5000" value="120000"></div></div>
               <div class="xc-f" id="liNwF" style="display:none"><label for="liNw">Total net worth</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liNw" min="0" step="50000" value="2500000"></div></div>
-              <div class="xc-f"><label for="liDebt">Outstanding debt</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liDebt" min="0" step="10000" value="340000"></div></div>
-              <div style="font-size:.72rem;color:var(--ink-soft);line-height:1.35;margin-top:-4px">Mortgage and loans your family would inherit &mdash; carriers let you insure enough to clear these <b>on top of</b> replacing your income, so the debt doesn&rsquo;t land on them.</div>
               <div class="xc-f"><label for="liHave">Coverage already in force</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liHave" min="0" step="50000" value="500000"></div></div>
             </div>
             <div class="xc-res"><div class="k">Maximum qualified coverage</div><div class="v" id="liMax">$0</div><div class="sub" id="liBasis"></div></div>
@@ -1550,8 +1548,10 @@
             <div class="lrow"><span>Already in force</span><b id="liL2">$0</b></div>
             <div class="lrow tot"><span>Remaining insurable capacity</span><b id="liL3">$0</b></div>
           </div>
+          <div class="xc-f" style="margin-top:16px"><label for="liDebt">Outstanding debt</label><div class="xc-in"><span class="pre">$</span><input type="number" id="liDebt" min="0" step="10000" value="340000"></div></div>
+          <div style="font-size:.72rem;color:var(--ink-soft);line-height:1.35;margin-top:6px">This doesn&rsquo;t change the ceiling above &mdash; but factor it in when you decide how much to actually buy. You want enough coverage to <b>clear these debts on top of</b> replacing your income, so they don&rsquo;t land on your family.</div>
           <div class="flagbar" id="liFlag" style="display:none"></div>
-          <p class="x-note"><b>The guideline table:</b> 18&ndash;40 &rarr; 30&times; income &middot; 41&ndash;50 &rarr; 20&times; &middot; 51&ndash;60 &rarr; 15&times; &middot; 61&ndash;65 &rarr; 10&times; &middot; 66&ndash;70 &rarr; 1&times; net worth &middot; 71&ndash;80 &rarr; &frac12;&times; net worth &middot; 81+ case by case. Debt is added on top &mdash; coverage can both replace your income <b>and</b> clear what you owe. Educational estimate only&mdash;guidelines vary by carrier, and final underwriting depends on health, occupation and financial documentation. Same math as the <a href="lesson-protection.html" style="color:var(--pine);font-weight:700">Protection lesson</a>.</p>
+          <p class="x-note"><b>The guideline table:</b> 18&ndash;40 &rarr; 30&times; income &middot; 41&ndash;50 &rarr; 20&times; &middot; 51&ndash;60 &rarr; 15&times; &middot; 61&ndash;65 &rarr; 10&times; &middot; 66&ndash;70 &rarr; 1&times; net worth &middot; 71&ndash;80 &rarr; &frac12;&times; net worth &middot; 81+ case by case. Educational estimate only&mdash;guidelines vary by carrier, and final underwriting depends on health, occupation and financial documentation. Same math as the <a href="lesson-protection.html" style="color:var(--pine);font-weight:700">Protection lesson</a>.</p>
         </div></div>
       </details>
 
@@ -1734,6 +1734,51 @@
           <p class="x-note">Left for lifestyle = earnings &minus; protection &minus; wealth-building &minus; debts &amp; taxes. If this goes negative, the plan is spending money it doesn&rsquo;t have.</p>
         </div></div>
       </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>Don&rsquo;t let idle cash rot.</h3><p>Sitting cash loses ~3% a year to inflation. A liquid, higher-yield home fights back.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Cash in checking earns nothing while prices climb&mdash;every year it buys about 3% less. A <b>money-market fund</b> (like Fidelity&rsquo;s SPAXX) or a <b>high-yield savings account</b> stays just as reachable, but pays a yield that fights inflation instead of losing to it.</div>
+          <div class="xc-grid">
+            <div class="xc-fields">
+              <div class="xc-f"><label for="mmAmt">Cash you&rsquo;re parking</label><div class="xc-in"><span class="pre">$</span><input type="number" id="mmAmt" min="0" step="1000" value="25000"></div></div>
+              <div class="xc-f"><label for="mmYrs">Years</label><div class="xc-in"><input type="range" id="mmYrs" min="1" max="40" value="20" style="width:130px"><b id="mmYrsV" style="margin-left:8px">20</b></div></div>
+              <div class="xc-f"><label for="mmYield">Money-market / HYSA yield</label><div class="xc-in"><input type="number" id="mmYield" min="0" max="15" step="0.1" value="4.5" style="width:70px"><span class="pre" style="margin-left:4px">%</span></div></div>
+              <div class="xc-f"><label for="mmInfl">Inflation</label><div class="xc-in"><input type="number" id="mmInfl" min="0" max="15" step="0.1" value="3" style="width:70px"><span class="pre" style="margin-left:4px">%</span></div></div>
+            </div>
+            <div class="xc-res"><div class="k">In SPAXX / HYSA after <span id="mmYrsR">20</span> yrs</div><div class="v" id="mmBal">$0</div><div class="sub" id="mmBalReal" style="font-size:.82rem;opacity:.9;margin-top:8px"></div></div>
+          </div>
+          <div class="ldg">
+            <div class="lrow"><span>Left idle &mdash; real spending power</span><b id="mmIdle">$0</b></div>
+            <div class="lrow"><span>In SPAXX / HYSA &mdash; balance</span><b id="mmBal2">$0</b></div>
+            <div class="lrow tot"><span>Ahead by staying liquid &amp; earning</span><b id="mmGap">$0</b></div>
+          </div>
+          <p class="x-note"><b>Set up a money-market fund at Fidelity:</b> open a brokerage or Cash Management account &rarr; transfer cash in &rarr; it lands in <b>SPAXX</b> (their government money-market fund) automatically, or buy <b>SPAXX</b> / <b>FDLXX</b> yourself &rarr; it stays same-day liquid and the yield posts every month. A <b>high-yield savings account</b> (Ally, Marcus, Wealthfront) does the same job straight from a bank. Educational only&mdash;yields move and aren&rsquo;t guaranteed.</p>
+        </div></div>
+      </details>
+      <script>
+      (function(){
+        var $=function(id){return document.getElementById(id);};
+        var amt=$('mmAmt'), yrs=$('mmYrs'), yld=$('mmYield'), infl=$('mmInfl');
+        if(!amt||!yrs) return;
+        function money(v){v=Math.round(v);return (v<0?'-$':'$')+Math.abs(v).toLocaleString('en-US');}
+        function run(){
+          var P=+amt.value||0, n=+yrs.value||0, y=(+yld.value||0)/100, f=(+infl.value||0)/100;
+          var idleReal=P/Math.pow(1+f,n), bal=P*Math.pow(1+y,n), balReal=bal/Math.pow(1+f,n);
+          $('mmYrsV').textContent=n; $('mmYrsR').textContent=n;
+          $('mmBal').textContent=money(bal);
+          $('mmBalReal').textContent='≈ '+money(balReal)+' in today’s dollars';
+          $('mmIdle').textContent=money(idleReal);
+          $('mmBal2').textContent=money(bal);
+          $('mmGap').textContent='+'+money(balReal-idleReal);
+        }
+        [amt,yrs,yld,infl].forEach(function(el){el.addEventListener('input',run);el.addEventListener('change',run);});
+        run();
+      })();
+      </script>
 
       <details class="collapse reveal">
         <summary>
@@ -2384,7 +2429,7 @@
           <p class="sub">Books shaping how I think about money, faith, systems, and growth. Tap a shelf to open it.</p>
           <div class="booklist">
             <details>
-              <summary><span class="btitle">Self-help &amp; growth — ranked</span><span class="bcount">29</span></summary>
+              <summary><span class="btitle">Self-help &amp; growth — ranked</span><span class="bcount">31</span></summary>
               <div class="brank">Top tier</div>
               <ul>
                 <li><b>The Millionaire Next Door</b></li>
@@ -2399,6 +2444,8 @@
                 <li><b>How Will You Measure Your Life?</b></li>
                 <li><b>How to Win Friends &amp; Influence People</b> <span class="ba">· Dale Carnegie</span></li>
                 <li><b>Men Are from Mars, Women Are from Venus</b></li>
+                <li><b>The Ruthless Elimination of Hurry</b> <span class="ba">· John Mark Comer</span></li>
+                <li><b>The Anxious Generation</b> <span class="ba">· Jonathan Haidt</span></li>
               </ul>
               <div class="brank">Solid</div>
               <ul>
@@ -2428,18 +2475,16 @@
               </ul>
             </details>
             <details>
-              <summary><span class="btitle">On my list to read</span><span class="bcount">30</span></summary>
+              <summary><span class="btitle">On my list to read</span><span class="bcount">28</span></summary>
               <ul>
                 <li><b>Man's Search for Meaning</b> <span class="ba">· Viktor Frankl</span></li>
                 <li><b>The Power of Everyday Missionaries</b></li>
                 <li><b>Leading Without Authority</b></li>
-                <li><b>The Anxious Generation</b></li>
                 <li><b>The Innovator's Dilemma</b></li>
                 <li><b>Essentialism</b></li>
                 <li><b>Mere Christianity</b> <span class="ba">· C.S. Lewis</span></li>
                 <li><b>The Art of Doing Twice the Work in Half the Time</b></li>
                 <li><b>A Tale of Two Cities</b></li>
-                <li><b>The Ruthless Elimination of Hurry</b></li>
                 <li><b>Story Selling</b></li>
                 <li><b>The Screwtape Letters</b></li>
                 <li><b>The Wealth of Nations</b></li>
@@ -3191,9 +3236,9 @@
         $('liAgeV').textContent=a;
         nwF.style.display=r.b==='worth'?'':'none';
         const base=r.b==='income'?(+inc.value||0)*r.m:r.b==='worth'?(+nw.value||0)*r.m:0;
-        const max=base+(+debt.value||0), left=Math.max(0,max-(+have.value||0));
+        const max=base, left=Math.max(0,max-(+have.value||0));
         out.textContent=r.b==='case'?'Case by case':money(max);
-        basis.innerHTML='Age '+a+' &middot; '+r.l+(r.b==='case'?'':' + debt');
+        basis.innerHTML='Age '+a+' &middot; '+r.l;
         $('liL1').textContent=r.b==='case'?'—':money(max);
         $('liL2').textContent='−'+money(+have.value||0);
         $('liL3').textContent=r.b==='case'?'—':money(left);
@@ -4293,6 +4338,7 @@
   function onFun(){ return main.getAttribute('data-active')==='fun'; }
   function swim(){
     if(!onFun()){ fish.style.display='none'; return; }
+    if(window.__flappyPlaying){ fish.style.display='none'; schedule(); return; }  // stay off the game
     fish.style.display='block'; fish.style.opacity='1';
     var dir=Math.random()<0.5, top=14+Math.random()*46;              // random depth
     fish.style.top=top+'%';
@@ -4303,6 +4349,7 @@
       var k=Math.min(1,(ts-t0)/dur);
       var x=from+(to-from)*k;
       var bob=Math.sin(k*Math.PI*6)*10;
+      if(window.__flappyPlaying){ fish.style.display='none'; schedule(); return; }  // a game just started — clear the screen
       fish.style.left=x+'px'; fish.style.marginTop=bob+'px';
       if(k<1 && !modal.classList.contains('on')) requestAnimationFrame(step);
       else if(k>=1){ fish.style.display='none'; schedule(); }
@@ -4336,6 +4383,11 @@
       goText=document.getElementById('goText'), startBtn=document.getElementById('gameStart'),
       fsBtn=document.getElementById('gameFs');
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+  /* Talon's headshot, clipped into the eagle's head once it loads */
+  var face=new Image(), faceReady=false;
+  face.onload=function(){ faceReady=true; };
+  face.src='images/headshot.jpg';
 
   /* fixed virtual world; CSS scales the canvas, so physics never depend on display size */
   var VW=400, VH=500, GROUND=54;
@@ -4373,11 +4425,11 @@
     overlay.hidden=false;
   }
   function begin(){
-    reset(); state='play'; overlay.hidden=true; flap();
+    reset(); state='play'; window.__flappyPlaying=true; overlay.hidden=true; flap();
     if(!raf) loop();
   }
   function die(){
-    state='over';
+    state='over'; window.__flappyPlaying=false;
     if(score>best){ best=score; try{localStorage.setItem('tr-flappy-best',best);}catch(e){} }
     bestEl.textContent='Best '+best;
     showOverlay('Game over','You grabbed '+score+' '+(score===1?'bill':'bills')+'. Best: '+best+'.','Try again');
@@ -4467,16 +4519,27 @@
     /* far wing */
     ctx.fillStyle='#5a3a1e';
     wingShape(-0.1*S,0.1*S,S,flapA*0.6);
-    /* head (white) */
+    /* head (white) — comically oversized bobblehead */
+    var hx=1.0*S, hy=-1.05*S, hR=1.75*S;
     ctx.fillStyle='#f3f4f0';
-    ctx.beginPath(); ctx.arc(0.95*S,-0.35*S,0.62*S,0,6.28); ctx.fill();
+    ctx.beginPath(); ctx.arc(hx,hy,hR,0,6.28); ctx.fill();
+    /* Talon's face, clipped into the head */
+    if(faceReady){
+      ctx.save();
+      var hr=hR-0.03*S;
+      ctx.beginPath(); ctx.arc(hx,hy,hr,0,6.28); ctx.clip();
+      ctx.drawImage(face, 238,248,324,324, hx-hr, hy-hr, hr*2, hr*2);
+      ctx.restore();
+    }
     /* beak (yellow, hooked) */
     ctx.fillStyle='#f2a900';
-    ctx.beginPath(); ctx.moveTo(1.45*S,-0.5*S); ctx.lineTo(1.95*S,-0.28*S);
-    ctx.lineTo(1.5*S,-0.12*S); ctx.quadraticCurveTo(1.75*S,-0.28*S,1.45*S,-0.5*S); ctx.fill();
-    /* eye */
-    ctx.fillStyle='#1a1a1a';
-    ctx.beginPath(); ctx.arc(1.05*S,-0.45*S,0.09*S,0,6.28); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(2.6*S,-1.2*S); ctx.lineTo(3.25*S,-0.9*S);
+    ctx.lineTo(2.66*S,-0.66*S); ctx.quadraticCurveTo(3.0*S,-0.9*S,2.6*S,-1.2*S); ctx.fill();
+    /* eye — only when the photo hasn't loaded */
+    if(!faceReady){
+      ctx.fillStyle='#1a1a1a';
+      ctx.beginPath(); ctx.arc(1.2*S,-1.15*S,0.16*S,0,6.28); ctx.fill();
+    }
     /* near wing (flaps) */
     ctx.fillStyle='#7a4e28';
     wingShape(0.0,0.0,S,flapA);
