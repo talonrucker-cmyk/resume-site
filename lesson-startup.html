@@ -184,6 +184,51 @@
 
   .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
 
+  /* ---------- PROGRESSIVE REVEAL (build) ----------
+     Any element with data-step="N" stays hidden until the slide's build
+     reaches step N. The Next button advances the build first, then the slide. */
+  [data-step]{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .5s cubic-bezier(.2,.85,.25,1)}
+  [data-step].show{opacity:1;transform:none}
+  [data-step][hidden]{display:none}
+
+  /* build columns — titles are the headline; a colored accent bar replaces
+     the old number and keeps the per-column color coding */
+  .build-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:44px;align-items:start;align-content:center;padding:4px 0}
+  .bcol{display:flex;flex-direction:column;align-items:flex-start}
+  .bcol::before{content:"";display:block;width:46px;height:6px;border-radius:99px;background:var(--pine);margin-bottom:18px}
+  .bcol:nth-child(2)::before{background:var(--amber)}
+  .bcol:nth-child(3)::before{background:var(--brick)}
+  .btitle{font-family:var(--display);font-weight:700;font-size:2.1rem;letter-spacing:-.02em;color:var(--ink);line-height:1.08}
+  .bexp{font-size:1.05rem;color:var(--ink-soft);line-height:1.5;margin-top:12px}
+  .bexp em{font-style:italic;color:var(--ink)}
+  .reveal-foot{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .qline{border-left:3px solid var(--amber);padding:5px 0 5px 18px;font-family:var(--display);font-weight:500;font-size:1.34rem;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+  .action{display:inline-flex;align-items:center;gap:15px;align-self:center;background:var(--sage);border:1px solid rgba(14,82,64,.28);border-radius:14px;padding:15px 26px;font-family:var(--body);font-size:1.18rem;font-weight:600;line-height:1.35;color:var(--pine-deep);max-width:100%;cursor:pointer;text-align:left;transition:.18s}
+  .action:hover{border-color:var(--pine);box-shadow:0 8px 20px -12px rgba(14,82,64,.7)}
+  .ax-box{flex:none;width:27px;height:27px;border:2px solid var(--pine);border-radius:8px;background:var(--white);display:grid;place-items:center}
+  .ax-box .ck{width:12px;height:7px;border-left:2.8px solid #fff;border-bottom:2.8px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .action.done .ax-box{background:var(--pine);border-color:var(--pine)}
+  .action.done .ax-box .ck{opacity:1}
+  .ax-tag{flex:none;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--pine);color:#fff;padding:5px 10px;border-radius:99px}
+  /* compact action for tight widget slides (calculators, tables) */
+  .action.mini{padding:10px 18px;font-size:1.02rem;gap:12px;border-radius:12px;margin-top:12px}
+  .action.mini .ax-box{width:23px;height:23px}
+  .action.mini .ax-box .ck{width:11px;height:6px}
+  .build-hint{color:var(--pine)}
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  .checklist{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;align-content:start;margin-top:18px;overflow:auto;padding-right:4px}
+  .ck-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 15px;cursor:pointer;transition:.18s;text-align:left;font:inherit}
+  .ck-item:hover{border-color:var(--pine);transform:translateY(-1px)}
+  .ck-box{flex:none;width:24px;height:24px;border:2px solid var(--line-strong);border-radius:7px;background:var(--white);display:grid;place-items:center;margin-top:1px}
+  .ck-box .ck{width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .ck-item.done .ck-box{background:var(--pine);border-color:var(--pine)}
+  .ck-item.done .ck-box .ck{opacity:1}
+  .ck-body{min-width:0}
+  .ck-phase{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+  .ck-text{display:block;font-size:.96rem;color:var(--ink);line-height:1.4;margin-top:2px}
+  .ck-item.done .ck-text{color:var(--ink-soft);text-decoration:line-through}
+
   @media print{.deck-bar,.dots,.progress{display:none}}
 
   /* ---------- MOBILE ----------
@@ -216,6 +261,15 @@
     .row2{grid-template-columns:1fr}
     .recap{margin-top:0}
 
+    /* reveal everything on mobile — the build is a desktop/present affordance */
+    [data-step]{opacity:1;transform:none}
+    .build-cols{grid-template-columns:1fr;gap:24px}
+    .btitle{font-size:1.7rem}
+    .bexp{font-size:1rem}
+    .qline{font-size:1.14rem}
+    .checklist{grid-template-columns:1fr;overflow:visible}
+    .build-hint{display:none}
+
     /* timeline becomes a tappable vertical menu */
     .tl-phases{display:none}
     .tl-track{flex-direction:column;gap:2px;padding-left:4px}
@@ -240,7 +294,7 @@
     <div class="bar-right">
       <button class="ghostbtn" id="fs">Present</button>
       <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
-      <span class="counter" id="counter">1 / 13</span>
+      <span class="counter" id="counter">1 / 14</span>
       <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
     </div>
   </div>
@@ -282,76 +336,88 @@
         <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> to page through, or click a stop</span></div>
       </section>
 
-      <!-- 2 — ENTITY & LIABILITY -->
-      <section class="slide">
+      <!-- 2 — ENTITY & LIABILITY  (prototype: progressive-reveal "build") -->
+      <section class="slide" data-action="entity">
         <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Foundation &middot; Stop 1</span></div>
         <h2 class="st">Put a <span class="pine">wall</span> between you and the business.</h2>
-        <div class="two" style="margin-top:16px">
-          <div>
-            <ul class="points">
-              <li><span class="num">1</span><span class="tx">Ridgeline will buy steel, run machines, and mail blades to strangers. Each of those is a claim looking for a name — make sure the name it finds is the <b>company&rsquo;s</b>, not yours.</span></li>
-              <li><span class="num">2</span><span class="tx">An <b>LLC</b> or <b>S-corp</b> is that wall. Set up right, a lawsuit or debt against the business can&rsquo;t reach your house, your car, or your savings.</span></li>
-              <li><span class="num">3</span><span class="tx">The wall only holds if you respect it — separate money, clean records, real paperwork. Skip that and a court can tear it down. (That&rsquo;s Stop 2.)</span></li>
-              <li><span class="num">4</span><span class="tx">Ask a CPA about <b>LLC vs. S-corp</b> — the choice mostly changes how you&rsquo;re taxed once profit is steady, not how protected you are.</span></li>
-            </ul>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Build the wall</div>
+            <p class="bexp" data-step="1">Everything a business does &mdash; buying materials, running equipment, shipping to strangers &mdash; is a claim looking for a name. Make sure it finds the company&rsquo;s, not yours.</p>
           </div>
-          <div class="stack">
-            <div class="pull">You can&rsquo;t take a real swing at building something if one bad batch of blades can take your home.</div>
-            <div class="card">
-              <h3>Do this first</h3>
-              <p>Form the entity <b>before</b> you sign a lease, take a dollar, or ship a razor. Protection is cheapest when it&rsquo;s in place before the risk starts.</p>
-            </div>
+          <div class="bcol">
+            <div class="btitle">The corporate veil</div>
+            <p class="bexp" data-step="2">That wall is called the &ldquo;corporate veil,&rdquo; and it only holds if you respect it &mdash; separate money, clean records, real paperwork. Blur the line and a court can <em>pierce</em> it and reach your personal assets.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Form an LLC</div>
+            <p class="bexp" data-step="3">The entity that builds the wall. Register an LLC and, kept clean, a lawsuit or debt against the business can&rsquo;t reach your house, car, or savings.</p>
           </div>
         </div>
-        <div class="slide-foot"><span>01 — CHOOSE A STRUCTURE</span><span>STARTUP FINANCE</span></div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;You can&rsquo;t take a real swing at building something if one bad batch can take your home.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="entity" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Form your entity before you sign a lease, take a dollar, or make a sale.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>01 — CHOOSE A STRUCTURE</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 3 — DON'T COMMINGLE -->
       <section class="slide">
         <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Foundation &middot; Stop 2</span></div>
         <h2 class="st">The business&rsquo;s money is <span class="pine">not</span> your money.</h2>
-        <div class="two" style="margin-top:16px">
-          <div>
-            <ul class="points">
-              <li><span class="num">1</span><span class="tx">Open a dedicated <b>business checking account</b> on day one. Every dollar of razor revenue lands there; every expense leaves from there.</span></li>
-              <li><span class="num">2</span><span class="tx">Mixing personal and business funds — &ldquo;<b>commingling</b>&rdquo; — is the fastest way to collapse the liability wall. A court can rule the company was never really separate from you.</span></li>
-              <li><span class="num">3</span><span class="tx">It also wrecks tax time. You can&rsquo;t cleanly deduct what you can&rsquo;t cleanly trace — and messy books invite audits.</span></li>
-              <li><span class="num">4</span><span class="tx">Pay yourself <b>on purpose</b>: a set transfer (an owner&rsquo;s draw or salary) from business to personal. Never swipe the company card for groceries.</span></li>
-            </ul>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Separate accounts</div>
+            <p class="bexp" data-step="1">Open a business checking account on day one. Revenue in, expenses out &mdash; all of it in the company&rsquo;s name, never your personal account.</p>
           </div>
-          <div class="stack">
-            <div class="pull">One account in, one account out. If a dollar can&rsquo;t be traced, it can&rsquo;t be defended in court &mdash; or deducted at tax time.</div>
-            <div class="card">
-              <h3>The two-account rule</h3>
-              <p>Business checking + business card, both in the company&rsquo;s name. That&rsquo;s the whole habit. Everything else on this roadmap gets easier once these exist.</p>
-            </div>
+          <div class="bcol">
+            <div class="btitle">Don&rsquo;t commingle</div>
+            <p class="bexp" data-step="2">Mixing personal and business money is the fastest way to collapse the wall &mdash; a court can rule the company was never really separate from you, and it wrecks tax time too.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Pay yourself on purpose</div>
+            <p class="bexp" data-step="3">Move money to yourself as a set draw or salary. Never swipe the company card for groceries.</p>
           </div>
         </div>
-        <div class="slide-foot"><span>02 — DON'T COMMINGLE</span><span>PROTECT THE LIABILITY SHIELD</span></div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;One account in, one account out. If a dollar can&rsquo;t be traced, it can&rsquo;t be defended &mdash; or deducted.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="separate" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Open a business checking account and run all business money through it.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>02 — DON'T COMMINGLE</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 4 — BUSINESS CARD & EXPENSES -->
       <section class="slide">
         <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Foundation &middot; Stop 3</span></div>
         <h2 class="st">Build the company&rsquo;s <span class="pine">own credit</span> — and catch every deduction.</h2>
-        <div class="two" style="margin-top:16px">
-          <div>
-            <ul class="points">
-              <li><span class="num">1</span><span class="tx">A <b>business credit card</b> keeps spending separate and starts building credit under Ridgeline&rsquo;s name, not yours.</span></li>
-              <li><span class="num">2</span><span class="tx">Business credit unlocks bigger lines later — steel inventory, a blade-grinding machine, a delivery van — <b>without a personal guarantee</b> on the hook.</span></li>
-              <li><span class="num">3</span><span class="tx">Categorize every expense: raw steel, packaging, postage, ads, software. Clean books mean you <b>deduct everything</b> the business is owed.</span></li>
-              <li><span class="num">4</span><span class="tx"><b>Pay it in full every month.</b> Card interest is the most expensive money a young company can borrow — it quietly eats the margin you&rsquo;re fighting for.</span></li>
-            </ul>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">A business card</div>
+            <p class="bexp" data-step="1">Put spending on a card in the company&rsquo;s name. It keeps things separate and builds credit under the business, not you.</p>
           </div>
-          <div class="stack">
-            <div class="pull">Every legitimate expense you track is money the business keeps at tax time.</div>
-            <div class="card">
-              <h3>Rewards, pointed the right way</h3>
-              <p>A cash-back or points card turns spending you&rsquo;d do anyway into a small rebate — useful, but never a reason to buy what you don&rsquo;t need. The deduction and the clean trail matter far more than the perks.</p>
-            </div>
+          <div class="bcol">
+            <div class="btitle">Real borrowing power</div>
+            <p class="bexp" data-step="2">Business credit unlocks bigger lines later &mdash; inventory, equipment, a delivery van &mdash; <em>without</em> a personal guarantee on the hook.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Catch every deduction</div>
+            <p class="bexp" data-step="3">Categorize every expense so you deduct everything you&rsquo;re owed &mdash; and pay the card in full. Interest is the priciest money a young company borrows.</p>
           </div>
         </div>
-        <div class="slide-foot"><span>03 — BUSINESS CARD & EXPENSES</span><span>CREDIT, DEDUCTIONS, CLEAN BOOKS</span></div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Every legitimate expense you track is money the business keeps at tax time.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="card" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Open a business credit card and categorize every expense.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>03 — BUSINESS CARD & EXPENSES</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 5 — MEASURABLE GOALS (BENCHMARKS) -->
@@ -371,15 +437,14 @@
             <div class="pull" style="font-size:1.14rem">&ldquo;We&rsquo;re growing&rdquo; isn&rsquo;t a number. A target you can check on a Friday is.</div>
             <div class="card">
               <h3>Same dials, any company</h3>
-              <p>A razor subscription, a coffee cart, a law firm, an app — all of them live or die on margin, the cost to win a customer, how long that customer stays, and how many months of cash sit in the bank. The healthy ranges shift by industry; <b>the dials don&rsquo;t.</b></p>
-            </div>
-            <div class="card">
-              <h3>Next two stops</h3>
-              <p>Stop 5 puts real numbers into the customer math. Stop 6 does the same for your cash runway.</p>
+              <p>A razor subscription, a coffee cart, a law firm, an app &mdash; all of them live or die on margin, the cost to win a customer, how long they stay, and months of cash in the bank. The healthy ranges shift by industry; <b>the dials don&rsquo;t.</b></p>
             </div>
           </div>
         </div>
-        <div class="slide-foot"><span>04 — MEASURABLE GOALS</span><span>TARGETS VARY BY INDUSTRY — THE DIALS DON'T</span></div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="goals" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Write down your target margin, LTV:CAC, runway, and churn.</span></button>
+        </div>
+        <div class="slide-foot"><span>04 — MEASURABLE GOALS</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 6 — UNIT ECONOMICS CALCULATOR -->
@@ -429,7 +494,10 @@
             <div class="disclaim">Simplified: ignores discounting and add-on sales. Directional, not a forecast.</div>
           </div>
         </div>
-        <div class="slide-foot"><span>05 — UNIT ECONOMICS</span><span>DRAG ANY DIAL — RESULTS UPDATE LIVE</span></div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="unit" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Calculate your real CAC, lifetime value, and CAC-payback period.</span></button>
+        </div>
+        <div class="slide-foot"><span>05 — UNIT ECONOMICS</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 7 — RUNWAY & LIQUIDITY CALCULATOR -->
@@ -475,7 +543,10 @@
             <div class="disclaim">A business emergency fund is the same idea as a personal one: liquid cash that buys you time when a client, a season, or a machine goes sideways.</div>
           </div>
         </div>
-        <div class="slide-foot"><span>06 — RUNWAY & LIQUIDITY</span><span>LIQUIDITY = TIME TO MAKE GOOD DECISIONS</span></div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="runway" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Build a business cash cushion of six-plus months of expenses.</span></button>
+        </div>
+        <div class="slide-foot"><span>06 — RUNWAY & LIQUIDITY</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 8 — POWER OF PROTECTION (THESIS) -->
@@ -485,10 +556,9 @@
         <div class="two" style="margin-top:14px">
           <div>
             <ul class="points">
-              <li><span class="num">1</span><span class="tx">Insurance doesn&rsquo;t make bad things stop happening. It moves the <b>financial loss</b> off your balance sheet and onto the carrier&rsquo;s.</span></li>
-              <li><span class="num">2</span><span class="tx">A defective batch of blades, a delivery-van crash, a slip-and-fall at the plant — <b>general and product liability</b> coverage turns a company-ending number into a monthly premium.</span></li>
-              <li><span class="num">3</span><span class="tx">Once a catastrophe can&rsquo;t wipe you out, you can do the things that actually grow a company: sign the bigger lease, take the wholesale order, hire ahead of the revenue.</span></li>
-              <li><span class="num">4</span><span class="tx">That&rsquo;s the whole thesis: <b>the protected founder can afford to take risks the exposed founder can&rsquo;t</b> — and it&rsquo;s the risks that carry the return.</span></li>
+              <li><span class="num">1</span><span class="tx">Insurance doesn&rsquo;t stop bad things happening. It moves the <b>financial loss</b> off your balance sheet and onto the carrier&rsquo;s for a monthly premium.</span></li>
+              <li><span class="num">2</span><span class="tx">A defective batch, a delivery-van crash, a slip-and-fall &mdash; <b>general and product liability</b> turns a company-ending number into a line item.</span></li>
+              <li><span class="num">3</span><span class="tx">Once a catastrophe can&rsquo;t wipe you out, you can take the swings that grow a company &mdash; <b>and it&rsquo;s the swings that carry the return.</b></span></li>
             </ul>
           </div>
           <div class="riskbox" id="riskBox">
@@ -501,7 +571,10 @@
             <p class="risk-cap" id="riskCap"><b>Exposed:</b> one lawsuit, one fire, or one lost partner could end it &mdash; so you play small and grow slowly to survive.</p>
           </div>
         </div>
-        <div class="slide-foot"><span>07 — THE POWER OF PROTECTION</span><span>TAP EXPOSED / PROTECTED</span></div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="protect" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Get general and product liability quotes for the business.</span></button>
+        </div>
+        <div class="slide-foot"><span>07 — THE POWER OF PROTECTION</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 9 — BUY/SELL AGREEMENT CALCULATOR -->
@@ -545,7 +618,10 @@
             <div class="disclaim">A buy/sell agreement sets the price and terms in advance; life insurance provides the cash to honor it. Educational only.</div>
           </div>
         </div>
-        <div class="slide-foot"><span>08 — BUY / SELL AGREEMENT</span><span>SET THE PRICE NOW, FUND IT WITH INSURANCE</span></div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="buysell" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Put a funded buy/sell agreement in place with any co-owners.</span></button>
+        </div>
+        <div class="slide-foot"><span>08 — BUY / SELL AGREEMENT</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 10 — INSURE YOUR PEOPLE -->
@@ -571,32 +647,38 @@
             </ul>
           </div>
         </div>
-        <div class="pull" style="margin-top:20px">The property is insured because it&rsquo;s obvious. The people are the actual business &mdash; and they&rsquo;re the ones most companies forget to protect.</div>
-        <div class="slide-foot"><span>09 — INSURE YOUR PEOPLE</span><span>DISABILITY · KEY PERSON</span></div>
+        <div class="reveal-foot" style="margin-top:18px">
+          <button class="action mini" type="button" data-step="1" data-action-check="people" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Insure partners for disability and cover your key person.</span></button>
+        </div>
+        <div class="slide-foot"><span>09 — INSURE YOUR PEOPLE</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 11 — EMPLOYEE BENEFITS -->
       <section class="slide">
         <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Scale &middot; Stop 10</span></div>
         <h2 class="st">Benefits are how you <span class="pine">win and keep</span> good people.</h2>
-        <div class="two" style="margin-top:16px">
-          <div>
-            <ul class="points">
-              <li><span class="num">1</span><span class="tx">Ridgeline is hiring machinists, packers, and a marketer. The best ones have options — <b>benefits are how you compete</b> without simply paying the most.</span></li>
-              <li><span class="num">2</span><span class="tx">Start with the basics people expect: <b>health insurance</b>, then dental and vision as you can afford them.</span></li>
-              <li><span class="num">3</span><span class="tx">Layer in <b>group life and disability</b> — often cheap per head, and they extend the protection thesis to your whole team.</span></li>
-              <li><span class="num">4</span><span class="tx">A <b>retirement plan with a match</b> (Stop 11) is the retention magnet. Replacing a trained employee costs far more than the benefits that kept them.</span></li>
-            </ul>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Compete without overpaying</div>
+            <p class="bexp" data-step="1">The best hires have options. Benefits let you win them without simply paying the most.</p>
           </div>
-          <div class="stack">
-            <div class="pull">Turnover is a tax you pay in lost knowledge. Benefits are how you stop paying it.</div>
-            <div class="card">
-              <h3>Right-size it to the stage</h3>
-              <p>You don&rsquo;t need a Fortune-500 package on day one. Add benefits as headcount and cash flow grow — but put <b>something</b> in place before your best hire gets a better offer.</p>
-            </div>
+          <div class="bcol">
+            <div class="btitle">Start with the basics</div>
+            <p class="bexp" data-step="2">Health insurance first, then dental and vision. Add group life and disability &mdash; cheap per head, and they extend the protection thesis to the whole team.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">A match keeps people</div>
+            <p class="bexp" data-step="3">A retirement match is the retention magnet. Replacing a trained employee costs far more than the benefits that kept them.</p>
           </div>
         </div>
-        <div class="slide-foot"><span>10 — EMPLOYEE BENEFITS</span><span>RECRUIT · RETAIN · PROTECT THE TEAM</span></div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Turnover is a tax you pay in lost knowledge. Benefits are how you stop paying it.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="benefits" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Choose a starter benefits package before your next key hire.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>10 — EMPLOYEE BENEFITS</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 12 — RETIREMENT PLANS -->
@@ -614,11 +696,14 @@
             <div class="pull" style="font-size:1.14rem">The owner who reinvests everything and saves nothing is building a company and no personal wealth.</div>
             <div class="card">
               <h3>Two wins at once</h3>
-              <p>Owner contributions are usually <b>tax-deductible to the business</b>, and a match is the benefit employees value most. As Ridgeline grows, the plan grows with it &mdash; start simple, upgrade as headcount climbs.</p>
+              <p>Owner contributions are usually <b>tax-deductible to the business</b>, and a match is the benefit employees value most. Start simple, upgrade as headcount climbs.</p>
             </div>
           </div>
         </div>
-        <div class="slide-foot"><span>11 — RETIREMENT PLANS</span><span>OWNER FIRST, THEN THE TEAM</span></div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="retire" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Open the retirement plan that fits your stage.</span></button>
+        </div>
+        <div class="slide-foot"><span>11 — RETIREMENT PLANS</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 13 — THE THROUGHLINE (RECAP) -->
@@ -643,7 +728,16 @@
           </div>
         </div>
         <div class="pull" style="margin-top:22px">Protection isn&rsquo;t the cautious move. It&rsquo;s what lets you stop playing small &mdash; the exposed founder plays not to lose; the protected founder plays to win.</div>
-        <div class="slide-foot"><span>12 — THE THROUGHLINE</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
+        <div class="slide-foot"><span>12 — THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
+      </section>
+
+      <!-- 14 — ACTION CHECKLIST -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Your action list</span></div>
+        <h2 class="st">Now go <span class="pine">do</span> it.</h2>
+        <p class="lede" style="margin-top:4px">Every stop leaves one action. Tick them off as you knock them out &mdash; progress saves on this device.</p>
+        <div class="checklist" id="checklist"></div>
+        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 11</span></div>
       </section>
 
     </div>
@@ -666,36 +760,84 @@
   var bar     = document.getElementById('bar');
   var prevBtn = document.getElementById('prev');
   var nextBtn = document.getElementById('next');
-  var cur = 0;
+  var mobileQ = window.matchMedia('(max-width:860px)');
+  var cur = 0, curStep = 0;
 
   slides.forEach(function(_, i){
     var b = document.createElement('button');
     b.className = 'dot' + (i === 0 ? ' on' : '');
     b.setAttribute('aria-label', 'Slide ' + (i + 1));
-    b.addEventListener('click', function(){ go(i); });
+    b.addEventListener('click', function(){ goSlide(i, 0); });
     dotsBox.appendChild(b);
   });
   var dots = Array.prototype.slice.call(dotsBox.children);
 
-  function go(i){
-    cur = Math.max(0, Math.min(slides.length - 1, i));
+  /* ---- progressive-reveal "build" within a slide ----
+     Elements carrying data-step="N" appear once the build reaches step N.
+     Next advances the build first, then moves to the next slide. On mobile the
+     build is skipped — everything shows, since you read by scrolling there. */
+  function maxStepOf(slide){
+    var m = 0;
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0; if (s > m) m = s;
+    });
+    return m;
+  }
+  function applyStep(slide, step){
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0;
+      if (s <= step){ el.hidden = false; requestAnimationFrame(function(){ el.classList.add('show'); }); }
+      else { el.classList.remove('show'); el.hidden = true; }
+    });
+    var hint = slide.querySelector('.build-hint');
+    if (hint){
+      var mx = maxStepOf(slide);
+      hint.textContent = (mx > 0 && step < mx) ? 'CLICK → TO REVEAL MORE' : '';
+    }
+  }
+
+  function render(){
+    var slide = slides[cur];
+    var mx = maxStepOf(slide);
+    var eff = mobileQ.matches ? mx : curStep;
     slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
     dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
     counter.textContent = (cur + 1) + ' / ' + slides.length;
     bar.style.width = ((cur + 1) / slides.length * 100) + '%';
-    prevBtn.disabled = cur === 0;
-    nextBtn.disabled = cur === slides.length - 1;
+    applyStep(slide, eff);
+    prevBtn.disabled = (cur === 0 && eff === 0);
+    nextBtn.disabled = (cur === slides.length - 1 && eff >= mx);
     if (mobileQ.matches) window.scrollTo(0, 0);
   }
-  prevBtn.addEventListener('click', function(){ go(cur - 1); });
-  nextBtn.addEventListener('click', function(){ go(cur + 1); });
 
-  /* timeline stops jump to their slide; every "Roadmap" button returns home */
+  /* step === null means "reveal the whole slide" (used for jumps and back-nav) */
+  function goSlide(i, step){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    var mx = maxStepOf(slides[cur]);
+    curStep = (step == null) ? mx : Math.max(0, Math.min(mx, step));
+    render();
+  }
+  function next(){
+    var mx = maxStepOf(slides[cur]);
+    if (!mobileQ.matches && curStep < mx){ curStep++; render(); }
+    else if (cur < slides.length - 1){ goSlide(cur + 1, 0); }
+  }
+  function prev(){
+    if (!mobileQ.matches && curStep > 0){ curStep--; render(); }
+    else if (cur > 0){ goSlide(cur - 1, null); }
+  }
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  /* timeline stops jump to their slide and start it from the beginning (step 0),
+     so the click-through build plays from the top; Roadmap buttons go home */
   document.addEventListener('click', function(e){
     var node = e.target.closest('[data-goto]');
-    if (node){ go(+node.getAttribute('data-goto')); return; }
+    if (node){ goSlide(+node.getAttribute('data-goto'), 0); return; }
     var home = e.target.closest('[data-home]');
-    if (home){ go(0); }
+    if (home){ goSlide(0, 0); return; }
+    var act = e.target.closest('[data-action-check]');
+    if (act){ toggleAction(act.getAttribute('data-action-check')); }
   });
 
   document.addEventListener('keydown', function(e){
@@ -704,10 +846,10 @@
       if (e.key === 'Escape') e.target.blur();
       return;
     }
-    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
-    else if (e.key === 'Home') { e.preventDefault(); go(0); }
-    else if (e.key === 'End') { e.preventDefault(); go(slides.length - 1); }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goSlide(0, 0); }
+    else if (e.key === 'End') { e.preventDefault(); goSlide(slides.length - 1, null); }
   });
 
   document.getElementById('fs').addEventListener('click', function(){
@@ -718,7 +860,6 @@
   /* Scale the 1280x720 stage to fit. Below 860px the stylesheet switches to a
      stacked reading layout, so the fit math stands down and clears itself. */
   var fitBox = document.getElementById('stageFit');
-  var mobileQ = window.matchMedia('(max-width:860px)');
 
   function fit(){
     if (mobileQ.matches){
@@ -915,11 +1056,70 @@
   riskOff.addEventListener('click', function(){ setRisk(false); });
   riskOn.addEventListener('click', function(){ setRisk(true); });
 
+  /* ---------- ACTION CHECKLIST (final slide) ----------
+     One action per stop. Ticks persist per-device in localStorage. As the
+     progressive-reveal pattern rolls out to each stop, that stop's action item
+     is the same wording collected here. */
+  var ACTIONS = [
+    {id:'entity',   phase:'Foundation', text:'Form your LLC before you sign a lease or make a sale.'},
+    {id:'separate', phase:'Foundation', text:'Open a business checking account and run all business money through it.'},
+    {id:'card',     phase:'Foundation', text:'Open a business credit card and categorize every expense.'},
+    {id:'goals',    phase:'Launch',     text:'Write down your target margin, LTV:CAC, runway, and churn.'},
+    {id:'unit',     phase:'Launch',     text:'Calculate your real CAC, lifetime value, and CAC-payback period.'},
+    {id:'runway',   phase:'Launch',     text:'Build a business cash cushion of six-plus months of expenses.'},
+    {id:'protect',  phase:'Protect',    text:'Get general and product liability quotes for the business.'},
+    {id:'buysell',  phase:'Protect',    text:'Put a funded buy/sell agreement in place with any co-owners.'},
+    {id:'people',   phase:'Protect',    text:'Insure partners for disability and cover your key person.'},
+    {id:'benefits', phase:'Scale',      text:'Choose a starter benefits package before your next key hire.'},
+    {id:'retire',   phase:'Scale',      text:'Open the retirement plan that fits your stage.'}
+  ];
+  var CK_KEY = 'tr-startup-actions', ckState = {};
+  try { var cs = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (cs && typeof cs === 'object') ckState = cs; } catch(e){}
+  var ckWrap = document.getElementById('checklist'), ckCount = document.getElementById('ckcount');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function ckSave(){ try { localStorage.setItem(CK_KEY, JSON.stringify(ckState)); } catch(e){} }
+  function ckRender(){
+    if (!ckWrap) return;
+    ckWrap.innerHTML = ACTIONS.map(function(a){
+      var done = !!ckState[a.id];
+      return '<button type="button" class="ck-item' + (done ? ' done' : '') + '" data-ck="' + a.id + '">' +
+               '<span class="ck-box"><span class="ck"></span></span>' +
+               '<span class="ck-body"><span class="ck-phase">' + a.phase + '</span>' +
+               '<span class="ck-text">' + esc(a.text) + '</span></span>' +
+             '</button>';
+    }).join('');
+    var n = ACTIONS.filter(function(a){ return ckState[a.id]; }).length;
+    if (ckCount) ckCount.textContent = n + ' of ' + ACTIONS.length;
+  }
+  /* mirror the saved state onto every inline action checkbox on the slides */
+  function syncActions(){
+    document.querySelectorAll('[data-action-check]').forEach(function(btn){
+      var done = !!ckState[btn.getAttribute('data-action-check')];
+      btn.classList.toggle('done', done);
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    });
+  }
+  /* one source of truth: ticking a slide's action or a checklist row updates
+     storage, the end checklist, and the inline action — so a box checked mid-
+     lesson shows up already checked on the final slide */
+  function toggleAction(id){
+    ckState[id] = !ckState[id];
+    ckSave(); ckRender(); syncActions();
+  }
+  if (ckWrap){
+    ckWrap.addEventListener('click', function(e){
+      var it = e.target.closest('[data-ck]'); if (!it) return;
+      toggleAction(it.getAttribute('data-ck'));
+    });
+  }
+  ckRender();
+  syncActions();
+
   /* ---------- INIT ---------- */
   calcUnit();
   calcRunway();
   calcBuySell();
-  go(0);
+  goSlide(0, 0);
 })();
 </script>
 </body>
