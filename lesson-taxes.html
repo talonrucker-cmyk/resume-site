@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tax Basics — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:48px 58px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  .eyebrow.p2{color:#9a6410}.eyebrow.p2::before{background:var(--amber)}
+  .eyebrow.p3{color:var(--brick)}.eyebrow.p3::before{background:var(--brick)}
+  .eyebrow.p4{color:var(--pine-deep)}.eyebrow.p4::before{background:var(--pine)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1.03;letter-spacing:-.028em;margin:14px 0 16px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1.08;letter-spacing:-.022em;margin:12px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  h2.st .amber{color:var(--amber)}
+  h2.st .brick{color:var(--brick)}
+  .lede{font-size:1.12rem;color:var(--ink-soft);max-width:64ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* per-slide header: back-to-roadmap + phase tag */
+  .slide-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:2px}
+  .tl-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-weight:600;font-size:.78rem;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--white);color:var(--pine);cursor:pointer;transition:.18s}
+  .tl-back:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .tl-back .ar{transition:transform .18s}.tl-back:hover .ar{transform:translateX(-3px)}
+
+  /* ---------- TIMELINE HUB (slide 1) ---------- */
+  .timeline{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:8px}
+  .tl-phases{display:flex;gap:16px;margin-bottom:34px}
+  .tl-phase{flex:1;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:11px;border-bottom:2px solid var(--line);color:var(--ink)}
+  .tl-phase span{display:block;font-family:var(--body);font-size:.74rem;letter-spacing:0;text-transform:none;color:#8e9c96;font-weight:400;margin-top:3px}
+  .tl-phase.p1{border-color:var(--pine);color:var(--pine)}
+  .tl-phase.p2{border-color:var(--amber);color:#9a6410}
+  .tl-phase.p3{border-color:var(--brick);color:var(--brick)}
+  .tl-phase.p4{border-color:var(--pine-deep);color:var(--pine-deep)}
+  .tl-track{position:relative;display:flex}
+  .tl-spine{position:absolute;left:5%;right:5%;top:17px;height:3px;transform:translateY(-50%);background:var(--line-strong);border-radius:99px;z-index:0}
+  .tl-node{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;gap:13px;background:none;border:0;cursor:pointer;padding:0 4px;font:inherit}
+  .tl-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:.86rem;color:#fff;background:var(--pine);border:3px solid var(--paper);box-shadow:0 2px 8px -2px rgba(10,40,30,.4);transition:.18s}
+  .tl-node.p2 .tl-dot{background:var(--amber);color:#3a2a08}
+  .tl-node.p3 .tl-dot{background:var(--brick)}
+  .tl-node.p4 .tl-dot{background:var(--pine-deep)}
+  .tl-lab{font-family:var(--display);font-weight:600;font-size:.85rem;line-height:1.18;color:var(--ink-soft);text-align:center;max-width:13ch;transition:.18s}
+  .tl-node:hover .tl-dot{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 18px -6px rgba(10,40,30,.55)}
+  .tl-node:hover .tl-lab{color:var(--ink)}
+  .tl-node:focus-visible .tl-dot{outline:2px solid var(--pine);outline-offset:3px}
+  .tl-hint{margin-top:30px;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:#8e9c96}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.12fr .88fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.96rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:15px;margin-top:20px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.26rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+  .stack{display:flex;flex-direction:column;gap:18px}
+
+  /* benchmark table */
+  .bench{display:flex;flex-direction:column;gap:8px}
+  .benchrow{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 16px;transition:.2s}
+  .benchrow:hover{border-color:var(--pine);transform:translateX(3px)}
+  .benchrow .bm{font-weight:600;color:var(--ink);font-size:.98rem}
+  .benchrow .bm span{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:400;margin-top:1px}
+  .benchrow .bt{font-family:var(--display);font-weight:700;color:var(--pine);font-size:1.04rem;white-space:nowrap;text-align:right}
+  .benchrow .bt.amber{color:var(--amber)}
+  .benchrow .bt.brick{color:var(--brick)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:20px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:13px;overflow:auto}
+  .inputs.tight{gap:10px;padding:16px 24px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:11px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.1rem;color:var(--ink);padding:10px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:60px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:24px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.3rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.brick{color:#F0A093}
+  .out .big.green{color:#8FD8BE}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.32rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bn.green{color:#8FD8BE}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.28rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px;line-height:1.45}
+  .flag.good{background:rgba(79,176,141,.14);border-color:rgba(79,176,141,.4);color:#8FD8BE}
+  .flag.bad{background:rgba(162,58,45,.16);border-color:rgba(240,160,147,.4);color:#F0A093}
+
+  /* filing-status / method toggle (reused for calculators) */
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper-2)}
+  .seg button{border:0;background:none;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;padding:8px 16px;cursor:pointer;color:var(--ink-soft)}
+  .seg button.on{background:var(--pine);color:#fff}
+
+  /* capital-gains stacked bar (in the dark output panel) */
+  .cgbar{margin:14px 0 4px}
+  .cgtrack{height:26px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;display:flex;border:1px solid rgba(255,255,255,.14)}
+  .cgtrack i{height:100%;display:block;transition:width .4s cubic-bezier(.2,.85,.25,1)}
+  .cg-ord{background:repeating-linear-gradient(45deg,#5E776C,#5E776C 7px,#546b61 7px,#546b61 14px)}
+  .cg-0{background:linear-gradient(90deg,#2E8C6E,#4FB08D)}
+  .cg-15{background:var(--amber)}
+  .cg-20{background:var(--brick)}
+  .cgkey{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px}
+  .cgkey span{font-family:var(--mono);font-size:.64rem;letter-spacing:.03em;color:#B6C7BF;display:flex;align-items:center;gap:6px}
+  .cgkey i{width:13px;height:10px;border-radius:2px;flex:none}
+  .cgkey i.k-ord{background:#5E776C}.cgkey i.k-0{background:#4FB08D}.cgkey i.k-15{background:var(--amber)}.cgkey i.k-20{background:var(--brick)}
+
+  /* ---------- PROGRESSIVE REVEAL (build) ---------- */
+  [data-step]{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .5s cubic-bezier(.2,.85,.25,1)}
+  [data-step].show{opacity:1;transform:none}
+  [data-step][hidden]{display:none}
+
+  .build-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:44px;align-items:start;align-content:center;padding:4px 0}
+  .bcol{display:flex;flex-direction:column;align-items:flex-start}
+  .bcol::before{content:"";display:block;width:46px;height:6px;border-radius:99px;background:var(--pine);margin-bottom:18px}
+  .bcol:nth-child(2)::before{background:var(--amber)}
+  .bcol:nth-child(3)::before{background:var(--brick)}
+  .btitle{font-family:var(--display);font-weight:700;font-size:2.1rem;letter-spacing:-.02em;color:var(--ink);line-height:1.08}
+  .bexp{font-size:1.05rem;color:var(--ink-soft);line-height:1.5;margin-top:12px}
+  .bexp em{font-style:italic;color:var(--ink)}
+  .reveal-foot{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .qline{border-left:3px solid var(--amber);padding:5px 0 5px 18px;font-family:var(--display);font-weight:500;font-size:1.34rem;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+  .action{display:inline-flex;align-items:center;gap:15px;align-self:center;background:var(--sage);border:1px solid rgba(14,82,64,.28);border-radius:14px;padding:15px 26px;font-family:var(--body);font-size:1.18rem;font-weight:600;line-height:1.35;color:var(--pine-deep);max-width:100%;cursor:pointer;text-align:left;transition:.18s}
+  .action:hover{border-color:var(--pine);box-shadow:0 8px 20px -12px rgba(14,82,64,.7)}
+  .ax-box{flex:none;width:27px;height:27px;border:2px solid var(--pine);border-radius:8px;background:var(--white);display:grid;place-items:center}
+  .ax-box .ck{width:12px;height:7px;border-left:2.8px solid #fff;border-bottom:2.8px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .action.done .ax-box{background:var(--pine);border-color:var(--pine)}
+  .action.done .ax-box .ck{opacity:1}
+  .ax-tag{flex:none;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--pine);color:#fff;padding:5px 10px;border-radius:99px}
+  .action.mini{padding:10px 18px;font-size:1.02rem;gap:12px;border-radius:12px;margin-top:12px}
+  .action.mini .ax-box{width:23px;height:23px}
+  .action.mini .ax-box .ck{width:11px;height:6px}
+  .build-hint{color:var(--pine)}
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  .checklist{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;align-content:start;margin-top:18px;overflow:auto;padding-right:4px}
+  .ck-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 15px;cursor:pointer;transition:.18s;text-align:left;font:inherit}
+  .ck-item:hover{border-color:var(--pine);transform:translateY(-1px)}
+  .ck-box{flex:none;width:24px;height:24px;border:2px solid var(--line-strong);border-radius:7px;background:var(--white);display:grid;place-items:center;margin-top:1px}
+  .ck-box .ck{width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .ck-item.done .ck-box{background:var(--pine);border-color:var(--pine)}
+  .ck-item.done .ck-box .ck{opacity:1}
+  .ck-body{min-width:0}
+  .ck-phase{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+  .ck-text{display:block;font-size:.96rem;color:var(--ink);line-height:1.4;margin-top:2px}
+  .ck-item.done .ck-text{color:var(--ink-soft);text-decoration:line-through}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:26px 18px 32px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.2rem;margin:12px 0 14px}
+    h2.st{font-size:1.7rem}
+    .lede{font-size:1rem}
+    .pull{font-size:1.08rem}
+
+    .two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.5rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    [data-step]{opacity:1;transform:none}
+    .build-cols{grid-template-columns:1fr;gap:24px}
+    .btitle{font-size:1.7rem}
+    .bexp{font-size:1rem}
+    .qline{font-size:1.14rem}
+    .checklist{grid-template-columns:1fr;overflow:visible}
+    .build-hint{display:none}
+
+    .tl-phases{display:none}
+    .tl-track{flex-direction:column;gap:2px;padding-left:4px}
+    .tl-spine{left:19px;right:auto;top:10px;bottom:10px;width:3px;height:auto;transform:none}
+    .tl-node{flex-direction:row;align-items:center;gap:14px;width:100%;padding:9px 4px;justify-content:flex-start}
+    .tl-lab{text-align:left;max-width:none;font-size:1.02rem}
+    .tl-hint{display:none}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.26rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.94rem;color:var(--ink-soft);flex:1}
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 06 · Tax Basics</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 14</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TIMELINE HUB -->
+      <section class="slide on">
+        <span class="eyebrow">Interactive lesson &middot; Tax basics</span>
+        <h2 class="st" style="margin-top:12px">Taxes, from your <span class="pine">first return</span> to your first S&#8209;corp.</h2>
+        <p class="lede">You don&rsquo;t need to love taxes &mdash; you need to know which levers exist and when to pull them. Click any stop, or page straight through.</p>
+        <div class="timeline">
+          <div class="tl-phases">
+            <div class="tl-phase p1">Phase 1 · Basics<span>Filing &amp; deductions</span></div>
+            <div class="tl-phase p2">Phase 2 · Investing<span>Capital gains</span></div>
+            <div class="tl-phase p3">Phase 3 · Working for yourself<span>1099 &amp; business</span></div>
+            <div class="tl-phase p4">Phase 4 · Structure<span>Entities &amp; help</span></div>
+          </div>
+          <div class="tl-track">
+            <div class="tl-spine"></div>
+            <button class="tl-node p1" data-goto="1"><span class="tl-dot">1</span><span class="tl-lab">How income is taxed</span></button>
+            <button class="tl-node p1" data-goto="2"><span class="tl-dot">2</span><span class="tl-lab">Standard vs. itemized</span></button>
+            <button class="tl-node p1" data-goto="3"><span class="tl-dot">3</span><span class="tl-lab">Do you have to file?</span></button>
+            <button class="tl-node p2" data-goto="4"><span class="tl-dot">4</span><span class="tl-lab">Capital gains rates</span></button>
+            <button class="tl-node p2" data-goto="5"><span class="tl-dot">5</span><span class="tl-lab">The 0% bracket</span></button>
+            <button class="tl-node p3" data-goto="6"><span class="tl-dot">6</span><span class="tl-lab">W&#8209;2 vs. 1099</span></button>
+            <button class="tl-node p3" data-goto="7"><span class="tl-dot">7</span><span class="tl-lab">Pay yourself &amp; quarterlies</span></button>
+            <button class="tl-node p3" data-goto="8"><span class="tl-dot">8</span><span class="tl-lab">Business deductions</span></button>
+            <button class="tl-node p3" data-goto="9"><span class="tl-dot">9</span><span class="tl-lab">Tithing &amp; giving</span></button>
+            <button class="tl-node p3" data-goto="10"><span class="tl-dot">10</span><span class="tl-lab">The S&#8209;corp move</span></button>
+            <button class="tl-node p4" data-goto="11"><span class="tl-dot">11</span><span class="tl-lab">Entities &amp; getting help</span></button>
+          </div>
+          <div class="tl-hint">Click a stop to dive in &middot; every slide has a &ldquo;&#8598; Roadmap&rdquo; button to jump back here</div>
+        </div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> to page through, or click a stop</span></div>
+      </section>
+
+      <!-- 2 — HOW INCOME IS TAXED -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Basics &middot; Stop 1</span></div>
+        <h2 class="st">You&rsquo;re not taxed on what you <span class="pine">make</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Start with income</div>
+            <p class="bexp" data-step="1">Add up everything you earned &mdash; wages, side gigs, interest. Subtract a few adjustments and you get your <em>AGI</em> (adjusted gross income).</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Subtract a deduction</div>
+            <p class="bexp" data-step="2">Then take the standard deduction (or itemize). What&rsquo;s left is your <em>taxable income</em> &mdash; the only number the tax brackets ever touch.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Fill the brackets</div>
+            <p class="bexp" data-step="3">Rates are <em>marginal</em>: your first dollars are taxed low, later dollars higher. A raise into the next bracket only taxes the dollars <em>above</em> the line &mdash; never all of it.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Income &minus; deductions = taxable income. Almost every tax move is just shrinking that middle number.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="taxable" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Learn your taxable income and your top marginal bracket.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>01 — HOW INCOME IS TAXED</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 3 — STANDARD VS ITEMIZED (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Basics &middot; Stop 2</span></div>
+        <h2 class="st" style="margin-bottom:12px">Take the bigger deduction &mdash; standard or itemized.</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Your itemized deductions (2026)</div>
+            <div class="fld">
+              <label>Filing status</label>
+              <div class="seg" id="si_status" role="group" aria-label="Filing status">
+                <button type="button" data-st="single" class="on">Single</button>
+                <button type="button" data-st="married">Married &middot; joint</button>
+              </div>
+            </div>
+            <div class="fld">
+              <label for="si_mort">Mortgage interest</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="si_mort" inputmode="numeric" value="0"></div>
+            </div>
+            <div class="fld">
+              <label for="si_salt">State &amp; local + property tax</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="si_salt" inputmode="numeric" value="0"></div>
+              <div class="hint">Capped &mdash; most filers can count up to $40,000 of this in 2026.</div>
+            </div>
+            <div class="fld">
+              <label for="si_give">Charitable giving / tithing</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="si_give" inputmode="numeric" value="0"></div>
+            </div>
+            <div class="fld">
+              <label for="si_med">Other (large medical, etc.)</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="si_med" inputmode="numeric" value="0"></div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">You should</div>
+            <div class="big" id="si_verdict">Take the standard</div>
+            <div class="sub" id="si_sub">Your itemized total is below the standard deduction, so the flat amount wins.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn" id="si_std">$16,100</div><div class="bl">Standard deduction</div></div>
+              <div class="bd"><div class="bn amber" id="si_item">$0</div><div class="bl">Your itemized total</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Standard deduction</span><b id="si_l1">$16,100</b></div>
+              <div class="lrow"><span>Your itemized total</span><b id="si_l2">$0</b></div>
+              <div class="lrow tot"><span>Deduction you&rsquo;ll take</span><b id="si_l3">$16,100</b></div>
+            </div>
+            <div class="flag" id="si_flag">MOST PEOPLE TAKE THE STANDARD — YOU ONLY ITEMIZE WHEN THESE ADD UP TO MORE.</div>
+            <div class="disclaim">Simplified &mdash; real rules have floors and caps. Educational only, not tax advice.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="deduction" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Add up your itemized deductions and compare them to the standard.</span></button>
+        </div>
+        <div class="slide-foot"><span>02 — STANDARD VS ITEMIZED</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 4 — DO YOU HAVE TO FILE? -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Basics &middot; Stop 3</span></div>
+        <h2 class="st">Sometimes you don&rsquo;t <span class="pine">have</span> to file &mdash; but you still <span class="amber">should</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">The rough line</div>
+            <p class="bexp" data-step="1">If your income is under the standard deduction (about <em>$16,100 single</em> in 2026), you often owe nothing and aren&rsquo;t required to file at all.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">File anyway for a refund</div>
+            <p class="bexp" data-step="2">If any tax was withheld from a paycheck, filing is the <em>only</em> way to get it back. No return, no refund &mdash; the IRS keeps it.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Credits are free money</div>
+            <p class="bexp" data-step="3">Low earners often qualify for <em>refundable</em> credits &mdash; the EITC, the Child Tax Credit &mdash; that can pay you more than you had withheld. You must file to claim them.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;When in doubt, file. Skipping a return you didn&rsquo;t owe usually just leaves your own money on the table.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="file" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">File if any tax was withheld or you qualify for a refundable credit.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>03 — DO YOU HAVE TO FILE?</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 5 — CAPITAL GAINS RATES -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Investing &middot; Stop 4</span></div>
+        <h2 class="st">Hold for a <span class="amber">year</span> and the tax rate falls off a cliff.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:start">
+          <div class="bench">
+            <div class="benchrow"><span class="bm">Short-term gain<span>Sold within 1 year of buying</span></span><span class="bt brick">Taxed as<br>ordinary income</span></div>
+            <div class="benchrow"><span class="bm">Long-term &middot; 0% band<span>Low total income</span></span><span class="bt">0%</span></div>
+            <div class="benchrow"><span class="bm">Long-term &middot; middle<span>Most investors land here</span></span><span class="bt amber">15%</span></div>
+            <div class="benchrow"><span class="bm">Long-term &middot; top band<span>Very high income</span></span><span class="bt brick">20%</span></div>
+            <div class="benchrow"><span class="bm">High-earner surtax (NIIT)<span>Above $200k single / $250k joint</span></span><span class="bt brick">+3.8%</span></div>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">Same stock, same gain. Sell at 11 months and you can pay double what you&rsquo;d pay at 13.</div>
+            <div class="card">
+              <h3>Why the wait pays</h3>
+              <p>Sell before a year and the profit is <b>short-term</b> &mdash; taxed like a paycheck, up to 37%. Hold past a year and it&rsquo;s <b>long-term</b>: just <b>0%, 15%, or 20%</b>. There is no 22% long-term rate &mdash; that&rsquo;s an ordinary-income bracket.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="longterm" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Hold investments past one year to earn the long-term rate.</span></button>
+        </div>
+        <div class="slide-foot"><span>04 — CAPITAL GAINS RATES</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 6 — THE 0% BRACKET (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Investing &middot; Stop 5</span></div>
+        <h2 class="st" style="margin-bottom:12px">How much can you sell at <span class="pine">0%</span> tax?</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">2026 long-term capital gains</div>
+            <div class="fld">
+              <label>Filing status</label>
+              <div class="seg" id="cg_status" role="group" aria-label="Filing status">
+                <button type="button" data-st="single" class="on">Single</button>
+                <button type="button" data-st="married">Married &middot; joint</button>
+              </div>
+            </div>
+            <div class="fld">
+              <label for="cg_ord">Your other taxable income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="cg_ord" inputmode="numeric" value="30,000"></div>
+              <div class="hint">Wages and other income <b>after</b> your deduction &mdash; this fills the bracket first.</div>
+            </div>
+            <div class="fld">
+              <label for="cg_gain">Long-term gain you want to realize</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="cg_gain" inputmode="numeric" value="40,000"></div>
+              <div class="hint">Profit on shares held over a year, stacked on top of your income.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Of that gain, taxed at 0%</div>
+            <div class="big green" id="cg_free">$19,450</div>
+            <div class="sub" id="cg_sub">You can realize $19,450 of gain tax-free before you reach the $49,450 ceiling.</div>
+
+            <div class="cgbar">
+              <div class="cgtrack">
+                <i class="cg-ord" id="cg_bord" style="width:40%"></i>
+                <i class="cg-0" id="cg_b0" style="width:25%"></i>
+                <i class="cg-15" id="cg_b15" style="width:25%"></i>
+                <i class="cg-20" id="cg_b20" style="width:0%"></i>
+              </div>
+              <div class="cgkey">
+                <span><i class="k-ord"></i>Your income</span>
+                <span><i class="k-0"></i>Gain @ 0%</span>
+                <span><i class="k-15"></i>Gain @ 15%</span>
+                <span><i class="k-20"></i>Gain @ 20%</span>
+              </div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>0% ceiling (taxable income)</span><b id="cg_l1">$49,450</b></div>
+              <div class="lrow"><span>Gain taxed at 0%</span><b id="cg_l2">$19,450</b></div>
+              <div class="lrow"><span>Gain taxed at 15%</span><b id="cg_l3">$20,550</b></div>
+              <div class="lrow tot"><span>Total tax on the gain</span><b id="cg_l4">$3,083</b></div>
+            </div>
+            <div class="flag good" id="cg_flag">TAX-GAIN HARVESTING — IN A LOW-INCOME YEAR, SELL WINNERS UP TO THE 0% CEILING AND REBUY TO RESET YOUR COST FOR FREE.</div>
+            <div class="disclaim">Ignores state tax, NIIT, and interactions with credits. Directional, not a filing. Educational only.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="zero" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">In low-income years, realize long-term gains up to the 0% ceiling.</span></button>
+        </div>
+        <div class="slide-foot"><span>05 — THE 0% BRACKET</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 7 — W-2 VS 1099 -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 6</span></div>
+        <h2 class="st">Two forms decide <span class="brick">who withholds your taxes</span>.</h2>
+        <div class="two" style="margin-top:18px;align-items:stretch">
+          <div class="card">
+            <h3>W&#8209;2 &mdash; you&rsquo;re an employee</h3>
+            <p style="margin-bottom:10px">The classic job. Your employer does the tax work for you.</p>
+            <ul class="points" style="margin-top:6px;gap:11px">
+              <li><span class="num">&#9679;</span><span class="tx">Taxes are <b>withheld from every paycheck</b> automatically.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">Your employer <b>pays half</b> of your Social Security &amp; Medicare (7.65%).</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">In January you get a W&#8209;2 and mostly just file.</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>1099 &mdash; you&rsquo;re a contractor</h3>
+            <p style="margin-bottom:10px">Freelance, gig, or your own business. You&rsquo;re paid in full &mdash; and you&rsquo;re the boss of the taxes.</p>
+            <ul class="points" style="margin-top:6px;gap:11px">
+              <li><span class="num">&#9679;</span><span class="tx"><b>Nothing is withheld</b> &mdash; the whole check hits your account.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">You pay <b>both halves</b> of Social Security &amp; Medicare &mdash; the 15.3% self-employment tax.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">But you can <b>deduct business expenses</b> a W&#8209;2 worker can&rsquo;t.</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:18px">
+          <button class="action mini" type="button" data-step="1" data-action-check="form" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Know whether each gig pays you on a W&#8209;2 or a 1099.</span></button>
+        </div>
+        <div class="slide-foot"><span>06 — W-2 VS 1099</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 8 — PAY YOURSELF & QUARTERLIES -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 7</span></div>
+        <h2 class="st">No boss withholds it &mdash; so <span class="brick">you</span> do.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Set money aside</div>
+            <p class="bexp" data-step="1">On 1099 income, park roughly <em>25&ndash;30%</em> of every payment in a separate account the moment it lands. That&rsquo;s the tax you&rsquo;ll owe &mdash; it was never really yours.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Pay quarterly</div>
+            <p class="bexp" data-step="2">The IRS wants it four times a year &mdash; <em>April, June, September, January</em>. Skip the estimates and you get hit with penalties on top of the tax.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Draw, don&rsquo;t &ldquo;payroll&rdquo;</div>
+            <p class="bexp" data-step="3">As a sole proprietor you don&rsquo;t run payroll on yourself &mdash; you just <em>draw</em> money out. Real payroll only starts if you elect S&#8209;corp (Stop 10).</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;The surprise April tax bill isn&rsquo;t a surprise &mdash; it&rsquo;s the withholding you forgot to do all year.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="quarterly" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Set aside ~25&ndash;30% of 1099 income and pay quarterly estimates.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>07 — PAY YOURSELF & QUARTERLIES</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 9 — BUSINESS DEDUCTIONS -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 8</span></div>
+        <h2 class="st">Deductions that <span class="pine">shrink</span> the business bill.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Business expenses</div>
+            <p class="bexp" data-step="1">Anything <em>ordinary and necessary</em> to run the business &mdash; software, tools, mileage, a home office &mdash; comes off your profit before it&rsquo;s taxed. Keep the receipts.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Per diem</div>
+            <p class="bexp" data-step="2">Travel for work? Instead of saving every meal receipt, you can deduct a flat government <em>per-diem</em> rate for each day away. Simpler, and often larger.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Depreciation</div>
+            <p class="bexp" data-step="3">Big assets &mdash; a truck, machines, equipment &mdash; get deducted over their life. <em>Section&nbsp;179</em> and bonus depreciation can let you write off much of it the first year.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Every legitimate dollar you deduct is a dollar the brackets never get to touch.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="deduct" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Track every business expense, per-diem day, and depreciable asset.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>08 — BUSINESS DEDUCTIONS</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 10 — TITHING & GIVING -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 9</span></div>
+        <h2 class="st">Giving you already do can <span class="pine">lower</span> your taxes.</h2>
+        <div class="two" style="margin-top:18px;align-items:stretch">
+          <div class="card">
+            <h3>Tithing is a charitable gift</h3>
+            <p style="margin-bottom:10px">Money given to a church or qualified nonprofit is deductible &mdash; but only where it actually helps:</p>
+            <ul class="points" style="margin-top:6px;gap:11px">
+              <li><span class="num">1</span><span class="tx">It counts as an <b>itemized</b> deduction. It only saves tax if your giving plus other itemized items <b>beat the standard deduction</b>.</span></li>
+              <li><span class="num">2</span><span class="tx">New for 2026: even if you take the standard deduction, you can also write off up to <b>$1,000 single / $2,000 joint</b> in cash giving.</span></li>
+            </ul>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">Give because you mean to &mdash; then make sure the deduction doesn&rsquo;t slip through the cracks.</div>
+            <div class="card">
+              <h3>Keep the paper trail</h3>
+              <p>Save receipts and year-end giving statements. A steady tither can sometimes <b>&ldquo;bunch&rdquo;</b> two years of gifts into one to clear the standard deduction, then itemize that year.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="tithe" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Track your giving and check whether itemizing beats the standard.</span></button>
+        </div>
+        <div class="slide-foot"><span>09 — TITHING & GIVING</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 11 — THE S-CORP MOVE (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 10</span></div>
+        <h2 class="st" style="margin-bottom:12px">The S&#8209;corp move: split pay from profit.</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Self-employment tax, two ways</div>
+            <div class="fld">
+              <label for="sc_profit">Yearly business profit</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="sc_profit" inputmode="numeric" value="120,000"></div>
+              <div class="hint">What&rsquo;s left after expenses &mdash; your take from the business.</div>
+            </div>
+            <div class="fld">
+              <label for="sc_salary">Reasonable salary you&rsquo;d pay yourself</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="sc_salary" inputmode="numeric" value="70,000"></div>
+              <div class="hint">Must be a fair wage for the work &mdash; the IRS requires it. The rest is a distribution.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Self-employment tax saved / year</div>
+            <div class="big green" id="sc_save">$7,065</div>
+            <div class="sub" id="sc_sub">Only the $70,000 salary owes the 15.3% tax; the $50,000 distribution doesn&rsquo;t.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn" id="sc_sole">$16,948</div><div class="bl">SE tax as sole prop</div></div>
+              <div class="bd"><div class="bn green" id="sc_scorp">$9,882</div><div class="bl">Payroll tax as S&#8209;corp</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Salary (owes 15.3%)</span><b id="sc_l1">$70,000</b></div>
+              <div class="lrow"><span>Distribution (no 15.3%)</span><b id="sc_l2">$50,000</b></div>
+              <div class="lrow tot"><span>Tax saved</span><b id="sc_l3">$7,065</b></div>
+            </div>
+            <div class="flag" id="sc_flag">WORTH IT ONCE PROFIT IS STEADY — PAYROLL, EXTRA FILINGS, AND A CPA EAT INTO THE SAVINGS ON SMALL PROFITS.</div>
+            <div class="disclaim">Simplified: ignores the Social Security wage cap, QBI, and income tax (unchanged either way). Run real numbers with a CPA.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="scorp" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Once profit is steady, run the S&#8209;corp math with a CPA.</span></button>
+        </div>
+        <div class="slide-foot"><span>10 — THE S-CORP MOVE</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 12 — ENTITIES & GETTING HELP -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Structure &middot; Stop 11</span></div>
+        <h2 class="st">Pick a <span class="pine">structure</span> &mdash; and know when to call a pro.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:start">
+          <div class="bench">
+            <div class="benchrow"><span class="bm">Sole proprietor<span>Default &mdash; just you, no paperwork</span></span><span class="bt">Simplest</span></div>
+            <div class="benchrow"><span class="bm">LLC<span>Shields your personal assets from the business</span></span><span class="bt amber">Protection</span></div>
+            <div class="benchrow"><span class="bm">S&#8209;corp (an election)<span>LLC/corp that splits salary &amp; distributions</span></span><span class="bt">Save on SE tax</span></div>
+            <div class="benchrow"><span class="bm">C&#8209;corp<span>Separate taxpayer; for raising big money</span></span><span class="bt brick">Scale / VC</span></div>
+            <div class="benchrow"><span class="bm">Partnership<span>Two or more owners, no corporation</span></span><span class="bt">Shared</span></div>
+          </div>
+          <div class="stack">
+            <div class="card">
+              <h3>When to form an LLC</h3>
+              <p>Once you have something to lose &mdash; real revenue, customers, contracts, or assets &mdash; an LLC puts a wall between the business and your personal house and savings.</p>
+            </div>
+            <div class="card">
+              <h3>When to hire a CPA</h3>
+              <p>When the stakes beat the fee: self-employment, a business, rentals, equity comp, or a big life change. A good preparer usually finds more than they cost.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="entity" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Form an LLC when you have something to protect; hire a CPA when the stakes beat the fee.</span></button>
+        </div>
+        <div class="slide-foot"><span>11 — ENTITIES & GETTING HELP</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 13 — RECAP -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">The throughline</span></div>
+        <h2 class="st">It all comes back to <span class="pine">one number</span>.</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">Shrink it</div>
+            <h3>Taxable income</h3>
+            <p>Deductions, business expenses, depreciation, giving &mdash; every legal move just lowers the income the brackets can reach.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Time it</div>
+            <h3>When you realize</h3>
+            <p>Hold gains past a year, and sell them in low-income years to catch the 0% bracket. Timing changes the rate.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Structure it</div>
+            <h3>How you&rsquo;re set up</h3>
+            <p>Employee, contractor, LLC, or S&#8209;corp &mdash; the wrapper around your income decides which taxes even apply.</p>
+          </div>
+        </div>
+        <div class="pull" style="margin-top:22px">You&rsquo;ll never out-earn a bad tax setup. A few right moves &mdash; and a CPA when it counts &mdash; keep more of every dollar you make.</div>
+        <div class="slide-foot"><span>12 — THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
+      </section>
+
+      <!-- 14 — ACTION CHECKLIST -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Your action list</span></div>
+        <h2 class="st">Now go <span class="pine">do</span> it.</h2>
+        <p class="lede" style="margin-top:4px">Every stop leaves one action. Tick them off as you knock them out &mdash; progress saves on this device.</p>
+        <div class="checklist" id="checklist"></div>
+        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 11</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+  var cur = 0, curStep = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ goSlide(i, 0); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function maxStepOf(slide){
+    var m = 0;
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0; if (s > m) m = s;
+    });
+    return m;
+  }
+  function applyStep(slide, step){
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0;
+      if (s <= step){ el.hidden = false; requestAnimationFrame(function(){ el.classList.add('show'); }); }
+      else { el.classList.remove('show'); el.hidden = true; }
+    });
+    var hint = slide.querySelector('.build-hint');
+    if (hint){
+      var mx = maxStepOf(slide);
+      hint.textContent = (mx > 0 && step < mx) ? 'CLICK → TO REVEAL MORE' : '';
+    }
+  }
+
+  function render(){
+    var slide = slides[cur];
+    var mx = maxStepOf(slide);
+    var eff = mobileQ.matches ? mx : curStep;
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    applyStep(slide, eff);
+    prevBtn.disabled = (cur === 0 && eff === 0);
+    nextBtn.disabled = (cur === slides.length - 1 && eff >= mx);
+    if (mobileQ.matches) window.scrollTo(0, 0);
+  }
+
+  function goSlide(i, step){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    var mx = maxStepOf(slides[cur]);
+    curStep = (step == null) ? mx : Math.max(0, Math.min(mx, step));
+    render();
+  }
+  function next(){
+    var mx = maxStepOf(slides[cur]);
+    if (!mobileQ.matches && curStep < mx){ curStep++; render(); }
+    else if (cur < slides.length - 1){ goSlide(cur + 1, 0); }
+  }
+  function prev(){
+    if (!mobileQ.matches && curStep > 0){ curStep--; render(); }
+    else if (cur > 0){ goSlide(cur - 1, null); }
+  }
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('click', function(e){
+    var node = e.target.closest('[data-goto]');
+    if (node){ goSlide(+node.getAttribute('data-goto'), 0); return; }
+    var home = e.target.closest('[data-home]');
+    if (home){ goSlide(0, 0); return; }
+    var act = e.target.closest('[data-action-check]');
+    if (act){ toggleAction(act.getAttribute('data-action-check')); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goSlide(0, 0); }
+    else if (e.key === 'End') { e.preventDefault(); goSlide(slides.length - 1, null); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  var fitBox = document.getElementById('stageFit');
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';
+    fitBox.style.height = (720 * s) + 'px';
+  }
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function set(id, txt){ var el = document.getElementById(id); if (el) el.textContent = txt; }
+  function bindSeg(id, onPick){
+    var box = document.getElementById(id);
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-st]'); if (!b) return;
+      box.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); });
+      onPick(b.getAttribute('data-st'));
+    });
+  }
+
+  /* ---------- CALC 1: STANDARD VS ITEMIZED (Stop 2) ---------- */
+  var STD = { single: 16100, married: 32200 };
+  var siStatus = 'single';
+  function calcStdItem(){
+    var std = STD[siStatus];
+    var item = val('si_mort') + val('si_salt') + val('si_give') + val('si_med');
+    var takeItem = item > std;
+    set('si_std', money(std));
+    set('si_item', money(item));
+    set('si_l1', money(std));
+    set('si_l2', money(item));
+    set('si_l3', money(Math.max(std, item)));
+    set('si_verdict', takeItem ? 'Itemize' : 'Take the standard');
+    var flag = document.getElementById('si_flag');
+    if (takeItem){
+      set('si_sub', 'Your itemized total beats the standard by ' + money(item - std) + ' — itemizing lowers your taxable income more.');
+      flag.className = 'flag good';
+      flag.textContent = 'ITEMIZE — YOUR DEDUCTIONS ADD UP TO MORE THAN THE FLAT STANDARD AMOUNT.';
+    } else {
+      set('si_sub', 'Your itemized total is ' + money(std - item) + ' short of the standard, so the flat amount wins.');
+      flag.className = 'flag';
+      flag.textContent = 'MOST PEOPLE TAKE THE STANDARD — YOU ONLY ITEMIZE WHEN THESE ADD UP TO MORE.';
+    }
+  }
+  bindSeg('si_status', function(st){ siStatus = st; calcStdItem(); });
+  ['si_mort','si_salt','si_give','si_med'].forEach(function(id){ bindMoney(id, calcStdItem); });
+
+  /* ---------- CALC 2: 0% CAPITAL-GAINS BRACKET (Stop 5) ---------- */
+  var CG0  = { single: 49450, married: 98900 };    // 2026 taxable-income ceiling for 0% LTCG
+  var CG15 = { single: 545500, married: 613700 };  // top of the 15% band
+  var cgStatus = 'single';
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+  function calcCG(){
+    var c0 = CG0[cgStatus], c15 = CG15[cgStatus];
+    var ord  = val('cg_ord');
+    var gain = val('cg_gain');
+
+    var g0  = clamp(c0 - ord, 0, gain);
+    var g15 = clamp(c15 - Math.max(ord, c0), 0, gain - g0);
+    var g20 = Math.max(0, gain - g0 - g15);
+    var tax = g15 * 0.15 + g20 * 0.20;
+
+    set('cg_free', money(g0));
+    set('cg_sub', g0 > 0
+      ? 'You can realize ' + money(g0) + ' of gain tax-free before you reach the ' + money(c0) + ' ceiling.'
+      : 'Your income already fills the 0% band — more gain is taxed at 15% or above.');
+    set('cg_l1', money(c0));
+    set('cg_l2', money(g0));
+    set('cg_l3', money(g15));
+    set('cg_l4', money(tax));
+
+    // stacked bar — scale everything to the taller of (income+gain) or the 0% ceiling
+    var span = Math.max(ord + gain, c0, 1);
+    function pct(x){ return (x / span * 100) + '%'; }
+    document.getElementById('cg_bord').style.width = pct(ord);
+    document.getElementById('cg_b0').style.width  = pct(g0);
+    document.getElementById('cg_b15').style.width = pct(g15);
+    document.getElementById('cg_b20').style.width = pct(g20);
+
+    var flag = document.getElementById('cg_flag');
+    if (g0 >= gain && gain > 0){
+      flag.className = 'flag good';
+      flag.textContent = 'ALL OF IT AT 0% — THIS ENTIRE GAIN FITS UNDER THE CEILING AND OWES NO FEDERAL TAX.';
+    } else if (g0 > 0){
+      flag.className = 'flag good';
+      flag.textContent = 'TAX-GAIN HARVESTING — SELL WINNERS UP TO THE 0% CEILING AND REBUY TO RESET YOUR COST FOR FREE.';
+    } else {
+      flag.className = 'flag';
+      flag.textContent = 'NO 0% ROOM THIS YEAR — YOUR INCOME ALREADY FILLS THE BRACKET. HARVEST IN A LOWER-INCOME YEAR INSTEAD.';
+    }
+  }
+  bindSeg('cg_status', function(st){ cgStatus = st; calcCG(); });
+  ['cg_ord','cg_gain'].forEach(function(id){ bindMoney(id, calcCG); });
+
+  /* ---------- CALC 3: S-CORP SE-TAX SAVINGS (Stop 10) ---------- */
+  function calcScorp(){
+    var profit = val('sc_profit');
+    var salary = Math.min(val('sc_salary'), profit);      // salary can't exceed profit here
+    var soleSE   = 0.153 * profit * 0.9235;               // SE tax on ~92.35% of net earnings
+    var scorpTax = 0.153 * salary;                        // payroll tax on salary only
+    var saved    = Math.max(0, soleSE - scorpTax);
+    var dist     = Math.max(0, profit - salary);
+
+    set('sc_sole', money(soleSE));
+    set('sc_scorp', money(scorpTax));
+    set('sc_save', money(saved));
+    set('sc_l1', money(salary));
+    set('sc_l2', money(dist));
+    set('sc_l3', money(saved));
+    set('sc_sub', 'Only the ' + money(salary) + ' salary owes the 15.3% tax; the ' + money(dist) + ' distribution doesn’t.');
+
+    var flag = document.getElementById('sc_flag');
+    var ratio = profit > 0 ? salary / profit : 1;
+    if (profit < 40000){
+      flag.className = 'flag';
+      flag.textContent = 'PROBABLY TOO EARLY — ON THIS PROFIT, PAYROLL AND CPA COSTS CAN OUTWEIGH THE SAVINGS.';
+    } else if (ratio < 0.35){
+      flag.className = 'flag bad';
+      flag.textContent = 'SALARY LOOKS TOO LOW — AN UNREASONABLY SMALL SALARY IS A RED FLAG THE IRS AUDITS.';
+    } else {
+      flag.className = 'flag good';
+      flag.textContent = 'REAL SAVINGS — JUST KEEP THE SALARY DEFENSIBLE AND BUDGET FOR PAYROLL + A CPA.';
+    }
+  }
+  ['sc_profit','sc_salary'].forEach(function(id){ bindMoney(id, calcScorp); });
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  var ACTIONS = [
+    {id:'taxable',   phase:'Basics',      text:'Learn your taxable income and your top marginal bracket.'},
+    {id:'deduction', phase:'Basics',      text:'Add up your itemized deductions and compare them to the standard.'},
+    {id:'file',      phase:'Basics',      text:'File if any tax was withheld or you qualify for a refundable credit.'},
+    {id:'longterm',  phase:'Investing',   text:'Hold investments past one year to earn the long-term rate.'},
+    {id:'zero',      phase:'Investing',   text:'In low-income years, realize long-term gains up to the 0% ceiling.'},
+    {id:'form',      phase:'Self-employed',text:'Know whether each gig pays you on a W-2 or a 1099.'},
+    {id:'quarterly', phase:'Self-employed',text:'Set aside ~25–30% of 1099 income and pay quarterly estimates.'},
+    {id:'deduct',    phase:'Self-employed',text:'Track every business expense, per-diem day, and depreciable asset.'},
+    {id:'tithe',     phase:'Self-employed',text:'Track your giving and check whether itemizing beats the standard.'},
+    {id:'scorp',     phase:'Self-employed',text:'Once profit is steady, run the S-corp math with a CPA.'},
+    {id:'entity',    phase:'Structure',   text:'Form an LLC when you have something to protect; hire a CPA when the stakes beat the fee.'}
+  ];
+  var CK_KEY = 'tr-taxes-actions', ckState = {};
+  try { var cs = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (cs && typeof cs === 'object') ckState = cs; } catch(e){}
+  var ckWrap = document.getElementById('checklist'), ckCount = document.getElementById('ckcount');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function ckSave(){ try { localStorage.setItem(CK_KEY, JSON.stringify(ckState)); } catch(e){} }
+  function ckRender(){
+    if (!ckWrap) return;
+    ckWrap.innerHTML = ACTIONS.map(function(a){
+      var done = !!ckState[a.id];
+      return '<button type="button" class="ck-item' + (done ? ' done' : '') + '" data-ck="' + a.id + '">' +
+               '<span class="ck-box"><span class="ck"></span></span>' +
+               '<span class="ck-body"><span class="ck-phase">' + a.phase + '</span>' +
+               '<span class="ck-text">' + esc(a.text) + '</span></span>' +
+             '</button>';
+    }).join('');
+    var n = ACTIONS.filter(function(a){ return ckState[a.id]; }).length;
+    if (ckCount) ckCount.textContent = n + ' of ' + ACTIONS.length;
+  }
+  function syncActions(){
+    document.querySelectorAll('[data-action-check]').forEach(function(btn){
+      var done = !!ckState[btn.getAttribute('data-action-check')];
+      btn.classList.toggle('done', done);
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    });
+  }
+  function toggleAction(id){
+    ckState[id] = !ckState[id];
+    ckSave(); ckRender(); syncActions();
+  }
+  if (ckWrap){
+    ckWrap.addEventListener('click', function(e){
+      var it = e.target.closest('[data-ck]'); if (!it) return;
+      toggleAction(it.getAttribute('data-ck'));
+    });
+  }
+  ckRender();
+  syncActions();
+
+  /* ---------- INIT ---------- */
+  calcStdItem();
+  calcCG();
+  calcScorp();
+  goSlide(0, 0);
+})();
+</script>
+</body>
+</html>

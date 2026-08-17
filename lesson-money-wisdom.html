@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Being Wise With Money — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:48px 58px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  .eyebrow.p2{color:#9a6410}.eyebrow.p2::before{background:var(--amber)}
+  .eyebrow.p3{color:var(--brick)}.eyebrow.p3::before{background:var(--brick)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1.03;letter-spacing:-.028em;margin:14px 0 16px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1.08;letter-spacing:-.022em;margin:12px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  h2.st .amber{color:var(--amber)}
+  h2.st .brick{color:var(--brick)}
+  .lede{font-size:1.12rem;color:var(--ink-soft);max-width:64ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.12fr .88fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.96rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:15px;margin-top:20px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.26rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+  .stack{display:flex;flex-direction:column;gap:18px}
+
+  /* benchmark table */
+  .bench{display:flex;flex-direction:column;gap:8px}
+  .benchrow{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 16px;transition:.2s}
+  .benchrow:hover{border-color:var(--pine);transform:translateX(3px)}
+  .benchrow .bm{font-weight:600;color:var(--ink);font-size:.98rem}
+  .benchrow .bm span{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:400;margin-top:1px}
+  .benchrow .bt{font-family:var(--display);font-weight:700;color:var(--pine);font-size:1.04rem;white-space:nowrap;text-align:right}
+  .benchrow .bt.amber{color:var(--amber)}
+  .benchrow .bt.brick{color:var(--brick)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:20px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:13px;overflow:auto}
+  .inputs.tight{gap:10px;padding:16px 24px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:11px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.1rem;color:var(--ink);padding:10px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:64px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:24px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.3rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.brick{color:#F0A093}
+  .out .big.green{color:#8FD8BE}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.32rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bn.green{color:#8FD8BE}
+  .out .bd .bn.brick{color:#F0A093}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.28rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px;line-height:1.45}
+  .flag.good{background:rgba(79,176,141,.14);border-color:rgba(79,176,141,.4);color:#8FD8BE}
+  .flag.bad{background:rgba(162,58,45,.16);border-color:rgba(240,160,147,.4);color:#F0A093}
+
+  /* scenario / method toggle */
+  .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line-strong);border-radius:12px;overflow:hidden;background:var(--paper-2)}
+  .seg button{border:0;background:none;font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;padding:9px 14px;cursor:pointer;color:var(--ink-soft);border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .seg button.on{background:var(--pine);color:#fff}
+
+  /* simulator chart */
+  .simchart{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-top:2px;flex:1;display:flex;flex-direction:column;justify-content:center}
+  .simchart svg{width:100%;height:auto;display:block}
+  .simleg{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px}
+  .simleg span{font-size:.78rem;color:var(--ink-soft);display:flex;align-items:center;gap:7px}
+  .simleg i{width:18px;height:0;border-top:3px solid var(--pine);display:inline-block}
+  .simleg i.l-lump{border-color:var(--amber)}
+  .simleg i.l-dca{border-color:var(--pine)}
+  .simleg i.l-inv{border-top-style:dashed;border-color:#9aa6a1}
+
+  /* ---------- PROGRESSIVE REVEAL (build) ---------- */
+  [data-step]{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .5s cubic-bezier(.2,.85,.25,1)}
+  [data-step].show{opacity:1;transform:none}
+  [data-step][hidden]{display:none}
+
+  .build-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:44px;align-items:start;align-content:center;padding:4px 0}
+  .bcol{display:flex;flex-direction:column;align-items:flex-start}
+  .bcol::before{content:"";display:block;width:46px;height:6px;border-radius:99px;background:var(--pine);margin-bottom:18px}
+  .bcol:nth-child(2)::before{background:var(--amber)}
+  .bcol:nth-child(3)::before{background:var(--brick)}
+  .btitle{font-family:var(--display);font-weight:700;font-size:2.1rem;letter-spacing:-.02em;color:var(--ink);line-height:1.08}
+  .bexp{font-size:1.05rem;color:var(--ink-soft);line-height:1.5;margin-top:12px}
+  .bexp em{font-style:italic;color:var(--ink)}
+  .reveal-foot{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .qline{border-left:3px solid var(--amber);padding:5px 0 5px 18px;font-family:var(--display);font-weight:500;font-size:1.34rem;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+  .action{display:inline-flex;align-items:center;gap:15px;align-self:center;background:var(--sage);border:1px solid rgba(14,82,64,.28);border-radius:14px;padding:15px 26px;font-family:var(--body);font-size:1.18rem;font-weight:600;line-height:1.35;color:var(--pine-deep);max-width:100%;cursor:pointer;text-align:left;transition:.18s}
+  .action:hover{border-color:var(--pine);box-shadow:0 8px 20px -12px rgba(14,82,64,.7)}
+  .ax-box{flex:none;width:27px;height:27px;border:2px solid var(--pine);border-radius:8px;background:var(--white);display:grid;place-items:center}
+  .ax-box .ck{width:12px;height:7px;border-left:2.8px solid #fff;border-bottom:2.8px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .action.done .ax-box{background:var(--pine);border-color:var(--pine)}
+  .action.done .ax-box .ck{opacity:1}
+  .ax-tag{flex:none;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--pine);color:#fff;padding:5px 10px;border-radius:99px}
+  .action.mini{padding:10px 18px;font-size:1.02rem;gap:12px;border-radius:12px;margin-top:12px}
+  .action.mini .ax-box{width:23px;height:23px}
+  .action.mini .ax-box .ck{width:11px;height:6px}
+  .build-hint{color:var(--pine)}
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  .checklist{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;align-content:start;margin-top:18px;overflow:auto;padding-right:4px}
+  .ck-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 15px;cursor:pointer;transition:.18s;text-align:left;font:inherit}
+  .ck-item:hover{border-color:var(--pine);transform:translateY(-1px)}
+  .ck-box{flex:none;width:24px;height:24px;border:2px solid var(--line-strong);border-radius:7px;background:var(--white);display:grid;place-items:center;margin-top:1px}
+  .ck-box .ck{width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .ck-item.done .ck-box{background:var(--pine);border-color:var(--pine)}
+  .ck-item.done .ck-box .ck{opacity:1}
+  .ck-body{min-width:0}
+  .ck-phase{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+  .ck-text{display:block;font-size:.96rem;color:var(--ink);line-height:1.4;margin-top:2px}
+  .ck-item.done .ck-text{color:var(--ink-soft);text-decoration:line-through}
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.26rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.94rem;color:var(--ink-soft);flex:1}
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:26px 18px 32px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.2rem;margin:12px 0 14px}
+    h2.st{font-size:1.7rem}
+    .lede{font-size:1rem}
+    .pull{font-size:1.08rem}
+
+    .two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.5rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    [data-step]{opacity:1;transform:none}
+    .build-cols{grid-template-columns:1fr;gap:24px}
+    .btitle{font-size:1.7rem}
+    .bexp{font-size:1rem}
+    .qline{font-size:1.14rem}
+    .checklist{grid-template-columns:1fr;overflow:visible}
+    .build-hint{display:none}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 07 · Being Wise With Money</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 10</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TITLE -->
+      <section class="slide on">
+        <span class="eyebrow">Interactive lesson &middot; Money wisdom</span>
+        <h1 class="big">Wealth is what you <em>keep</em><br>and put to <span class="amber">work</span>.</h1>
+        <p class="lede">Being wise with money isn&rsquo;t about earning more &mdash; it&rsquo;s about spending under your means, turning the gap into income that works while you sleep, and not getting fooled by a good year. Let&rsquo;s drive the numbers.</p>
+        <div class="two" style="margin-top:26px;align-items:stretch">
+          <div class="card">
+            <h3>What you&rsquo;ll do here</h3>
+            <ul class="points" style="margin-top:8px;gap:10px">
+              <li><span class="num">1</span><span class="tx">See the real cost of an <b>over-priced car</b>.</span></li>
+              <li><span class="num">2</span><span class="tx">Watch a portfolio pay you <b>every day</b>.</span></li>
+              <li><span class="num">3</span><span class="tx">Get fooled &mdash; then un-fooled &mdash; by an <b>average return</b>.</span></li>
+              <li><span class="num">4</span><span class="tx">Run a market <b>crash</b> against dollar-cost averaging.</span></li>
+            </ul>
+          </div>
+          <div class="stack" style="justify-content:center">
+            <div class="pull">If you make $70,000 a year, the wise move isn&rsquo;t a $70,000 car. It&rsquo;s the car you need &mdash; and investing the rest.</div>
+          </div>
+        </div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> to page through</span></div>
+      </section>
+
+      <!-- 2 — LIVE BELOW YOUR MEANS (car calc) -->
+      <section class="slide">
+        <span class="eyebrow">Principle 1 &middot; Spend under your means</span>
+        <h2 class="st" style="margin-bottom:12px">Don&rsquo;t buy a <span class="brick">$70k car</span> on a $70k salary.</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Your income vs. the car</div>
+            <div class="fld">
+              <label for="c_income">Yearly take-home income</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="c_income" inputmode="numeric" value="70,000"></div>
+            </div>
+            <div class="fld">
+              <label for="c_car">Price of the car you want</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="c_car" inputmode="numeric" value="70,000"></div>
+            </div>
+            <div class="fld">
+              <label for="c_years">Invest the difference for</label>
+              <div class="slider"><input type="range" id="c_years" min="3" max="25" step="1" value="10"><span class="amt" id="c_years_v">10 yrs</span></div>
+              <div class="hint">At an assumed 8% a year, roughly the long-run stock-market average.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">This car is</div>
+            <div class="big brick" id="c_pct">100% of income</div>
+            <div class="sub" id="c_sub">A whole year&rsquo;s pay on one car. A common guardrail: keep the car under ~35% of your yearly income.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn green" id="c_sensible">$24,500</div><div class="bl">Car at ~35% of income</div></div>
+              <div class="bd"><div class="bn amber" id="c_grown">$98,570</div><div class="bl">Difference invested, later</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Car you want</span><b id="c_l1">$70,000</b></div>
+              <div class="lrow"><span>Sensible car (~35%)</span><b id="c_l2">$24,500</b></div>
+              <div class="lrow tot"><span>Invest the difference &rarr; grows to</span><b id="c_l3">$98,570</b></div>
+            </div>
+            <div class="flag" id="c_flag">SAME MONEY, TWO LIVES: A STATUS CAR NOW, OR A SIX-FIGURE HEAD START LATER.</div>
+            <div class="disclaim">Growth assumes 8%/yr, compounded, ignoring taxes and car depreciation. Illustrative, not a projection.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="below" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Keep big purchases well under your income &mdash; invest the gap.</span></button>
+        </div>
+        <div class="slide-foot"><span>01 — SPEND UNDER YOUR MEANS</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 3 — BUILD PASSIVE INCOME -->
+      <section class="slide">
+        <span class="eyebrow">Principle 2 &middot; Put money to work</span>
+        <h2 class="st">Trade hours for dollars once &mdash; then make dollars <span class="pine">work</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Active income tops out</div>
+            <p class="bexp" data-step="1">A paycheck stops the moment you do. There are only so many hours to sell, so income from work alone always hits a ceiling.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Assets pay while you sleep</div>
+            <p class="bexp" data-step="2">Money invested in the market becomes an <em>asset</em> that earns on its own &mdash; growth and dividends that keep coming whether you&rsquo;re working, sleeping, or on a beach.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">The gap is the seed</div>
+            <p class="bexp" data-step="3">The difference between what you earn and what you spend is what you invest. Live under your means, and that gap quietly buys you freedom.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Rich isn&rsquo;t a big paycheck. It&rsquo;s owning enough assets that they out-earn your job.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="passive" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Put your savings into income-producing investments, not idle cash.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>02 — BUILD PASSIVE INCOME</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 4 — REALISTIC RETURNS -->
+      <section class="slide">
+        <span class="eyebrow p2">Principle 3 &middot; Expect real numbers</span>
+        <h2 class="st">Plan on a <span class="amber">realistic</span> return &mdash; not last year&rsquo;s.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:start">
+          <div class="bench">
+            <div class="benchrow"><span class="bm">Cash / savings<span>Safe, but barely beats inflation</span></span><span class="bt">~0.5&ndash;4%</span></div>
+            <div class="benchrow"><span class="bm">Bonds<span>Steadier, lower growth</span></span><span class="bt">~4&ndash;5%</span></div>
+            <div class="benchrow"><span class="bm">S&amp;P 500, long run<span>Before inflation</span></span><span class="bt amber">~10%</span></div>
+            <div class="benchrow"><span class="bm">S&amp;P 500, after inflation<span>Real growth in buying power</span></span><span class="bt">~7%</span></div>
+            <div class="benchrow"><span class="bm">What to plan on<span>Leave room to be wrong</span></span><span class="bt">~6&ndash;8%</span></div>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">The market averages ~10% over decades &mdash; but almost no single year is 10%. It&rsquo;s +25% and &minus;15%, not a smooth line.</div>
+            <div class="card">
+              <h3>Why plan low</h3>
+              <p>Build your plan on <b>~6&ndash;8%</b>, not 10%, and definitely not last year&rsquo;s hot number. If reality does better, you&rsquo;re early. If you assume too much, you fall short right when it matters.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="returns" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Plan on a realistic ~6&ndash;8% return, not last year&rsquo;s number.</span></button>
+        </div>
+        <div class="slide-foot"><span>03 — REALISTIC RETURNS</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 5 — THE AVERAGE-RETURN TRAP (calc) -->
+      <section class="slide">
+        <span class="eyebrow p2">Principle 3 &middot; The average trap</span>
+        <h2 class="st" style="margin-bottom:12px">&ldquo;Average return&rdquo; can <span class="brick">lie</span> to you.</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">$10,000, two years running</div>
+            <div class="fld">
+              <label for="a_y1">Year 1 return</label>
+              <div class="slider"><input type="range" id="a_y1" min="-50" max="100" step="5" value="100"><span class="amt" id="a_y1_v">+100%</span></div>
+            </div>
+            <div class="fld">
+              <label for="a_y2">Year 2 return</label>
+              <div class="slider"><input type="range" id="a_y2" min="-50" max="100" step="5" value="-50"><span class="amt" id="a_y2_v">&minus;50%</span></div>
+            </div>
+            <div class="fld">
+              <div class="hint" style="margin-top:2px">Up 100% then down 50% <b>feels</b> like an average gain of +25% a year. Watch what your money actually does.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">What $10,000 actually became</div>
+            <div class="big" id="a_end">$10,000</div>
+            <div class="sub" id="a_sub">Two big years and you&rsquo;re exactly where you started &mdash; a true gain of 0%.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn amber" id="a_avg">+25% / yr</div><div class="bl">&ldquo;Average&rdquo; return (misleading)</div></div>
+              <div class="bd"><div class="bn green" id="a_cagr">0% / yr</div><div class="bl">Real return (what you kept)</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Start</span><b>$10,000</b></div>
+              <div class="lrow"><span>After year 1</span><b id="a_l1">$20,000</b></div>
+              <div class="lrow tot"><span>After year 2</span><b id="a_l2">$10,000</b></div>
+            </div>
+            <div class="flag" id="a_flag">A LOSS HURTS MORE THAN THE SAME-SIZE GAIN HELPS — DOWN 50% NEEDS UP 100% JUST TO BREAK EVEN.</div>
+            <div class="disclaim">The gap is &ldquo;volatility drag.&rdquo; Judge results by ending value, not the average of the yearly numbers.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="average" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Judge investments by real ending value, not the average.</span></button>
+        </div>
+        <div class="slide-foot"><span>04 — THE AVERAGE TRAP</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 6 — PASSIVE INCOME PER DAY (calc) -->
+      <section class="slide">
+        <span class="eyebrow">Principle 2 &middot; Your daily wage from money</span>
+        <h2 class="st" style="margin-bottom:12px">What does your money earn <span class="pine">per day</span>?</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Your invested pile</div>
+            <div class="fld">
+              <label for="p_value">Amount invested</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="p_value" inputmode="numeric" value="100,000"></div>
+            </div>
+            <div class="fld">
+              <label for="p_rate">Assumed yearly return</label>
+              <div class="slider"><input type="range" id="p_rate" min="1" max="15" step="0.5" value="8"><span class="amt" id="p_rate_v">8%</span></div>
+            </div>
+            <div class="fld">
+              <label for="p_goal">Passive income you&rsquo;d like / day</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="p_goal" inputmode="numeric" value="100"></div>
+              <div class="hint">We&rsquo;ll show the pile it takes to earn that at your rate.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Earning, on average</div>
+            <div class="big green" id="p_day">$21.92 / day</div>
+            <div class="sub" id="p_sub">That&rsquo;s roughly what $100,000 at 8% makes every day &mdash; while you do nothing.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn" id="p_month">$667</div><div class="bl">Per month</div></div>
+              <div class="bd"><div class="bn amber" id="p_year">$8,000</div><div class="bl">Per year</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Per week</span><b id="p_week">$154</b></div>
+              <div class="lrow tot"><span>Pile needed for your $/day goal</span><b id="p_need">$456,250</b></div>
+            </div>
+            <div class="flag good" id="p_flag">PASSIVE INCOME IS JUST A SLICE OF YOUR PILE — GROW THE PILE, GROW THE DAILY CHECK.</div>
+            <div class="disclaim">A long-run average, not a steady daily deposit — real returns arrive lumpy. Educational only.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="daily" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Know what your portfolio pays per day &mdash; and your target pile.</span></button>
+        </div>
+        <div class="slide-foot"><span>05 — PASSIVE INCOME PER DAY</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 7 — SEQUENCE + DCA SIMULATOR -->
+      <section class="slide">
+        <span class="eyebrow p2">Principle 4 &middot; When you buy matters</span>
+        <h2 class="st" style="margin-bottom:10px">Same $24,000. All at once, or spread out?</h2>
+        <div class="calc">
+          <div class="inputs" style="gap:11px">
+            <div class="ih">Pick a market story</div>
+            <div class="seg" id="s_scen" role="group" aria-label="Market scenario">
+              <button type="button" data-scen="crash" class="on">Crash right away</button>
+              <button type="button" data-scen="boom">Great start, crash later</button>
+              <button type="button" data-scen="steady">Slow &amp; steady</button>
+            </div>
+            <div class="simchart">
+              <svg id="s_svg" viewBox="0 0 500 250" role="img" aria-label="Portfolio value over eight years for a lump sum versus dollar-cost averaging">
+                <line id="s_inv" x1="46" y1="120" x2="488" y2="120" stroke="#9aa6a1" stroke-width="1.5" stroke-dasharray="5 4"/>
+                <polyline id="s_lumpline" fill="none" stroke="#D38B26" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points=""/>
+                <polyline id="s_dcaline" fill="none" stroke="#0E5240" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" points=""/>
+                <text id="s_ymax" x="42" y="24" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10" fill="#8e9c96">$</text>
+                <text x="46" y="246" font-family="'JetBrains Mono',monospace" font-size="10" fill="#8e9c96">Year 0</text>
+                <text x="488" y="246" text-anchor="end" font-family="'JetBrains Mono',monospace" font-size="10" fill="#8e9c96">Year 8</text>
+              </svg>
+              <div class="simleg">
+                <span><i class="l-lump"></i>Lump sum &mdash; all $24k on day one</span>
+                <span><i class="l-dca"></i>Dollar-cost &mdash; $3k a year</span>
+                <span><i class="l-inv"></i>Total invested ($24k)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">After 8 years</div>
+            <div class="big" id="s_winner">Dollar-cost wins</div>
+            <div class="sub" id="s_sub">Spreading your buys turned the early crash into a discount.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn amber" id="s_lump">$33,180</div><div class="bl">Lump sum ending value</div></div>
+              <div class="bd"><div class="bn green" id="s_dca">$38,940</div><div class="bl">Dollar-cost ending value</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Total you put in</span><b>$24,000</b></div>
+              <div class="lrow"><span>Worst 1-year drop along the way</span><b id="s_drop">&minus;37%</b></div>
+              <div class="lrow tot"><span>Difference</span><b id="s_diff">$5,760</b></div>
+            </div>
+            <div class="flag good" id="s_flag">NOBODY KNOWS WHICH STORY IS COMING — DOLLAR-COST AVERAGING REMOVES THE GUESS.</div>
+            <div class="disclaim">Illustrative return sequences, not real history. The lesson is the pattern, not the exact dollars.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="sequence" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Don&rsquo;t bet everything on one entry point &mdash; a crash-first year can sink a lump sum.</span></button>
+        </div>
+        <div class="slide-foot"><span>06 — SEQUENCE & DOLLAR-COST AVERAGING</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 8 — DOLLAR-COST AVERAGING TAKEAWAY -->
+      <section class="slide">
+        <span class="eyebrow">Principle 4 &middot; The discipline</span>
+        <h2 class="st">Buy on a <span class="pine">schedule</span>, not on a feeling.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Same dollars, every time</div>
+            <p class="bexp" data-step="1">Dollar-cost averaging means investing a <em>fixed amount</em> on a set schedule &mdash; every paycheck, every month &mdash; no matter what the market is doing.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">You buy more when it&rsquo;s cheap</div>
+            <p class="bexp" data-step="2">The fixed dollars buy <em>more</em> shares when prices are low and fewer when high. A crash becomes a sale, not a disaster.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">It beats your emotions</div>
+            <p class="bexp" data-step="3">The real enemy is panic-selling low and piling in high. Automating your buys takes the decision &mdash; and the fear &mdash; out of your hands.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Time <em>in</em> the market beats timing the market &mdash; and dollar-cost averaging is how normal people stay in.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="dca" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Automate a fixed investment on a schedule &mdash; dollar-cost average.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>07 — DOLLAR-COST AVERAGING</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 9 — RECAP -->
+      <section class="slide">
+        <span class="eyebrow">The throughline</span>
+        <h2 class="st">Wise with money, in <span class="pine">four moves</span>.</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">Spend</div>
+            <h3>Under your means</h3>
+            <p>The car, the house, the lifestyle &mdash; keep them below what you earn. The gap you protect is the money that builds everything else.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Invest</div>
+            <h3>Into assets that pay</h3>
+            <p>Turn that gap into market investments that grow and pay you daily &mdash; on a realistic ~6&ndash;8%, not a fantasy number.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Stay</div>
+            <h3>Steady and unfooled</h3>
+            <p>Don&rsquo;t trust a flashy average, don&rsquo;t time the market, don&rsquo;t panic in a crash. Buy on a schedule and let time do the heavy lifting.</p>
+          </div>
+        </div>
+        <div class="pull" style="margin-top:22px">Nobody gets wealthy from one great year. They get wealthy by spending less than they make and staying invested through every kind of year.</div>
+        <div class="slide-foot"><span>THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
+      </section>
+
+      <!-- 10 — ACTION CHECKLIST -->
+      <section class="slide">
+        <span class="eyebrow">Your action list</span>
+        <h2 class="st">Now go <span class="pine">do</span> it.</h2>
+        <p class="lede" style="margin-top:4px">Every principle leaves one action. Tick them off as you knock them out &mdash; progress saves on this device.</p>
+        <div class="checklist" id="checklist"></div>
+        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 7</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+  var cur = 0, curStep = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ goSlide(i, 0); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function maxStepOf(slide){
+    var m = 0;
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0; if (s > m) m = s;
+    });
+    return m;
+  }
+  function applyStep(slide, step){
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0;
+      if (s <= step){ el.hidden = false; requestAnimationFrame(function(){ el.classList.add('show'); }); }
+      else { el.classList.remove('show'); el.hidden = true; }
+    });
+    var hint = slide.querySelector('.build-hint');
+    if (hint){
+      var mx = maxStepOf(slide);
+      hint.textContent = (mx > 0 && step < mx) ? 'CLICK → TO REVEAL MORE' : '';
+    }
+  }
+
+  function render(){
+    var slide = slides[cur];
+    var mx = maxStepOf(slide);
+    var eff = mobileQ.matches ? mx : curStep;
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    applyStep(slide, eff);
+    prevBtn.disabled = (cur === 0 && eff === 0);
+    nextBtn.disabled = (cur === slides.length - 1 && eff >= mx);
+    if (mobileQ.matches) window.scrollTo(0, 0);
+  }
+
+  function goSlide(i, step){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    var mx = maxStepOf(slides[cur]);
+    curStep = (step == null) ? mx : Math.max(0, Math.min(mx, step));
+    render();
+  }
+  function next(){
+    var mx = maxStepOf(slides[cur]);
+    if (!mobileQ.matches && curStep < mx){ curStep++; render(); }
+    else if (cur < slides.length - 1){ goSlide(cur + 1, 0); }
+  }
+  function prev(){
+    if (!mobileQ.matches && curStep > 0){ curStep--; render(); }
+    else if (cur > 0){ goSlide(cur - 1, null); }
+  }
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('click', function(e){
+    var act = e.target.closest('[data-action-check]');
+    if (act){ toggleAction(act.getAttribute('data-action-check')); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goSlide(0, 0); }
+    else if (e.key === 'End') { e.preventDefault(); goSlide(slides.length - 1, null); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  var fitBox = document.getElementById('stageFit');
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';
+    fitBox.style.height = (720 * s) + 'px';
+  }
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  var usd2 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', minimumFractionDigits:2, maximumFractionDigits:2});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function money2(n){ return usd2.format(n || 0); }
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function bindRange(id, onChange){ document.getElementById(id).addEventListener('input', onChange); }
+  function set(id, txt){ var el = document.getElementById(id); if (el) el.textContent = txt; }
+
+  /* ---------- CALC 1: LIVE BELOW YOUR MEANS (Slide 2) ---------- */
+  function calcCar(){
+    var income = val('c_income');
+    var car    = val('c_car');
+    var years  = +document.getElementById('c_years').value;
+    set('c_years_v', years + ' yrs');
+
+    var pct = income > 0 ? car / income * 100 : 0;
+    var sensible = income * 0.35;
+    var diff = Math.max(0, car - sensible);
+    var grown = diff * Math.pow(1.08, years);
+
+    set('c_pct', Math.round(pct) + '% of income');
+    set('c_sensible', money(sensible));
+    set('c_grown', money(grown));
+    set('c_l1', money(car));
+    set('c_l2', money(sensible));
+    set('c_l3', money(grown));
+
+    var flag = document.getElementById('c_flag');
+    if (pct <= 35 || car <= sensible){
+      set('c_sub', 'This fits the guardrail — under ~35% of your income. Nice and sane.');
+      flag.className = 'flag good';
+      flag.textContent = 'SENSIBLE — THIS CAR LEAVES ROOM TO INVEST AND STILL LIVE.';
+    } else if (pct <= 60){
+      set('c_sub', 'A stretch. A car at ~35% of income (' + money(sensible) + ') frees up real money to invest.');
+      flag.className = 'flag';
+      flag.textContent = 'A STRETCH — THE EXTRA ' + money(diff) + ' COULD BE ' + money(grown) + ' IN ' + years + ' YEARS INSTEAD.';
+    } else {
+      set('c_sub', 'That’s most of a year’s pay on one car. A sensible car frees up ' + money(diff) + ' to invest.');
+      flag.className = 'flag bad';
+      flag.textContent = 'TOO MUCH CAR — THAT ' + money(diff) + ' COULD GROW TO ' + money(grown) + ' IN ' + years + ' YEARS.';
+    }
+  }
+  ['c_income','c_car'].forEach(function(id){ bindMoney(id, calcCar); });
+  bindRange('c_years', calcCar);
+
+  /* ---------- CALC 2: AVERAGE-RETURN TRAP (Slide 5) ---------- */
+  function pctLabel(n){ return (n >= 0 ? '+' : '−') + Math.abs(n) + '%'; }
+  function calcAvg(){
+    var y1 = +document.getElementById('a_y1').value;
+    var y2 = +document.getElementById('a_y2').value;
+    set('a_y1_v', pctLabel(y1));
+    set('a_y2_v', pctLabel(y2));
+
+    var mid = 10000 * (1 + y1/100);
+    var end = mid * (1 + y2/100);
+    var avg = (y1 + y2) / 2;
+    var cagr = Math.pow(end / 10000, 1/2) - 1;    // real per-year (geometric)
+
+    set('a_l1', money(mid));
+    set('a_l2', money(end));
+    set('a_end', money(end));
+    set('a_avg', pctLabel(avg) + ' / yr');
+    set('a_cagr', (cagr >= 0 ? '+' : '−') + Math.abs(cagr*100).toFixed(1).replace(/\.0$/,'') + '% / yr');
+
+    var realGain = end - 10000;
+    set('a_sub', realGain === 0
+      ? 'Two big years and you’re exactly where you started — a true gain of 0%.'
+      : (realGain > 0
+          ? 'The “average” says ' + pctLabel(avg) + ', but you actually turned $10,000 into ' + money(end) + '.'
+          : 'The “average” looks like ' + pctLabel(avg) + ', yet $10,000 shrank to ' + money(end) + '.'));
+
+    var flag = document.getElementById('a_flag');
+    if (avg > 0 && end <= 10000){
+      flag.className = 'flag bad';
+      flag.textContent = 'A POSITIVE AVERAGE, ZERO REAL GAIN — A BIG LOSS UNDOES A BIGGER-LOOKING GAIN.';
+    } else if (end < mid){
+      flag.className = 'flag';
+      flag.textContent = 'A LOSS HURTS MORE THAN THE SAME-SIZE GAIN HELPS — DOWN 50% NEEDS UP 100% TO BREAK EVEN.';
+    } else {
+      flag.className = 'flag good';
+      flag.textContent = 'JUDGE BY ENDING VALUE — THAT’S THE MONEY YOU ACTUALLY GET TO KEEP.';
+    }
+  }
+  ['a_y1','a_y2'].forEach(function(id){ bindRange(id, calcAvg); });
+
+  /* ---------- CALC 3: PASSIVE INCOME PER DAY (Slide 6) ---------- */
+  function calcPassive(){
+    var value = val('p_value');
+    var rate  = +document.getElementById('p_rate').value / 100;
+    var goal  = val('p_goal');
+    set('p_rate_v', (rate*100) + '%');
+
+    var perYear  = value * rate;
+    var perDay   = perYear / 365;
+    var perWeek  = perYear / 52;
+    var perMonth = perYear / 12;
+    var need     = rate > 0 ? goal * 365 / rate : 0;
+
+    set('p_day', money2(perDay) + ' / day');
+    set('p_month', money(perMonth));
+    set('p_year', money(perYear));
+    set('p_week', money(perWeek));
+    set('p_need', money(need));
+    set('p_sub', 'That’s roughly what ' + money(value) + ' at ' + (rate*100) + '% makes every day — while you do nothing.');
+    set('p_flag', 'TO EARN ' + money(goal) + '/DAY AT ' + (rate*100) + '%, YOU’D NEED ABOUT ' + money(need) + ' INVESTED.');
+    document.getElementById('p_flag').className = 'flag good';
+  }
+  ['p_value','p_goal'].forEach(function(id){ bindMoney(id, calcPassive); });
+  bindRange('p_rate', calcPassive);
+
+  /* ---------- SIM: SEQUENCE OF RETURNS + DCA (Slide 7) ---------- */
+  var SCEN = {
+    crash:  {r:[-0.37,-0.05,0.20,0.16,0.12,0.14,0.13,0.15],
+             win:'Dollar-cost wins',
+             sub:'Spreading your buys turned the early crash into a discount — most of your money went in at low prices.',
+             flag:'CRASH FIRST FAVORS DOLLAR-COST — A LUMP SUM TAKES THE FULL HIT ON DAY ONE.', flagcls:'flag good'},
+    boom:   {r:[0.28,0.22,0.18,0.14,-0.12,-0.34,0.10,0.13],
+             win:'Lump sum wins',
+             sub:'Money in early caught the boom. But notice how much less dollar-cost fell when the crash finally came.',
+             flag:'A GREAT START FAVORS THE LUMP SUM — BUT NOBODY KNOWS THE START IN ADVANCE.', flagcls:'flag'},
+    steady: {r:[0.08,0.09,0.07,0.10,0.08,0.09,0.08,0.07],
+             win:'Lump sum wins',
+             sub:'In a market that mostly rises, time in beats timing — the lump sum simply had longer to grow.',
+             flag:'STEADY MARKETS FAVOR TIME IN — GET INVESTED, THEN KEEP ADDING.', flagcls:'flag good'}
+  };
+  var scen = 'crash';
+  var TOTAL = 24000, YRS = 8;
+
+  function paths(r){
+    var lump = [TOTAL], dca = [0], lb = TOTAL, db = 0;
+    for (var i = 0; i < r.length; i++){
+      lb = lb * (1 + r[i]);
+      db = (db + TOTAL / YRS) * (1 + r[i]);
+      lump.push(lb); dca.push(db);
+    }
+    return {lump:lump, dca:dca};
+  }
+  function poly(arr, max){
+    var x0 = 46, x1 = 488, y0 = 18, y1 = 214;
+    return arr.map(function(v, i){
+      var x = x0 + (i / YRS) * (x1 - x0);
+      var y = y1 - (v / max) * (y1 - y0);
+      return x.toFixed(1) + ',' + y.toFixed(1);
+    }).join(' ');
+  }
+  function drawSim(){
+    var s = SCEN[scen];
+    var p = paths(s.r);
+    var lumpEnd = p.lump[YRS], dcaEnd = p.dca[YRS];
+    var max = Math.max.apply(null, p.lump.concat(p.dca).concat([TOTAL])) * 1.08;
+
+    document.getElementById('s_lumpline').setAttribute('points', poly(p.lump, max));
+    document.getElementById('s_dcaline').setAttribute('points', poly(p.dca, max));
+    var yInv = 214 - (TOTAL / max) * (214 - 18);
+    var invLine = document.getElementById('s_inv');
+    invLine.setAttribute('y1', yInv.toFixed(1)); invLine.setAttribute('y2', yInv.toFixed(1));
+    document.getElementById('s_ymax').textContent = money(max);
+
+    var worst = Math.min.apply(null, s.r);
+    set('s_winner', s.win);
+    set('s_sub', s.sub);
+    set('s_lump', money(lumpEnd));
+    set('s_dca', money(dcaEnd));
+    set('s_drop', '−' + Math.round(Math.abs(worst) * 100) + '%');
+    set('s_diff', money(Math.abs(lumpEnd - dcaEnd)));
+    var flag = document.getElementById('s_flag');
+    flag.className = s.flagcls;
+    flag.textContent = s.flag;
+  }
+  document.getElementById('s_scen').addEventListener('click', function(e){
+    var b = e.target.closest('button[data-scen]'); if (!b) return;
+    this.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); });
+    scen = b.getAttribute('data-scen');
+    drawSim();
+  });
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  var ACTIONS = [
+    {id:'below',    phase:'Spend',  text:'Keep big purchases well under your income — invest the gap.'},
+    {id:'passive',  phase:'Invest', text:'Put your savings into income-producing investments, not idle cash.'},
+    {id:'returns',  phase:'Invest', text:'Plan on a realistic ~6–8% return, not last year’s number.'},
+    {id:'average',  phase:'Stay',   text:'Judge investments by real ending value, not the average.'},
+    {id:'daily',    phase:'Invest', text:'Know what your portfolio pays per day — and your target pile.'},
+    {id:'sequence', phase:'Stay',   text:'Don’t bet everything on one entry point — a crash-first year can sink a lump sum.'},
+    {id:'dca',      phase:'Stay',   text:'Automate a fixed investment on a schedule — dollar-cost average.'}
+  ];
+  var CK_KEY = 'tr-money-actions', ckState = {};
+  try { var cs = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (cs && typeof cs === 'object') ckState = cs; } catch(e){}
+  var ckWrap = document.getElementById('checklist'), ckCount = document.getElementById('ckcount');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function ckSave(){ try { localStorage.setItem(CK_KEY, JSON.stringify(ckState)); } catch(e){} }
+  function ckRender(){
+    if (!ckWrap) return;
+    ckWrap.innerHTML = ACTIONS.map(function(a){
+      var done = !!ckState[a.id];
+      return '<button type="button" class="ck-item' + (done ? ' done' : '') + '" data-ck="' + a.id + '">' +
+               '<span class="ck-box"><span class="ck"></span></span>' +
+               '<span class="ck-body"><span class="ck-phase">' + a.phase + '</span>' +
+               '<span class="ck-text">' + esc(a.text) + '</span></span>' +
+             '</button>';
+    }).join('');
+    var n = ACTIONS.filter(function(a){ return ckState[a.id]; }).length;
+    if (ckCount) ckCount.textContent = n + ' of ' + ACTIONS.length;
+  }
+  function syncActions(){
+    document.querySelectorAll('[data-action-check]').forEach(function(btn){
+      var done = !!ckState[btn.getAttribute('data-action-check')];
+      btn.classList.toggle('done', done);
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    });
+  }
+  function toggleAction(id){
+    ckState[id] = !ckState[id];
+    ckSave(); ckRender(); syncActions();
+  }
+  if (ckWrap){
+    ckWrap.addEventListener('click', function(e){
+      var it = e.target.closest('[data-ck]'); if (!it) return;
+      toggleAction(it.getAttribute('data-ck'));
+    });
+  }
+  ckRender();
+  syncActions();
+
+  /* ---------- INIT ---------- */
+  calcCar();
+  calcAvg();
+  calcPassive();
+  drawSim();
+  goSlide(0, 0);
+})();
+</script>
+</body>
+</html>
