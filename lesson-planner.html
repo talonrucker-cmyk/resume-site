@@ -192,6 +192,17 @@
 
   .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
 
+  /* stated-vs-unseen comparison table */
+  .svtable{display:flex;flex-direction:column;gap:7px;margin-top:14px;flex:1}
+  .svhead,.svrow{display:grid;grid-template-columns:1fr 1.25fr 1.6fr;gap:14px;align-items:center}
+  .svhead{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#8e9c96;padding:0 16px}
+  .svrow{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:11px 16px;box-shadow:var(--shadow);transition:.18s}
+  .svrow:hover{border-color:var(--pine);transform:translateX(3px)}
+  .svrow .svarea{font-family:var(--display);font-weight:600;font-size:.95rem;color:var(--ink)}
+  .svrow .svstated{font-size:.9rem;color:var(--ink-soft)}
+  .svrow .svunseen{font-size:.9rem;color:var(--ink)}
+  .svrow .svunseen b{color:var(--pine)}
+
   @media print{.deck-bar,.dots,.progress{display:none}}
 
   /* ---------- MOBILE ----------
@@ -242,7 +253,7 @@
     <div class="bar-right">
       <button class="ghostbtn" id="fs">Present</button>
       <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
-      <span class="counter" id="counter">1 / 9</span>
+      <span class="counter" id="counter">1 / 10</span>
       <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
     </div>
   </div>
@@ -537,7 +548,23 @@
         <div class="slide-foot"><span>08 — WHAT A PLANNER DOES</span><span>YOUR FINANCIAL PLANNER</span></div>
       </section>
 
-      <!-- 9 — RECAP -->
+      <!-- 9 — STATED VS. UNSEEN NEEDS -->
+      <section class="slide">
+        <span class="eyebrow">What you get, in one view</span>
+        <h2 class="st" style="margin-bottom:2px">What you ask for &mdash; and the <span class="pine">deeper problem</span> a planner solves.</h2>
+        <div class="svtable">
+          <div class="svhead"><span>Focus area</span><span>What you think you need</span><span>The unseen problem a good planner solves</span></div>
+          <div class="svrow"><span class="svarea">Behavior &amp; decisions</span><span class="svstated">Peace of mind and avoiding big mistakes</span><span class="svunseen">A <b>decision buffer</b> &mdash; a barrier between panic or greed and your portfolio.</span></div>
+          <div class="svrow"><span class="svarea">Tax &amp; efficiency</span><span class="svstated">Paying less in tax</span><span class="svunseen"><b>Asset location</b> &mdash; putting the right holdings in the right accounts, not just picking funds.</span></div>
+          <div class="svrow"><span class="svarea">Cash flow &amp; income</span><span class="svstated">A clear retirement roadmap</span><span class="svunseen">Managing <b>sequence-of-returns risk</b> &mdash; an early downturn that can drain a nest egg you&rsquo;re drawing from.</span></div>
+          <div class="svrow"><span class="svarea">Organization &amp; strategy</span><span class="svstated">One dashboard for everything</span><span class="svunseen">Escaping the <b>piecemeal trap</b> &mdash; a quarterback across your CPA, attorney, and insurance so they don&rsquo;t work at cross-purposes.</span></div>
+          <div class="svrow"><span class="svarea">Psychology &amp; spending</span><span class="svstated">Growing net worth as high as possible</span><span class="svunseen"><b>Permission to spend</b> &mdash; helping lifelong savers actually enjoy the money without guilt.</span></div>
+          <div class="svrow"><span class="svarea">Family &amp; continuity</span><span class="svstated">Buying back time and hassle</span><span class="svunseen"><b>Spouse-proofing</b> &mdash; making sure the non-money-managing partner isn&rsquo;t left vulnerable in a crisis.</span></div>
+        </div>
+        <div class="slide-foot"><span>09 — STATED VS. UNSEEN NEEDS</span><span>WHAT A PLANNER REALLY DOES</span></div>
+      </section>
+
+      <!-- 10 — RECAP -->
       <section class="slide">
         <span class="eyebrow">Recap</span>
         <h2 class="st">Three numbers to walk away with</h2>
@@ -564,7 +591,7 @@
             <div class="bl" style="font-family:var(--mono);font-size:.63rem;letter-spacing:.06em;color:#8e9c96;margin-top:4px">MONTHLY TO FUND YOUR GOALS</div>
           </div>
         </div>
-        <div class="slide-foot"><span>09 — RECAP · VALUES PULL FROM YOUR ENTRIES</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
+        <div class="slide-foot"><span>10 — RECAP · VALUES PULL FROM YOUR ENTRIES</span><span>TALON RUCKER · FINANCIAL EDUCATION</span></div>
       </section>
 
     </div>

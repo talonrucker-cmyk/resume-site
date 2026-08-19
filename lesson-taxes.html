@@ -119,6 +119,12 @@
 
   /* benchmark table */
   .bench{display:flex;flex-direction:column;gap:8px}
+  .benchlbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:#8e9c96;margin-bottom:2px}
+  .dlstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .dlitem{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 15px}
+  .dlitem .dlk{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#8e9c96}
+  .dlitem b{display:block;font-family:var(--display);font-size:1.12rem;color:var(--pine);margin:3px 0}
+  .dlitem .dld{display:block;font-size:.76rem;color:var(--ink-soft);line-height:1.35}
   .benchrow{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 16px;transition:.2s}
   .benchrow:hover{border-color:var(--pine);transform:translateX(3px)}
   .benchrow .bm{font-weight:600;color:var(--ink);font-size:.98rem}
@@ -324,15 +330,19 @@
             <button class="tl-node p1" data-goto="3"><span class="tl-dot">3</span><span class="tl-lab">Do you have to file?</span></button>
             <button class="tl-node p2" data-goto="4"><span class="tl-dot">4</span><span class="tl-lab">Capital gains rates</span></button>
             <button class="tl-node p2" data-goto="5"><span class="tl-dot">5</span><span class="tl-lab">The 0% bracket</span></button>
-            <button class="tl-node p3" data-goto="6"><span class="tl-dot">6</span><span class="tl-lab">W&#8209;2 vs. 1099</span></button>
-            <button class="tl-node p3" data-goto="7"><span class="tl-dot">7</span><span class="tl-lab">Pay yourself &amp; quarterlies</span></button>
-            <button class="tl-node p3" data-goto="8"><span class="tl-dot">8</span><span class="tl-lab">Business deductions</span></button>
-            <button class="tl-node p3" data-goto="9"><span class="tl-dot">9</span><span class="tl-lab">Tithing &amp; giving</span></button>
-            <button class="tl-node p3" data-goto="10"><span class="tl-dot">10</span><span class="tl-lab">The S&#8209;corp move</span></button>
-            <button class="tl-node p4" data-goto="11"><span class="tl-dot">11</span><span class="tl-lab">Entities &amp; getting help</span></button>
+            <button class="tl-node p2" data-goto="6"><span class="tl-dot">6</span><span class="tl-lab">Tax-loss harvesting</span></button>
+            <button class="tl-node p3" data-goto="7"><span class="tl-dot">7</span><span class="tl-lab">W&#8209;2 vs. 1099</span></button>
+            <button class="tl-node p3" data-goto="8"><span class="tl-dot">8</span><span class="tl-lab">Pay yourself &amp; quarterlies</span></button>
+            <button class="tl-node p3" data-goto="9"><span class="tl-dot">9</span><span class="tl-lab">Business deductions</span></button>
+            <button class="tl-node p3" data-goto="10"><span class="tl-dot">10</span><span class="tl-lab">Tithing &amp; giving</span></button>
+            <button class="tl-node p3" data-goto="11"><span class="tl-dot">11</span><span class="tl-lab">The S&#8209;corp move</span></button>
+            <button class="tl-node p4" data-goto="12"><span class="tl-dot">12</span><span class="tl-lab">Entities &amp; getting help</span></button>
+            <button class="tl-node p4" data-goto="13"><span class="tl-dot">13</span><span class="tl-lab">CPA + planner team</span></button>
+            <button class="tl-node p4" data-goto="14"><span class="tl-dot">14</span><span class="tl-lab">Roth conversions</span></button>
           </div>
           <div class="tl-hint">Click a stop to dive in &middot; every slide has a &ldquo;&#8598; Roadmap&rdquo; button to jump back here</div>
         </div>
+        <div class="disclaim" style="text-align:center;margin-top:10px">Educational and illustrative only &mdash; not tax, legal, or accounting advice. Figures are simplified 2026 estimates; your outcome depends on your full situation. Consult a qualified CPA or tax attorney.</div>
         <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> to page through, or click a stop</span></div>
       </section>
 
@@ -442,9 +452,15 @@
           </div>
         </div>
 
+        <div class="dlstrip" data-step="4">
+          <div class="dlitem"><span class="dlk">File by</span><b>April 15</b><span class="dld">An extension to Oct 15 buys more time to file &mdash; not to pay.</span></div>
+          <div class="dlitem"><span class="dlk">Self-employed? Quarterlies</span><b>Apr 15 &middot; Jun 15 &middot; Sep 15 &middot; Jan 15</b><span class="dld">Estimated tax when no employer withholds for you.</span></div>
+          <div class="dlitem"><span class="dlk">Filed late &amp; owed a refund?</span><b>3-year window</b><span class="dld">File within ~3 years of the deadline or the IRS keeps the refund for good.</span></div>
+        </div>
+
         <div class="reveal-foot">
-          <div class="qline" data-step="4">&ldquo;When in doubt, file. Skipping a return you didn&rsquo;t owe usually just leaves your own money on the table.&rdquo;</div>
-          <button class="action" type="button" data-step="5" data-action-check="file" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">File if any tax was withheld or you qualify for a refundable credit.</span></button>
+          <div class="qline" data-step="5">&ldquo;When in doubt, file. Skipping a return you didn&rsquo;t owe usually just leaves your own money on the table.&rdquo;</div>
+          <button class="action" type="button" data-step="6" data-action-check="file" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">File if any tax was withheld or you qualify for a refundable credit.</span></button>
         </div>
 
         <div class="slide-foot"><span>03 — DO YOU HAVE TO FILE?</span><span class="build-hint"></span></div>
@@ -456,10 +472,11 @@
         <h2 class="st">Hold for a <span class="amber">year</span> and the tax rate falls off a cliff.</h2>
         <div class="two wide-left" style="margin-top:14px;align-items:start">
           <div class="bench">
-            <div class="benchrow"><span class="bm">Short-term gain<span>Sold within 1 year of buying</span></span><span class="bt brick">Taxed as<br>ordinary income</span></div>
-            <div class="benchrow"><span class="bm">Long-term &middot; 0% band<span>Low total income</span></span><span class="bt">0%</span></div>
-            <div class="benchrow"><span class="bm">Long-term &middot; middle<span>Most investors land here</span></span><span class="bt amber">15%</span></div>
-            <div class="benchrow"><span class="bm">Long-term &middot; top band<span>Very high income</span></span><span class="bt brick">20%</span></div>
+            <div class="benchlbl">2026 &middot; by taxable income</div>
+            <div class="benchrow"><span class="bm">Short-term gain<span>Held under 1 year &mdash; your ordinary bracket, up to 37%</span></span><span class="bt brick">Taxed as<br>ordinary income</span></div>
+            <div class="benchrow"><span class="bm">Long-term &middot; 0% band<span>Taxable income up to $49,450 single &middot; $98,900 joint</span></span><span class="bt">0%</span></div>
+            <div class="benchrow"><span class="bm">Long-term &middot; middle<span>Up to about $545,500 single &middot; $613,700 joint</span></span><span class="bt amber">15%</span></div>
+            <div class="benchrow"><span class="bm">Long-term &middot; top band<span>Income above those thresholds</span></span><span class="bt brick">20%</span></div>
             <div class="benchrow"><span class="bm">High-earner surtax (NIIT)<span>Above $200k single / $250k joint</span></span><span class="bt brick">+3.8%</span></div>
           </div>
           <div class="stack">
@@ -472,6 +489,7 @@
         </div>
         <div class="reveal-foot">
           <button class="action mini" type="button" data-step="1" data-action-check="longterm" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Hold investments past one year to earn the long-term rate.</span></button>
+          <div class="disclaim">2026 figures, illustrative and educational only &mdash; not tax advice. Thresholds are inflation-adjusted yearly; your result depends on total taxable income. Confirm with a CPA.</div>
         </div>
         <div class="slide-foot"><span>04 — CAPITAL GAINS RATES</span><span class="build-hint"></span></div>
       </section>
@@ -538,9 +556,38 @@
         <div class="slide-foot"><span>05 — THE 0% BRACKET</span><span class="build-hint"></span></div>
       </section>
 
+      <!-- 6 — TAX-LOSS HARVESTING -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Investing &middot; Stop 6</span></div>
+        <h2 class="st">Turn a loser into a <span class="pine">tax discount</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Sell what&rsquo;s down</div>
+            <p class="bexp" data-step="1">A paper loss does nothing for you. <em>Sell</em> an investment that&rsquo;s dropped and you <em>realize</em> the loss &mdash; now it&rsquo;s a number the IRS lets you use.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Offset gains, then income</div>
+            <p class="bexp" data-step="2">The loss cancels your capital gains dollar-for-dollar. Any leftover then knocks up to <b>$3,000</b> off your ordinary income each year.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Carry the rest forward</div>
+            <p class="bexp" data-step="3">Losses bigger than that don&rsquo;t vanish &mdash; they <b>carry forward</b> to future years, waiting to wipe out your next gain.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Mind the <b>wash-sale rule</b>: rebuy the same (or a nearly identical) investment within 30 days &mdash; before or after the sale &mdash; and the IRS throws the loss out.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="harvest" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">In a down year, harvest losses to offset gains &mdash; and don&rsquo;t rebuy within 30 days.</span></button>
+          <div class="disclaim">Illustrative and educational only &mdash; not tax advice. Wash-sale and carryforward rules have exceptions; confirm with a CPA.</div>
+        </div>
+
+        <div class="slide-foot"><span>06 — TAX-LOSS HARVESTING</span><span class="build-hint"></span></div>
+      </section>
+
       <!-- 7 — W-2 VS 1099 -->
       <section class="slide">
-        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 6</span></div>
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 7</span></div>
         <h2 class="st">Two forms decide <span class="brick">who withholds your taxes</span>.</h2>
         <div class="two" style="margin-top:18px;align-items:stretch">
           <div class="card">
@@ -565,12 +612,12 @@
         <div class="reveal-foot" style="margin-top:18px">
           <button class="action mini" type="button" data-step="1" data-action-check="form" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Know whether each gig pays you on a W&#8209;2 or a 1099.</span></button>
         </div>
-        <div class="slide-foot"><span>06 — W-2 VS 1099</span><span class="build-hint"></span></div>
+        <div class="slide-foot"><span>07 — W-2 VS 1099</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 8 — PAY YOURSELF & QUARTERLIES -->
       <section class="slide">
-        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 7</span></div>
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 8</span></div>
         <h2 class="st">No boss withholds it &mdash; so <span class="brick">you</span> do.</h2>
 
         <div class="build-cols">
@@ -584,7 +631,7 @@
           </div>
           <div class="bcol">
             <div class="btitle">Draw, don&rsquo;t &ldquo;payroll&rdquo;</div>
-            <p class="bexp" data-step="3">As a sole proprietor you don&rsquo;t run payroll on yourself &mdash; you just <em>draw</em> money out. Real payroll only starts if you elect S&#8209;corp (Stop 10).</p>
+            <p class="bexp" data-step="3">As a sole proprietor you don&rsquo;t run payroll on yourself &mdash; you just <em>draw</em> money out. Real payroll only starts if you elect S&#8209;corp (Stop 11).</p>
           </div>
         </div>
 
@@ -593,12 +640,12 @@
           <button class="action" type="button" data-step="5" data-action-check="quarterly" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Set aside ~25&ndash;30% of 1099 income and pay quarterly estimates.</span></button>
         </div>
 
-        <div class="slide-foot"><span>07 — PAY YOURSELF & QUARTERLIES</span><span class="build-hint"></span></div>
+        <div class="slide-foot"><span>08 — PAY YOURSELF & QUARTERLIES</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 9 — BUSINESS DEDUCTIONS -->
       <section class="slide">
-        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 8</span></div>
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 9</span></div>
         <h2 class="st">Deductions that <span class="pine">shrink</span> the business bill.</h2>
 
         <div class="build-cols">
@@ -621,12 +668,12 @@
           <button class="action" type="button" data-step="5" data-action-check="deduct" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Track every business expense, per-diem day, and depreciable asset.</span></button>
         </div>
 
-        <div class="slide-foot"><span>08 — BUSINESS DEDUCTIONS</span><span class="build-hint"></span></div>
+        <div class="slide-foot"><span>09 — BUSINESS DEDUCTIONS</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 10 — TITHING & GIVING -->
       <section class="slide">
-        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 9</span></div>
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 10</span></div>
         <h2 class="st">Giving you already do can <span class="pine">lower</span> your taxes.</h2>
         <div class="two" style="margin-top:18px;align-items:stretch">
           <div class="card">
@@ -648,12 +695,12 @@
         <div class="reveal-foot" style="margin-top:16px">
           <button class="action mini" type="button" data-step="1" data-action-check="tithe" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Track your giving and check whether itemizing beats the standard.</span></button>
         </div>
-        <div class="slide-foot"><span>09 — TITHING & GIVING</span><span class="build-hint"></span></div>
+        <div class="slide-foot"><span>10 — TITHING & GIVING</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 11 — THE S-CORP MOVE (calculator) -->
       <section class="slide">
-        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 10</span></div>
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Working for yourself &middot; Stop 11</span></div>
         <h2 class="st" style="margin-bottom:12px">The S&#8209;corp move: split pay from profit.</h2>
         <div class="calc">
           <div class="inputs">
@@ -686,18 +733,18 @@
               <div class="lrow tot"><span>Tax saved</span><b id="sc_l3">$7,065</b></div>
             </div>
             <div class="flag" id="sc_flag">WORTH IT ONCE PROFIT IS STEADY — PAYROLL, EXTRA FILINGS, AND A CPA EAT INTO THE SAVINGS ON SMALL PROFITS.</div>
-            <div class="disclaim">Simplified: ignores the Social Security wage cap, QBI, and income tax (unchanged either way). Run real numbers with a CPA.</div>
+            <div class="disclaim">Illustrative only, not tax advice. Simplified: ignores the Social Security wage cap, QBI, state LLC/S&#8209;corp fees, and payroll &amp; extra-filing costs that shrink the savings. Run real numbers with a CPA.</div>
           </div>
         </div>
         <div class="reveal-foot">
           <button class="action mini" type="button" data-step="1" data-action-check="scorp" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Once profit is steady, run the S&#8209;corp math with a CPA.</span></button>
         </div>
-        <div class="slide-foot"><span>10 — THE S-CORP MOVE</span><span class="build-hint"></span></div>
+        <div class="slide-foot"><span>11 — THE S-CORP MOVE</span><span class="build-hint"></span></div>
       </section>
 
       <!-- 12 — ENTITIES & GETTING HELP -->
       <section class="slide">
-        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Structure &middot; Stop 11</span></div>
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Structure &middot; Stop 12</span></div>
         <h2 class="st">Pick a <span class="pine">structure</span> &mdash; and know when to call a pro.</h2>
         <div class="two wide-left" style="margin-top:14px;align-items:start">
           <div class="bench">
@@ -721,10 +768,63 @@
         <div class="reveal-foot">
           <button class="action mini" type="button" data-step="1" data-action-check="entity" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Form an LLC when you have something to protect; hire a CPA when the stakes beat the fee.</span></button>
         </div>
-        <div class="slide-foot"><span>11 — ENTITIES & GETTING HELP</span><span class="build-hint"></span></div>
+        <div class="slide-foot"><span>12 — ENTITIES & GETTING HELP</span><span class="build-hint"></span></div>
       </section>
 
-      <!-- 13 — RECAP -->
+      <!-- 13 — CPA + PLANNER COORDINATION -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Structure &middot; Stop 13</span></div>
+        <h2 class="st">Your CPA and planner should be on the <span class="pine">same team</span>.</h2>
+
+        <div class="build-cols" style="grid-template-columns:repeat(2,1fr)">
+          <div class="bcol">
+            <div class="btitle">Coordinate, don&rsquo;t silo</div>
+            <p class="bexp" data-step="1">The biggest wins come when your <em>investments</em> and your <em>tax return</em> are built together. A <b>CFP&reg;</b> and a <b>CPA</b> working as one catch what either alone would miss.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">One plan, not three</div>
+            <p class="bexp" data-step="2">One team aligns your investing, your tax return, and your big decisions so they pull in the <em>same direction</em> &mdash; instead of three people who never talk to each other.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="3">&ldquo;Investments and taxes are one system. The advisor who sees both keeps more of every dollar in your pocket.&rdquo;</div>
+          <button class="action" type="button" data-step="4" data-action-check="coordinate" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">As things get complex, get a planner and CPA who coordinate the whole picture.</span></button>
+          <div class="disclaim">State income taxes vary from state to state &mdash; an accountant who knows yours can help you plan around them. Educational only, not tax advice.</div>
+        </div>
+
+        <div class="slide-foot"><span>13 — CPA + PLANNER, INTEGRATED</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 14 — ROTH CONVERSIONS -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Structure &middot; Stop 14</span></div>
+        <h2 class="st">Roth conversions: pay tax <span class="pine">now</span>, grow tax-free.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">What it is</div>
+            <p class="bexp" data-step="1">Move money from a <b>pre-tax</b> IRA or 401(k) into a <b>Roth</b>. You pay income tax on the amount today; from then on it grows and comes out <b>tax-free</b>.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">When it wins</div>
+            <p class="bexp" data-step="2">Convert in <b>low-income years</b> &mdash; a gap year, or early retirement before Social Security and RMDs kick in &mdash; when your tax rate is low. You move the money at a discount.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Part of the bigger plan</div>
+            <p class="bexp" data-step="3">Pair it with <b>asset location</b> (the right holdings in the right accounts) and <b>tax-loss harvesting</b>, so the whole picture is optimized together &mdash; which is exactly where a coordinated CPA and planner earn their keep.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <button class="action" type="button" data-step="4" data-action-check="roth" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">In a low-income year, look at converting some pre-tax savings to Roth with your CPA.</span></button>
+          <div class="disclaim">Illustrative and educational only &mdash; not tax or investment advice. A conversion adds to this year&rsquo;s taxable income; confirm the numbers with a qualified CPA.</div>
+        </div>
+
+        <div class="slide-foot"><span>14 — ROTH CONVERSIONS</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 14 — RECAP -->
       <section class="slide">
         <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">The throughline</span></div>
         <h2 class="st">It all comes back to <span class="pine">one number</span>.</h2>
@@ -746,7 +846,7 @@
           </div>
         </div>
         <div class="pull" style="margin-top:22px">You&rsquo;ll never out-earn a bad tax setup. A few right moves &mdash; and a CPA when it counts &mdash; keep more of every dollar you make.</div>
-        <div class="slide-foot"><span>12 — THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
+        <div class="slide-foot"><span>15 — THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
       </section>
 
       <!-- 14 — ACTION CHECKLIST -->
@@ -755,7 +855,7 @@
         <h2 class="st">Now go <span class="pine">do</span> it.</h2>
         <p class="lede" style="margin-top:4px">Every stop leaves one action. Tick them off as you knock them out &mdash; progress saves on this device.</p>
         <div class="checklist" id="checklist"></div>
-        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 11</span></div>
+        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 14</span></div>
       </section>
 
     </div>
@@ -1012,7 +1112,7 @@
   bindSeg('cg_status', function(st){ cgStatus = st; calcCG(); });
   ['cg_ord','cg_gain'].forEach(function(id){ bindMoney(id, calcCG); });
 
-  /* ---------- CALC 3: S-CORP SE-TAX SAVINGS (Stop 10) ---------- */
+  /* ---------- CALC 3: S-CORP SE-TAX SAVINGS (Stop 11) ---------- */
   function calcScorp(){
     var profit = val('sc_profit');
     var salary = Math.min(val('sc_salary'), profit);      // salary can't exceed profit here
@@ -1051,12 +1151,15 @@
     {id:'file',      phase:'Basics',      text:'File if any tax was withheld or you qualify for a refundable credit.'},
     {id:'longterm',  phase:'Investing',   text:'Hold investments past one year to earn the long-term rate.'},
     {id:'zero',      phase:'Investing',   text:'In low-income years, realize long-term gains up to the 0% ceiling.'},
+    {id:'harvest',   phase:'Investing',   text:'In a down year, harvest losses to offset gains — and don’t rebuy within 30 days.'},
     {id:'form',      phase:'Self-employed',text:'Know whether each gig pays you on a W-2 or a 1099.'},
     {id:'quarterly', phase:'Self-employed',text:'Set aside ~25–30% of 1099 income and pay quarterly estimates.'},
     {id:'deduct',    phase:'Self-employed',text:'Track every business expense, per-diem day, and depreciable asset.'},
     {id:'tithe',     phase:'Self-employed',text:'Track your giving and check whether itemizing beats the standard.'},
     {id:'scorp',     phase:'Self-employed',text:'Once profit is steady, run the S-corp math with a CPA.'},
-    {id:'entity',    phase:'Structure',   text:'Form an LLC when you have something to protect; hire a CPA when the stakes beat the fee.'}
+    {id:'entity',    phase:'Structure',   text:'Form an LLC when you have something to protect; hire a CPA when the stakes beat the fee.'},
+    {id:'coordinate',phase:'Structure',   text:'As things get complex, get a planner and CPA who coordinate the whole picture.'},
+    {id:'roth',      phase:'Structure',   text:'In a low-income year, look at converting some pre-tax savings to Roth with your CPA.'}
   ];
   var CK_KEY = 'tr-taxes-actions', ckState = {};
   try { var cs = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (cs && typeof cs === 'object') ckState = cs; } catch(e){}

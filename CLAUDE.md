@@ -32,10 +32,9 @@ Never stage `.claude/` (local tooling). Never stage `index1.html` (old, unused).
 | `lesson-planner.html` | Lesson 01 deck — why a financial planner + goals planner |
 | `lesson-protection.html` | Lesson 02 deck — insurance |
 | `lesson-cashflow.html` | Lesson 03 deck — cash flow |
-| `lesson-investing.html` | Lesson 04 deck — investing & risk |
-| `lesson-startup.html` | Lesson 05 deck — startup finance (roadmap) |
-| `lesson-taxes.html` | Lesson 06 deck — tax basics (std/itemized, 0% cap-gains calc, 1099/S-corp, entities) |
-| `lesson-money-wisdom.html` | Lesson 07 deck — being wise with money (car calc, passive-income/day, avg-return trap, crash+DCA simulator) |
+| `lesson-investing.html` | Lesson 04 deck — investing & risk + being wise with money (freeway/lanes, crash, buy-low, two-investors, opportunity-cost calc, big-rocks, passive income, realistic returns, static average-trap, passive-income/day). **Former Lesson 07 (money-wisdom) was folded in here and its file deleted.** |
+| `lesson-startup.html` | Lesson 05 deck — business startup (roadmap) |
+| `lesson-taxes.html` | Lesson 06 deck — tax basics (std/itemized, 0% cap-gains calc + brackets, deadlines/late-filing, tax-loss harvesting, 1099/S-corp, entities) |
 | `images/` | Photo gallery assets |
 | `why-you-need-a-financial-planner.pdf` | Embedded guide |
 | `EDITS.md` | The outstanding work list, batched |
@@ -87,8 +86,9 @@ Lesson decks scale a fixed 1280×720 stage to fit. Below 860px they switch to a
 stacked reading layout — scaling that far down makes text illegible. Sizing falls
 back to a synchronous path when `document.hidden`, since rAF pauses in background tabs.
 
-There are now **seven lessons** (01 financial planner, 02 protection, 03 cash flow,
-04 investing, 05 startup finance, 06 tax basics, 07 being wise with money) behind a
+There are now **six lessons** (01 financial planner, 02 protection, 03 cash flow,
+04 investing & risk — which absorbed the former "being wise with money" deck,
+05 business startup, 06 tax basics) behind a
 `lessons.html` **hub**. The nav "Lessons" tab and the hero
 button point at the hub; each deck's "← All lessons" button returns to it, and the
 hub backs out to `index.html`. A new lesson = a new `lesson-<topic>.html` file **plus
