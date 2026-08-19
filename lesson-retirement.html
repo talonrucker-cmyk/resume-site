@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retirement Planning — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:48px 58px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  .eyebrow.p2{color:#9a6410}.eyebrow.p2::before{background:var(--amber)}
+  .eyebrow.p3{color:var(--brick)}.eyebrow.p3::before{background:var(--brick)}
+  .eyebrow.p4{color:var(--pine-deep)}.eyebrow.p4::before{background:var(--pine)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1.03;letter-spacing:-.028em;margin:14px 0 16px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1.08;letter-spacing:-.022em;margin:12px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  h2.st .amber{color:var(--amber)}
+  h2.st .brick{color:var(--brick)}
+  .lede{font-size:1.12rem;color:var(--ink-soft);max-width:64ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* per-slide header: back-to-roadmap + phase tag */
+  .slide-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:2px}
+  .tl-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-weight:600;font-size:.78rem;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--white);color:var(--pine);cursor:pointer;transition:.18s}
+  .tl-back:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .tl-back .ar{transition:transform .18s}.tl-back:hover .ar{transform:translateX(-3px)}
+
+  /* ---------- TIMELINE HUB (slide 1) ---------- */
+  .timeline{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:8px}
+  .tl-phases{display:flex;gap:16px;margin-bottom:34px}
+  .tl-phase{flex:1;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:11px;border-bottom:2px solid var(--line);color:var(--ink)}
+  .tl-phase span{display:block;font-family:var(--body);font-size:.74rem;letter-spacing:0;text-transform:none;color:#8e9c96;font-weight:400;margin-top:3px}
+  .tl-phase.p1{border-color:var(--pine);color:var(--pine)}
+  .tl-phase.p2{border-color:var(--amber);color:#9a6410}
+  .tl-phase.p3{border-color:var(--brick);color:var(--brick)}
+  .tl-phase.p4{border-color:var(--pine-deep);color:var(--pine-deep)}
+  .tl-track{position:relative;display:flex}
+  .tl-spine{position:absolute;left:5%;right:5%;top:17px;height:3px;transform:translateY(-50%);background:var(--line-strong);border-radius:99px;z-index:0}
+  .tl-node{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;gap:13px;background:none;border:0;cursor:pointer;padding:0 4px;font:inherit}
+  .tl-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:.86rem;color:#fff;background:var(--pine);border:3px solid var(--paper);box-shadow:0 2px 8px -2px rgba(10,40,30,.4);transition:.18s}
+  .tl-node.p2 .tl-dot{background:var(--amber);color:#3a2a08}
+  .tl-node.p3 .tl-dot{background:var(--brick)}
+  .tl-node.p4 .tl-dot{background:var(--pine-deep)}
+  .tl-lab{font-family:var(--display);font-weight:600;font-size:.85rem;line-height:1.18;color:var(--ink-soft);text-align:center;max-width:13ch;transition:.18s}
+  .tl-node:hover .tl-dot{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 18px -6px rgba(10,40,30,.55)}
+  .tl-node:hover .tl-lab{color:var(--ink)}
+  .tl-node:focus-visible .tl-dot{outline:2px solid var(--pine);outline-offset:3px}
+  .tl-hint{margin-top:30px;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:#8e9c96}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.12fr .88fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.96rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:15px;margin-top:20px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.26rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+  .stack{display:flex;flex-direction:column;gap:18px}
+
+  /* benchmark table */
+  .bench{display:flex;flex-direction:column;gap:8px}
+  .benchlbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:#8e9c96;margin-bottom:2px}
+  .dlstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .dlitem{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 15px}
+  .dlitem .dlk{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#8e9c96}
+  .dlitem b{display:block;font-family:var(--display);font-size:1.12rem;color:var(--pine);margin:3px 0}
+  .dlitem .dld{display:block;font-size:.76rem;color:var(--ink-soft);line-height:1.35}
+  .benchrow{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 16px;transition:.2s}
+  .benchrow:hover{border-color:var(--pine);transform:translateX(3px)}
+  .benchrow .bm{font-weight:600;color:var(--ink);font-size:.98rem}
+  .benchrow .bm span{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:400;margin-top:1px}
+  .benchrow .bt{font-family:var(--display);font-weight:700;color:var(--pine);font-size:1.04rem;white-space:nowrap;text-align:right}
+  .benchrow .bt.amber{color:var(--amber)}
+  .benchrow .bt.brick{color:var(--brick)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:20px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:13px;overflow:auto}
+  .inputs.tight{gap:10px;padding:16px 24px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:11px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.1rem;color:var(--ink);padding:10px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:60px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:24px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.3rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.brick{color:#F0A093}
+  .out .big.green{color:#8FD8BE}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.32rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bn.green{color:#8FD8BE}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.28rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px;line-height:1.45}
+  .flag.good{background:rgba(79,176,141,.14);border-color:rgba(79,176,141,.4);color:#8FD8BE}
+  .flag.bad{background:rgba(162,58,45,.16);border-color:rgba(240,160,147,.4);color:#F0A093}
+
+  /* filing-status / method toggle (reused for calculators) */
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper-2)}
+  .seg button{border:0;background:none;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;padding:8px 16px;cursor:pointer;color:var(--ink-soft)}
+  .seg button.on{background:var(--pine);color:#fff}
+
+  /* capital-gains stacked bar (in the dark output panel) */
+  .cgbar{margin:14px 0 4px}
+  .cgtrack{height:26px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;display:flex;border:1px solid rgba(255,255,255,.14)}
+  .cgtrack i{height:100%;display:block;transition:width .4s cubic-bezier(.2,.85,.25,1)}
+  .cg-ord{background:repeating-linear-gradient(45deg,#5E776C,#5E776C 7px,#546b61 7px,#546b61 14px)}
+  .cg-0{background:linear-gradient(90deg,#2E8C6E,#4FB08D)}
+  .cg-15{background:var(--amber)}
+  .cg-20{background:var(--brick)}
+  .cgkey{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px}
+  .cgkey span{font-family:var(--mono);font-size:.64rem;letter-spacing:.03em;color:#B6C7BF;display:flex;align-items:center;gap:6px}
+  .cgkey i{width:13px;height:10px;border-radius:2px;flex:none}
+  .cgkey i.k-ord{background:#5E776C}.cgkey i.k-0{background:#4FB08D}.cgkey i.k-15{background:var(--amber)}.cgkey i.k-20{background:var(--brick)}
+
+  /* ---------- PROGRESSIVE REVEAL (build) ---------- */
+  [data-step]{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .5s cubic-bezier(.2,.85,.25,1)}
+  [data-step].show{opacity:1;transform:none}
+  [data-step][hidden]{display:none}
+
+  .build-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:44px;align-items:start;align-content:center;padding:4px 0}
+  .bcol{display:flex;flex-direction:column;align-items:flex-start}
+  .bcol::before{content:"";display:block;width:46px;height:6px;border-radius:99px;background:var(--pine);margin-bottom:18px}
+  .bcol:nth-child(2)::before{background:var(--amber)}
+  .bcol:nth-child(3)::before{background:var(--brick)}
+  .btitle{font-family:var(--display);font-weight:700;font-size:2.1rem;letter-spacing:-.02em;color:var(--ink);line-height:1.08}
+  .bexp{font-size:1.05rem;color:var(--ink-soft);line-height:1.5;margin-top:12px}
+  .bexp em{font-style:italic;color:var(--ink)}
+  .reveal-foot{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .qline{border-left:3px solid var(--amber);padding:5px 0 5px 18px;font-family:var(--display);font-weight:500;font-size:1.34rem;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+  .action{display:inline-flex;align-items:center;gap:15px;align-self:center;background:var(--sage);border:1px solid rgba(14,82,64,.28);border-radius:14px;padding:15px 26px;font-family:var(--body);font-size:1.18rem;font-weight:600;line-height:1.35;color:var(--pine-deep);max-width:100%;cursor:pointer;text-align:left;transition:.18s}
+  .action:hover{border-color:var(--pine);box-shadow:0 8px 20px -12px rgba(14,82,64,.7)}
+  .ax-box{flex:none;width:27px;height:27px;border:2px solid var(--pine);border-radius:8px;background:var(--white);display:grid;place-items:center}
+  .ax-box .ck{width:12px;height:7px;border-left:2.8px solid #fff;border-bottom:2.8px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .action.done .ax-box{background:var(--pine);border-color:var(--pine)}
+  .action.done .ax-box .ck{opacity:1}
+  .ax-tag{flex:none;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--pine);color:#fff;padding:5px 10px;border-radius:99px}
+  .action.mini{padding:10px 18px;font-size:1.02rem;gap:12px;border-radius:12px;margin-top:12px}
+  .action.mini .ax-box{width:23px;height:23px}
+  .action.mini .ax-box .ck{width:11px;height:6px}
+  .build-hint{color:var(--pine)}
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  .checklist{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;align-content:start;margin-top:18px;overflow:auto;padding-right:4px}
+  .ck-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 15px;cursor:pointer;transition:.18s;text-align:left;font:inherit}
+  .ck-item:hover{border-color:var(--pine);transform:translateY(-1px)}
+  .ck-box{flex:none;width:24px;height:24px;border:2px solid var(--line-strong);border-radius:7px;background:var(--white);display:grid;place-items:center;margin-top:1px}
+  .ck-box .ck{width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .ck-item.done .ck-box{background:var(--pine);border-color:var(--pine)}
+  .ck-item.done .ck-box .ck{opacity:1}
+  .ck-body{min-width:0}
+  .ck-phase{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+  .ck-text{display:block;font-size:.96rem;color:var(--ink);line-height:1.4;margin-top:2px}
+  .ck-item.done .ck-text{color:var(--ink-soft);text-decoration:line-through}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:26px 18px 32px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.2rem;margin:12px 0 14px}
+    h2.st{font-size:1.7rem}
+    .lede{font-size:1rem}
+    .pull{font-size:1.08rem}
+
+    .two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.5rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    [data-step]{opacity:1;transform:none}
+    .build-cols{grid-template-columns:1fr;gap:24px}
+    .btitle{font-size:1.7rem}
+    .bexp{font-size:1rem}
+    .qline{font-size:1.14rem}
+    .checklist{grid-template-columns:1fr;overflow:visible}
+    .build-hint{display:none}
+
+    .tl-phases{display:none}
+    .tl-track{flex-direction:column;gap:2px;padding-left:4px}
+    .tl-spine{left:19px;right:auto;top:10px;bottom:10px;width:3px;height:auto;transform:none}
+    .tl-node{flex-direction:row;align-items:center;gap:14px;width:100%;padding:9px 4px;justify-content:flex-start}
+    .tl-lab{text-align:left;max-width:none;font-size:1.02rem}
+    .tl-hint{display:none}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.26rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.94rem;color:var(--ink-soft);flex:1}
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 08 · Retirement Planning</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 16</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TIMELINE HUB -->
+      <section class="slide on">
+        <span class="eyebrow">Interactive lesson &middot; Retirement planning</span>
+        <h2 class="st" style="margin-top:12px">Build a paycheck that keeps coming after the <span class="pine">job stops</span>.</h2>
+        <p class="lede">Retirement isn&rsquo;t an age you reach &mdash; it&rsquo;s a number you build, then spend down without running out. Click any stop, or page straight through.</p>
+        <div class="timeline">
+          <div class="tl-phases">
+            <div class="tl-phase p1">Phase 1 · Build the buckets<span>Accounts &amp; saving</span></div>
+            <div class="tl-phase p2">Phase 2 · Your number<span>How much, on track?</span></div>
+            <div class="tl-phase p3">Phase 3 · Spend it down<span>Withdrawals</span></div>
+            <div class="tl-phase p4">Phase 4 · Protect the plan<span>Risks &amp; the whole picture</span></div>
+          </div>
+          <div class="tl-track">
+            <div class="tl-spine"></div>
+            <button class="tl-node p1" data-goto="1"><span class="tl-dot">1</span><span class="tl-lab">A number, not an age</span></button>
+            <button class="tl-node p1" data-goto="2"><span class="tl-dot">2</span><span class="tl-lab">The account lineup</span></button>
+            <button class="tl-node p1" data-goto="3"><span class="tl-dot">3</span><span class="tl-lab">Traditional vs. Roth</span></button>
+            <button class="tl-node p1" data-goto="4"><span class="tl-dot">4</span><span class="tl-lab">The match, limits &amp; order</span></button>
+            <button class="tl-node p2" data-goto="5"><span class="tl-dot">5</span><span class="tl-lab">How big a nest egg?</span></button>
+            <button class="tl-node p2" data-goto="6"><span class="tl-dot">6</span><span class="tl-lab">Are you on track?</span></button>
+            <button class="tl-node p3" data-goto="7"><span class="tl-dot">7</span><span class="tl-lab">The 4% rule</span></button>
+            <button class="tl-node p3" data-goto="8"><span class="tl-dot">8</span><span class="tl-lab">Sequence-of-returns risk</span></button>
+            <button class="tl-node p3" data-goto="9"><span class="tl-dot">9</span><span class="tl-lab">Which account to tap first</span></button>
+            <button class="tl-node p3" data-goto="10"><span class="tl-dot">10</span><span class="tl-lab">RMDs at 73</span></button>
+            <button class="tl-node p4" data-goto="11"><span class="tl-dot">11</span><span class="tl-lab">Healthcare &amp; long-term care</span></button>
+            <button class="tl-node p4" data-goto="12"><span class="tl-dot">12</span><span class="tl-lab">Inflation &amp; longevity</span></button>
+            <button class="tl-node p4" data-goto="13"><span class="tl-dot">13</span><span class="tl-lab">Put the plan together</span></button>
+          </div>
+          <div class="tl-hint">Click a stop to dive in &middot; every slide has a &ldquo;&#8598; Roadmap&rdquo; button to jump back here</div>
+        </div>
+        <div class="disclaim" style="text-align:center;margin-top:10px">Educational and illustrative only &mdash; not tax, legal, or investment advice. Figures are simplified 2026 estimates; contribution limits, tax rules, and market returns change. Confirm your plan with a qualified advisor.</div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> to page through, or click a stop</span></div>
+      </section>
+
+      <!-- 2 — A NUMBER, NOT AN AGE -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Build the buckets &middot; Stop 1</span></div>
+        <h2 class="st">Retirement isn&rsquo;t an age &mdash; it&rsquo;s a <span class="pine">number</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">You&rsquo;re buying your salary</div>
+            <p class="bexp" data-step="1">Retirement means replacing your paycheck <em>without a job</em>. Your savings have to throw off income for the rest of your life.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Aim to replace ~80%</div>
+            <p class="bexp" data-step="2">Most people need roughly <em>70&ndash;85%</em> of their pre-retirement income each year &mdash; the house and kids often cost less, but healthcare and free time cost more.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">The 25&times; shortcut</div>
+            <p class="bexp" data-step="3">A rough target: <em>25&times;</em> the annual income your savings must cover. Need your portfolio to supply $40k a year? You&rsquo;re aiming at about $1,000,000.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;The question was never &lsquo;what age?&rsquo; &mdash; it&rsquo;s &lsquo;what number lets my money outlast me?&rsquo;&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="number" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Estimate the annual income you&rsquo;ll want in retirement.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>01 — A NUMBER, NOT AN AGE</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 3 — THE ACCOUNT LINEUP -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Build the buckets &middot; Stop 2</span></div>
+        <h2 class="st">Four <span class="pine">buckets</span>, three tax deals.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:start">
+          <div class="bench">
+            <div class="benchlbl">How each account is taxed</div>
+            <div class="benchrow"><span class="bm">401(k) / 403(b) / Traditional IRA<span>Deduct now, taxed when you withdraw</span></span><span class="bt">Tax-deferred</span></div>
+            <div class="benchrow"><span class="bm">Roth IRA / Roth 401(k)<span>Pay tax now, grows &amp; comes out tax-free</span></span><span class="bt">Tax-free</span></div>
+            <div class="benchrow"><span class="bm">HSA<span>Deduct, grow, and spend on health &mdash; untaxed</span></span><span class="bt amber">Triple tax-free</span></div>
+            <div class="benchrow"><span class="bm">Taxable brokerage<span>No limits or penalties; capital-gains rates</span></span><span class="bt">Flexible</span></div>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">Same dollars, wildly different after-tax outcomes &mdash; <em>where</em> you save matters almost as much as how much.</div>
+            <div class="card">
+              <h3>The HSA secret</h3>
+              <p>With a high-deductible health plan, the HSA is the <b>only</b> account that&rsquo;s deductible going in <b>and</b> tax-free coming out. After 65 you can pull it for anything, like an IRA.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="accounts" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Know which accounts you have and how each one is taxed.</span></button>
+        </div>
+        <div class="slide-foot"><span>02 — THE ACCOUNT LINEUP</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 4 — TRADITIONAL VS ROTH -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Build the buckets &middot; Stop 3</span></div>
+        <h2 class="st">Pay the tax <span class="amber">now</span>, or <span class="pine">later</span>?</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Traditional = deduct now</div>
+            <p class="bexp" data-step="1">Contributions lower <em>this year&rsquo;s</em> taxable income. You then pay ordinary tax on every dollar you pull out in retirement.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Roth = tax-free later</div>
+            <p class="bexp" data-step="2">No deduction today &mdash; but decades of growth and <em>every</em> withdrawal come out completely tax-free.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">It&rsquo;s a tax-rate bet</div>
+            <p class="bexp" data-step="3">Roth wins if your rate will be <em>higher</em> later; Traditional wins if it&rsquo;ll be <em>lower</em>. Young or low-income years favor Roth.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Most people should own some of both &mdash; tax diversification lets you choose which bucket to tap each year.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="rothtrad" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Favor Roth in your lower-earning years; hold both for flexibility.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>03 — TRADITIONAL VS ROTH</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 5 — THE MATCH, LIMITS & ORDER -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Build the buckets &middot; Stop 4</span></div>
+        <h2 class="st">Free money first, then fill in <span class="pine">order</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Grab the full match</div>
+            <p class="bexp" data-step="1">An employer match is an instant <em>50&ndash;100% return</em>. Contribute at least enough to get all of it &mdash; nothing else beats it.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Then debt &amp; Roth</div>
+            <p class="bexp" data-step="2">After the match, wipe out <em>high-interest debt</em>, then fund a <em>Roth IRA</em>, then circle back to max the 401(k).</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Mind the limits</div>
+            <p class="bexp" data-step="3">Each account has a yearly cap. Once you&rsquo;re <em>50+</em>, &lsquo;catch-up&rsquo; contributions let you add even more.</p>
+          </div>
+        </div>
+
+        <div class="dlstrip" data-step="4">
+          <div class="dlitem"><span class="dlk">401(k) employee</span><b>~$24,500</b><span class="dld">plus a catch-up if you&rsquo;re 50+.</span></div>
+          <div class="dlitem"><span class="dlk">IRA (Roth or Traditional)</span><b>~$7,500</b><span class="dld">combined across all your IRAs.</span></div>
+          <div class="dlitem"><span class="dlk">HSA (family)</span><b>~$8,750</b><span class="dld">with a qualifying high-deductible plan.</span></div>
+        </div>
+
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="5" data-action-check="order" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Get the full match, then fund your accounts in the right order every year.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>04 — THE MATCH, LIMITS &amp; ORDER</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 6 — HOW BIG A NEST EGG? (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Your number &middot; Stop 5</span></div>
+        <h2 class="st" style="margin-bottom:12px">How big a <span class="amber">nest egg</span> do you actually need?</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your retirement income (today&rsquo;s dollars)</div>
+            <div class="fld">
+              <label for="rn_income">Annual income you&rsquo;ll want</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="rn_income" inputmode="numeric" value="60,000"></div>
+              <div class="hint">A rough start: 70&ndash;85% of your current pay.</div>
+            </div>
+            <div class="fld">
+              <label for="rn_ss">Social Security &amp; any pension / year</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="rn_ss" inputmode="numeric" value="24,000"></div>
+              <div class="hint">Your guaranteed income floor, from ssa.gov and any pension.</div>
+            </div>
+            <div class="fld">
+              <label for="rn_rate">Safe withdrawal rate</label>
+              <div class="slider"><input type="range" id="rn_rate" min="3" max="5" step="0.5" value="4"><span class="amt" id="rn_rateamt">4%</span></div>
+              <div class="hint">How much you pull each year. 4% is the classic starting point.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Nest egg you&rsquo;re aiming for</div>
+            <div class="big" id="rn_nest">$900,000</div>
+            <div class="sub" id="rn_sub">That&rsquo;s about 25&times; the $36,000 your own savings must cover each year.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn amber" id="rn_gap">$36,000</div><div class="bl">From your portfolio / yr</div></div>
+              <div class="bd"><div class="bn" id="rn_month">$3,000</div><div class="bl">Per month it must cover</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Income you want</span><b id="rn_l1">$60,000</b></div>
+              <div class="lrow"><span>Social Security &amp; pension</span><b id="rn_l2">$24,000</b></div>
+              <div class="lrow"><span>Gap your savings fund</span><b id="rn_l3">$36,000</b></div>
+              <div class="lrow tot"><span>Nest egg needed</span><b id="rn_l4">$900,000</b></div>
+            </div>
+            <div class="flag good" id="rn_flag">THE 25&times; RULE — AT A 4% WITHDRAWAL, YOUR TARGET IS ROUGHLY 25 TIMES YOUR ANNUAL GAP.</div>
+            <div class="disclaim">Rough target in today&rsquo;s dollars; ignores taxes on withdrawals and how markets actually move. Directional only, not advice.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="nestegg" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Run your own number &mdash; income wanted, minus Social Security, times 25.</span></button>
+        </div>
+        <div class="slide-foot"><span>05 — HOW BIG A NEST EGG?</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 7 — ARE YOU ON TRACK? (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Your number &middot; Stop 6</span></div>
+        <h2 class="st" style="margin-bottom:12px">At this pace, <span class="pine">where do you land</span>?</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Your savings plan</div>
+            <div class="fld">
+              <label for="ot_current">Saved so far</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="ot_current" inputmode="numeric" value="50,000"></div>
+            </div>
+            <div class="fld">
+              <label for="ot_monthly">You add each month</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="ot_monthly" inputmode="numeric" value="500"></div>
+            </div>
+            <div class="fld">
+              <label for="ot_years">Years until retirement</label>
+              <div class="slider"><input type="range" id="ot_years" min="5" max="45" step="1" value="30"><span class="amt" id="ot_yearsamt">30</span></div>
+            </div>
+            <div class="fld">
+              <label for="ot_return">Expected annual return</label>
+              <div class="slider"><input type="range" id="ot_return" min="3" max="10" step="0.5" value="7"><span class="amt" id="ot_returnamt">7%</span></div>
+              <div class="hint">A stock/bond mix has averaged ~6&ndash;8% a year before inflation.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Projected balance at retirement</div>
+            <div class="big green" id="ot_balance">$1,015,000</div>
+            <div class="sub" id="ot_sub">At a 4% withdrawal, that&rsquo;s about $40,600 a year — or $3,383 a month.</div>
+
+            <div class="split">
+              <div class="bd"><div class="bn green" id="ot_income">$40,600</div><div class="bl">Income at 4% / yr</div></div>
+              <div class="bd"><div class="bn" id="ot_contrib">$230,000</div><div class="bl">Total you&rsquo;ll add</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>What you contribute</span><b id="ot_l1">$230,000</b></div>
+              <div class="lrow"><span>Growth on top</span><b id="ot_l2">$785,000</b></div>
+              <div class="lrow tot"><span>Projected balance</span><b id="ot_l3">$1,015,000</b></div>
+            </div>
+            <div class="flag good" id="ot_flag">COMPOUNDING IS DOING THE WORK — MORE THAN HALF THIS BALANCE IS GROWTH, NOT DEPOSITS.</div>
+            <div class="disclaim">Assumes a steady return every year &mdash; real markets don&rsquo;t. Before-inflation, before-tax estimate. Educational only.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="ontrack" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Check your projected balance and bump savings if there&rsquo;s a gap.</span></button>
+        </div>
+        <div class="slide-foot"><span>06 — ARE YOU ON TRACK?</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 8 — THE 4% RULE -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Spend it down &middot; Stop 7</span></div>
+        <h2 class="st">Spend <span class="amber">4%</span>, and the odds say it lasts.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Where it comes from</div>
+            <p class="bexp" data-step="1">Studies found a portfolio could hand you <em>4% the first year</em>, raise it with inflation each year after, and survive 30+ years through history&rsquo;s worst markets.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">A guide, not a law</div>
+            <p class="bexp" data-step="2">Retire into a crash, live longer, or hold too much cash and the safe number can be lower. Many planners now start nearer <em>3.5%</em>.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Stay flexible</div>
+            <p class="bexp" data-step="3">Trim spending in down years and you can safely spend more in good ones. A rule with a little <em>give</em> beats a rigid one.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;The 4% rule turns a scary pile of money into a simple paycheck &mdash; then you adjust as real life happens.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="fourpct" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Use ~4% as your starting withdrawal, and stay flexible in bad years.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>07 — THE 4% RULE</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 9 — SEQUENCE-OF-RETURNS RISK -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Spend it down &middot; Stop 8</span></div>
+        <h2 class="st">A crash <span class="brick">early</span> hurts far more than a crash late.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">The retiree&rsquo;s hidden risk</div>
+            <p class="bexp" data-step="1">Two retirees can earn the <em>same average return</em> and get opposite outcomes &mdash; the one who hits a crash in year one can run out decades sooner.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Selling into a downturn</div>
+            <p class="bexp" data-step="2">Pulling income from stocks while they&rsquo;re <em>down</em> locks in the losses. Those shares are gone &mdash; they can never recover for you.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Keep a cash cushion</div>
+            <p class="bexp" data-step="3">Hold <em>1&ndash;3 years</em> of spending in cash and bonds. In a downturn you live off that &mdash; and give your stocks time to bounce back.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;You can&rsquo;t control when the market falls &mdash; but a cash cushion decides whether it&rsquo;s a scare or a catastrophe.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="sequence" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Build a 1&ndash;3 year cash-and-bond buffer before you retire.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>08 — SEQUENCE-OF-RETURNS RISK</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 10 — WHICH ACCOUNT TO TAP FIRST -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Spend it down &middot; Stop 9</span></div>
+        <h2 class="st">Draw them down in the <span class="pine">right order</span>.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:start">
+          <div class="bench">
+            <div class="benchlbl">A common withdrawal order</div>
+            <div class="benchrow"><span class="bm">1 &middot; Taxable brokerage<span>Low capital-gains rates; let the rest grow</span></span><span class="bt">First</span></div>
+            <div class="benchrow"><span class="bm">2 &middot; Tax-deferred (401k / IRA)<span>Taxed as income; drain before RMDs force it</span></span><span class="bt amber">Next</span></div>
+            <div class="benchrow"><span class="bm">3 &middot; Roth<span>Tax-free &mdash; let it compound as long as possible</span></span><span class="bt">Last</span></div>
+            <div class="benchrow"><span class="bm">Every year &middot; fill low brackets<span>Blend sources to control your tax bill</span></span><span class="bt">Blend</span></div>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">The order you spend your buckets can add <em>years</em> to how long the money lasts.</div>
+            <div class="card">
+              <h3>Why it works</h3>
+              <p>Spending taxable money first keeps your tax bill low early, lets tax-advantaged accounts grow longer, and saves the tax-free Roth for last &mdash; or for heirs.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="drawdown" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Plan a withdrawal order &mdash; taxable, then tax-deferred, then Roth.</span></button>
+        </div>
+        <div class="slide-foot"><span>09 — WHICH ACCOUNT TO TAP FIRST</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 11 — RMDs AT 73 -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Spend it down &middot; Stop 10</span></div>
+        <h2 class="st">At <span class="brick">73</span>, the IRS makes you withdraw.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">The forced withdrawal</div>
+            <p class="bexp" data-step="1">Starting at <em>73</em>, you must pull a required minimum from Traditional 401(k)s and IRAs each year &mdash; and pay ordinary tax on it, like it or not.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">The penalty is steep</div>
+            <p class="bexp" data-step="2">Miss an RMD and the penalty runs up to <em>25%</em> of what you should have taken. Automate it so you never slip.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Roth escapes it</div>
+            <p class="bexp" data-step="3">Roth IRAs have <em>no RMDs</em> in your lifetime. Converting to Roth in your 60s can shrink future RMDs and the taxes they trigger.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;RMDs are why your 60s &mdash; low-income, pre-RMD years &mdash; are prime time to convert to Roth and smooth out the tax hit.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="rmd" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Plan for RMDs at 73 &mdash; and weigh Roth conversions in your 60s.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>10 — RMDs AT 73</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 12 — HEALTHCARE & LONG-TERM CARE -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Protect the plan &middot; Stop 11</span></div>
+        <h2 class="st">The <span class="brick">biggest bill</span> most plans forget.</h2>
+        <div class="two" style="margin-top:18px;align-items:stretch">
+          <div class="card">
+            <h3>Before 65: the coverage gap</h3>
+            <p style="margin-bottom:10px">Retire early and you&rsquo;re on your own for health insurance until Medicare starts at 65.</p>
+            <ul class="points" style="margin-top:6px;gap:11px">
+              <li><span class="num">&#9679;</span><span class="tx"><b>ACA marketplace plans</b> are the usual bridge for those years.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">Keeping taxable income low can earn big <b>premium subsidies</b> &mdash; another reason withdrawal order matters.</span></li>
+            </ul>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">Health costs are the wildcard that sinks more retirements than bad investing does.</div>
+            <div class="card">
+              <h3>Later: long-term care</h3>
+              <p>Most people need some long-term care, and <b>Medicare barely covers it</b>. A few years in a facility can run into the hundreds of thousands. Self-fund, buy LTC insurance, or use a hybrid policy &mdash; decide before you need it.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="healthcare" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Plan the pre-65 health-insurance bridge and a long-term-care strategy.</span></button>
+        </div>
+        <div class="slide-foot"><span>11 — HEALTHCARE &amp; LONG-TERM CARE</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 13 — INFLATION & LONGEVITY -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Protect the plan &middot; Stop 12</span></div>
+        <h2 class="st">Plan for a <span class="pine">30-year</span> retirement.</h2>
+
+        <div class="build-cols" style="grid-template-columns:repeat(2,1fr)">
+          <div class="bcol">
+            <div class="btitle">Longevity is the real risk</div>
+            <p class="bexp" data-step="1">Retire at 65 and you may need income into your <em>90s</em>. Plan for a long life, not an average one &mdash; running out is far worse than leaving some behind.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Inflation quietly halves it</div>
+            <p class="bexp" data-step="2">At 3% inflation, prices <em>double in about 24 years</em>. Keep enough in stocks that your income keeps up &mdash; all-cash feels safe but slowly loses ground.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="3">&ldquo;The safest-feeling portfolio &mdash; all cash &mdash; is often the one most likely to run dry. Growth stays part of the plan even in retirement.&rdquo;</div>
+          <button class="action" type="button" data-step="4" data-action-check="longevity" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Plan to age 90+, and keep enough in stocks to outpace inflation.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>12 — INFLATION &amp; LONGEVITY</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 14 — PUT THE PLAN TOGETHER -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Protect the plan &middot; Stop 13</span></div>
+        <h2 class="st">One plan, <span class="pine">every piece</span> pulling together.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Stack your income floors</div>
+            <p class="bexp" data-step="1">Social Security and any pension are <em>guaranteed floors</em>. Your portfolio fills the gap on top &mdash; size it to what&rsquo;s left, not the whole bill.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Coordinate the taxes</div>
+            <p class="bexp" data-step="2">Claim age, withdrawal order, Roth conversions, and RMDs all move your tax bill. Planned <em>together</em>, they can save six figures over a retirement.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Revisit it yearly</div>
+            <p class="bexp" data-step="3">Markets, tax law, and your life all change. A plan is a <em>living thing</em> &mdash; check it every year and adjust.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Accounts, Social Security, taxes, and healthcare are one machine &mdash; a planner tunes them together so no single part quietly drags the rest down.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="coordinate" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Build one plan that ties savings, Social Security, taxes, and care together.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>13 — PUT THE PLAN TOGETHER</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 15 — RECAP -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">The throughline</span></div>
+        <h2 class="st">Save it, grow it, <span class="pine">spend it right</span>.</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">Build it</div>
+            <h3>Fill the right buckets</h3>
+            <p>Grab the match, split Roth and Traditional, and let the HSA and decades of tax-free growth do the heavy lifting.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Size it</div>
+            <h3>Know your number</h3>
+            <p>Aim at roughly 25&times; the income your portfolio must cover &mdash; then check you&rsquo;re on pace to get there.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Spend it</div>
+            <h3>Make it last</h3>
+            <p>A flexible ~4% withdrawal, a cash cushion, the right draw-down order, and a plan for taxes, healthcare, and a long life.</p>
+          </div>
+        </div>
+        <div class="pull" style="margin-top:22px">The paycheck stops, but the bills don&rsquo;t. Retirement planning is just making sure the money keeps showing up &mdash; for as long as you do.</div>
+        <div class="slide-foot"><span>14 — THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
+      </section>
+
+      <!-- 16 — ACTION CHECKLIST -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Your action list</span></div>
+        <h2 class="st">Now go <span class="pine">do</span> it.</h2>
+        <p class="lede" style="margin-top:4px">Every stop leaves one action. Tick them off as you knock them out &mdash; progress saves on this device.</p>
+        <div class="checklist" id="checklist"></div>
+        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 13</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+  var cur = 0, curStep = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ goSlide(i, 0); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function maxStepOf(slide){
+    var m = 0;
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0; if (s > m) m = s;
+    });
+    return m;
+  }
+  function applyStep(slide, step){
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0;
+      if (s <= step){ el.hidden = false; requestAnimationFrame(function(){ el.classList.add('show'); }); }
+      else { el.classList.remove('show'); el.hidden = true; }
+    });
+    var hint = slide.querySelector('.build-hint');
+    if (hint){
+      var mx = maxStepOf(slide);
+      hint.textContent = (mx > 0 && step < mx) ? 'CLICK → TO REVEAL MORE' : '';
+    }
+  }
+
+  function render(){
+    var slide = slides[cur];
+    var mx = maxStepOf(slide);
+    var eff = mobileQ.matches ? mx : curStep;
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    applyStep(slide, eff);
+    prevBtn.disabled = (cur === 0 && eff === 0);
+    nextBtn.disabled = (cur === slides.length - 1 && eff >= mx);
+    if (mobileQ.matches) window.scrollTo(0, 0);
+  }
+
+  function goSlide(i, step){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    var mx = maxStepOf(slides[cur]);
+    curStep = (step == null) ? mx : Math.max(0, Math.min(mx, step));
+    render();
+  }
+  function next(){
+    var mx = maxStepOf(slides[cur]);
+    if (!mobileQ.matches && curStep < mx){ curStep++; render(); }
+    else if (cur < slides.length - 1){ goSlide(cur + 1, 0); }
+  }
+  function prev(){
+    if (!mobileQ.matches && curStep > 0){ curStep--; render(); }
+    else if (cur > 0){ goSlide(cur - 1, null); }
+  }
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('click', function(e){
+    var node = e.target.closest('[data-goto]');
+    if (node){ goSlide(+node.getAttribute('data-goto'), 0); return; }
+    var home = e.target.closest('[data-home]');
+    if (home){ goSlide(0, 0); return; }
+    var act = e.target.closest('[data-action-check]');
+    if (act){ toggleAction(act.getAttribute('data-action-check')); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goSlide(0, 0); }
+    else if (e.key === 'End') { e.preventDefault(); goSlide(slides.length - 1, null); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  var fitBox = document.getElementById('stageFit');
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';
+    fitBox.style.height = (720 * s) + 'px';
+  }
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function set(id, txt){ var el = document.getElementById(id); if (el) el.textContent = txt; }
+
+  /* ---------- CALC 1: NEST EGG NEEDED (Stop 5) ---------- */
+  function calcNest(){
+    var income = val('rn_income');
+    var ss = val('rn_ss');
+    var rate = +document.getElementById('rn_rate').value;
+    set('rn_rateamt', rate + '%');
+    var gap = Math.max(0, income - ss);
+    var nest = rate > 0 ? gap / (rate / 100) : 0;
+    var mult = Math.round((100 / rate) * 10) / 10;
+    set('rn_nest', money(nest));
+    set('rn_gap', money(gap));
+    set('rn_month', money(gap / 12));
+    set('rn_l1', money(income));
+    set('rn_l2', money(ss));
+    set('rn_l3', money(gap));
+    set('rn_l4', money(nest));
+    set('rn_sub', gap <= 0
+      ? 'Your guaranteed income already covers the target — anything you save is a cushion on top.'
+      : 'That’s about ' + mult + '× the ' + money(gap) + ' your own savings must cover each year.');
+    var flag = document.getElementById('rn_flag');
+    if (gap <= 0){
+      flag.className = 'flag good';
+      flag.textContent = 'COVERED — YOUR GUARANTEED INCOME ALREADY MEETS YOUR TARGET. KEEP SAVING FOR SECURITY AND EXTRAS.';
+    } else if (rate > 4){
+      flag.className = 'flag';
+      flag.textContent = 'AGGRESSIVE WITHDRAWAL — A HIGHER RATE NEEDS A SMALLER NEST EGG, BUT RAISES THE RISK OF RUNNING OUT.';
+    } else if (rate < 4){
+      flag.className = 'flag good';
+      flag.textContent = 'CONSERVATIVE — A LOWER RATE IS SAFER FOR A LONG RETIREMENT, BUT ASKS YOU TO SAVE MORE.';
+    } else {
+      flag.className = 'flag good';
+      flag.textContent = 'THE 25× RULE — AT A 4% WITHDRAWAL, YOUR TARGET IS ROUGHLY 25 TIMES YOUR ANNUAL GAP.';
+    }
+  }
+  ['rn_income','rn_ss'].forEach(function(id){ bindMoney(id, calcNest); });
+  document.getElementById('rn_rate').addEventListener('input', calcNest);
+
+  /* ---------- CALC 2: ARE YOU ON TRACK? (Stop 6) ---------- */
+  function calcTrack(){
+    var pv = val('ot_current');
+    var pmt = val('ot_monthly');
+    var years = +document.getElementById('ot_years').value;
+    var ret = +document.getElementById('ot_return').value;
+    set('ot_yearsamt', years);
+    set('ot_returnamt', ret + '%');
+    var rm = ret / 100 / 12, n = years * 12;
+    var fv = rm > 0 ? pv * Math.pow(1 + rm, n) + pmt * ((Math.pow(1 + rm, n) - 1) / rm) : pv + pmt * n;
+    var contrib = pv + pmt * n;
+    var growth = Math.max(0, fv - contrib);
+    var income = fv * 0.04;
+    set('ot_balance', money(fv));
+    set('ot_income', money(income));
+    set('ot_contrib', money(contrib));
+    set('ot_l1', money(contrib));
+    set('ot_l2', money(growth));
+    set('ot_l3', money(fv));
+    set('ot_sub', 'At a 4% withdrawal, that’s about ' + money(income) + ' a year — or ' + money(income / 12) + ' a month.');
+    var flag = document.getElementById('ot_flag');
+    var gShare = fv > 0 ? growth / fv : 0;
+    if (gShare >= 0.5){
+      flag.className = 'flag good';
+      flag.textContent = 'COMPOUNDING IS DOING THE WORK — MORE THAN HALF THIS BALANCE IS GROWTH, NOT DEPOSITS.';
+    } else if (years < 15){
+      flag.className = 'flag';
+      flag.textContent = 'GIVE IT TIME — COMPOUNDING SNOWBALLS IN THE LATER YEARS. KEEP ADDING AND STAY INVESTED.';
+    } else {
+      flag.className = 'flag good';
+      flag.textContent = 'ON YOUR WAY — KEEP THE CONTRIBUTIONS STEADY AND LET THE MARKET COMPOUND.';
+    }
+  }
+  ['ot_current','ot_monthly'].forEach(function(id){ bindMoney(id, calcTrack); });
+  document.getElementById('ot_years').addEventListener('input', calcTrack);
+  document.getElementById('ot_return').addEventListener('input', calcTrack);
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  var ACTIONS = [
+    {id:'number',    phase:'Buckets',      text:'Estimate the annual income you’ll want in retirement.'},
+    {id:'accounts',  phase:'Buckets',      text:'Know which accounts you have and how each is taxed.'},
+    {id:'rothtrad',  phase:'Buckets',      text:'Favor Roth in lower-earning years; hold both for flexibility.'},
+    {id:'order',     phase:'Buckets',      text:'Get the full match, then fund accounts in the right order.'},
+    {id:'nestegg',   phase:'Your number',  text:'Run your number: income wanted, minus Social Security, times 25.'},
+    {id:'ontrack',   phase:'Your number',  text:'Check your projected balance and bump savings if there’s a gap.'},
+    {id:'fourpct',   phase:'Withdrawals',  text:'Use ~4% as your starting withdrawal, and stay flexible.'},
+    {id:'sequence',  phase:'Withdrawals',  text:'Build a 1–3 year cash-and-bond buffer before you retire.'},
+    {id:'drawdown',  phase:'Withdrawals',  text:'Plan a withdrawal order: taxable, then deferred, then Roth.'},
+    {id:'rmd',       phase:'Withdrawals',  text:'Plan for RMDs at 73 and weigh Roth conversions in your 60s.'},
+    {id:'healthcare',phase:'Protect it',   text:'Plan the pre-65 health bridge and a long-term-care strategy.'},
+    {id:'longevity', phase:'Protect it',   text:'Plan to age 90+ and keep enough in stocks to beat inflation.'},
+    {id:'coordinate',phase:'Protect it',   text:'Tie savings, Social Security, taxes, and care into one plan.'}
+  ];
+  var CK_KEY = 'tr-retirement-actions', ckState = {};
+  try { var cs = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (cs && typeof cs === 'object') ckState = cs; } catch(e){}
+  var ckWrap = document.getElementById('checklist'), ckCount = document.getElementById('ckcount');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function ckSave(){ try { localStorage.setItem(CK_KEY, JSON.stringify(ckState)); } catch(e){} }
+  function ckRender(){
+    if (!ckWrap) return;
+    ckWrap.innerHTML = ACTIONS.map(function(a){
+      var done = !!ckState[a.id];
+      return '<button type="button" class="ck-item' + (done ? ' done' : '') + '" data-ck="' + a.id + '">' +
+               '<span class="ck-box"><span class="ck"></span></span>' +
+               '<span class="ck-body"><span class="ck-phase">' + a.phase + '</span>' +
+               '<span class="ck-text">' + esc(a.text) + '</span></span>' +
+             '</button>';
+    }).join('');
+    var n = ACTIONS.filter(function(a){ return ckState[a.id]; }).length;
+    if (ckCount) ckCount.textContent = n + ' of ' + ACTIONS.length;
+  }
+  function syncActions(){
+    document.querySelectorAll('[data-action-check]').forEach(function(btn){
+      var done = !!ckState[btn.getAttribute('data-action-check')];
+      btn.classList.toggle('done', done);
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    });
+  }
+  function toggleAction(id){
+    ckState[id] = !ckState[id];
+    ckSave(); ckRender(); syncActions();
+  }
+  if (ckWrap){
+    ckWrap.addEventListener('click', function(e){
+      var it = e.target.closest('[data-ck]'); if (!it) return;
+      toggleAction(it.getAttribute('data-ck'));
+    });
+  }
+  ckRender();
+  syncActions();
+
+  /* ---------- INIT ---------- */
+  calcNest();
+  calcTrack();
+  goSlide(0, 0);
+})();
+</script>
+</body>
+</html>
