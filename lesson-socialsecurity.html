@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Security — Interactive Lesson</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F3F5F2; --paper-2:#EAEEE9; --white:#FFFFFF;
+    --ink:#14201C; --ink-soft:#3C4A45;
+    --pine:#0E5240; --pine-deep:#0A3B2E;
+    --amber:#D38B26; --amber-soft:#F0C277;
+    --brick:#A23A2D; --sage:#D7E1D8;
+    --line:rgba(20,32,28,.12); --line-strong:rgba(20,32,28,.22);
+    --shadow:0 1px 2px rgba(10,40,30,.05), 0 14px 40px -18px rgba(10,40,30,.28);
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Hanken Grotesk',system-ui,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--paper-2);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+  ::selection{background:var(--amber-soft);color:var(--ink)}
+
+  /* ---------- DECK CHROME ---------- */
+  .deck{height:100vh;display:flex;flex-direction:column}
+  .deck-bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:10px 20px;background:rgba(243,245,242,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);flex:none}
+  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-family:var(--body);font-weight:700;font-size:.95rem;padding:10px 20px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px);box-shadow:0 12px 26px -10px rgba(14,82,64,.9)}
+  .homebtn .ha{font-size:1.05rem;line-height:1;transition:transform .18s}
+  .homebtn:hover .ha{transform:translateX(-3px)}
+  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
+  .deck-title{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pine)}
+  .bar-right{display:flex;align-items:center;gap:8px}
+  .navbtn{width:32px;height:32px;border-radius:9px;border:1px solid var(--line-strong);background:var(--white);color:var(--ink);cursor:pointer;display:grid;place-items:center;font-size:.95rem;transition:.18s}
+  .navbtn:hover:not(:disabled){border-color:var(--pine);color:var(--pine);transform:translateY(-1px)}
+  .navbtn:disabled{opacity:.32;cursor:default}
+  .counter{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);min-width:52px;text-align:center}
+  .ghostbtn{font-family:var(--body);font-weight:600;font-size:.8rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line-strong);background:transparent;cursor:pointer;transition:.18s}
+  .ghostbtn:hover{border-color:var(--pine);color:var(--pine)}
+
+  .progress{height:3px;background:var(--line);flex:none}
+  .progress i{display:block;height:100%;background:linear-gradient(90deg,var(--pine),var(--amber));width:0;transition:width .35s cubic-bezier(.2,.85,.25,1)}
+
+  .stage-wrap{flex:1;display:grid;place-items:center;padding:22px;min-height:0;overflow:hidden}
+  .stage-fit{position:relative}
+  .stage{width:1280px;height:720px;position:relative;transform-origin:top left;background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+
+  /* dots */
+  .dots{display:flex;gap:6px;padding:0 20px 14px;justify-content:center;flex:none;flex-wrap:wrap}
+  .dot{width:26px;height:5px;border-radius:99px;background:var(--line-strong);border:none;cursor:pointer;transition:.2s;padding:0}
+  .dot:hover{background:var(--pine);opacity:.6}
+  .dot.on{background:var(--pine);width:38px}
+
+  /* ---------- SLIDES ---------- */
+  .slide{position:absolute;inset:0;padding:48px 58px;opacity:0;visibility:hidden;transform:translateY(14px);transition:opacity .38s ease, transform .42s cubic-bezier(.2,.85,.25,1);display:flex;flex-direction:column;overflow:hidden}
+  .slide.on{opacity:1;visibility:visible;transform:none}
+  .slide::before{content:"";position:absolute;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:46px 46px;mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);-webkit-mask-image:radial-gradient(110% 78% at 88% 6%,#000 0%,transparent 60%);opacity:.55;pointer-events:none}
+  .slide > *{position:relative;z-index:1}
+
+  .eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--pine);display:inline-flex;align-items:center;gap:.6em}
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--amber)}
+  .eyebrow.p2{color:#9a6410}.eyebrow.p2::before{background:var(--amber)}
+  .eyebrow.p3{color:var(--brick)}.eyebrow.p3::before{background:var(--brick)}
+  .eyebrow.p4{color:var(--pine-deep)}.eyebrow.p4::before{background:var(--pine)}
+  h1.big{font-family:var(--display);font-weight:700;font-size:3.5rem;line-height:1.03;letter-spacing:-.028em;margin:14px 0 16px}
+  h1.big em{font-style:normal;color:var(--pine)}
+  h1.big .amber{color:var(--amber)}
+  h2.st{font-family:var(--display);font-weight:600;font-size:2.4rem;line-height:1.08;letter-spacing:-.022em;margin:12px 0 8px}
+  h2.st .pine{color:var(--pine)}
+  h2.st .amber{color:var(--amber)}
+  h2.st .brick{color:var(--brick)}
+  .lede{font-size:1.12rem;color:var(--ink-soft);max-width:64ch}
+  .slide-foot{margin-top:auto;padding-top:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:#8e9c96;border-top:1px solid var(--line);display:flex;justify-content:space-between}
+
+  /* per-slide header: back-to-roadmap + phase tag */
+  .slide-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:2px}
+  .tl-back{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-weight:600;font-size:.78rem;padding:7px 14px;border-radius:999px;border:1px solid var(--line-strong);background:var(--white);color:var(--pine);cursor:pointer;transition:.18s}
+  .tl-back:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .tl-back .ar{transition:transform .18s}.tl-back:hover .ar{transform:translateX(-3px)}
+
+  /* ---------- TIMELINE HUB (slide 1) ---------- */
+  .timeline{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:8px}
+  .tl-phases{display:flex;gap:16px;margin-bottom:34px}
+  .tl-phase{flex:1;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding-bottom:11px;border-bottom:2px solid var(--line);color:var(--ink)}
+  .tl-phase span{display:block;font-family:var(--body);font-size:.74rem;letter-spacing:0;text-transform:none;color:#8e9c96;font-weight:400;margin-top:3px}
+  .tl-phase.p1{border-color:var(--pine);color:var(--pine)}
+  .tl-phase.p2{border-color:var(--amber);color:#9a6410}
+  .tl-phase.p3{border-color:var(--brick);color:var(--brick)}
+  .tl-phase.p4{border-color:var(--pine-deep);color:var(--pine-deep)}
+  .tl-track{position:relative;display:flex}
+  .tl-spine{position:absolute;left:5%;right:5%;top:17px;height:3px;transform:translateY(-50%);background:var(--line-strong);border-radius:99px;z-index:0}
+  .tl-node{position:relative;z-index:1;flex:1;display:flex;flex-direction:column;align-items:center;gap:13px;background:none;border:0;cursor:pointer;padding:0 4px;font:inherit}
+  .tl-dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:.86rem;color:#fff;background:var(--pine);border:3px solid var(--paper);box-shadow:0 2px 8px -2px rgba(10,40,30,.4);transition:.18s}
+  .tl-node.p2 .tl-dot{background:var(--amber);color:#3a2a08}
+  .tl-node.p3 .tl-dot{background:var(--brick)}
+  .tl-node.p4 .tl-dot{background:var(--pine-deep)}
+  .tl-lab{font-family:var(--display);font-weight:600;font-size:.85rem;line-height:1.18;color:var(--ink-soft);text-align:center;max-width:13ch;transition:.18s}
+  .tl-node:hover .tl-dot{transform:translateY(-3px) scale(1.08);box-shadow:0 8px 18px -6px rgba(10,40,30,.55)}
+  .tl-node:hover .tl-lab{color:var(--ink)}
+  .tl-node:focus-visible .tl-dot{outline:2px solid var(--pine);outline-offset:3px}
+  .tl-hint{margin-top:30px;text-align:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;color:#8e9c96}
+
+  /* teaching layouts */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:34px;flex:1;align-items:center}
+  .two.wide-left{grid-template-columns:1.12fr .88fr}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow)}
+  .card h3{font-family:var(--display);font-weight:600;font-size:1.18rem;letter-spacing:-.01em;margin-bottom:8px}
+  .card p{font-size:.96rem;color:var(--ink-soft)}
+  .points{list-style:none;display:flex;flex-direction:column;gap:15px;margin-top:20px}
+  .points li{display:flex;gap:14px;align-items:flex-start}
+  .points .num{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sage);color:var(--pine);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;font-weight:600}
+  .points .tx{font-size:1rem;color:var(--ink-soft)}
+  .points .tx b{color:var(--ink);font-weight:600}
+  .pull{border-left:3px solid var(--amber);padding:6px 0 6px 18px;font-family:var(--display);font-weight:500;font-size:1.26rem;line-height:1.35;letter-spacing:-.01em;color:var(--ink)}
+  .stack{display:flex;flex-direction:column;gap:18px}
+
+  /* benchmark table */
+  .bench{display:flex;flex-direction:column;gap:8px}
+  .benchlbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:#8e9c96;margin-bottom:2px}
+  .dlstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+  .dlitem{background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 15px}
+  .dlitem .dlk{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:#8e9c96}
+  .dlitem b{display:block;font-family:var(--display);font-size:1.12rem;color:var(--pine);margin:3px 0}
+  .dlitem .dld{display:block;font-size:.76rem;color:var(--ink-soft);line-height:1.35}
+  .benchrow{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:11px;padding:12px 16px;transition:.2s}
+  .benchrow:hover{border-color:var(--pine);transform:translateX(3px)}
+  .benchrow .bm{font-weight:600;color:var(--ink);font-size:.98rem}
+  .benchrow .bm span{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:400;margin-top:1px}
+  .benchrow .bt{font-family:var(--display);font-weight:700;color:var(--pine);font-size:1.04rem;white-space:nowrap;text-align:right}
+  .benchrow .bt.amber{color:var(--amber)}
+  .benchrow .bt.brick{color:var(--brick)}
+
+  /* ---------- CALCULATOR ---------- */
+  .calc{display:grid;grid-template-columns:.95fr 1.05fr;gap:28px;flex:1;align-items:stretch;min-height:0}
+  .inputs{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:20px 24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:13px;overflow:auto}
+  .inputs.tight{gap:10px;padding:16px 24px}
+  .inputs .ih{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);padding-bottom:11px;border-bottom:1px solid var(--line)}
+  .fld label{display:block;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:6px}
+  .fld .hint{font-size:.76rem;color:#8e9c96;margin-top:5px;line-height:1.45}
+  .inwrap{position:relative;display:flex;align-items:center}
+  .inwrap .pre{position:absolute;left:13px;font-family:var(--display);font-weight:600;color:#9aa6a1;pointer-events:none}
+  .inwrap input{width:100%;font-family:var(--display);font-weight:700;font-size:1.1rem;color:var(--ink);padding:10px 13px;border:1px solid var(--line-strong);border-radius:11px;background:var(--paper);transition:.18s}
+  .inwrap.money input{padding-left:27px}
+  .inwrap input:focus{outline:none;border-color:var(--pine);background:var(--white);box-shadow:0 0 0 3px rgba(14,82,64,.13)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .slider{display:flex;align-items:center;gap:13px}
+  .slider input[type=range]{flex:1;accent-color:var(--pine);height:4px}
+  .slider .amt{font-family:var(--display);font-weight:700;font-size:1rem;color:var(--pine);min-width:60px;text-align:right}
+
+  .out{background:var(--ink);color:#EAF3EE;border-radius:18px;padding:24px 28px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:auto}
+  .out .rk{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#7FA295}
+  .out .big{font-family:var(--display);font-weight:700;font-size:3.3rem;line-height:1;color:#fff;margin:8px 0 2px;letter-spacing:-.02em}
+  .out .big.amber{color:var(--amber-soft)}
+  .out .big.brick{color:#F0A093}
+  .out .big.green{color:#8FD8BE}
+  .out .sub{font-size:.9rem;color:#B6C7BF}
+  .out .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;border-top:1px solid rgba(255,255,255,.14);padding-top:16px}
+  .out .bd .bn{font-family:var(--display);font-weight:600;font-size:1.32rem;color:#fff}
+  .out .bd .bn.amber{color:var(--amber-soft)}
+  .out .bd .bn.green{color:#8FD8BE}
+  .out .bd .bl{font-family:var(--mono);font-size:.63rem;text-transform:uppercase;letter-spacing:.06em;color:#7FA295;margin-top:4px}
+  .out .ledger{margin-top:auto;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;display:flex;flex-direction:column;gap:8px}
+  .lrow{display:flex;justify-content:space-between;align-items:baseline;font-size:.92rem;color:#B6C7BF}
+  .lrow b{font-family:var(--display);font-weight:600;color:#fff;font-size:1rem}
+  .lrow.tot{border-top:1px solid rgba(255,255,255,.14);padding-top:11px;margin-top:2px}
+  .lrow.tot span{color:#EAF3EE;font-weight:600}
+  .lrow.tot b{font-size:1.28rem;color:var(--amber-soft)}
+  .lrow.gap b{color:#F0A093}
+  .disclaim{font-size:.68rem;color:#5E776C;margin-top:11px;line-height:1.45}
+  .flag{display:inline-flex;align-items:center;gap:8px;background:rgba(240,194,119,.14);border:1px solid rgba(240,194,119,.35);color:var(--amber-soft);font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;padding:8px 12px;border-radius:9px;margin-top:14px;line-height:1.45}
+  .flag.good{background:rgba(79,176,141,.14);border-color:rgba(79,176,141,.4);color:#8FD8BE}
+  .flag.bad{background:rgba(162,58,45,.16);border-color:rgba(240,160,147,.4);color:#F0A093}
+
+  /* filing-status / method toggle (reused for calculators) */
+  .seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper-2)}
+  .seg button{border:0;background:none;font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;padding:8px 16px;cursor:pointer;color:var(--ink-soft)}
+  .seg button.on{background:var(--pine);color:#fff}
+
+  /* capital-gains stacked bar (in the dark output panel) */
+  .cgbar{margin:14px 0 4px}
+  .cgtrack{height:26px;border-radius:8px;background:rgba(255,255,255,.08);overflow:hidden;display:flex;border:1px solid rgba(255,255,255,.14)}
+  .cgtrack i{height:100%;display:block;transition:width .4s cubic-bezier(.2,.85,.25,1)}
+  .cg-ord{background:repeating-linear-gradient(45deg,#5E776C,#5E776C 7px,#546b61 7px,#546b61 14px)}
+  .cg-0{background:linear-gradient(90deg,#2E8C6E,#4FB08D)}
+  .cg-15{background:var(--amber)}
+  .cg-20{background:var(--brick)}
+  .cgkey{display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px}
+  .cgkey span{font-family:var(--mono);font-size:.64rem;letter-spacing:.03em;color:#B6C7BF;display:flex;align-items:center;gap:6px}
+  .cgkey i{width:13px;height:10px;border-radius:2px;flex:none}
+  .cgkey i.k-ord{background:#5E776C}.cgkey i.k-0{background:#4FB08D}.cgkey i.k-15{background:var(--amber)}.cgkey i.k-20{background:var(--brick)}
+
+  /* ---------- PROGRESSIVE REVEAL (build) ---------- */
+  [data-step]{opacity:0;transform:translateY(12px);transition:opacity .45s ease, transform .5s cubic-bezier(.2,.85,.25,1)}
+  [data-step].show{opacity:1;transform:none}
+  [data-step][hidden]{display:none}
+
+  .build-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:44px;align-items:start;align-content:center;padding:4px 0}
+  .bcol{display:flex;flex-direction:column;align-items:flex-start}
+  .bcol::before{content:"";display:block;width:46px;height:6px;border-radius:99px;background:var(--pine);margin-bottom:18px}
+  .bcol:nth-child(2)::before{background:var(--amber)}
+  .bcol:nth-child(3)::before{background:var(--brick)}
+  .btitle{font-family:var(--display);font-weight:700;font-size:2.1rem;letter-spacing:-.02em;color:var(--ink);line-height:1.08}
+  .bexp{font-size:1.05rem;color:var(--ink-soft);line-height:1.5;margin-top:12px}
+  .bexp em{font-style:italic;color:var(--ink)}
+  .reveal-foot{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+  .qline{border-left:3px solid var(--amber);padding:5px 0 5px 18px;font-family:var(--display);font-weight:500;font-size:1.34rem;line-height:1.3;letter-spacing:-.01em;color:var(--ink)}
+  .action{display:inline-flex;align-items:center;gap:15px;align-self:center;background:var(--sage);border:1px solid rgba(14,82,64,.28);border-radius:14px;padding:15px 26px;font-family:var(--body);font-size:1.18rem;font-weight:600;line-height:1.35;color:var(--pine-deep);max-width:100%;cursor:pointer;text-align:left;transition:.18s}
+  .action:hover{border-color:var(--pine);box-shadow:0 8px 20px -12px rgba(14,82,64,.7)}
+  .ax-box{flex:none;width:27px;height:27px;border:2px solid var(--pine);border-radius:8px;background:var(--white);display:grid;place-items:center}
+  .ax-box .ck{width:12px;height:7px;border-left:2.8px solid #fff;border-bottom:2.8px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .action.done .ax-box{background:var(--pine);border-color:var(--pine)}
+  .action.done .ax-box .ck{opacity:1}
+  .ax-tag{flex:none;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;background:var(--pine);color:#fff;padding:5px 10px;border-radius:99px}
+  .action.mini{padding:10px 18px;font-size:1.02rem;gap:12px;border-radius:12px;margin-top:12px}
+  .action.mini .ax-box{width:23px;height:23px}
+  .action.mini .ax-box .ck{width:11px;height:6px}
+  .build-hint{color:var(--pine)}
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  .checklist{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px 22px;align-content:start;margin-top:18px;overflow:auto;padding-right:4px}
+  .ck-item{display:flex;align-items:flex-start;gap:12px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:12px 15px;cursor:pointer;transition:.18s;text-align:left;font:inherit}
+  .ck-item:hover{border-color:var(--pine);transform:translateY(-1px)}
+  .ck-box{flex:none;width:24px;height:24px;border:2px solid var(--line-strong);border-radius:7px;background:var(--white);display:grid;place-items:center;margin-top:1px}
+  .ck-box .ck{width:11px;height:6px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translateY(-1px);opacity:0}
+  .ck-item.done .ck-box{background:var(--pine);border-color:var(--pine)}
+  .ck-item.done .ck-box .ck{opacity:1}
+  .ck-body{min-width:0}
+  .ck-phase{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber)}
+  .ck-text{display:block;font-size:.96rem;color:var(--ink);line-height:1.4;margin-top:2px}
+  .ck-item.done .ck-text{color:var(--ink-soft);text-decoration:line-through}
+
+  @media print{.deck-bar,.dots,.progress{display:none}}
+
+  /* ---------- MOBILE ---------- */
+  @media (max-width:860px){
+    body{overflow:auto}
+    .deck{height:auto;min-height:100vh}
+    .deck-bar{position:sticky;top:0;z-index:60;flex-wrap:wrap;gap:10px;padding:9px 14px}
+    .deck-title{display:none}
+    .homebtn{font-size:.88rem;padding:8px 16px}
+    .progress{position:sticky;top:49px;z-index:60}
+
+    .stage-wrap{display:block;padding:0;overflow:visible;min-height:0}
+    .stage-fit{width:auto!important;height:auto!important}
+    .stage{width:100%;height:auto;transform:none!important;border:none;border-radius:0;box-shadow:none;background:var(--paper)}
+
+    .slide{position:relative;inset:auto;padding:26px 18px 32px;opacity:1;visibility:visible;transform:none;min-height:calc(100vh - 120px)}
+    .slide:not(.on){display:none}
+    .slide::before{display:none}
+
+    h1.big{font-size:2.2rem;margin:12px 0 14px}
+    h2.st{font-size:1.7rem}
+    .lede{font-size:1rem}
+    .pull{font-size:1.08rem}
+
+    .two,.two.wide-left,.calc,.recap{grid-template-columns:1fr;gap:20px}
+    .inputs,.out{overflow:visible}
+    .out .big{font-size:2.5rem}
+    .row2{grid-template-columns:1fr}
+    .recap{margin-top:0}
+
+    [data-step]{opacity:1;transform:none}
+    .build-cols{grid-template-columns:1fr;gap:24px}
+    .btitle{font-size:1.7rem}
+    .bexp{font-size:1rem}
+    .qline{font-size:1.14rem}
+    .checklist{grid-template-columns:1fr;overflow:visible}
+    .build-hint{display:none}
+
+    .tl-phases{display:none}
+    .tl-track{flex-direction:column;gap:2px;padding-left:4px}
+    .tl-spine{left:19px;right:auto;top:10px;bottom:10px;width:3px;height:auto;transform:none}
+    .tl-node{flex-direction:row;align-items:center;gap:14px;width:100%;padding:9px 4px;justify-content:flex-start}
+    .tl-lab{text-align:left;max-width:none;font-size:1.02rem}
+    .tl-hint{display:none}
+
+    .slide-foot{font-size:.62rem;gap:12px}
+    .dots{padding:14px 16px 22px}
+    .dot{width:20px}
+    .dot.on{width:30px}
+  }
+
+  /* recap */
+  .recap{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;flex:1;align-items:stretch;margin-top:10px}
+  .rcard{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow);display:flex;flex-direction:column}
+  .rcard .rn{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--amber);text-transform:uppercase}
+  .rcard h3{font-family:var(--display);font-weight:600;font-size:1.26rem;letter-spacing:-.01em;margin:10px 0 8px}
+  .rcard p{font-size:.94rem;color:var(--ink-soft);flex:1}
+  .kbd{font-family:var(--mono);font-size:.66rem;background:var(--white);border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:5px;padding:2px 6px;color:var(--ink-soft)}
+</style>
+</head>
+<body>
+
+
+<div class="deck">
+  <div class="deck-bar">
+    <a class="homebtn" href="lessons.html"><span class="ha">&#8592;</span> All lessons</a>
+    <div class="deck-title">Lesson 07 · Social Security</div>
+    <div class="bar-right">
+      <button class="ghostbtn" id="fs">Present</button>
+      <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+      <span class="counter" id="counter">1 / 16</span>
+      <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div class="stage-wrap" id="stageWrap">
+   <div class="stage-fit" id="stageFit">
+    <div class="stage" id="stage">
+
+      <!-- 1 — TIMELINE HUB -->
+      <section class="slide on">
+        <span class="eyebrow">Interactive lesson &middot; Social Security</span>
+        <h2 class="st" style="margin-top:12px">The one check that follows you from your <span class="pine">first job</span> to your last day.</h2>
+        <p class="lede">You&rsquo;ve paid into it your whole life &mdash; the payoff turns on a few decisions most people make blind. Click any stop, or page straight through.</p>
+        <div class="timeline">
+          <div class="tl-phases">
+            <div class="tl-phase p1">Phase 1 · Earning<span>Credits &amp; benefit</span></div>
+            <div class="tl-phase p2">Phase 2 · Claiming<span>When to start</span></div>
+            <div class="tl-phase p3">Phase 3 · Family &amp; taxes<span>Spouse, survivors, IRS</span></div>
+            <div class="tl-phase p4">Phase 4 · Big picture<span>Longevity &amp; the plan</span></div>
+          </div>
+          <div class="tl-track">
+            <div class="tl-spine"></div>
+            <button class="tl-node p1" data-goto="1"><span class="tl-dot">1</span><span class="tl-lab">What it is &amp; how it&rsquo;s funded</span></button>
+            <button class="tl-node p1" data-goto="2"><span class="tl-dot">2</span><span class="tl-lab">Do you qualify?</span></button>
+            <button class="tl-node p1" data-goto="3"><span class="tl-dot">3</span><span class="tl-lab">How your benefit is figured</span></button>
+            <button class="tl-node p2" data-goto="4"><span class="tl-dot">4</span><span class="tl-lab">Full Retirement Age</span></button>
+            <button class="tl-node p2" data-goto="5"><span class="tl-dot">5</span><span class="tl-lab">62 vs. 67 vs. 70</span></button>
+            <button class="tl-node p2" data-goto="6"><span class="tl-dot">6</span><span class="tl-lab">The earnings test</span></button>
+            <button class="tl-node p3" data-goto="7"><span class="tl-dot">7</span><span class="tl-lab">Spousal benefits</span></button>
+            <button class="tl-node p3" data-goto="8"><span class="tl-dot">8</span><span class="tl-lab">Survivor benefits</span></button>
+            <button class="tl-node p3" data-goto="9"><span class="tl-dot">9</span><span class="tl-lab">Taxes on your benefit</span></button>
+            <button class="tl-node p3" data-goto="10"><span class="tl-dot">10</span><span class="tl-lab">Medicare &amp; IRMAA</span></button>
+            <button class="tl-node p4" data-goto="11"><span class="tl-dot">11</span><span class="tl-lab">Break-even &amp; longevity</span></button>
+            <button class="tl-node p4" data-goto="12"><span class="tl-dot">12</span><span class="tl-lab">Will it still be there?</span></button>
+            <button class="tl-node p4" data-goto="13"><span class="tl-dot">13</span><span class="tl-lab">Fit it into the plan</span></button>
+          </div>
+          <div class="tl-hint">Click a stop to dive in &middot; every slide has a &ldquo;&#8598; Roadmap&rdquo; button to jump back here</div>
+        </div>
+        <div class="disclaim" style="text-align:center;margin-top:10px">Educational and illustrative only &mdash; not tax, legal, or financial advice. Figures are simplified 2026 estimates; Social Security rules and amounts change yearly. Confirm your numbers at ssa.gov or with a qualified advisor.</div>
+        <div class="slide-foot"><span>TALON RUCKER · FINANCIAL EDUCATION</span><span>Use <span class="kbd">&rarr;</span> to page through, or click a stop</span></div>
+      </section>
+
+      <!-- 2 — WHAT IT IS & HOW IT'S FUNDED -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Earning &middot; Stop 1</span></div>
+        <h2 class="st">You&rsquo;ve been buying it with <span class="pine">every paycheck</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">A paycheck deduction</div>
+            <p class="bexp" data-step="1"><em>6.2%</em> of your wages goes to Social Security (the FICA line); another 1.45% funds Medicare. Your employer quietly <em>matches</em> the Social Security piece dollar-for-dollar.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">A cap on the SS part</div>
+            <p class="bexp" data-step="2">Only the first <em>~$183,600</em> of 2026 wages is taxed for Social Security. Earn above that and the 6.2% stops &mdash; but Medicare&rsquo;s 1.45% never does.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Self-employed pay both halves</div>
+            <p class="bexp" data-step="3">No employer to match you, so you owe the full <em>12.4%</em> for Social Security plus 2.9% for Medicare &mdash; the 15.3% self-employment tax.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;It&rsquo;s not a savings account with your name on it &mdash; today&rsquo;s workers fund today&rsquo;s retirees, and one day the next generation funds you.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="fund" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Look at a pay stub and find the Social Security (FICA) line.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>01 — WHAT IT IS &amp; HOW IT&rsquo;S FUNDED</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 3 — DO YOU QUALIFY? -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Earning &middot; Stop 2</span></div>
+        <h2 class="st">Ten years of work <span class="amber">buys</span> a lifetime benefit.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">You earn credits</div>
+            <p class="bexp" data-step="1">Work and pay in, and you earn up to <em>4 credits a year</em> &mdash; one for about every $1,800 of 2026 earnings. You max out around $7,240.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">40 credits = eligible</div>
+            <p class="bexp" data-step="2">Hit <em>40 credits</em> &mdash; about 10 years of work &mdash; and you&rsquo;ve qualified for your own retirement benefit for life. More years don&rsquo;t add credits, but they can raise the amount.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Family rides along</div>
+            <p class="bexp" data-step="3">Once you qualify, a <em>spouse, ex-spouse, or minor kids</em> can draw off your record too &mdash; even if they never worked.</p>
+          </div>
+        </div>
+
+        <div class="dlstrip" data-step="4">
+          <div class="dlitem"><span class="dlk">One credit</span><b>~$1,800</b><span class="dld">of covered earnings in 2026.</span></div>
+          <div class="dlitem"><span class="dlk">In a single year</span><b>4 credits max</b><span class="dld">you can&rsquo;t earn more than four, no matter how much you make.</span></div>
+          <div class="dlitem"><span class="dlk">To qualify</span><b>40 credits</b><span class="dld">about 10 years of covered work.</span></div>
+        </div>
+
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="5" data-action-check="credits" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Check your credits and estimated benefit with a &ldquo;my Social Security&rdquo; account at ssa.gov.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>02 — DO YOU QUALIFY?</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 4 — HOW YOUR BENEFIT IS FIGURED -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow">Phase 1 · Earning &middot; Stop 3</span></div>
+        <h2 class="st">Your check is built from your <span class="pine">top 35 years</span>.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">35 years, indexed</div>
+            <p class="bexp" data-step="1">SSA takes your <em>35 highest-earning years</em>, adjusts old wages for inflation, and averages them into a monthly figure &mdash; your AIME.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Fewer years = zeros</div>
+            <p class="bexp" data-step="2">Work fewer than 35 years and the missing ones count as <em>$0</em>, dragging the average down. Each extra high-earning year can replace an early low one.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">A progressive formula</div>
+            <p class="bexp" data-step="3">That average runs through <em>bend points</em> that replace a big share of low earnings and a smaller share of high ones &mdash; so lower earners get back a higher percentage.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Every year you work can knock out a zero or a low year &mdash; which is why late-career earnings often move the needle most.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="record" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Review your earnings record for missing or wrong years &mdash; mistakes cost you later.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>03 — HOW YOUR BENEFIT IS FIGURED</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 5 — FULL RETIREMENT AGE -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Claiming &middot; Stop 4</span></div>
+        <h2 class="st">Your <span class="pine">Full Retirement Age</span> is the anchor for everything.</h2>
+        <div class="two wide-left" style="margin-top:14px;align-items:start">
+          <div class="bench">
+            <div class="benchlbl">When you reach 100% of your benefit</div>
+            <div class="benchrow"><span class="bm">Born 1960 or later<span>Today&rsquo;s workers</span></span><span class="bt">67</span></div>
+            <div class="benchrow"><span class="bm">Born 1955&ndash;1959<span>Phasing up</span></span><span class="bt amber">66 + 2&ndash;10 mo</span></div>
+            <div class="benchrow"><span class="bm">Born 1954 or earlier<span>Already there</span></span><span class="bt">66 or less</span></div>
+            <div class="benchrow"><span class="bm">Earliest you can claim<span>With a permanent cut</span></span><span class="bt amber">62</span></div>
+            <div class="benchrow"><span class="bm">Latest a delay pays off<span>Credits stop growing</span></span><span class="bt">70</span></div>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">FRA isn&rsquo;t when you <em>must</em> claim &mdash; it&rsquo;s the line where early cuts stop and delayed bonuses begin.</div>
+            <div class="card">
+              <h3>Why it&rsquo;s the anchor</h3>
+              <p>Everything &mdash; early reductions, delayed credits, the earnings test, spousal amounts &mdash; is measured <b>from your FRA</b>. Know yours before you decide anything.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="fra" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Look up your exact Full Retirement Age (67 for most workers today).</span></button>
+        </div>
+        <div class="slide-foot"><span>04 — FULL RETIREMENT AGE</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 6 — 62 VS 67 VS 70 (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Claiming &middot; Stop 5</span></div>
+        <h2 class="st" style="margin-bottom:12px">Claim at 62 or wait to 70? It&rsquo;s worth <span class="amber">a third of your check</span>.</h2>
+        <div class="calc">
+          <div class="inputs">
+            <div class="ih">Your benefit &amp; when you claim</div>
+            <div class="fld">
+              <label for="ss_pia">Full benefit at 67 (your PIA)</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="ss_pia" inputmode="numeric" value="2,000"></div>
+              <div class="hint">SSA&rsquo;s estimate at your FRA. The U.S. average is about $2,000/mo.</div>
+            </div>
+            <div class="fld">
+              <label for="ss_age">Claim at age</label>
+              <div class="slider"><input type="range" id="ss_age" min="62" max="70" step="1" value="62"><span class="amt" id="ss_ageamt">62</span></div>
+              <div class="hint">Early cuts ~6&ndash;7% a year before 67; delaying adds ~8% a year up to 70.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Your monthly benefit if you claim then</div>
+            <div class="big" id="ss_month">$1,400</div>
+            <div class="sub" id="ss_sub">Claiming 5 years early cuts your check by 30%.</div>
+
+            <div class="split" style="grid-template-columns:repeat(3,1fr)">
+              <div class="bd"><div class="bn" id="ss_62" style="color:#F0A093">$1,400</div><div class="bl">At 62</div></div>
+              <div class="bd"><div class="bn" id="ss_67">$2,000</div><div class="bl">At 67 &middot; full</div></div>
+              <div class="bd"><div class="bn green" id="ss_70">$2,480</div><div class="bl">At 70</div></div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Full benefit at 67</span><b id="ss_l1">$2,000</b></div>
+              <div class="lrow"><span>Adjustment for your age</span><b id="ss_l2">&minus;30%</b></div>
+              <div class="lrow"><span>Your monthly benefit</span><b id="ss_l3">$1,400</b></div>
+              <div class="lrow tot"><span>Collected over 20 years</span><b id="ss_l4">$336,000</b></div>
+            </div>
+            <div class="flag" id="ss_flag">SMALLEST CHECK &mdash; LOCKED IN FOR LIFE. ONLY IDEAL IF YOU NEED THE INCOME OR HAVE POOR HEALTH.</div>
+            <div class="disclaim">Simplified: ignores cost-of-living raises, taxes, and the earnings test. Directional only, not advice.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="claimage" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Model your benefit at 62, 67, and 70 before you pick a claim date.</span></button>
+        </div>
+        <div class="slide-foot"><span>05 — 62 VS 67 VS 70</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 7 — THE EARNINGS TEST -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p2">Phase 2 · Claiming &middot; Stop 6</span></div>
+        <h2 class="st">Claim early <span class="brick">and</span> keep working? Some of it is held back.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Under FRA all year</div>
+            <p class="bexp" data-step="1">Earn above about <em>$24,480</em> in 2026 and SSA withholds <em>$1 for every $2</em> over &mdash; but only while you&rsquo;re collecting early.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">The year you reach FRA</div>
+            <p class="bexp" data-step="2">The limit jumps to about <em>$65,160</em> and the bite eases to <em>$1 for every $3</em> over &mdash; counting only the months before your birthday.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">You get it back</div>
+            <p class="bexp" data-step="3">Withheld benefits aren&rsquo;t gone. At FRA, SSA <em>recalculates</em> and pays them back over time as a higher monthly check.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;The earnings test isn&rsquo;t a tax and isn&rsquo;t forever &mdash; but claiming early while working full-time often just means you gave up the delay bonus for nothing.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="earntest" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">If you&rsquo;ll work while collecting before FRA, check the earnings limit first.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>06 — THE EARNINGS TEST</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 8 — SPOUSAL BENEFITS -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Family &amp; taxes &middot; Stop 7</span></div>
+        <h2 class="st">A spouse can draw off <span class="pine">your</span> record &mdash; up to half.</h2>
+        <div class="two" style="margin-top:18px;align-items:stretch">
+          <div class="card">
+            <h3>How spousal works</h3>
+            <p style="margin-bottom:10px">A lower-earning spouse can claim on the other&rsquo;s record instead of their own.</p>
+            <ul class="points" style="margin-top:6px;gap:11px">
+              <li><span class="num">&#9679;</span><span class="tx">Up to <b>50% of the worker&rsquo;s FRA benefit</b> &mdash; even if the spouse never worked.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">You get the <b>higher</b> of your own or the spousal amount &mdash; never both.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">Claim it before your FRA and it&rsquo;s reduced. Unlike your own, spousal <b>never grows past FRA</b>.</span></li>
+            </ul>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">Two people, one work record &mdash; and a benefit that shows up whether or not the spouse ever earned a dime.</div>
+            <div class="card">
+              <h3>Divorced? You may still qualify</h3>
+              <p>Married <b>10+ years</b> and now single? You can claim on an ex-spouse&rsquo;s record. It <b>doesn&rsquo;t reduce their benefit</b> or involve them at all.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="spousal" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">If married or divorced (10+ yrs), compare your own benefit to the spousal amount.</span></button>
+        </div>
+        <div class="slide-foot"><span>07 — SPOUSAL BENEFITS</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 9 — SURVIVOR BENEFITS -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Family &amp; taxes &middot; Stop 8</span></div>
+        <h2 class="st">Survivor benefits are the <span class="brick">hidden reason</span> to delay.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">The survivor steps up</div>
+            <p class="bexp" data-step="1">When one spouse dies, the survivor keeps the <em>larger</em> of the two checks &mdash; not both. The smaller one simply goes away.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Delaying protects them</div>
+            <p class="bexp" data-step="2">Every delayed credit the higher earner banks by waiting to 70 carries <em>straight into the survivor&rsquo;s benefit</em> for life.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">As early as 60</div>
+            <p class="bexp" data-step="3">A widow or widower can claim survivor benefits as early as <em>60</em> (50 if disabled), and switch to their own later if it&rsquo;s bigger.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;For married couples, the higher earner delaying to 70 isn&rsquo;t just their bet &mdash; it&rsquo;s a raise for whichever spouse lives longer.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="survivor" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Married? Have the higher earner consider delaying to lock in a bigger survivor benefit.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>08 — SURVIVOR BENEFITS</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 10 — TAXES ON YOUR BENEFIT (calculator) -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Family &amp; taxes &middot; Stop 9</span></div>
+        <h2 class="st" style="margin-bottom:12px">Up to <span class="amber">85%</span> of your benefit can be taxed.</h2>
+        <div class="calc">
+          <div class="inputs tight">
+            <div class="ih">Provisional income (2026)</div>
+            <div class="fld">
+              <label>Filing status</label>
+              <div class="seg" id="sst_status" role="group" aria-label="Filing status">
+                <button type="button" data-st="single" class="on">Single</button>
+                <button type="button" data-st="married">Married &middot; joint</button>
+              </div>
+            </div>
+            <div class="fld">
+              <label for="sst_other">Other income (pensions, IRA, wages, interest)</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="sst_other" inputmode="numeric" value="30,000"></div>
+              <div class="hint">Everything except Social Security &mdash; this is what pushes your benefit into tax.</div>
+            </div>
+            <div class="fld">
+              <label for="sst_ss">Your annual Social Security benefit</label>
+              <div class="inwrap money"><span class="pre">$</span><input type="text" id="sst_ss" inputmode="numeric" value="24,000"></div>
+              <div class="hint">Only <b>half</b> of this counts toward provisional income.</div>
+            </div>
+          </div>
+
+          <div class="out">
+            <div class="rk">Of your benefit, subject to tax</div>
+            <div class="big amber" id="sst_tax">$10,200</div>
+            <div class="sub" id="sst_sub">About 43% of your Social Security is added to your taxable income.</div>
+
+            <div class="cgbar">
+              <div class="cgtrack">
+                <i class="cg-0" id="sst_bfree" style="width:57%"></i>
+                <i class="cg-15" id="sst_btax" style="width:43%"></i>
+              </div>
+              <div class="cgkey">
+                <span><i class="k-0"></i>Tax-free portion</span>
+                <span><i class="k-15"></i>Taxable portion</span>
+              </div>
+            </div>
+
+            <div class="ledger">
+              <div class="lrow"><span>Provisional income</span><b id="sst_l1">$42,000</b></div>
+              <div class="lrow"><span>Taxable portion of benefit</span><b id="sst_l2">$10,200</b></div>
+              <div class="lrow tot"><span>Share of benefit that&rsquo;s taxed</span><b id="sst_l3">43%</b></div>
+            </div>
+            <div class="flag" id="sst_flag">PARTIALLY TAXED &mdash; SPREADING OUT IRA WITHDRAWALS CAN KEEP MORE OF YOUR BENEFIT TAX-FREE.</div>
+            <div class="disclaim">Provisional income = other income + half your benefit. Simplified federal rules; many states don&rsquo;t tax benefits at all. Educational only.</div>
+          </div>
+        </div>
+        <div class="reveal-foot">
+          <button class="action mini" type="button" data-step="1" data-action-check="sstax" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Estimate your provisional income to see how much benefit tax you&rsquo;ll owe.</span></button>
+        </div>
+        <div class="slide-foot"><span>09 — TAXES ON YOUR BENEFIT</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 11 — MEDICARE & IRMAA -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p3">Phase 3 · Family &amp; taxes &middot; Stop 10</span></div>
+        <h2 class="st">At 65, <span class="pine">Medicare</span> starts &mdash; and it&rsquo;s tied to your check.</h2>
+        <div class="two" style="margin-top:18px;align-items:stretch">
+          <div class="card">
+            <h3>Sign up at 65 &mdash; even if you delay SS</h3>
+            <p style="margin-bottom:10px">Medicare and Social Security are separate clocks. Don&rsquo;t let one wait on the other.</p>
+            <ul class="points" style="margin-top:6px;gap:11px">
+              <li><span class="num">&#9679;</span><span class="tx">Eligibility hits at <b>65 no matter when you claim SS</b>. Miss the window and you can owe <b>lifelong penalties</b>.</span></li>
+              <li><span class="num">&#9679;</span><span class="tx">If you&rsquo;re already collecting, <b>Part B premiums come straight out</b> of your monthly check.</span></li>
+            </ul>
+          </div>
+          <div class="stack">
+            <div class="pull" style="font-size:1.14rem">One clock starts at 65, the other whenever you choose &mdash; don&rsquo;t let a Social Security delay make you miss Medicare.</div>
+            <div class="card">
+              <h3>IRMAA &mdash; the high-income surcharge</h3>
+              <p>Higher earners pay more for Part B and D, based on your tax return from <b>two years earlier</b>. One big year &mdash; a Roth conversion, a home sale &mdash; can quietly raise your premiums later.</p>
+            </div>
+          </div>
+        </div>
+        <div class="reveal-foot" style="margin-top:16px">
+          <button class="action mini" type="button" data-step="1" data-action-check="medicare" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Enroll in Medicare on time at 65, and watch income spikes that trigger IRMAA.</span></button>
+        </div>
+        <div class="slide-foot"><span>10 — MEDICARE &amp; IRMAA</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 12 — BREAK-EVEN & LONGEVITY -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Big picture &middot; Stop 11</span></div>
+        <h2 class="st">Delaying isn&rsquo;t a gamble &mdash; it&rsquo;s <span class="pine">longevity insurance</span>.</h2>
+
+        <div class="build-cols" style="grid-template-columns:repeat(2,1fr)">
+          <div class="bcol">
+            <div class="btitle">The break-even</div>
+            <p class="bexp" data-step="1">Claim early and you get <em>smaller checks sooner</em>; delay and you get <em>bigger checks later</em>. The lines cross in your <b>late 70s to early 80s</b> &mdash; live past that and waiting wins.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Insure the risk you can&rsquo;t afford</div>
+            <p class="bexp" data-step="2">The real danger isn&rsquo;t dying early &mdash; it&rsquo;s <em>outliving your money</em>. The bigger delayed check is guaranteed, inflation-adjusted income that <b>never runs out</b>.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="3">&ldquo;Claim early if you need the money or have poor health. If you expect a long life, the delayed check is the best-priced insurance you can buy.&rdquo;</div>
+          <button class="action" type="button" data-step="4" data-action-check="breakeven" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Weigh your health and family longevity when you choose a claim age.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>11 — BREAK-EVEN &amp; LONGEVITY</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 13 — WILL IT STILL BE THERE? -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Big picture &middot; Stop 12</span></div>
+        <h2 class="st">Will it <span class="brick">still be there</span>? Mostly, yes.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">The honest picture</div>
+            <p class="bexp" data-step="1">Social Security&rsquo;s trust fund is projected to run low <em>around 2033</em>. That&rsquo;s a shortfall &mdash; not a shutdown.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Even then, ~80%</div>
+            <p class="bexp" data-step="2">If Congress does nothing, incoming payroll taxes still cover roughly <em>77&ndash;83%</em> of scheduled benefits. A cut, not a zero.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">It&rsquo;s usually patched</div>
+            <p class="bexp" data-step="3">Every past shortfall was fixed with small tweaks &mdash; a higher cap, a later FRA, adjusted rates. Younger workers should plan for <em>a bit less, not nothing</em>.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;Plan as if you&rsquo;ll get most of it &mdash; and build your own savings so Social Security is the floor, not the whole plan.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="realistic" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Treat Social Security as a base, and build retirement savings on top of it.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>12 — WILL IT STILL BE THERE?</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 14 — FIT IT INTO THE PLAN -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Phase 4 · Big picture &middot; Stop 13</span></div>
+        <h2 class="st">The claim date is a <span class="pine">planning</span> decision, not just a form.</h2>
+
+        <div class="build-cols">
+          <div class="bcol">
+            <div class="btitle">Bridge the gap</div>
+            <p class="bexp" data-step="1">Want to delay to 70 but retire at 65? <em>Spend from savings</em> for those years to &ldquo;buy&rdquo; the bigger, lifelong check.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Convert while it&rsquo;s cheap</div>
+            <p class="bexp" data-step="2">The low-income years before benefits and RMDs start are prime time for <em>Roth conversions</em> &mdash; before Social Security fills your brackets.</p>
+          </div>
+          <div class="bcol">
+            <div class="btitle">Coordinate the whole picture</div>
+            <p class="bexp" data-step="3">Claim age, taxes, Medicare/IRMAA, and survivor needs all interact. A planner runs them <em>together</em> so one move doesn&rsquo;t quietly cost you on another.</p>
+          </div>
+        </div>
+
+        <div class="reveal-foot">
+          <div class="qline" data-step="4">&ldquo;The right claim age depends on your savings, your taxes, your health, and your spouse &mdash; which is exactly why it&rsquo;s a plan, not a default.&rdquo;</div>
+          <button class="action" type="button" data-step="5" data-action-check="coordinate" aria-pressed="false"><span class="ax-box"><span class="ck"></span></span><span class="ax-tag">Action</span><span class="ax-text">Decide your claim age as part of a full retirement plan, not in isolation.</span></button>
+        </div>
+
+        <div class="slide-foot"><span>13 — FIT IT INTO THE PLAN</span><span class="build-hint"></span></div>
+      </section>
+
+      <!-- 15 — RECAP -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">The throughline</span></div>
+        <h2 class="st">Three levers, <span class="pine">one lifetime</span> check.</h2>
+        <div class="recap">
+          <div class="rcard">
+            <div class="rn">Build it</div>
+            <h3>Your earnings record</h3>
+            <p>35 indexed years and 40 credits set the size of your check &mdash; and extra working years can replace zeros and raise it.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Time it</div>
+            <h3>Your claim age</h3>
+            <p>Every year you wait from 62 to 70 grows the check &mdash; and the survivor&rsquo;s &mdash; by roughly 8%. It&rsquo;s the biggest lever you control.</p>
+          </div>
+          <div class="rcard">
+            <div class="rn">Protect it</div>
+            <h3>Taxes, spouse &amp; plan</h3>
+            <p>Manage benefit taxes and IRMAA, coordinate spousal and survivor benefits, and treat Social Security as the floor under your own savings.</p>
+          </div>
+        </div>
+        <div class="pull" style="margin-top:22px">You can&rsquo;t control the program &mdash; but the record you build, the age you claim, and the plan around it decide how much of it actually reaches you.</div>
+        <div class="slide-foot"><span>14 — THE THROUGHLINE</span><span>ONE MORE SLIDE — YOUR ACTION LIST &rarr;</span></div>
+      </section>
+
+      <!-- 16 — ACTION CHECKLIST -->
+      <section class="slide">
+        <div class="slide-head"><button class="tl-back" data-home><span class="ar">&#8598;</span> Roadmap</button><span class="eyebrow p4">Your action list</span></div>
+        <h2 class="st">Now go <span class="pine">do</span> it.</h2>
+        <p class="lede" style="margin-top:4px">Every stop leaves one action. Tick them off as you knock them out &mdash; progress saves on this device.</p>
+        <div class="checklist" id="checklist"></div>
+        <div class="slide-foot"><span>ACTION CHECKLIST · SAVES ON THIS DEVICE</span><span id="ckcount">0 of 13</span></div>
+      </section>
+
+    </div>
+   </div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- DECK NAVIGATION ---------- */
+  var slides  = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var stage   = document.getElementById('stage');
+  var wrap    = document.getElementById('stageWrap');
+  var dotsBox = document.getElementById('dots');
+  var counter = document.getElementById('counter');
+  var bar     = document.getElementById('bar');
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var mobileQ = window.matchMedia('(max-width:860px)');
+  var cur = 0, curStep = 0;
+
+  slides.forEach(function(_, i){
+    var b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Slide ' + (i + 1));
+    b.addEventListener('click', function(){ goSlide(i, 0); });
+    dotsBox.appendChild(b);
+  });
+  var dots = Array.prototype.slice.call(dotsBox.children);
+
+  function maxStepOf(slide){
+    var m = 0;
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0; if (s > m) m = s;
+    });
+    return m;
+  }
+  function applyStep(slide, step){
+    slide.querySelectorAll('[data-step]').forEach(function(el){
+      var s = +el.getAttribute('data-step') || 0;
+      if (s <= step){ el.hidden = false; requestAnimationFrame(function(){ el.classList.add('show'); }); }
+      else { el.classList.remove('show'); el.hidden = true; }
+    });
+    var hint = slide.querySelector('.build-hint');
+    if (hint){
+      var mx = maxStepOf(slide);
+      hint.textContent = (mx > 0 && step < mx) ? 'CLICK → TO REVEAL MORE' : '';
+    }
+  }
+
+  function render(){
+    var slide = slides[cur];
+    var mx = maxStepOf(slide);
+    var eff = mobileQ.matches ? mx : curStep;
+    slides.forEach(function(s, n){ s.classList.toggle('on', n === cur); });
+    dots.forEach(function(d, n){ d.classList.toggle('on', n === cur); });
+    counter.textContent = (cur + 1) + ' / ' + slides.length;
+    bar.style.width = ((cur + 1) / slides.length * 100) + '%';
+    applyStep(slide, eff);
+    prevBtn.disabled = (cur === 0 && eff === 0);
+    nextBtn.disabled = (cur === slides.length - 1 && eff >= mx);
+    if (mobileQ.matches) window.scrollTo(0, 0);
+  }
+
+  function goSlide(i, step){
+    cur = Math.max(0, Math.min(slides.length - 1, i));
+    var mx = maxStepOf(slides[cur]);
+    curStep = (step == null) ? mx : Math.max(0, Math.min(mx, step));
+    render();
+  }
+  function next(){
+    var mx = maxStepOf(slides[cur]);
+    if (!mobileQ.matches && curStep < mx){ curStep++; render(); }
+    else if (cur < slides.length - 1){ goSlide(cur + 1, 0); }
+  }
+  function prev(){
+    if (!mobileQ.matches && curStep > 0){ curStep--; render(); }
+    else if (cur > 0){ goSlide(cur - 1, null); }
+  }
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+
+  document.addEventListener('click', function(e){
+    var node = e.target.closest('[data-goto]');
+    if (node){ goSlide(+node.getAttribute('data-goto'), 0); return; }
+    var home = e.target.closest('[data-home]');
+    if (home){ goSlide(0, 0); return; }
+    var act = e.target.closest('[data-action-check]');
+    if (act){ toggleAction(act.getAttribute('data-action-check')); }
+  });
+
+  document.addEventListener('keydown', function(e){
+    var t = e.target.tagName;
+    if (t === 'INPUT' || t === 'TEXTAREA') {
+      if (e.key === 'Escape') e.target.blur();
+      return;
+    }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') { e.preventDefault(); goSlide(0, 0); }
+    else if (e.key === 'End') { e.preventDefault(); goSlide(slides.length - 1, null); }
+  });
+
+  document.getElementById('fs').addEventListener('click', function(){
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  });
+
+  var fitBox = document.getElementById('stageFit');
+  function fit(){
+    if (mobileQ.matches){
+      stage.style.transform = '';
+      fitBox.style.width = fitBox.style.height = '';
+      return;
+    }
+    var pad = 44;
+    var w = wrap.clientWidth - pad, h = wrap.clientHeight - pad;
+    if (w <= 0 || h <= 0) return;
+    var s = Math.min(w / 1280, h / 720);
+    stage.style.transform = 'scale(' + s + ')';
+    fitBox.style.width  = (1280 * s) + 'px';
+    fitBox.style.height = (720 * s) + 'px';
+  }
+  var pending = false;
+  function scheduleFit(){
+    if (document.hidden){ fit(); return; }
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(function(){ pending = false; fit(); });
+  }
+  window.addEventListener('resize', scheduleFit);
+  window.addEventListener('orientationchange', scheduleFit);
+  window.addEventListener('load', scheduleFit);
+  document.addEventListener('fullscreenchange', scheduleFit);
+  document.addEventListener('visibilitychange', scheduleFit);
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleFit);
+  if (window.ResizeObserver){
+    var ro = new ResizeObserver(scheduleFit);
+    ro.observe(wrap);
+    ro.observe(document.documentElement);
+  }
+  if (mobileQ.addEventListener) mobileQ.addEventListener('change', scheduleFit);
+  fit();
+
+  /* ---------- SHARED HELPERS ---------- */
+  var usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+  function money(n){ return usd0.format(Math.round(n || 0)); }
+  function val(id){
+    var raw = document.getElementById(id).value.replace(/[^0-9.]/g, '');
+    var n = parseFloat(raw);
+    return isFinite(n) ? n : 0;
+  }
+  function bindMoney(id, onChange){
+    var el = document.getElementById(id);
+    el.addEventListener('input', function(){
+      var digitsBefore = (el.value.slice(0, el.selectionStart).match(/\d/g) || []).length;
+      var n = el.value.replace(/[^0-9]/g, '');
+      el.value = n === '' ? '' : parseInt(n, 10).toLocaleString('en-US');
+      var pos = 0, seen = 0;
+      while (pos < el.value.length && seen < digitsBefore) {
+        if (/\d/.test(el.value[pos])) seen++;
+        pos++;
+      }
+      el.setSelectionRange(pos, pos);
+      onChange();
+    });
+    el.addEventListener('blur', function(){ if (el.value === '') { el.value = '0'; onChange(); } });
+  }
+  function set(id, txt){ var el = document.getElementById(id); if (el) el.textContent = txt; }
+  function bindSeg(id, onPick){
+    var box = document.getElementById(id);
+    box.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-st]'); if (!b) return;
+      box.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x === b); });
+      onPick(b.getAttribute('data-st'));
+    });
+  }
+
+  /* ---------- CALC 1: CLAIM AGE 62 / 67 / 70 (Stop 5) ---------- */
+  function claimFactor(age){
+    if (age < 67){
+      var m = (67 - age) * 12;
+      var r = Math.min(m, 36) * (5/900) + Math.max(m - 36, 0) * (5/1200);
+      return 1 - r;
+    }
+    if (age > 67){ return 1 + (age - 67) * 0.08; }
+    return 1;
+  }
+  function calcClaim(){
+    var pia = val('ss_pia');
+    var age = +document.getElementById('ss_age').value;
+    set('ss_ageamt', age);
+    var f = claimFactor(age);
+    var m = pia * f;
+    var pct = Math.round((f - 1) * 100);
+    set('ss_month', money(m));
+    set('ss_62', money(pia * claimFactor(62)));
+    set('ss_67', money(pia));
+    set('ss_70', money(pia * claimFactor(70)));
+    set('ss_l1', money(pia));
+    set('ss_l2', (pct >= 0 ? '+' : '−') + Math.abs(pct) + '%');
+    set('ss_l3', money(m));
+    set('ss_l4', money(m * 12 * 20));
+    if (age === 67){
+      set('ss_sub', 'This is your full benefit — 100% of your PIA.');
+    } else if (age < 67){
+      var ye = 67 - age;
+      set('ss_sub', 'Claiming ' + ye + (ye === 1 ? ' year' : ' years') + ' early cuts your check by ' + Math.abs(pct) + '%.');
+    } else {
+      var yl = age - 67;
+      set('ss_sub', 'Waiting ' + yl + (yl === 1 ? ' year' : ' years') + ' past 67 adds ' + pct + '% for life.');
+    }
+    var flag = document.getElementById('ss_flag');
+    if (age >= 70){
+      flag.className = 'flag good';
+      flag.textContent = 'MAXIMUM CHECK — DELAYED CREDITS STOP AT 70, SO THERE’S NO GAIN TO WAITING LONGER.';
+    } else if (age <= 62){
+      flag.className = 'flag';
+      flag.textContent = 'SMALLEST CHECK — LOCKED IN FOR LIFE. ONLY IDEAL IF YOU NEED THE INCOME OR HAVE POOR HEALTH.';
+    } else {
+      flag.className = 'flag good';
+      flag.textContent = 'EACH YEAR YOU WAIT ADDS ROUGHLY 8% — GUARANTEED, FOR THE REST OF YOUR LIFE.';
+    }
+  }
+  bindMoney('ss_pia', calcClaim);
+  document.getElementById('ss_age').addEventListener('input', calcClaim);
+
+  /* ---------- CALC 2: TAXES ON YOUR BENEFIT (Stop 9) ---------- */
+  var TXB = { single: [25000, 34000], married: [32000, 44000] };
+  var sstStatus = 'single';
+  function calcSStax(){
+    var t = TXB[sstStatus];
+    var other = val('sst_other');
+    var ss = val('sst_ss');
+    var pi = other + ss * 0.5;
+    var taxable;
+    if (pi <= t[0]) taxable = 0;
+    else if (pi <= t[1]) taxable = Math.min(ss * 0.5, (pi - t[0]) * 0.5);
+    else taxable = (pi - t[1]) * 0.85 + Math.min(ss * 0.5, (t[1] - t[0]) * 0.5);
+    taxable = Math.max(0, Math.min(taxable, ss * 0.85));
+    var pct = ss > 0 ? Math.round(taxable / ss * 100) : 0;
+    set('sst_tax', money(taxable));
+    set('sst_l1', money(pi));
+    set('sst_l2', money(taxable));
+    set('sst_l3', pct + '%');
+    var freePct = ss > 0 ? (ss - taxable) / ss * 100 : 100;
+    document.getElementById('sst_bfree').style.width = freePct + '%';
+    document.getElementById('sst_btax').style.width = (100 - freePct) + '%';
+    set('sst_sub', taxable <= 0
+      ? 'Your income is low enough that none of your benefit is taxed.'
+      : 'About ' + pct + '% of your Social Security is added to your taxable income.');
+    var flag = document.getElementById('sst_flag');
+    if (taxable <= 0){
+      flag.className = 'flag good';
+      flag.textContent = 'NONE TAXED — YOUR PROVISIONAL INCOME IS BELOW THE ' + money(t[0]) + ' THRESHOLD.';
+    } else if (pct >= 85){
+      flag.className = 'flag';
+      flag.textContent = 'AT THE MAX — 85% IS THE MOST OF YOUR BENEFIT THAT CAN EVER BE TAXED.';
+    } else {
+      flag.className = 'flag';
+      flag.textContent = 'PARTIALLY TAXED — SPREADING OUT IRA WITHDRAWALS CAN KEEP MORE OF YOUR BENEFIT TAX-FREE.';
+    }
+  }
+  bindSeg('sst_status', function(st){ sstStatus = st; calcSStax(); });
+  ['sst_other','sst_ss'].forEach(function(id){ bindMoney(id, calcSStax); });
+
+  /* ---------- ACTION CHECKLIST (final slide) ---------- */
+  var ACTIONS = [
+    {id:'fund',      phase:'Earning',        text:'Look at a pay stub and find the Social Security (FICA) line.'},
+    {id:'credits',   phase:'Earning',        text:'Check your credits and estimated benefit at ssa.gov.'},
+    {id:'record',    phase:'Earning',        text:'Review your earnings record for missing or wrong years.'},
+    {id:'fra',       phase:'Claiming',       text:'Look up your exact Full Retirement Age (67 for most today).'},
+    {id:'claimage',  phase:'Claiming',       text:'Model your benefit at 62, 67, and 70 before you pick a date.'},
+    {id:'earntest',  phase:'Claiming',       text:'If you’ll work while collecting before FRA, check the earnings limit.'},
+    {id:'spousal',   phase:'Family & taxes', text:'If married or divorced (10+ yrs), compare your own benefit to spousal.'},
+    {id:'survivor',  phase:'Family & taxes', text:'Have the higher earner consider delaying to lift the survivor benefit.'},
+    {id:'sstax',     phase:'Family & taxes', text:'Estimate your provisional income to see how much benefit tax you’ll owe.'},
+    {id:'medicare',  phase:'Family & taxes', text:'Enroll in Medicare on time at 65 and watch for IRMAA surcharges.'},
+    {id:'breakeven', phase:'Big picture',    text:'Weigh your health and family longevity when choosing a claim age.'},
+    {id:'realistic', phase:'Big picture',    text:'Treat Social Security as a base and build savings on top of it.'},
+    {id:'coordinate',phase:'Big picture',    text:'Decide your claim age as part of a full retirement plan.'}
+  ];
+  var CK_KEY = 'tr-socialsecurity-actions', ckState = {};
+  try { var cs = JSON.parse(localStorage.getItem(CK_KEY) || 'null'); if (cs && typeof cs === 'object') ckState = cs; } catch(e){}
+  var ckWrap = document.getElementById('checklist'), ckCount = document.getElementById('ckcount');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function ckSave(){ try { localStorage.setItem(CK_KEY, JSON.stringify(ckState)); } catch(e){} }
+  function ckRender(){
+    if (!ckWrap) return;
+    ckWrap.innerHTML = ACTIONS.map(function(a){
+      var done = !!ckState[a.id];
+      return '<button type="button" class="ck-item' + (done ? ' done' : '') + '" data-ck="' + a.id + '">' +
+               '<span class="ck-box"><span class="ck"></span></span>' +
+               '<span class="ck-body"><span class="ck-phase">' + a.phase + '</span>' +
+               '<span class="ck-text">' + esc(a.text) + '</span></span>' +
+             '</button>';
+    }).join('');
+    var n = ACTIONS.filter(function(a){ return ckState[a.id]; }).length;
+    if (ckCount) ckCount.textContent = n + ' of ' + ACTIONS.length;
+  }
+  function syncActions(){
+    document.querySelectorAll('[data-action-check]').forEach(function(btn){
+      var done = !!ckState[btn.getAttribute('data-action-check')];
+      btn.classList.toggle('done', done);
+      btn.setAttribute('aria-pressed', done ? 'true' : 'false');
+    });
+  }
+  function toggleAction(id){
+    ckState[id] = !ckState[id];
+    ckSave(); ckRender(); syncActions();
+  }
+  if (ckWrap){
+    ckWrap.addEventListener('click', function(e){
+      var it = e.target.closest('[data-ck]'); if (!it) return;
+      toggleAction(it.getAttribute('data-ck'));
+    });
+  }
+  ckRender();
+  syncActions();
+
+  /* ---------- INIT ---------- */
+  calcClaim();
+  calcSStax();
+  goSlide(0, 0);
+})();
+</script>
+</body>
+</html>
