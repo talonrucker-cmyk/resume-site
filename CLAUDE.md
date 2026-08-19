@@ -29,13 +29,14 @@ Never stage `.claude/` (local tooling). Never stage `index1.html` (old, unused).
 | `index.html` | Published site — 4 pages in one file, toggled by JS |
 | `index-BACKUP.html` | Canonical edit source (see above) |
 | `lessons.html` | Lessons hub — cards linking to each deck; nav "Lessons" tab points here |
-| `lesson-planner.html` | Lesson 01 deck — why a financial planner + goals planner |
+| `lesson-planner.html` | Lesson 01 deck — click-through builds (2 levers/word-cloud, balance-sheet stack, process wheel, goals timeline) + live calculators (net worth, goals planner, protection level, rate-of-savings, liquidity, debt gained-opportunity) that roll up into a warning→optimal scorecard. Rebuilt to mirror the client-pitch flow in Talon's brand. |
 | `lesson-protection.html` | Lesson 02 deck — insurance |
 | `lesson-cashflow.html` | Lesson 03 deck — cash flow |
 | `lesson-investing.html` | Lesson 04 deck — investing & risk + being wise with money (freeway/lanes, crash, buy-low, two-investors, opportunity-cost calc, big-rocks, passive income, realistic returns, static average-trap, passive-income/day). **Former Lesson 07 (money-wisdom) was folded in here and its file deleted.** |
 | `lesson-startup.html` | Lesson 05 deck — business startup (roadmap) |
 | `lesson-taxes.html` | Lesson 06 deck — tax basics (std/itemized, 0% cap-gains calc + brackets, deadlines/late-filing, tax-loss harvesting, 1099/S-corp, entities) |
 | `lesson-socialsecurity.html` | Lesson 07 deck — Social Security (funding/credits/top-35, FRA, 62-vs-70 claim-age calc, earnings test, spousal & survivor, benefit-tax/provisional-income calc, Medicare/IRMAA, break-even, solvency, bridge/Roth) |
+| `lesson-retirement.html` | Lesson 08 deck — retirement planning (account buckets/tax treatment, Roth-vs-Traditional, match & limits, nest-egg/25× calc, on-track future-value calc, 4% rule, sequence risk, withdrawal order, RMDs at 73, healthcare/LTC, inflation/longevity, coordinate) |
 | `images/` | Photo gallery assets |
 | `why-you-need-a-financial-planner.pdf` | Embedded guide |
 | `EDITS.md` | The outstanding work list, batched |
@@ -87,9 +88,9 @@ Lesson decks scale a fixed 1280×720 stage to fit. Below 860px they switch to a
 stacked reading layout — scaling that far down makes text illegible. Sizing falls
 back to a synchronous path when `document.hidden`, since rAF pauses in background tabs.
 
-There are now **seven lessons** (01 financial planner, 02 protection, 03 cash flow,
+There are now **eight lessons** (01 financial planner, 02 protection, 03 cash flow,
 04 investing & risk — which absorbed the former "being wise with money" deck,
-05 business startup, 06 tax basics, 07 Social Security) behind a
+05 business startup, 06 tax basics, 07 Social Security, 08 retirement planning) behind a
 `lessons.html` **hub**. The nav "Lessons" tab and the hero
 button point at the hub; each deck's "← All lessons" button returns to it, and the
 hub backs out to `index.html`. A new lesson = a new `lesson-<topic>.html` file **plus
