@@ -503,6 +503,8 @@
   .embed-card p.sub{font-size:.9rem;color:var(--ink-soft);margin-top:4px}
   .spotify-embed{width:100%;height:420px;border:0;border-radius:12px;margin-top:16px}
   .soon-block{margin-top:18px;padding:26px;border:1px dashed var(--line-strong);border-radius:12px;background:var(--paper);text-align:center}
+  /* card cover art — capped at native width so it never upscales soft */
+  .card-cover{display:block;width:100%;max-width:768px;height:auto;margin:0 auto 18px;border-radius:12px;background:var(--paper-2)}
   /* Fun page: videos on one side, the Talondar on the other */
   .split2{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:18px}
   .split2-half{padding:0 26px;display:flex;flex-direction:column}
@@ -2676,6 +2678,7 @@
 
         <!-- PRODUCTIVITY VIDEOS + THE TALONDAR -->
         <div class="embed-card reveal" style="grid-column:1 / -1">
+          <img class="card-cover" src="images/workshop-cover.jpg" alt="Personal Finance Workshop" width="768" height="404" loading="lazy">
           <h3>🗓️ Talon's Tips to Success</h3>
           <p class="sub">Google Calendar, life strategy, and the things I've learned that actually stuck.</p>
           <div class="split2">

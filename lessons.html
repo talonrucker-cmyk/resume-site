@@ -180,6 +180,92 @@
     .yp-amt{display:none}
   }
 
+  /* ---- aqueduct vs. buckets (item: taxable brokerage / passive income) ----
+     Top row is active income: a figure carrying buckets, and the water only
+     moves while they walk. Bottom row is the aqueduct being dug — its built
+     fraction is literally pile / target, so dragging the year slider builds
+     it in front of you. Arches light up as the money compounds. */
+  .aq{margin-top:14px}
+  .aq-stage{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 14px 6px}
+  .aq-stage svg{width:100%;height:auto;display:block;overflow:visible}
+
+  .aq-label{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;fill:var(--ink-soft)}
+  .aq-cap{font-family:var(--body);font-size:11px;fill:var(--ink-soft)}
+  .aq-big{font-family:var(--display);font-size:19px;font-weight:700;fill:var(--pine)}
+  .aq-big.muted{fill:#9aa69f}
+  .aq-sm{font-family:var(--mono);font-size:9px;letter-spacing:.06em;fill:#9aa69f;text-transform:uppercase}
+
+  .aq-ink{stroke:var(--ink-soft);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .aq-bucket{fill:var(--amber-soft);stroke:var(--amber);stroke-width:1.5}
+  .aq-well{fill:var(--paper-2);stroke:var(--line-strong);stroke-width:1.5}
+  .aq-water{fill:#3f9c80}
+
+  /* the walk — buckets bob, and the whole figure shuffles back and forth to
+     make the point that the water only moves while the legs do */
+  .aq-walker{animation:aqWalk 3.4s ease-in-out infinite}
+  @keyframes aqWalk{0%,100%{transform:translateX(0)}50%{transform:translateX(84px)}}
+  .aq-bob{animation:aqBob 1.1s ease-in-out infinite}
+  @keyframes aqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(2.5px)}}
+
+  /* aqueduct channel */
+  .aq-chan-bg{fill:var(--paper-2);stroke:var(--line);stroke-width:1}
+  .aq-chan-fill{fill:#17705a;transition:width .35s cubic-bezier(.3,.9,.35,1)}
+  .aq-arch{fill:none;stroke:#dfe3da;stroke-width:3;transition:stroke .3s}
+  .aq-arch.on{stroke:var(--pine)}
+  .aq-pier{fill:#e7ebe4;transition:fill .3s}
+  .aq-pier.on{fill:var(--pine-deep)}
+  .aq-ghost{stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:4 4;fill:none}
+
+  /* droplets running down the finished channel */
+  .aq-drop{fill:var(--amber-soft);opacity:0}
+  .aq-flowing .aq-drop{animation:aqFlow 2.6s linear infinite}
+  .aq-drop:nth-of-type(2){animation-delay:.65s}
+  .aq-drop:nth-of-type(3){animation-delay:1.3s}
+  .aq-drop:nth-of-type(4){animation-delay:1.95s}
+  @keyframes aqFlow{0%{opacity:0}8%{opacity:1}92%{opacity:1}100%{opacity:0}}
+
+  .aq-house{fill:var(--paper-2);stroke:var(--line-strong);stroke-width:1.5;transition:fill .35s,stroke .35s}
+  .aq-house.lit{fill:#e8f2ed;stroke:var(--pine)}
+  .aq-roof{fill:#cfd7cf;transition:fill .35s}
+  .aq-house-wrap.lit .aq-roof{fill:var(--pine)}
+
+  @media(prefers-reduced-motion:reduce){
+    .aq-walker,.aq-bob,.aq-flowing .aq-drop{animation:none}
+    .aq-drop{opacity:.9}
+  }
+
+  /* controls */
+  .aq-ctl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+  .aq-f{display:flex;flex-direction:column;gap:4px}
+  .aq-f label{font-family:var(--mono);font-size:.6rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft)}
+  .aq-in{display:flex;align-items:center;background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:4px 9px}
+  .aq-in .pre{color:var(--ink-soft);font-size:.85rem}
+  .aq-in input{border:0;outline:0;background:none;font:inherit;font-size:.88rem;width:100%;min-width:0;padding:4px 2px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .aq-year{margin-top:14px;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .aq-year-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px}
+  .aq-year-top b{font-family:var(--display);font-size:1.05rem;color:var(--pine)}
+  .aq-year-top span{font-family:var(--mono);font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft)}
+  .aq-year input[type=range]{width:100%;accent-color:var(--pine);margin:0}
+
+  .aq-out{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+  .aq-stat{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .aq-stat .k{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .aq-stat .v{display:block;font-family:var(--display);font-size:1.06rem;color:var(--pine);margin:3px 0 1px;font-variant-numeric:tabular-nums}
+  .aq-stat .d{display:block;font-size:.68rem;color:var(--ink-soft);line-height:1.35}
+  .aq-stat.warn .v{color:var(--brick)}
+
+  .aq-verdict{margin-top:12px;font-size:.82rem;line-height:1.5;color:var(--ink-soft);
+              background:var(--paper-2);border-left:3px solid var(--pine);border-radius:0 8px 8px 0;padding:10px 13px}
+  .aq-verdict b{color:var(--ink)}
+  .aq-verdict.tight{border-left-color:var(--brick);background:#fdf0ed;color:#8f2b1f}
+  .aq-note{margin-top:9px;font-size:.7rem;color:var(--ink-soft);line-height:1.45}
+
+  @media(max-width:700px){
+    .aq-ctl{grid-template-columns:1fr}
+    .aq-out{grid-template-columns:repeat(2,1fr)}
+  }
+
   /* variable-vs-flat income chart (item: Balance a variable income) */
   .impl-chart{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
   .impl-chart svg{width:100%;height:auto;display:block}
@@ -395,6 +481,7 @@
     {id:'tax',title:'Open a taxable brokerage &amp; build passive income',
      optimal:'Automate weekly / monthly buys',
      lead:'This is the account where passive income actually gets built — and passive income is an aqueduct, not a lottery ticket.',
+     aqueduct:true,
      steps:[
        '<b>Buckets or an aqueduct.</b> Selling your hours is carrying buckets from the well: you get paid while you walk, and the water stops the moment you set them down. An aqueduct is brutal to dig — but once it’s cut, gravity delivers water to your door every day, including the days you don’t work.',
        '<b>Phase one is the digging.</b> Capital, time, or skill goes in up front and nothing comes back yet — index funds bought month after month, a rental, a thing you build once and sell many times. This is the unglamorous part, and it’s where nearly everyone quits.',
@@ -460,11 +547,13 @@
             (it.lead?'<p class="impl-lead">'+it.lead+'</p>':'')+
             '<ol>'+it.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
             (it.extra||'')+
+            (it.aqueduct?'<div class="aq" data-aqueduct></div>':'')+
             (it.yplan?'<div class="yp" data-yplan></div>':'')+
           '</div>'+
         '</div>';
     });
     listEl.innerHTML=h;
+    listEl.querySelectorAll('[data-aqueduct]').forEach(initAqueduct);
     listEl.querySelectorAll('[data-yplan]').forEach(initYearPlan);
     updateProgress();
   }
@@ -629,6 +718,224 @@
       if(t.matches('[data-ypinc]')){t.value=com(income);return;}
       if(t.matches('[data-ypra]')){i=+t.closest('[data-r]').getAttribute('data-r');if(rec[i])t.value=com(rec[i].amt);return;}
       if(t.matches('[data-ypoa]')){i=+t.closest('[data-o]').getAttribute('data-o');if(one[i])t.value=com(one[i].amt);}
+    },true);
+  }
+
+  /* ---- Buckets vs. aqueduct (item: taxable brokerage / passive income) ----
+     Teaches step 7 as a picture. Top row: active income — a figure carrying
+     buckets, water moving only while the legs do. Bottom row: the aqueduct,
+     whose built fraction IS pile / target, so dragging the year slider digs
+     it in front of you and the arches light up as the money compounds.
+
+     Math: surplus = income - living. Pile compounds monthly at RET. The pile
+     you need is target / SWR (the 4% rule — 25x). Passive income at any point
+     is pile * SWR. "Reaches your door" = passive income covers living costs. */
+  var AQ_RET=0.07, AQ_SWR=0.04, AQ_X0=70, AQ_X1=610, AQ_ARCHES=8;
+
+  function initAqueduct(wrap){
+    var income=6000, living=4000, target=100000, year=15;
+
+    function num(v){return +String(v).replace(/[^0-9.]/g,'')||0;}
+    function com(v){return Math.round(v).toLocaleString('en-US');}
+
+    /* Pile after n months of pouring `pmt`, compounding monthly. */
+    function pileAt(months,pmt){
+      var rm=AQ_RET/12;
+      if(pmt<=0) return 0;
+      return pmt*((Math.pow(1+rm,months)-1)/rm);
+    }
+    /* First month the pile throws off at least `need` of yearly income.
+       Returns null if it never happens inside 60 years. */
+    function monthsTo(need,pmt){
+      if(pmt<=0||need<=0) return null;
+      var want=need/AQ_SWR;
+      for(var n=1;n<=720;n++){ if(pileAt(n,pmt)>=want) return n; }
+      return null;
+    }
+    function yrTxt(months){
+      if(months==null) return null;
+      var y=Math.floor(months/12), mo=months%12;
+      return y+(y===1?' year':' years')+(mo?' '+mo+(mo===1?' month':' months'):'');
+    }
+
+    var svg=
+      '<svg viewBox="0 0 720 300" role="img" aria-label="Carrying buckets versus building an aqueduct">'+
+        /* ---------- row 1 · carrying buckets ---------- */
+        '<text class="aq-label" x="0" y="12">Carrying buckets &#183; active income</text>'+
+        /* well */
+        '<ellipse class="aq-well" cx="46" cy="62" rx="26" ry="9"/>'+
+        '<path class="aq-well" d="M20 62 V96 a26 9 0 0 0 52 0 V62"/>'+
+        '<ellipse class="aq-water" cx="46" cy="74" rx="19" ry="6" opacity=".8"/>'+
+        '<text class="aq-sm" x="46" y="115" text-anchor="middle">The well</text>'+
+        /* walker: yoke, body, two buckets */
+        '<g class="aq-walker">'+
+          '<g class="aq-bob">'+
+            '<circle class="aq-ink" cx="150" cy="44" r="7"/>'+
+            '<path class="aq-ink" d="M150 51 V78 M150 78 L142 96 M150 78 L158 96"/>'+
+            '<path class="aq-ink" d="M130 58 H170"/>'+
+            '<path class="aq-ink" d="M132 58 V66 M168 58 V66"/>'+
+            '<path class="aq-bucket" d="M124 66 h16 l-2.5 14 h-11 z"/>'+
+            '<path class="aq-bucket" d="M160 66 h16 l-2.5 14 h-11 z"/>'+
+          '</g>'+
+        '</g>'+
+        /* destination cup */
+        '<path class="aq-well" d="M300 60 h34 l-5 34 h-24 z"/>'+
+        '<ellipse class="aq-water" cx="317" cy="76" rx="12" ry="4" opacity=".55"/>'+
+        '<text class="aq-sm" x="317" y="115" text-anchor="middle">Your life</text>'+
+        /* the walk, dashed both ways */
+        '<path class="aq-ghost" d="M86 104 H296"/>'+
+        '<path class="aq-ghost" d="M290 100 l8 4 -8 4"/>'+
+        '<text class="aq-cap" x="380" y="52">Every drop is a trip you make.</text>'+
+        '<text class="aq-cap" x="380" y="70">Stop walking and the water stops</text>'+
+        '<text class="aq-cap" x="380" y="88">the same day.</text>'+
+        '<text class="aq-big muted" x="380" y="116" id="aqActive">$6,000 / mo</text>'+
+
+        /* ---------- row 2 · the aqueduct ---------- */
+        '<text class="aq-label" x="0" y="162">Building the aqueduct &#183; passive income</text>'+
+        /* the pour: what is left of the bucket goes into building the channel */
+        '<path class="aq-ghost" id="aqPour" d="M150 104 C 120 136, 70 150, 34 176" stroke-dasharray="5 4"/>'+
+        '<path class="aq-ghost" d="M28 168 l6 9 l10 -3"/>'+
+        '<text class="aq-cap" id="aqPourLab" x="124" y="140">pour</text>'+
+        /* source basin, feeding the channel */
+        '<path class="aq-well" d="M12 184 h40 v20 h-40 z"/>'+
+        '<path class="aq-well" d="M52 188 h'+(AQ_X0-52)+' v10 h-'+(AQ_X0-52)+' z"/>'+
+        '<text class="aq-sm" x="32" y="272" text-anchor="middle">You pour</text>'+
+        /* channel: ghost span, then the built fill */
+        '<rect class="aq-chan-bg" x="'+AQ_X0+'" y="182" width="'+(AQ_X1-AQ_X0)+'" height="16" rx="3"/>'+
+        '<rect class="aq-chan-fill" id="aqFill" x="'+AQ_X0+'" y="182" width="0" height="16" rx="3"/>'+
+        '<g id="aqArches"></g>'+
+        /* droplets ride the channel */
+        '<g id="aqDrops">'+
+          '<circle class="aq-drop" r="3" cx="0" cy="190"><animateMotion dur="2.6s" repeatCount="indefinite" path="M'+AQ_X0+' 0 H'+AQ_X1+'"/></circle>'+
+          '<circle class="aq-drop" r="3" cx="0" cy="190"><animateMotion dur="2.6s" begin="0.65s" repeatCount="indefinite" path="M'+AQ_X0+' 0 H'+AQ_X1+'"/></circle>'+
+          '<circle class="aq-drop" r="3" cx="0" cy="190"><animateMotion dur="2.6s" begin="1.3s" repeatCount="indefinite" path="M'+AQ_X0+' 0 H'+AQ_X1+'"/></circle>'+
+          '<circle class="aq-drop" r="3" cx="0" cy="190"><animateMotion dur="2.6s" begin="1.95s" repeatCount="indefinite" path="M'+AQ_X0+' 0 H'+AQ_X1+'"/></circle>'+
+        '</g>'+
+        /* the house it delivers to */
+        '<g class="aq-house-wrap" id="aqHouseWrap">'+
+          '<path class="aq-roof" d="M626 186 l30 -22 l30 22 z"/>'+
+          '<rect class="aq-house" id="aqHouse" x="634" y="186" width="44" height="42" rx="3"/>'+
+        '</g>'+
+        '<text class="aq-sm" x="656" y="272" text-anchor="middle">Your door</text>'+
+      '</svg>';
+
+    var html=
+      '<div class="aq-stage">'+svg+'</div>'+
+      '<div class="aq-ctl">'+
+        '<div class="aq-f"><label>Take-home / month</label><span class="aq-in"><span class="pre">$</span>'+
+          '<input type="text" inputmode="numeric" data-aqinc value="'+com(income)+'"></span></div>'+
+        '<div class="aq-f"><label>Cost of living / month</label><span class="aq-in"><span class="pre">$</span>'+
+          '<input type="text" inputmode="numeric" data-aqliv value="'+com(living)+'"></span></div>'+
+        '<div class="aq-f"><label>Passive income wanted / year</label><span class="aq-in"><span class="pre">$</span>'+
+          '<input type="text" inputmode="numeric" data-aqtgt value="'+com(target)+'"></span></div>'+
+      '</div>'+
+      '<div class="aq-year">'+
+        '<div class="aq-year-top"><b data-aqyrlab>Year 15</b><span>Drag to dig &#8594;</span></div>'+
+        '<input type="range" min="0" max="40" step="1" value="15" data-aqyr aria-label="Years from now">'+
+      '</div>'+
+      '<div class="aq-out" data-aqout></div><div class="aq-verdict" data-aqverdict></div>'+
+      '<p class="aq-note">Assumes a '+Math.round(AQ_RET*100)+'% average annual return and the '+Math.round(AQ_SWR*100)+
+        '% rule &mdash; you need about <b>25&times;</b> the income you want. Illustration, not a projection; real markets do not hand you the average every year.</p>';
+
+    wrap.innerHTML=html;
+
+    var fill=wrap.querySelector('#aqFill'),
+        arches=wrap.querySelector('#aqArches'),
+        drops=wrap.querySelector('#aqDrops'),
+        houseWrap=wrap.querySelector('#aqHouseWrap'),
+        house=wrap.querySelector('#aqHouse'),
+        active=wrap.querySelector('#aqActive'),
+        pourLab=wrap.querySelector('#aqPourLab');
+
+    /* arches drawn once; paint() only flips their class */
+    (function(){
+      var span=(AQ_X1-AQ_X0)/AQ_ARCHES, h='';
+      for(var i=0;i<AQ_ARCHES;i++){
+        var x=AQ_X0+i*span;
+        h+='<path class="aq-arch" data-arch="'+i+'" d="M'+(x+3)+' 244 V214 a'+((span-6)/2)+' 16 0 0 1 '+(span-6)+' 0 V244"/>';
+        h+='<rect class="aq-pier" data-pier="'+i+'" x="'+x+'" y="198" width="5" height="48"/>';
+      }
+      h+='<rect class="aq-pier" data-pier="'+AQ_ARCHES+'" x="'+(AQ_X1-5)+'" y="198" width="5" height="48"/>';
+      arches.innerHTML=h;
+    })();
+
+    function stat(k,v,d,warn){
+      return '<div class="aq-stat'+(warn?' warn':'')+'"><span class="k">'+k+'</span>'+
+             '<span class="v">'+v+'</span><span class="d">'+d+'</span></div>';
+    }
+
+    function paint(){
+      var surplus=Math.max(0,income-living),
+          need=target/AQ_SWR,
+          months=year*12,
+          pile=pileAt(months,surplus),
+          passive=pile*AQ_SWR,
+          p=need>0?Math.min(1,pile/need):0;
+
+      active.textContent=money(income)+' / mo';
+      pourLab.textContent=surplus>0?money(surplus)+' / mo':'nothing left';
+
+      // channel + arches build with progress
+      fill.setAttribute('width',((AQ_X1-AQ_X0)*p).toFixed(1));
+      for(var i=0;i<AQ_ARCHES;i++){
+        var on=p>=(i+1)/AQ_ARCHES;
+        arches.querySelector('[data-arch="'+i+'"]').setAttribute('class','aq-arch'+(on?' on':''));
+        arches.querySelector('[data-pier="'+i+'"]').setAttribute('class','aq-pier'+(p>=i/AQ_ARCHES&&p>0?' on':''));
+      }
+      arches.querySelector('[data-pier="'+AQ_ARCHES+'"]').setAttribute('class','aq-pier'+(p>=1?' on':''));
+      drops.setAttribute('class',p>=1?'aq-flowing':'');
+
+      // the door lights up when passive income covers living costs
+      var covered=passive>=living*12 && living>0;
+      house.setAttribute('class','aq-house'+(covered?' lit':''));
+      houseWrap.setAttribute('class','aq-house-wrap'+(covered?' lit':''));
+
+      var mCross=monthsTo(living*12,surplus), mDone=monthsTo(target,surplus);
+
+      wrap.querySelector('[data-aqout]').innerHTML=
+         stat('Aqueduct needed',money(need),'To throw off '+money(target)+' a year.')
+        +stat('You pour / month',money(surplus),surplus>0?'Income minus what you live on.':'Nothing left to pour.',surplus<=0)
+        +stat('Built by year '+year,Math.round(p*100)+'%',money(pile)+' dug so far.')
+        +stat('It delivers',money(passive)+' / yr',money(passive/365)+' a day, without working.');
+
+      var v=wrap.querySelector('[data-aqverdict]');
+      if(surplus<=0){
+        v.className='aq-verdict tight';
+        v.innerHTML='<b>You are carrying buckets with nothing left to pour.</b> Every drop you haul goes straight to living. '+
+          'The aqueduct never gets dug &mdash; not because the idea fails, but because construction never starts. Widen the gap between '+
+          money(income)+' and '+money(living)+' and the trench begins the same month.';
+      } else {
+        v.className='aq-verdict';
+        v.innerHTML='<b>You pour '+money(surplus)+' a month into the trench.</b> '+
+          (mCross
+            ? 'The water reaches your door in <b>'+yrTxt(mCross)+'</b> &mdash; that is the month your aqueduct covers the '+
+              money(living)+' you live on, and working becomes optional. '
+            : 'At this rate it does not reach your door inside 60 years &mdash; pour more in, or lower what the aqueduct has to carry. ')+
+          (mDone
+            ? 'The full '+money(target)+' a year arrives at <b>'+yrTxt(mDone)+'</b>.'
+            : 'The full '+money(target)+' target stays out of reach inside 60 years at this rate.')+
+          ' Every month you skip is a month of trench nobody digs for you.';
+      }
+    }
+
+    paint();
+
+    wrap.addEventListener('input',function(e){
+      var t=e.target;
+      if(t.matches('[data-aqinc]')){income=num(t.value);paint();return;}
+      if(t.matches('[data-aqliv]')){living=num(t.value);paint();return;}
+      if(t.matches('[data-aqtgt]')){target=num(t.value);paint();return;}
+      if(t.matches('[data-aqyr]')){
+        year=+t.value;
+        wrap.querySelector('[data-aqyrlab]').textContent='Year '+year;
+        paint();
+      }
+    });
+    wrap.addEventListener('blur',function(e){
+      var t=e.target;
+      if(t.matches('[data-aqinc]'))t.value=com(income);
+      else if(t.matches('[data-aqliv]'))t.value=com(living);
+      else if(t.matches('[data-aqtgt]'))t.value=com(target);
     },true);
   }
 
