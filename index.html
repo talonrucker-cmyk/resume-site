@@ -503,15 +503,16 @@
   .embed-card p.sub{font-size:.9rem;color:var(--ink-soft);margin-top:4px}
   .spotify-embed{width:100%;height:420px;border:0;border-radius:12px;margin-top:16px}
   .soon-block{margin-top:18px;padding:26px;border:1px dashed var(--line-strong);border-radius:12px;background:var(--paper);text-align:center}
-  /* card cover art — capped at native width so it never upscales soft */
-  .card-cover{display:block;width:100%;max-width:768px;height:auto;margin:0 auto 18px;border-radius:12px;background:var(--paper-2)}
   /* Fun page: videos on one side, the Talondar on the other */
   .split2{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:18px}
   .split2-half{padding:0 26px;display:flex;flex-direction:column}
   .split2-half:first-child{padding-left:0;border-right:1px solid var(--line)}
   .split2-half:last-child{padding-right:0}
   .s2-eyebrow{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);margin-bottom:8px}
-  .split2 .soon-block{margin-top:14px;padding:22px 18px;flex:1;display:flex;flex-direction:column;justify-content:center}
+  .split2 .soon-block{margin-top:14px;padding:18px;flex:1;display:flex;flex-direction:column;justify-content:center}
+  /* workshop art sits inside the coming-soon block, above the pill */
+  .soon-cover{display:block;width:100%;height:auto;border-radius:10px;margin-bottom:16px;background:var(--paper-2)}
+  .split2 .soon-pill{margin-top:0;align-self:center}
   .tdar{margin-top:14px;flex:1;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:18px;display:flex;flex-direction:column;gap:12px}
   .tdar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
   .tdar-grid span{aspect-ratio:1;border-radius:4px;background:var(--paper-2);border:1px solid var(--line)}
@@ -2678,14 +2679,14 @@
 
         <!-- PRODUCTIVITY VIDEOS + THE TALONDAR -->
         <div class="embed-card reveal" style="grid-column:1 / -1">
-          <img class="card-cover" src="images/workshop-cover.jpg" alt="Personal Finance Workshop" width="768" height="404" loading="lazy">
           <h3>🗓️ Talon's Tips to Success</h3>
           <p class="sub">Google Calendar, life strategy, and the things I've learned that actually stuck.</p>
           <div class="split2">
             <div class="split2-half">
               <span class="s2-eyebrow">Watch</span>
-              <p class="sub">Short walkthroughs of the systems I actually run &mdash; calendar, planning, and staying on top of it.</p>
+              <p class="sub">My Personal Finance Workshop, recorded &mdash; plus short walkthroughs of the calendar and planning systems I actually run.</p>
               <div class="soon-block">
+                <img class="soon-cover" src="images/workshop-cover.jpg" alt="Personal Finance Workshop" width="768" height="490" loading="lazy">
                 <span class="soon-pill">Coming soon</span>
                 <p class="sub" style="margin-top:14px">I'm filming these now. Once they're up, they'll embed right here.</p>
               </div>
