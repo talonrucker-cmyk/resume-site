@@ -1,7 +1,8 @@
 # Talon Rucker — personal finance website
 
-Static site published by GitHub Pages from `talonrucker-cmyk/resume-site`.
-Live at https://talonrucker-cmyk.github.io/resume-site/
+Static site in `talonrucker-cmyk/resume-site`, auto-deployed by Netlify on push to `main`.
+Live at https://talonruckerresume.netlify.app
+(Netlify Pretty URLs serve `lessons.html` as `/lessons` — keep the `.html` in source links.)
 
 ## Design rule (overrides normal instincts)
 
@@ -16,9 +17,6 @@ to `index.html` gets silently destroyed on the next push.**
 
 **Always apply edits to BOTH files**, or edit `index-BACKUP.html` and let `/push`
 copy it across. Verify with `cmp index.html index-BACKUP.html` (silence = identical).
-
-`/push` also mirrors to `C:\Users\Jason\Downloads\index.html`. Website is canonical;
-never copy Downloads → Website.
 
 Never stage `.claude/` (local tooling). Never stage `index1.html` (old, unused).
 
@@ -102,6 +100,25 @@ deliberately not extracted (copying is simpler and lower-risk). Revisit extracti
 4th lesson lands. The two calculators shared with the site (passive income `drawdown`,
 lifestyle-creep chart) are hand-ported into the decks, not imported — keep them in step
 with their `index.html` originals by hand if the math changes.
+
+## Hand-ported calculators (keep in step)
+
+| Calculator | Lives in | Notes |
+|---|---|---|
+| 12-month fixed-expense planner (`.yp-*`, `initYearPlan` / `[data-yplan]`) | `index.html` Tools §2 **and** `lessons.html` Commandment 10 | Two copies, CSS + JS. index uses `const`/arrow style, lessons uses `var`/`function`. Same math. |
+| Quick annual fixed-expense calc (`.ib-*`, `[data-ibudget]`) | `index.html` Tools §2 only | Moved out of `lessons.html` — Commandment 10 now shows the year planner instead. |
+
+The planner's income line is drawn **inside each bar** as a CSS percentage, not
+measured with `getBoundingClientRect`. Both hosts start hidden (`display:none` page
+toggle; the Commandments modal), so a measured offset reads zero on first paint.
+
+## Tax figures
+
+Contribution limits and federal brackets are **2026** (IRS Notice 2025-67 and
+Rev. Proc. 2025-32). The `FED` table in `index.html` feeds the compound teacher,
+Roth-vs-pre-tax, wealth calculator and bracket calculator. When bumping to 2027,
+also update the two "2026 brackets" notes in the HTML and the 401(k)/IRA/HSA
+figures in `lesson-retirement.html` and Commandment 6.
 
 ## Contact
 

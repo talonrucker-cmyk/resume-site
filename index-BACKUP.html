@@ -503,6 +503,25 @@
   .embed-card p.sub{font-size:.9rem;color:var(--ink-soft);margin-top:4px}
   .spotify-embed{width:100%;height:420px;border:0;border-radius:12px;margin-top:16px}
   .soon-block{margin-top:18px;padding:26px;border:1px dashed var(--line-strong);border-radius:12px;background:var(--paper);text-align:center}
+  /* Fun page: videos on one side, the Talondar on the other */
+  .split2{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:18px}
+  .split2-half{padding:0 26px;display:flex;flex-direction:column}
+  .split2-half:first-child{padding-left:0;border-right:1px solid var(--line)}
+  .split2-half:last-child{padding-right:0}
+  .s2-eyebrow{font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pine);margin-bottom:8px}
+  .split2 .soon-block{margin-top:14px;padding:22px 18px;flex:1;display:flex;flex-direction:column;justify-content:center}
+  .tdar{margin-top:14px;flex:1;border:1px solid var(--line);border-radius:12px;background:var(--paper);padding:18px;display:flex;flex-direction:column;gap:12px}
+  .tdar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+  .tdar-grid span{aspect-ratio:1;border-radius:4px;background:var(--paper-2);border:1px solid var(--line)}
+  .tdar-grid span.open{background:var(--pine);border-color:var(--pine)}
+  .tdar-grid span.dim{opacity:.45}
+  .tdar-cta{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+  .tdar-cta .btn{font-size:.84rem;padding:8px 15px}
+  @media(max-width:760px){
+    .split2{grid-template-columns:1fr;gap:24px}
+    .split2-half{padding:0}
+    .split2-half:first-child{border-right:0;border-bottom:1px solid var(--line);padding-bottom:24px}
+  }
   .family-gallery{margin-top:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
   .fam-photo{width:100%;height:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;display:block;box-shadow:0 6px 18px -10px rgba(10,40,30,.4);background:var(--paper-2);cursor:pointer;transition:transform .25s ease,box-shadow .25s ease}
   .fam-photo:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 14px 30px -10px rgba(10,40,30,.55)}
@@ -762,6 +781,125 @@
   .brk tr.top td{font-weight:800}
   .brk .bar{display:block;height:5px;border-radius:3px;background:var(--pine);margin-top:5px}
   .brk tr.unused .bar{background:#dfe3da}
+
+  /* bracket "glasses" — each bracket is a column that must fill before the
+     next one takes a drop. Columns are EQUAL height on purpose: the point is
+     how full each one is, not how wide the band happens to be. */
+  .wcols{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:18px;align-items:end}
+  .wc-col{text-align:center;min-width:0}
+  .wc-glass{position:relative;height:112px;border:1.5px solid var(--line-strong);border-top:none;
+            border-radius:0 0 7px 7px;background:linear-gradient(#fff,#f7f9f6);overflow:hidden}
+  .wc-col.open .wc-glass{border-style:dashed;border-radius:0 0 7px 7px}
+  .wc-fill{position:absolute;left:0;right:0;bottom:0;height:0;
+           background:linear-gradient(180deg,#17705a,var(--pine-deep));
+           transition:height .55s cubic-bezier(.3,.9,.35,1)}
+  /* meniscus — the lighter lip of water at the surface */
+  .wc-fill::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:#3f9c80;opacity:.95}
+  .wc-col.full .wc-fill{background:linear-gradient(180deg,#0E5240,var(--pine-deep))}
+  .wc-col.filling .wc-fill{background:linear-gradient(180deg,var(--amber),#b8761f)}
+  .wc-col.filling .wc-fill::before{background:var(--amber-soft)}
+  .wc-rate{font-family:var(--display);font-size:.82rem;color:var(--pine);margin-top:6px;font-weight:700}
+  .wc-in{display:block;font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--ink);
+         font-variant-numeric:tabular-nums}
+  .wc-col.empty .wc-in{color:#b3bcb4;font-weight:400}
+  .wc-col.empty .wc-rate{color:#b3bcb4}
+  .wc-cap{display:block;font-family:var(--mono);font-size:.54rem;color:#8b958d;letter-spacing:.02em;
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* quick annual fixed-expense calculator — ported from the Commandments
+     checklist in lessons.html; keep the two copies in step by hand. */
+  .impl-budget{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .ib-f{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+  .ib-f span{font-size:.86rem;font-weight:600;color:var(--ink)}
+  .ib-in{display:flex;align-items:center;background:#fff;border:1px solid var(--line-strong);border-radius:8px;padding:2px 8px}
+  .ib-in .pre{color:var(--ink-soft);font-size:.9rem}
+  .ib-in input{border:0;outline:0;text-align:right;width:96px;padding:7px 4px;font-family:var(--body);font-size:.95rem;background:transparent;color:var(--ink)}
+  .ib-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .ib-row .ib-label{flex:1 1 120px;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:8px 9px;font-family:var(--body);font-size:.88rem;background:#fff;color:var(--ink)}
+  .ib-row .ib-in input{width:78px}
+  .ib-per{flex:none;border:1px solid var(--line-strong);background:var(--paper-2);color:var(--pine);border-radius:8px;padding:7px 9px;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;line-height:1}
+  .ib-per:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .ib-conv{flex:none;font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);white-space:nowrap}
+  .ib-del{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);font-size:1.1rem;line-height:1;cursor:pointer}
+  .ib-del:hover{background:var(--brick);border-color:var(--brick);color:#fff}
+  .ib-add{font-family:var(--mono);font-size:.72rem;padding:8px 14px;border-radius:999px;border:1px dashed var(--line-strong);background:var(--paper-2);color:var(--pine);cursor:pointer;margin-top:2px}
+  .ib-add:hover{background:var(--pine);color:#fff;border-style:solid;border-color:var(--pine)}
+  .ib-out{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .ib-out span{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
+  .ib-out .ib-left{font-family:var(--display);font-weight:700;font-size:1.3rem}
+  .ib-out.pos .ib-left{color:var(--pine)} .ib-out.neg .ib-left{color:var(--brick)}
+
+  /* ---- 12-month fixed-expense planner ----
+     Same water idea as the bracket glasses: each month is a column you have to
+     fill before it comes due. Recurring bills stack from the bottom; one-time
+     hits sit on top in amber so a February computer is obvious at a glance. */
+  .yp-top{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+  .yp-f{display:flex;flex-direction:column;gap:4px}
+  .yp-f label{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .yp-in{display:inline-flex;align-items:center;gap:3px;background:var(--white);border:1px solid var(--line);border-radius:8px;padding:6px 9px}
+  .yp-in .pre{color:#8b958d;font-size:.8rem}
+  .yp-in input{border:0;background:none;font:inherit;font-size:.86rem;width:92px;outline:none;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .yp-lists{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  .yp-list{background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:12px}
+  .yp-lhead{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--pine);font-weight:700;margin-bottom:9px}
+  .yp-lhead span{display:block;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:.7rem;color:#8b958d;font-weight:400;margin-top:2px}
+  .yp-row{display:grid;grid-template-columns:1fr 92px auto;gap:6px;margin-bottom:6px;align-items:center}
+  .yp-row.one{grid-template-columns:1fr 92px 70px auto}
+  .yp-row input[type=text]{background:var(--white);border:1px solid var(--line);border-radius:7px;padding:6px 8px;font:inherit;font-size:.8rem;min-width:0;outline:none;color:var(--ink)}
+  .yp-row input.amt{font-variant-numeric:tabular-nums;text-align:right}
+  .yp-row select{background:var(--white);border:1px solid var(--line);border-radius:7px;padding:6px 3px;font:inherit;font-size:.74rem;outline:none;color:var(--ink)}
+  .yp-del{background:none;border:0;color:#b3bcb4;font-size:1.05rem;cursor:pointer;padding:0 3px;line-height:1}
+  .yp-del:hover{color:var(--brick)}
+  .yp-add{background:none;border:1px dashed var(--line-strong);border-radius:7px;color:var(--pine);font:inherit;font-size:.76rem;font-weight:700;padding:6px 10px;cursor:pointer;width:100%;margin-top:3px}
+  .yp-add:hover{background:var(--white)}
+
+  .yp-chart{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:5px;align-items:end;
+            background:var(--white);border:1px solid var(--line);border-radius:11px;padding:18px 12px 10px}
+  .yp-col{text-align:center;min-width:0}
+  .yp-bar{position:relative;display:flex;flex-direction:column-reverse;height:150px;border-radius:0 0 5px 5px;
+          background:linear-gradient(#f5f7f3,#eef1ec);overflow:hidden;border:1px solid var(--line)}
+  .yp-seg{width:100%;transition:height .45s cubic-bezier(.3,.9,.35,1)}
+  .yp-seg.rec{background:linear-gradient(180deg,#17705a,var(--pine-deep))}
+  .yp-seg.one{background:linear-gradient(180deg,var(--amber-soft),var(--amber))}
+  .yp-col.over .yp-bar{border-color:var(--brick);box-shadow:0 0 0 1.5px rgba(162,58,45,.22)}
+  .yp-mo{display:block;font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:5px;letter-spacing:.04em}
+  .yp-amt{display:block;font-family:var(--mono);font-size:.53rem;color:#8b958d;font-variant-numeric:tabular-nums;
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .yp-col.over .yp-mo{color:var(--brick);font-weight:700}
+  /* income line, drawn inside each glass as a % of its own height — no
+     measuring, so it survives the page being display:none at first paint */
+  .yp-mark{position:absolute;left:0;right:0;border-top:2px dashed var(--brick);pointer-events:none;z-index:2}
+  .yp-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.72rem;color:var(--ink-soft)}
+  .yp-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .yp-legend i.rec{background:var(--pine)}
+  .yp-legend i.one{background:var(--amber)}
+
+  .yp-out{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+  .yp-stat{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .yp-stat .k{display:block;font-family:var(--mono);font-size:.57rem;letter-spacing:.08em;text-transform:uppercase;color:#8b958d}
+  .yp-stat .v{display:block;font-family:var(--display);font-size:1.1rem;color:var(--pine);margin:3px 0 1px;font-variant-numeric:tabular-nums}
+  .yp-stat .d{display:block;font-size:.69rem;color:var(--ink-soft);line-height:1.35}
+  .yp-stat.warn .v{color:var(--brick)}
+  .yp-verdict{margin-top:12px;font-size:.82rem;line-height:1.5;color:var(--ink-soft);
+              background:var(--paper-2);border-left:3px solid var(--pine);border-radius:0 8px 8px 0;padding:10px 13px}
+  .yp-verdict b{color:var(--ink)}
+  .yp-verdict.tight{border-left-color:var(--brick);background:#fdf0ed;color:#8f2b1f}
+  @media(max-width:760px){
+    .yp-lists{grid-template-columns:1fr}
+    .yp-out{grid-template-columns:repeat(2,1fr)}
+    .yp-bar{height:112px}
+    .yp-amt{display:none}
+  }
+
+  .wc-lead{font-size:.82rem;color:var(--ink-soft);line-height:1.45;margin:16px 0 0}
+  .wc-lead b{color:var(--ink)}
+  .wc-spill{display:block;margin-top:7px;font-family:var(--mono);font-size:.62rem;
+            letter-spacing:.05em;text-transform:uppercase;color:var(--amber)}
+  @media(max-width:620px){
+    .wc-glass{height:88px}
+    .wc-cap{display:none}
+    .wc-rate{font-size:.72rem}
+  }
 
   /* two-panel compare */
   .cmp2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -1148,7 +1286,7 @@
                 <option value="married">Married, filing jointly</option>
               </select>
             </div>
-            <p class="wc-hint" id="wcTaxNote">2025 brackets and standard deduction, indexed forward at 3% inflation. Federal only &mdash; no state or payroll tax.</p>
+            <p class="wc-hint" id="wcTaxNote">2026 brackets and standard deduction, indexed forward at 3% inflation. Federal only &mdash; no state or payroll tax.</p>
           </div>
         </div>
 
@@ -1694,6 +1832,28 @@
 
       <details class="collapse reveal">
         <summary>
+          <div class="collapse-txt"><span class="eyebrow">Planner</span><h3>Your year of fixed expenses.</h3><p>Twelve columns. Fill each one before it comes due.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> A year of bills is never twelve equal months. Insurance renews, tuition lands, the car needs registering, and one month you buy a laptop. Spend the same amount every month and those spikes become debt. Map the whole year first and you know the one number that matters: <b>what to set aside monthly</b> so every month is already paid for before it arrives.</div>
+          <div class="yp" data-yplan></div>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt"><span class="eyebrow">Calculator</span><h3>What&rsquo;s left after the must-pays?</h3><p>The quick annual version&mdash;bills against income.</p></div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="x-tool">
+          <div class="x-why"><b>Why it matters:</b> Before the month-by-month plan, get the blunt number: everything you <i>must</i> pay in a year against everything you take home. The gap is your room to save and enjoy&mdash;and the bigger it is, the faster everything else works. Aim to keep fixed costs under about <b>30%</b> of income.</div>
+          <div class="impl-budget" data-ibudget></div>
+        </div></div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
           <div class="collapse-txt"><span class="eyebrow">Scorecard</span><h3>Savings &amp; wealth-building scorecard.</h3><p>Are your saving habits set up to win?</p></div>
           <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
         </summary>
@@ -2169,8 +2329,11 @@
               <div class="sub" id="tbSub"></div>
             </div>
           </div>
+          <p class="wc-lead">Think of each bracket as a <b>glass</b>. Your income pours in from the left. A glass has to fill to the brim before a single dollar spills into the next one &mdash; and only the water <i>in</i> a glass is taxed at that glass&rsquo;s rate. The last one has no rim.</p>
+          <div class="wcols" id="tbCols" aria-hidden="true"></div>
+          <p class="wc-lead" id="tbSpill"></p>
           <table class="brk"><thead><tr><th>Bracket</th><th>Income taxed here</th><th>Tax</th></tr></thead><tbody id="tbRows"></tbody></table>
-          <p class="x-note">2025 federal brackets and standard deduction. <b>Federal income tax only</b>&mdash;no state tax, no Social Security or Medicare payroll tax, no credits. Your <b>marginal</b> rate is what the next dollar costs; your <b>effective</b> rate is what the whole thing cost.</p>
+          <p class="x-note">2026 federal brackets and standard deduction. <b>Federal income tax only</b>&mdash;no state tax, no Social Security or Medicare payroll tax, no credits. Your <b>marginal</b> rate is what the next dollar costs; your <b>effective</b> rate is what the whole thing cost.</p>
         </div></div>
       </details>
 
@@ -2511,13 +2674,36 @@
           <p class="book-suggest">Read something I&rsquo;d love? <a href="sms:+14805892068?&body=Book%20for%20Talon%3A%20">Text it</a> or <a href="mailto:talonrucker@gmail.com?subject=A%20book%20for%20your%20list">email it</a> &mdash; I add the good ones.</p>
         </div>
 
-        <!-- PRODUCTIVITY VIDEOS -->
+        <!-- PRODUCTIVITY VIDEOS + THE TALONDAR -->
         <div class="embed-card reveal" style="grid-column:1 / -1">
           <h3>🗓️ Talon's Tips to Success</h3>
           <p class="sub">Google Calendar, life strategy, and the things I've learned that actually stuck.</p>
-          <div class="soon-block">
-            <span class="soon-pill">Coming soon</span>
-            <p class="sub" style="margin-top:14px">I'm filming these now. Once they're up, they'll embed right here.</p>
+          <div class="split2">
+            <div class="split2-half">
+              <span class="s2-eyebrow">Watch</span>
+              <p class="sub">Short walkthroughs of the systems I actually run &mdash; calendar, planning, and staying on top of it.</p>
+              <div class="soon-block">
+                <span class="soon-pill">Coming soon</span>
+                <p class="sub" style="margin-top:14px">I'm filming these now. Once they're up, they'll embed right here.</p>
+              </div>
+            </div>
+            <div class="split2-half">
+              <span class="s2-eyebrow">The Talondar</span>
+              <p class="sub">Talon + calendar. Grab a slot and we'll talk through whatever you're working on &mdash; no pitch, no cost.</p>
+              <div class="tdar">
+                <!-- Decorative week strip; swap this whole block for the booking
+                     embed once the scheduling link exists. -->
+                <div class="tdar-grid" aria-hidden="true">
+                  <span class="dim"></span><span class="dim"></span><span class="open"></span><span></span><span class="open"></span><span></span><span class="dim"></span>
+                  <span class="dim"></span><span class="open"></span><span></span><span class="open"></span><span></span><span class="open"></span><span class="dim"></span>
+                </div>
+                <p class="sub" style="margin:0">Online booking is being set up. Until then, send me a couple of times that work and I'll lock one in.</p>
+                <div class="tdar-cta">
+                  <a class="btn btn-primary" href="sms:+14805892068?&amp;body=Hi%20Talon%20%E2%80%94%20I%27d%20like%20to%20book%20a%20time.%20I%27m%20free%3A%20">Text me a time</a>
+                  <a class="btn btn-ghost" href="mailto:talonrucker@gmail.com?subject=Booking%20a%20time%20with%20Talon">Email me</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2657,15 +2843,17 @@
   })();
 
   /* ---- Federal tax, shared ----
-     2025 brackets + standard deduction. Bump these when 2026 figures are
-     confirmed. Federal only — no state or payroll tax. Declared above the
+     2026 brackets + standard deduction (IRS Rev. Proc. 2025-32). Bump these
+     when 2027 figures are confirmed, and update the "2026 brackets" notes in
+     the wealth calculator and the bracket calculator at the same time.
+     Federal only — no state or payroll tax. Declared above the
      calculators because several of them call it during their first render:
      the compound teacher, the Roth-vs-pre-tax comparison, the wealth
      calculator (indexed forward by its inflation slider, idx > 1) and the
      bracket calculator in Tools (idx = 1, current year). ---- */
   const FED={
-    single:{sd:15000,b:[[11925,.10],[48475,.12],[103350,.22],[197300,.24],[250525,.32],[626350,.35],[Infinity,.37]]},
-    married:{sd:30000,b:[[23850,.10],[96950,.12],[206700,.22],[394600,.24],[501050,.32],[751600,.35],[Infinity,.37]]}
+    single:{sd:16100,b:[[12400,.10],[50400,.12],[105700,.22],[201775,.24],[256225,.32],[640600,.35],[Infinity,.37]]},
+    married:{sd:32200,b:[[24800,.10],[100800,.12],[211400,.22],[403550,.24],[512450,.32],[768700,.35],[Infinity,.37]]}
   };
   function fedTax(income,status,idx){
     const t=FED[status]; if(!t) return 0;
@@ -3850,6 +4038,7 @@
     (function(){
       const inc=$('tbInc'), status=$('tbStatus'), ded=$('tbDed');
       const eff=$('tbEff'), sub=$('tbSub'), rows=$('tbRows');
+      const cols=$('tbCols'), spill=$('tbSpill');
       if(!eff) return;
       function run(){
         const I=+inc.value||0, st=status.value, t=FED[st];
@@ -3875,6 +4064,34 @@
           + '<td>'+(b.amt>0?money(b.amt):'&mdash;')+'</td>'
           + '<td>'+(b.amt>0?money(b.tax):'&mdash;')+'</td></tr>'
         ).join('');
+        // Water columns. Equal-height glasses: the fill is "how full is this
+        // bracket", not "how big is it". The top band has no rim, so it gets
+        // the widest finite band as a stand-in scale and never reads as full.
+        if(cols){
+          const ref=Math.max(...bands.filter(b=>b.cap!==Infinity).map(b=>b.cap-b.lo));
+          cols.innerHTML=bands.map(b=>{
+            const open=b.cap===Infinity, room=open?ref:b.cap-b.lo;
+            const pct=b.amt<=0?0:Math.max(6,Math.min(open?85:100,b.amt/room*100));
+            const cls=b.amt<=0?'empty':((!open&&b.amt>=room-.5)?'full':'filling');
+            return '<div class="wc-col '+cls+(open?' open':'')+'">'
+              +'<div class="wc-glass"><div class="wc-fill" style="height:'+pct.toFixed(1)+'%"></div></div>'
+              +'<div class="wc-rate">'+Math.round(b.rate*100)+'%</div>'
+              +'<span class="wc-in">'+(b.amt>0?money(b.amt):'&mdash;')+'</span>'
+              +'<span class="wc-cap">'+(open?'no rim':'holds '+money(room))+'</span>'
+              +'</div>';
+          }).join('');
+        }
+        if(spill){
+          const filled=bands.filter(b=>b.cap!==Infinity&&b.amt>=b.cap-b.lo-.5).length;
+          const cur=topIdx>=0?bands[topIdx]:null;
+          spill.innerHTML=ti<=0
+            ? 'Your deduction covers everything &mdash; no glass gets a drop.'
+            : '<b>'+filled+' glass'+(filled===1?'':'es')+' filled and spilled over.</b> You&rsquo;re part-way up the '
+              +Math.round(marg*100)+'% glass'+(cur&&cur.cap!==Infinity
+                ? ' &mdash; '+money(cur.cap-cur.lo-cur.amt)+' of room left before the next rate touches a dollar.'
+                : '.')
+              +'<span class="wc-spill">A raise only fills the glass you&rsquo;re standing in</span>';
+        }
         eff.textContent=I>0?(total/I*100).toFixed(1)+'%':'0%';
         sub.innerHTML=I>0
           ? money(total)+' of federal tax &mdash; but your <b>top bracket is '+Math.round(marg*100)+'%</b>'+(sd?', after a '+money(sd)+' standard deduction':'')+'.'
@@ -3882,6 +4099,198 @@
       }
       [inc,status,ded].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
       run();
+    })();
+
+    /* ---- 12-month fixed-expense planner ----
+       Twelve columns you fill before they come due. Recurring bills stack from
+       the bottom of every month; one-time hits land on one month only, in amber,
+       so a February laptop is obvious. The two numbers worth leaving with are
+       the monthly set-aside (year / 12) and the cushion you need banked up front
+       — because the big months arrive before you've finished saving for them. */
+    (function(){
+      const MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const m=v=>(v<0?'-$':'$')+Math.abs(Math.round(v)).toLocaleString('en-US');
+      const num=v=>+String(v).replace(/[^0-9.]/g,'')||0;
+      const esc=v=>String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+      const com=v=>Math.round(v).toLocaleString('en-US');
+
+      document.querySelectorAll('[data-yplan]').forEach(function(wrap){
+        let income=4500;
+        let rec=[{label:'Rent',amt:1500},{label:'Car + insurance',amt:480},
+                 {label:'Utilities & phone',amt:210},{label:'Subscriptions',amt:60}];
+        let one=[{label:'Laptop',amt:1000,mo:1},{label:'Car registration',amt:520,mo:3},
+                 {label:'Christmas',amt:900,mo:11}];
+
+        function months(){
+          const base=rec.reduce((t,x)=>t+(+x.amt||0),0);
+          return MO.map(function(_,i){
+            const extra=one.reduce((t,x)=>t+(+x.mo===i?(+x.amt||0):0),0);
+            return {rec:base,one:extra,total:base+extra};
+          });
+        }
+        function stat(k,v,d,warn){
+          return '<div class="yp-stat'+(warn?' warn':'')+'"><span class="k">'+k+'</span>'+
+                 '<span class="v">'+v+'</span><span class="d">'+d+'</span></div>';
+        }
+        function focusLast(sel){
+          const n=wrap.querySelectorAll(sel); if(n.length) n[n.length-1].focus();
+        }
+
+        function rows(){
+          let h='<div class="yp-top"><div class="yp-f"><label>Take-home income / month</label>'+
+            '<span class="yp-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ypinc value="'+com(income)+'"></span></div></div>';
+          h+='<div class="yp-lists">';
+          h+='<div class="yp-list"><div class="yp-lhead">Every month<span>Rent, insurance, utilities, subscriptions</span></div>';
+          rec.forEach(function(x,i){
+            h+='<div class="yp-row" data-r="'+i+'"><input type="text" data-yprl placeholder="e.g. Rent" value="'+esc(x.label)+'">'+
+               '<input type="text" class="amt" inputmode="numeric" data-ypra value="'+com(x.amt)+'">'+
+               '<button type="button" class="yp-del" data-yprd aria-label="Remove">&times;</button></div>';
+          });
+          h+='<button type="button" class="yp-add" data-ypaddr>+ Add monthly bill</button></div>';
+          h+='<div class="yp-list"><div class="yp-lhead">Once this year<span>Tuition, registration, a $1,000 computer in February</span></div>';
+          one.forEach(function(x,i){
+            h+='<div class="yp-row one" data-o="'+i+'"><input type="text" data-ypol placeholder="e.g. Laptop" value="'+esc(x.label)+'">'+
+               '<input type="text" class="amt" inputmode="numeric" data-ypoa value="'+com(x.amt)+'">'+
+               '<select data-ypom aria-label="Month">'+MO.map((n,k)=>'<option value="'+k+'"'+(+x.mo===k?' selected':'')+'>'+n+'</option>').join('')+'</select>'+
+               '<button type="button" class="yp-del" data-ypod aria-label="Remove">&times;</button></div>';
+          });
+          h+='<button type="button" class="yp-add" data-ypaddo>+ Add one-time expense</button></div></div>';
+          h+='<div class="yp-chart" data-ypchart></div>'+
+             '<div class="yp-legend"><span><i class="rec"></i>Every month</span><span><i class="one"></i>One-time</span>'+
+             '<span style="color:var(--brick)">&ndash;&ndash; Your monthly income</span></div>'+
+             '<div class="yp-out" data-ypout></div><div class="yp-verdict" data-ypverdict></div>';
+          wrap.innerHTML=h;
+        }
+
+        function paint(){
+          const M=months(), year=M.reduce((t,x)=>t+x.total,0), avg=year/12;
+          let peakI=0; M.forEach((x,i)=>{if(x.total>M[peakI].total)peakI=i;});
+          const peak=M[peakI], scale=Math.max(peak.total,income,1);
+          // Set aside the average each month, pay the real bill, watch the
+          // balance. The deepest trough is what has to be banked on day one.
+          let bal=0, worst=0;
+          M.forEach(function(x){bal+=avg-x.total; if(bal<worst)worst=bal;});
+          const cushion=Math.max(0,-worst);
+          const over=M.reduce((t,x)=>t+(x.total>income?1:0),0);
+
+          const chart=wrap.querySelector('[data-ypchart]');
+          // Clamped just inside the glass so it still reads when income is the
+          // tallest thing on the chart (every month comfortably under the line).
+          const mark=income>0
+            ? '<div class="yp-mark" style="bottom:'+Math.min(99,income/scale*100).toFixed(1)+'%"></div>'
+            : '';
+          chart.innerHTML=M.map(function(x,i){
+            return '<div class="yp-col'+(x.total>income?' over':'')+'" title="'+MO[i]+' — '+m(x.total)+'">'+
+              '<div class="yp-bar">'+mark+
+              '<div class="yp-seg rec" style="height:'+(x.rec/scale*100).toFixed(1)+'%"></div>'+
+              '<div class="yp-seg one" style="height:'+(x.one/scale*100).toFixed(1)+'%"></div>'+
+              '</div><span class="yp-mo">'+MO[i].charAt(0)+'</span><span class="yp-amt">'+m(x.total)+'</span></div>';
+          }).join('');
+
+          wrap.querySelector('[data-ypout]').innerHTML=
+             stat('Year of fixed costs',m(year),'Everything you must pay.')
+            +stat('Set aside / month',m(avg),'Pay this to yourself first.')
+            +stat('Cushion to start',m(cushion),cushion>0?'Banked before January.':'Not needed this year.',cushion>0)
+            +stat('Biggest month',MO[peakI]+' &middot; '+m(peak.total),
+                  over?over+' month'+(over===1?'':'s')+' over income.':'Every month fits your income.',over>0);
+
+          const v=wrap.querySelector('[data-ypverdict]'), tight=avg>income;
+          v.className='yp-verdict'+(tight?' tight':'');
+          v.innerHTML=tight
+            ? '<b>Your fixed costs outrun your income.</b> '+m(avg)+' a month has to come out of '+m(income)+
+              '. No savings plan fixes this &mdash; cut the biggest column first.'
+            : '<b>Set aside '+m(avg)+' a month</b> and every bill this year is already paid for, including '+
+              MO[peakI]+'&rsquo;s '+m(peak.total)+'. '+
+              (cushion>0
+                ? 'The big months land before you&rsquo;ve saved for them, so you also need <b>'+m(cushion)+
+                  ' banked to start</b>. Build that once and the monthly set-aside carries you from there.'
+                : 'The spikes land late enough that the monthly set-aside covers them on its own.')+
+              ' That leaves <b>'+m(income-avg)+' a month</b> to live on and invest.';
+        }
+
+        rows(); paint();
+
+        wrap.addEventListener('input',function(e){
+          const t=e.target, rr=t.closest('[data-r]'), or=t.closest('[data-o]');
+          if(t.matches('[data-ypinc]')){income=num(t.value);paint();return;}
+          if(rr){const i=+rr.getAttribute('data-r'); if(!rec[i])return;
+            if(t.matches('[data-yprl]'))rec[i].label=t.value;
+            else if(t.matches('[data-ypra]'))rec[i].amt=num(t.value); else return;
+            paint();return;}
+          if(or){const i=+or.getAttribute('data-o'); if(!one[i])return;
+            if(t.matches('[data-ypol]'))one[i].label=t.value;
+            else if(t.matches('[data-ypoa]'))one[i].amt=num(t.value); else return;
+            paint();}
+        });
+        wrap.addEventListener('change',function(e){
+          const or=e.target.closest('[data-o]');
+          if(or&&e.target.matches('[data-ypom]')){const i=+or.getAttribute('data-o');if(one[i]){one[i].mo=+e.target.value;paint();}}
+        });
+        wrap.addEventListener('click',function(e){
+          if(e.target.closest('[data-ypaddr]')){rec.push({label:'',amt:0});rows();paint();focusLast('[data-yprl]');return;}
+          if(e.target.closest('[data-ypaddo]')){one.push({label:'',amt:0,mo:0});rows();paint();focusLast('[data-ypol]');return;}
+          const rd=e.target.closest('[data-yprd]');
+          if(rd){rec.splice(+rd.closest('[data-r]').getAttribute('data-r'),1);rows();paint();return;}
+          const od=e.target.closest('[data-ypod]');
+          if(od){one.splice(+od.closest('[data-o]').getAttribute('data-o'),1);rows();paint();}
+        });
+        wrap.addEventListener('blur',function(e){
+          const t=e.target;
+          if(t.matches('[data-ypinc]')){t.value=com(income);return;}
+          if(t.matches('[data-ypra]')){const i=+t.closest('[data-r]').getAttribute('data-r');if(rec[i])t.value=com(rec[i].amt);return;}
+          if(t.matches('[data-ypoa]')){const i=+t.closest('[data-o]').getAttribute('data-o');if(one[i])t.value=com(one[i].amt);}
+        },true);
+
+      });
+    })();
+
+    /* Quick annual fixed-expense calculator — the blunt version that sits next
+       to the year planner. Ported from lessons.html; keep the two in step. */
+    (function(){
+      const money2=v=>{v=Math.round(v);return (v<0?'-$':'$')+Math.abs(v).toLocaleString('en-US');};
+      document.querySelectorAll('[data-ibudget]').forEach(function(wrap){
+        let income=60000;
+        // amt is stored ANNUAL (canonical); per is just how this row displays
+        let list=[{label:'Rent',amt:18000,per:'mo'},{label:'Insurance',amt:3000,per:'mo'},
+                  {label:'Utilities & phone',amt:3600,per:'mo'},{label:'Subscriptions',amt:1200,per:'yr'}];
+        function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+        function total(){let t=0;list.forEach(x=>{t+=+x.amt||0;});return t;}
+        function idx(el){const r=el.closest('[data-ibrow]');return r?+r.getAttribute('data-ibrow'):-1;}
+        function shown(x){return x.per==='mo'?(+x.amt||0)/12:(+x.amt||0);}
+        function fmtIn(x){return Math.round(shown(x)).toLocaleString('en-US');}
+        function conv(x){return x.per==='mo'?('= '+money2(+x.amt||0)+' / yr'):('= '+money2((+x.amt||0)/12)+' / mo');}
+        function calc(){
+          const left=income-total(), o=wrap.querySelector('[data-ibout]');
+          o.className='ib-out '+(left<0?'neg':'pos');
+          o.innerHTML='<span>Fixed '+money2(total())+' / yr &middot; Income '+money2(income)+'</span><span class="ib-left">'+money2(left)+' left</span>';
+        }
+        function draw(){
+          let h='<div class="ib-f"><span>Take-home income / year</span><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibinc value="'+income.toLocaleString('en-US')+'"></span></div>';
+          list.forEach(function(x,i){
+            h+='<div class="ib-row" data-ibrow="'+i+'"><input type="text" class="ib-label" data-iblabel placeholder="e.g. Rent" value="'+esc(x.label)+'"><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibamt value="'+fmtIn(x)+'"></span><button type="button" class="ib-per" data-ibper aria-label="Toggle monthly or annual">/ '+(x.per==='mo'?'mo':'yr')+'</button><span class="ib-conv" data-ibconv>'+conv(x)+'</span><button type="button" class="ib-del" data-ibdel aria-label="Remove">&times;</button></div>';
+          });
+          h+='<button type="button" class="ib-add" data-ibadd>+ Add expense</button><div class="ib-out" data-ibout></div>';
+          wrap.innerHTML=h; calc();
+        }
+        draw();
+        wrap.addEventListener('input',function(e){
+          const inc=e.target.closest('[data-ibinc]'); if(inc){income=+String(inc.value).replace(/[^0-9.]/g,'')||0;calc();return;}
+          const a=e.target.closest('[data-ibamt]');
+          if(a){const i=idx(a);if(i>=0&&list[i]){const v=+String(a.value).replace(/[^0-9.]/g,'')||0;list[i].amt=list[i].per==='mo'?v*12:v;const row=a.closest('[data-ibrow]'),c=row&&row.querySelector('[data-ibconv]');if(c)c.textContent=conv(list[i]);calc();}return;}
+          const l=e.target.closest('[data-iblabel]'); if(l){const j=idx(l);if(j>=0&&list[j])list[j].label=l.value;}
+        });
+        wrap.addEventListener('blur',function(e){
+          const inc=e.target.closest('[data-ibinc]'); if(inc){inc.value=(+income||0).toLocaleString('en-US');return;}
+          const a=e.target.closest('[data-ibamt]'); if(a){const i=idx(a);if(i>=0&&list[i])a.value=fmtIn(list[i]);}
+        },true);
+        wrap.addEventListener('click',function(e){
+          const per=e.target.closest('[data-ibper]');
+          if(per){const i=idx(per);if(i>=0&&list[i]){list[i].per=list[i].per==='mo'?'yr':'mo';const row=per.closest('[data-ibrow]');row.querySelector('[data-ibamt]').value=fmtIn(list[i]);per.textContent='/ '+list[i].per;row.querySelector('[data-ibconv]').textContent=conv(list[i]);}return;}
+          const add=e.target.closest('[data-ibadd]');
+          if(add){list.push({label:'',amt:0,per:'mo'});draw();const ls=wrap.querySelectorAll('[data-iblabel]');if(ls.length)ls[ls.length-1].focus();return;}
+          const del=e.target.closest('[data-ibdel]'); if(del){const i=idx(del);if(i>=0){list.splice(i,1);draw();}}
+        });
+      });
     })();
   })();
 

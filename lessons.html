@@ -116,27 +116,69 @@
   .impl-detail a{color:var(--pine);font-weight:600}
   .impl-foot{padding:12px 24px 22px;font-size:.76rem;color:var(--ink-soft);text-align:center}
 
-  /* embedded fixed-expense budget calculator (item: Budgeting) */
-  .impl-budget{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
-  .ib-f{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
-  .ib-f span{font-size:.86rem;font-weight:600;color:var(--ink)}
-  .ib-in{display:flex;align-items:center;background:#fff;border:1px solid var(--line-strong);border-radius:8px;padding:2px 8px}
-  .ib-in .pre{color:var(--ink-soft);font-size:.9rem}
-  .ib-in input{border:0;outline:0;text-align:right;width:96px;padding:7px 4px;font-family:var(--body);font-size:.95rem;background:transparent;color:var(--ink)}
-  .ib-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px}
-  .ib-row .ib-label{flex:1 1 120px;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:8px 9px;font-family:var(--body);font-size:.88rem;background:#fff;color:var(--ink)}
-  .ib-row .ib-in input{width:78px}
-  .ib-per{flex:none;border:1px solid var(--line-strong);background:var(--paper-2);color:var(--pine);border-radius:8px;padding:7px 9px;font-family:var(--mono);font-size:.66rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;line-height:1}
-  .ib-per:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
-  .ib-conv{flex:none;font-family:var(--mono);font-size:.66rem;color:var(--ink-soft);white-space:nowrap}
-  .ib-del{flex:none;width:30px;height:30px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink-soft);font-size:1.1rem;line-height:1;cursor:pointer}
-  .ib-del:hover{background:var(--brick);border-color:var(--brick);color:#fff}
-  .ib-add{font-family:var(--mono);font-size:.72rem;padding:8px 14px;border-radius:999px;border:1px dashed var(--line-strong);background:var(--paper-2);color:var(--pine);cursor:pointer;margin-top:2px}
-  .ib-add:hover{background:var(--pine);color:#fff;border-style:solid;border-color:var(--pine)}
-  .ib-out{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-  .ib-out span{font-family:var(--mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft)}
-  .ib-out .ib-left{font-family:var(--display);font-weight:700;font-size:1.3rem}
-  .ib-out.pos .ib-left{color:var(--pine)} .ib-out.neg .ib-left{color:var(--brick)}
+  /* ---- 12-month fixed-expense planner (item: Budgeting) ----
+     Each month is a column you fill before it comes due. Recurring bills stack
+     from the bottom; one-time hits sit on top in amber so a February laptop is
+     obvious at a glance. Hand-ported from index.html — keep the two in step. */
+  .yp{margin-top:14px}
+  .yp-top{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px}
+  .yp-f{display:flex;flex-direction:column;gap:4px}
+  .yp-f label{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .yp-in{display:inline-flex;align-items:center;gap:3px;background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:6px 9px}
+  .yp-in .pre{color:var(--ink-soft);font-size:.8rem}
+  .yp-in input{border:0;background:none;font:inherit;font-size:.86rem;width:92px;outline:none;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  .yp-lists{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+  .yp-list{background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:12px}
+  .yp-lhead{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--pine);font-weight:700;margin-bottom:9px}
+  .yp-lhead span{display:block;text-transform:none;letter-spacing:0;font-family:var(--body);font-size:.7rem;color:var(--ink-soft);font-weight:400;margin-top:2px}
+  .yp-row{display:grid;grid-template-columns:1fr 92px auto;gap:6px;margin-bottom:6px;align-items:center}
+  .yp-row.one{grid-template-columns:1fr 92px 70px auto}
+  .yp-row input[type=text]{background:var(--white);border:1px solid var(--line-strong);border-radius:7px;padding:6px 8px;font:inherit;font-size:.8rem;min-width:0;outline:none;color:var(--ink)}
+  .yp-row input.amt{font-variant-numeric:tabular-nums;text-align:right}
+  .yp-row select{background:var(--white);border:1px solid var(--line-strong);border-radius:7px;padding:6px 3px;font:inherit;font-size:.74rem;outline:none;color:var(--ink)}
+  .yp-del{background:none;border:0;color:var(--ink-soft);font-size:1.05rem;cursor:pointer;padding:0 3px;line-height:1;opacity:.5}
+  .yp-del:hover{color:var(--brick);opacity:1}
+  .yp-add{background:none;border:1px dashed var(--line-strong);border-radius:7px;color:var(--pine);font:inherit;font-size:.76rem;font-weight:700;padding:6px 10px;cursor:pointer;width:100%;margin-top:3px}
+  .yp-add:hover{background:var(--white)}
+
+  .yp-chart{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:5px;align-items:end;
+            background:var(--white);border:1px solid var(--line);border-radius:11px;padding:18px 12px 10px}
+  .yp-col{text-align:center;min-width:0}
+  .yp-bar{position:relative;display:flex;flex-direction:column-reverse;height:150px;border-radius:0 0 5px 5px;
+          background:linear-gradient(#f5f7f3,#eef1ec);overflow:hidden;border:1px solid var(--line)}
+  .yp-seg{width:100%;transition:height .45s cubic-bezier(.3,.9,.35,1)}
+  .yp-seg.rec{background:linear-gradient(180deg,#17705a,var(--pine))}
+  .yp-seg.one{background:linear-gradient(180deg,var(--amber-soft),var(--amber))}
+  .yp-col.over .yp-bar{border-color:var(--brick);box-shadow:0 0 0 1.5px rgba(162,58,45,.22)}
+  .yp-mo{display:block;font-family:var(--mono);font-size:.6rem;color:var(--ink-soft);margin-top:5px;letter-spacing:.04em}
+  .yp-amt{display:block;font-family:var(--mono);font-size:.53rem;color:var(--ink-soft);opacity:.75;font-variant-numeric:tabular-nums;
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .yp-col.over .yp-mo{color:var(--brick);font-weight:700}
+  /* income line, drawn inside each glass as a % of its own height — no
+     measuring, so it survives the modal being display:none at first paint */
+  .yp-mark{position:absolute;left:0;right:0;border-top:2px dashed var(--brick);pointer-events:none;z-index:2}
+  .yp-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.72rem;color:var(--ink-soft)}
+  .yp-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .yp-legend i.rec{background:var(--pine)}
+  .yp-legend i.one{background:var(--amber)}
+
+  .yp-out{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+  .yp-stat{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .yp-stat .k{display:block;font-family:var(--mono);font-size:.57rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .yp-stat .v{display:block;font-family:var(--display);font-size:1.1rem;color:var(--pine);margin:3px 0 1px;font-variant-numeric:tabular-nums}
+  .yp-stat .d{display:block;font-size:.69rem;color:var(--ink-soft);line-height:1.35}
+  .yp-stat.warn .v{color:var(--brick)}
+  .yp-verdict{margin-top:12px;font-size:.82rem;line-height:1.5;color:var(--ink-soft);
+              background:var(--paper-2);border-left:3px solid var(--pine);border-radius:0 8px 8px 0;padding:10px 13px}
+  .yp-verdict b{color:var(--ink)}
+  .yp-verdict.tight{border-left-color:var(--brick);background:#fdf0ed;color:#8f2b1f}
+  @media(max-width:760px){
+    .yp-lists{grid-template-columns:1fr}
+    .yp-out{grid-template-columns:repeat(2,1fr)}
+    .yp-bar{height:112px}
+    .yp-amt{display:none}
+  }
 
   /* variable-vs-flat income chart (item: Balance a variable income) */
   .impl-chart{margin-top:14px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
@@ -176,7 +218,7 @@
         <span class="ic-eyebrow">Start here</span>
         <h2>The 10 Commandments of Financial Planning</h2>
         <p>Not a lesson &mdash; a checklist. The exact accounts to open, the order to do them in, and step-by-step how-to for each. Toggle Moderate or Optimal to set your pace.</p>
-        <span class="impl-badges"><span>Financial planner</span><span>Emergency fund</span><span>Debt payoff</span><span>Credit score</span><span>401(k) match</span><span>Roth IRA</span><span>Taxable</span><span>Automation</span><span>Variable income</span><span>Budgeting</span></span>
+        <span class="impl-badges"><span>Planner &amp; habits</span><span>Dollar-cost averaging</span><span>Emergency fund</span><span>Debt payoff</span><span>Credit score</span><span>401(k) match</span><span>Roth IRA</span><span>Passive income</span><span>Automation</span><span>Variable income</span><span>Year planner</span></span>
       </span>
       <span class="ic-cta">Open the checklist &#8594;</span>
     </button>
@@ -300,9 +342,14 @@
       '<div class="ic-legend"><span><i class="k-var"></i>What you actually earn each month</span><span><i class="k-flat"></i>What you pay yourself &mdash; a steady ~$3,000/mo</span></div>'+
     '</div>';
   var ITEMS=[
-    {id:'planner',title:'Meet with a financial planner',
-     optimal:'Get a real plan, not just a checklist',
+    {id:'planner',title:'Meet with a planner &amp; build the habits now',
+     optimal:'Start the habits before the money shows up',
+     lead:'The habits you build while the numbers are small are the ones running your money when the numbers are big. Build them now, on purpose.',
      steps:[
+       '<b>Habits decide this, not income.</b> Saving 15% of $40,000 beats saving nothing on $150,000 — and the habit is far easier to build now, while a mistake costs you a little instead of a lot.',
+       '<b>Dollar-cost averaging.</b> Invest a fixed amount on a fixed day, every month, no matter what the market is doing. You automatically buy more shares when prices are low and fewer when they’re high, and you never have to guess the right moment — because nobody can.',
+       '<b>Small and automatic beats big and occasional.</b> $50 a week that never stops will pass the $2,000 you keep meaning to invest once things settle down. Things don’t settle down.',
+       '<b>Spend on purpose too.</b> Know what leaves each month before it leaves. A raise only makes you wealthier if the plan was already in place — otherwise it just raises your spending.',
        'A good planner does far more than this list — taxes, insurance, estate, buying a home, retirement timing, and the trade-offs between all of them.',
        'Treat these checkboxes as the foundation to have handled; a planner helps you build the rest on top and sidestep expensive mistakes.',
        'New to why it matters? Read <a href="why-you-need-a-financial-planner.pdf" target="_blank" rel="noopener">this short guide</a>.',
@@ -345,13 +392,17 @@
        'Set a monthly auto-transfer from checking.',
        'Then actually invest the cash — an S&amp;P 500 or total-market index fund (e.g. <b>FXAIX</b>) is the common default. Money sitting in the account isn’t invested until you buy something.',
        'Growth and retirement withdrawals come out <b>tax-free</b>.']},
-    {id:'tax',title:'Open a taxable brokerage account',
+    {id:'tax',title:'Open a taxable brokerage &amp; build passive income',
      optimal:'Automate weekly / monthly buys',
+     lead:'This is the account where passive income actually gets built — and passive income is an aqueduct, not a lottery ticket.',
      steps:[
+       '<b>Buckets or an aqueduct.</b> Selling your hours is carrying buckets from the well: you get paid while you walk, and the water stops the moment you set them down. An aqueduct is brutal to dig — but once it’s cut, gravity delivers water to your door every day, including the days you don’t work.',
+       '<b>Phase one is the digging.</b> Capital, time, or skill goes in up front and nothing comes back yet — index funds bought month after month, a rental, a thing you build once and sell many times. This is the unglamorous part, and it’s where nearly everyone quits.',
+       '<b>Phase two is the flow.</b> Dividends, interest, and growth arrive without a shift worked. Reinvest them instead of spending them and the channel widens itself — the aqueduct starts digging its own extension.',
        '<b>Emergency fund still comes first.</b> Only invest money you won’t need soon — if your six-month cushion isn’t built, be cautious about how much you lock into the market, since selling in a downturn can mean a loss.',
        'In <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a>, open a regular <b>brokerage (taxable)</b> account — no contribution limits, withdraw anytime.',
        'Most people simply buy an <b>S&amp;P 500 index fund</b> (e.g. <b>FXAIX</b> or <b>VOO</b>) and hold.',
-       'To make it automatic, open the <b>Transact</b> menu in Fidelity and hit <b>Automate</b> — set a recurring schedule that buys your fund every week or month.',
+       'To make it automatic, open the <b>Transact</b> menu in Fidelity and hit <b>Automate</b> — set a recurring schedule that buys your fund every week or month. That schedule <i>is</i> the trench.',
        'Use this once the Roth is funded, or for goals before retirement.']},
     {id:'auto',title:'Automate your savings',
      optimal:'Route 20% before it hits checking',
@@ -369,14 +420,17 @@
        'Pay yourself a fixed monthly “salary” into checking based on your <b>average</b> income, not this month’s.',
        'Lean months draw from the buffer; fat months refill it. Your lifestyle stops swinging with your paycheck.',
        'Protect the gap by winning the <b>big</b> decisions: getting one large purchase right — the car, the house — saves far more than nickel-and-diming twenty small ones, and it takes less willpower. Buy the sensible version and invest the difference.']},
-    {id:'budget',title:'Budget your fixed expenses',
-     optimal:'Fixed costs under ~30% of income',
-     lead:'List your must-pay bills against your income and see what’s actually left to save and spend.',
-     budget:true,
+    {id:'budget',title:'Plan a year of fixed expenses',
+     optimal:'Every month funded before it arrives',
+     lead:'A year of bills is never twelve equal months. Map all twelve, then fund each one before it comes due.',
+     yplan:true,
      steps:[
-       'Add each recurring bill — rent, insurance, utilities, subscriptions.',
-       'Compare the total to your income; the leftover is your room to save and enjoy.',
-       'The bigger that gap, the faster you build wealth. Attack the largest fixed costs first.']}
+       'Add every bill you pay <b>every month</b> — rent, insurance, utilities, subscriptions.',
+       'Then add the <b>one-time</b> hits and drop each on the month it lands: tuition in August, registration in April, a $1,000 computer in February.',
+       'Watch the columns. The tall ones are the months that wreck people who spend the same amount every month.',
+       'Take the <b>set aside / month</b> number and pay it to yourself first — that single number funds the entire year, spikes included.',
+       'If the big months come early, you need a <b>cushion banked to start</b>. The planner works out how much.',
+       'This is what makes a variable income survivable: you stop guessing what you can afford and start knowing.']}
   ];
 
   var card=document.getElementById('implOpen'), modal=document.getElementById('implModal');
@@ -406,12 +460,12 @@
             (it.lead?'<p class="impl-lead">'+it.lead+'</p>':'')+
             '<ol>'+it.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
             (it.extra||'')+
-            (it.budget?'<div class="impl-budget" data-ibudget></div>':'')+
+            (it.yplan?'<div class="yp" data-yplan></div>':'')+
           '</div>'+
         '</div>';
     });
     listEl.innerHTML=h;
-    listEl.querySelectorAll('[data-ibudget]').forEach(initBudget);
+    listEl.querySelectorAll('[data-yplan]').forEach(initYearPlan);
     updateProgress();
   }
   function updateProgress(){
@@ -443,45 +497,139 @@
   modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal.classList.contains('open'))closeModal();});
 
-  /* embedded fixed-expense budget calculator */
-  function initBudget(wrap){
-    var income=60000;
-    // amt is stored ANNUAL (canonical); per is just how this row is displayed/typed
-    var list=[{label:'Rent',amt:18000,per:'mo'},{label:'Insurance',amt:3000,per:'mo'},{label:'Utilities & phone',amt:3600,per:'mo'},{label:'Subscriptions',amt:1200,per:'yr'}];
+  /* ---- 12-month fixed-expense planner ----
+     Twelve columns you fill before they come due. Recurring bills stack from
+     the bottom of every month; one-time hits land on one month only, in amber.
+     The two numbers worth leaving with are the monthly set-aside (year / 12)
+     and the cushion to bank up front, because the big months arrive before
+     you've finished saving for them. Hand-ported from index.html — keep the
+     two copies in step if the math changes. */
+  var YP_MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  function initYearPlan(wrap){
+    var income=4500;
+    var rec=[{label:'Rent',amt:1500},{label:'Car + insurance',amt:480},
+             {label:'Utilities & phone',amt:210},{label:'Subscriptions',amt:60}];
+    var one=[{label:'Laptop',amt:1000,mo:1},{label:'Car registration',amt:520,mo:3},
+             {label:'Christmas',amt:900,mo:11}];
+
     function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-    function total(){var t=0;list.forEach(function(x){t+=+x.amt||0;});return t;}
-    function idx(el){var r=el.closest('[data-ibrow]');return r?+r.getAttribute('data-ibrow'):-1;}
-    function shown(x){return x.per==='mo'?(+x.amt||0)/12:(+x.amt||0);}            // value in the row's period
-    function fmtIn(x){return Math.round(shown(x)).toLocaleString('en-US');}
-    function conv(x){return x.per==='mo'?('= '+money(+x.amt||0)+' / yr'):('= '+money((+x.amt||0)/12)+' / mo');}
-    function calc(){
-      var left=income-total(), o=wrap.querySelector('[data-ibout]');
-      o.className='ib-out '+(left<0?'neg':'pos');
-      o.innerHTML='<span>Fixed '+money(total())+' / yr &middot; Income '+money(income)+'</span><span class="ib-left">'+money(left)+' left</span>';
-    }
-    function draw(){
-      var h='<div class="ib-f"><span>Take-home income / year</span><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibinc value="'+income.toLocaleString('en-US')+'"></span></div>';
-      list.forEach(function(x,i){
-        h+='<div class="ib-row" data-ibrow="'+i+'"><input type="text" class="ib-label" data-iblabel placeholder="e.g. Rent" value="'+esc(x.label)+'"><span class="ib-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ibamt value="'+fmtIn(x)+'"></span><button type="button" class="ib-per" data-ibper aria-label="Toggle monthly or annual">/ '+(x.per==='mo'?'mo':'yr')+'</button><span class="ib-conv" data-ibconv>'+conv(x)+'</span><button type="button" class="ib-del" data-ibdel aria-label="Remove">&times;</button></div>';
+    function num(v){return +String(v).replace(/[^0-9.]/g,'')||0;}
+    function com(v){return Math.round(v).toLocaleString('en-US');}
+    function months(){
+      var base=0; rec.forEach(function(x){base+=+x.amt||0;});
+      return YP_MO.map(function(_,i){
+        var extra=0; one.forEach(function(x){if(+x.mo===i)extra+=+x.amt||0;});
+        return {rec:base,one:extra,total:base+extra};
       });
-      h+='<button type="button" class="ib-add" data-ibadd>+ Add expense</button><div class="ib-out" data-ibout></div>';
-      wrap.innerHTML=h; calc();
     }
-    draw();
+    function stat(k,v,d,warn){
+      return '<div class="yp-stat'+(warn?' warn':'')+'"><span class="k">'+k+'</span>'+
+             '<span class="v">'+v+'</span><span class="d">'+d+'</span></div>';
+    }
+    function focusLast(sel){var n=wrap.querySelectorAll(sel);if(n.length)n[n.length-1].focus();}
+
+    function rows(){
+      var h='<div class="yp-top"><div class="yp-f"><label>Take-home income / month</label>'+
+        '<span class="yp-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-ypinc value="'+com(income)+'"></span></div></div>';
+      h+='<div class="yp-lists">';
+      h+='<div class="yp-list"><div class="yp-lhead">Every month<span>Rent, insurance, utilities, subscriptions</span></div>';
+      rec.forEach(function(x,i){
+        h+='<div class="yp-row" data-r="'+i+'"><input type="text" data-yprl placeholder="e.g. Rent" value="'+esc(x.label)+'">'+
+           '<input type="text" class="amt" inputmode="numeric" data-ypra value="'+com(x.amt)+'">'+
+           '<button type="button" class="yp-del" data-yprd aria-label="Remove">&times;</button></div>';
+      });
+      h+='<button type="button" class="yp-add" data-ypaddr>+ Add monthly bill</button></div>';
+      h+='<div class="yp-list"><div class="yp-lhead">Once this year<span>Tuition, registration, a $1,000 computer in February</span></div>';
+      one.forEach(function(x,i){
+        h+='<div class="yp-row one" data-o="'+i+'"><input type="text" data-ypol placeholder="e.g. Laptop" value="'+esc(x.label)+'">'+
+           '<input type="text" class="amt" inputmode="numeric" data-ypoa value="'+com(x.amt)+'">'+
+           '<select data-ypom aria-label="Month">'+YP_MO.map(function(n,k){return '<option value="'+k+'"'+(+x.mo===k?' selected':'')+'>'+n+'</option>';}).join('')+'</select>'+
+           '<button type="button" class="yp-del" data-ypod aria-label="Remove">&times;</button></div>';
+      });
+      h+='<button type="button" class="yp-add" data-ypaddo>+ Add one-time expense</button></div></div>';
+      h+='<div class="yp-chart" data-ypchart></div>'+
+         '<div class="yp-legend"><span><i class="rec"></i>Every month</span><span><i class="one"></i>One-time</span>'+
+         '<span style="color:var(--brick)">&ndash;&ndash; Your monthly income</span></div>'+
+         '<div class="yp-out" data-ypout></div><div class="yp-verdict" data-ypverdict></div>';
+      wrap.innerHTML=h;
+    }
+
+    function paint(){
+      var M=months(), year=0; M.forEach(function(x){year+=x.total;});
+      var avg=year/12, peakI=0;
+      M.forEach(function(x,i){if(x.total>M[peakI].total)peakI=i;});
+      var peak=M[peakI], scale=Math.max(peak.total,income,1);
+      // Set aside the average each month, pay the real bill, watch the balance.
+      // The deepest trough is what has to be banked on day one.
+      var bal=0, worst=0, over=0;
+      M.forEach(function(x){bal+=avg-x.total; if(bal<worst)worst=bal; if(x.total>income)over++;});
+      var cushion=Math.max(0,-worst);
+
+      // Income line drawn inside each glass as a % of its own height, so it
+      // survives the modal being display:none at first paint. Clamped just
+      // inside so it still reads when income is the tallest thing on the chart.
+      var mark=income>0?'<div class="yp-mark" style="bottom:'+Math.min(99,income/scale*100).toFixed(1)+'%"></div>':'';
+      wrap.querySelector('[data-ypchart]').innerHTML=M.map(function(x,i){
+        return '<div class="yp-col'+(x.total>income?' over':'')+'" title="'+YP_MO[i]+' — '+money(x.total)+'">'+
+          '<div class="yp-bar">'+mark+
+          '<div class="yp-seg rec" style="height:'+(x.rec/scale*100).toFixed(1)+'%"></div>'+
+          '<div class="yp-seg one" style="height:'+(x.one/scale*100).toFixed(1)+'%"></div>'+
+          '</div><span class="yp-mo">'+YP_MO[i].charAt(0)+'</span><span class="yp-amt">'+money(x.total)+'</span></div>';
+      }).join('');
+
+      wrap.querySelector('[data-ypout]').innerHTML=
+         stat('Year of fixed costs',money(year),'Everything you must pay.')
+        +stat('Set aside / month',money(avg),'Pay this to yourself first.')
+        +stat('Cushion to start',money(cushion),cushion>0?'Banked before January.':'Not needed this year.',cushion>0)
+        +stat('Biggest month',YP_MO[peakI]+' &middot; '+money(peak.total),
+              over?over+' month'+(over===1?'':'s')+' over income.':'Every month fits your income.',over>0);
+
+      var v=wrap.querySelector('[data-ypverdict]'), tight=avg>income;
+      v.className='yp-verdict'+(tight?' tight':'');
+      v.innerHTML=tight
+        ? '<b>Your fixed costs outrun your income.</b> '+money(avg)+' a month has to come out of '+money(income)+
+          '. No savings plan fixes this &mdash; cut the biggest column first.'
+        : '<b>Set aside '+money(avg)+' a month</b> and every bill this year is already paid for, including '+
+          YP_MO[peakI]+'’s '+money(peak.total)+'. '+
+          (cushion>0
+            ? 'The big months land before you’ve saved for them, so you also need <b>'+money(cushion)+
+              ' banked to start</b>. Build that once and the monthly set-aside carries you from there.'
+            : 'The spikes land late enough that the monthly set-aside covers them on its own.')+
+          ' That leaves <b>'+money(income-avg)+' a month</b> to live on and invest.';
+    }
+
+    rows(); paint();
+
     wrap.addEventListener('input',function(e){
-      var inc=e.target.closest('[data-ibinc]'); if(inc){income=+String(inc.value).replace(/[^0-9.]/g,'')||0;calc();return;}
-      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i]){var v=+String(a.value).replace(/[^0-9.]/g,'')||0;list[i].amt=list[i].per==='mo'?v*12:v;var row=a.closest('[data-ibrow]'),c=row&&row.querySelector('[data-ibconv]');if(c)c.textContent=conv(list[i]);calc();}return;}
-      var l=e.target.closest('[data-iblabel]'); if(l){var j=idx(l);if(j>=0&&list[j])list[j].label=l.value;return;}
+      var t=e.target, rr=t.closest('[data-r]'), or=t.closest('[data-o]'), i;
+      if(t.matches('[data-ypinc]')){income=num(t.value);paint();return;}
+      if(rr){i=+rr.getAttribute('data-r'); if(!rec[i])return;
+        if(t.matches('[data-yprl]'))rec[i].label=t.value;
+        else if(t.matches('[data-ypra]'))rec[i].amt=num(t.value); else return;
+        paint();return;}
+      if(or){i=+or.getAttribute('data-o'); if(!one[i])return;
+        if(t.matches('[data-ypol]'))one[i].label=t.value;
+        else if(t.matches('[data-ypoa]'))one[i].amt=num(t.value); else return;
+        paint();}
+    });
+    wrap.addEventListener('change',function(e){
+      var or=e.target.closest('[data-o]');
+      if(or&&e.target.matches('[data-ypom]')){var i=+or.getAttribute('data-o');if(one[i]){one[i].mo=+e.target.value;paint();}}
+    });
+    wrap.addEventListener('click',function(e){
+      if(e.target.closest('[data-ypaddr]')){rec.push({label:'',amt:0});rows();paint();focusLast('[data-yprl]');return;}
+      if(e.target.closest('[data-ypaddo]')){one.push({label:'',amt:0,mo:0});rows();paint();focusLast('[data-ypol]');return;}
+      var rd=e.target.closest('[data-yprd]');
+      if(rd){rec.splice(+rd.closest('[data-r]').getAttribute('data-r'),1);rows();paint();return;}
+      var od=e.target.closest('[data-ypod]');
+      if(od){one.splice(+od.closest('[data-o]').getAttribute('data-o'),1);rows();paint();}
     });
     wrap.addEventListener('blur',function(e){
-      var inc=e.target.closest('[data-ibinc]'); if(inc){inc.value=(+income||0).toLocaleString('en-US');return;}
-      var a=e.target.closest('[data-ibamt]'); if(a){var i=idx(a);if(i>=0&&list[i])a.value=fmtIn(list[i]);}
+      var t=e.target, i;
+      if(t.matches('[data-ypinc]')){t.value=com(income);return;}
+      if(t.matches('[data-ypra]')){i=+t.closest('[data-r]').getAttribute('data-r');if(rec[i])t.value=com(rec[i].amt);return;}
+      if(t.matches('[data-ypoa]')){i=+t.closest('[data-o]').getAttribute('data-o');if(one[i])t.value=com(one[i].amt);}
     },true);
-    wrap.addEventListener('click',function(e){
-      var per=e.target.closest('[data-ibper]'); if(per){var i=idx(per);if(i>=0&&list[i]){list[i].per=list[i].per==='mo'?'yr':'mo';var row=per.closest('[data-ibrow]');row.querySelector('[data-ibamt]').value=fmtIn(list[i]);per.textContent='/ '+list[i].per;row.querySelector('[data-ibconv]').textContent=conv(list[i]);}return;}
-      var add=e.target.closest('[data-ibadd]'); if(add){list.push({label:'',amt:0,per:'mo'});draw();var ls=wrap.querySelectorAll('[data-iblabel]');if(ls.length)ls[ls.length-1].focus();return;}
-      var del=e.target.closest('[data-ibdel]'); if(del){var i=idx(del);if(i>=0){list.splice(i,1);draw();}return;}
-    });
   }
 
   render();
