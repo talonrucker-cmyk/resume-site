@@ -3269,7 +3269,7 @@
     if(!chart) return;
     let mode='future', advOn=false;
     const wcTip=document.createElement('div'); wcTip.className='wc-tip'; wcTip.style.display='none'; document.body.appendChild(wcTip);
-    function wcShowTip(ev,year,d){ wcTip.style.display='block'; wcTip.innerHTML='<b>Year '+year+'</b><br>Income: '+fmt(d.income)+(d.tax>0?' &rarr; '+fmt(d.net)+' after tax':'')+'<br><span class="t-g">Wealth built: '+fmt(d.green)+'</span><br><span class="t-r">Lifestyle spent: '+fmt(d.red)+'</span>'+(d.taxCum>0?'<br><span class="t-t">Est. taxes paid: '+fmt(d.taxCum)+'</span>':''); wcTip.style.left=(ev.clientX+14)+'px'; wcTip.style.top=(ev.clientY+14)+'px'; }
+    function wcShowTip(ev,year,d){ wcTip.style.display='block'; wcTip.innerHTML='<b>Year '+year+'</b><br>Income: '+fmt(d.income)+(d.tax>0?' &rarr; '+fmt(d.net)+' after tax':'')+'<br><span class="t-g">Saved &amp; invested: '+fmt(d.save)+'</span><br><span class="t-r">Lifestyle spent: '+fmt(d.spend)+'</span>'+(d.tax>0?'<br><span class="t-t">Est. tax: '+fmt(d.tax)+'</span>':''); wcTip.style.left=(ev.clientX+14)+'px'; wcTip.style.top=(ev.clientY+14)+'px'; }
     function wcHideTip(){ wcTip.style.display='none'; }
     const NS="http://www.w3.org/2000/svg";
     const VB={w:1000,h:460,padL:70,padR:14,padT:16,padB:36};
@@ -3330,7 +3330,8 @@
         red=red+net*lifeR;                    // spent money is just spent — no compounding
         taxCum=taxCum+tax;                    // taxes paid — cumulative, never yours
         const defl=mode==='today'?Math.pow(1+i,y):1;
-        data.push({green:green/defl,red:red/defl,tax:tax/defl,taxCum:taxCum/defl,income:income/defl,net:net/defl});
+        data.push({green:green/defl,red:red/defl,tax:tax/defl,taxCum:taxCum/defl,income:income/defl,net:net/defl,
+                   save:net*saveR/defl,spend:net*lifeR/defl});   // this year only, for the tooltip
       }
       const deflN=Math.pow(1+i,N);
       const realized=mode==='today'?green/deflN:green;
