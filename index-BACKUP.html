@@ -412,6 +412,11 @@
   .wc-total{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-soft);text-align:center}
   .wc-total .wc-tk{display:inline-block;font-family:var(--display);font-weight:700;font-size:.95rem;color:#3a2a08;background:var(--amber-soft);border-radius:999px;padding:5px 14px}
   .wc-total b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;color:var(--brick);margin:4px 0 2px}
+  /* Earned at a 15%+ savings rate: green + check. Below it: red warning. */
+  .wc-total .wc-tk,.wc-total b{transition:background .25s,color .25s}
+  .wc-total.ok .wc-tk{background:var(--pine);color:#fff}
+  .wc-total.ok b{color:var(--pine)}
+  .wc-total.low .wc-tk{background:var(--brick);color:#fff}
   /* income steps + advanced */
   .wc-sub-d{margin:-8px 0 18px}
   .wc-sub-d>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--pine);padding:2px 0}
@@ -1210,7 +1215,7 @@
             <span><i class="sw red"></i>Cash you spend on lifestyle (not invested)</span>
             <span id="wcTaxLeg" style="display:none"><i class="sw tax"></i>Taxes paid (never yours to keep)</span>
           </div>
-          <div class="wc-total"><span class="wc-tk">Guilt-free spending</span><b id="wcSpend">$0</b><span id="wcSpendSub">to enjoy over your career &mdash; and the wealth still gets built.</span></div>
+          <div class="wc-total" id="wcTotal"><span class="wc-tk" id="wcSpendTk">Guilt-free spending</span><b id="wcSpend">$0</b><span id="wcSpendSub">to enjoy over your career &mdash; and the wealth still gets built.</span></div>
           <p class="wc-note">Hypothetical. Only the money you <b>save</b> is invested and compounds. The red bars are the raw dollars spent on lifestyle over the same years&mdash;spent, not grown. Flip to <b>Today&rsquo;s dollars</b> to strip out inflation and see what the ending balance is actually worth in current buying power.</p>
         </div>
       </div>
@@ -3329,9 +3334,14 @@
       taxSub.textContent=R.status==='off'?'':'Year-1 tax: '+Math.round(R.effRate*100)+'% effective';
       spendEl.textContent=fmt(R.spend);
       const spendSub=$('wcSpendSub');
-      if(spendSub) spendSub.innerHTML=R.spend>0
-        ? 'to enjoy over your career &mdash; and the wealth still gets built.'
-        : 'Slide Lifestyle (spend) up to see it.';
+      // Spending is only "guilt-free" once at least 15% is being saved.
+      const saveP=100-(+life.value), ok=saveP>=15, tot=$('wcTotal'), tk=$('wcSpendTk');
+      if(tot){ tot.classList.toggle('ok',ok); tot.classList.toggle('low',!ok); }
+      if(tk) tk.innerHTML=ok ? '&#10003; Guilt-free spending' : '&#9888; Spending your future';
+      if(spendSub) spendSub.innerHTML=R.spend<=0
+        ? 'Slide Lifestyle (spend) up to see it.'
+        : ok ? 'to enjoy over your career &mdash; you&rsquo;re saving '+saveP+'%, so the wealth still gets built.'
+        : 'spent while saving only '+saveP+'%. Save 15% or more and this becomes guilt-free.';
       if(taxLeg) taxLeg.style.display = R.status!=='off' ? '' : 'none';
 
       while(chart.firstChild) chart.removeChild(chart.firstChild);
