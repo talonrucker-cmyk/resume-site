@@ -371,6 +371,37 @@
   .fr-row.me{color:#9a5f12;font-weight:700}
   .fr-row.me .fr-bar{background:var(--amber)}
   @media(max-width:560px){.fr-rating{flex-direction:column;align-items:flex-start}.fl-mk span{font-size:.5rem}}
+  /* FIRE v2 — six inputs, year slider, growth chart, milestone table */
+  .ff-ctl{grid-template-columns:repeat(3,1fr)}
+  .ff-ctl select{border:0;outline:0;background:none;font:inherit;font-size:.82rem;width:100%;padding:4px 0;color:var(--ink)}
+  .ff-year{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .ff-year-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:7px}
+  .ff-year-top b{font-family:var(--display);font-size:1.05rem;color:var(--pine)}
+  .ff-year-top span{font-family:var(--mono);font-size:.66rem;color:var(--ink-soft)}
+  .ff-year input[type=range]{width:100%;accent-color:var(--pine);margin:0}
+  .ff-chart{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:10px 8px 6px}
+  .ff-chart svg{width:100%;height:auto;display:block}
+  .ff-grid{stroke:rgba(20,32,28,.08);stroke-width:1}
+  .ff-ax{font-family:'JetBrains Mono',monospace;font-size:9px;fill:#8e9c96}
+  .ff-area{fill:rgba(14,82,64,.10)}
+  .ff-line{fill:none;stroke:var(--pine);stroke-width:2.5;stroke-linejoin:round}
+  .ff-ms-line{stroke-width:1.2;stroke-dasharray:5 4;opacity:.8}
+  .ff-ms-lab{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700}
+  .ff-cur{stroke:var(--amber);stroke-width:1.5;stroke-dasharray:3 3}
+  .ff-cur-dot{fill:var(--amber);stroke:#fff;stroke-width:2}
+  .ff-axis-note{font-size:.66rem;color:#8e9c96;text-align:center;margin-top:2px}
+  .ff-ms{display:grid;gap:6px}
+  .ff-row{display:grid;grid-template-columns:12px 1fr auto auto auto;gap:4px 12px;align-items:center;background:var(--white);border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-size:.84rem}
+  .ff-row i{width:12px;height:12px;border-radius:3px}
+  .ff-row b{font-family:var(--display);color:var(--ink)}
+  .ff-t{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft)}
+  .ff-y{font-family:var(--display);font-weight:700;color:var(--pine);min-width:64px;text-align:right}
+  .ff-a{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);min-width:56px;text-align:right}
+  .ff-row.me{border-color:var(--amber);background:#fdf8ef}
+  .ff-row.done{background:#e8f2ed;border-color:rgba(14,82,64,.35)}
+  .fr-row{grid-template-columns:62px 1fr 64px}
+  @media(max-width:700px){.ff-ctl{grid-template-columns:1fr 1fr}}
+  @media(max-width:480px){.ff-row{grid-template-columns:12px 1fr auto;}.ff-t{display:none}.ff-a{grid-column:2/-1;text-align:left}}
 
   /* 401(k) rollover */
   .x-sub{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine);font-weight:700;margin:20px 0 9px}
@@ -710,24 +741,90 @@
       '<li>When it lands, <b>invest it</b>. Rollovers usually arrive as cash and sit there until you buy something.</li>'+
     '</ol>';
 
-  /* FIRE extra — the flavors, the early-access catches, and the calculator. */
+  /* FIRE extra — flavors, the calculator, then the playbook. */
   var FIRE_TYPES=[
     ['Lean FIRE','Bare-bones budget, about $40,000 a year or less. Smaller number, thinner cushion.'],
-    ['Barista FIRE','Leave the career, keep a part-time job that covers some bills (and maybe health insurance). Your portfolio only covers the rest.'],
-    ['Coast FIRE','Enough invested that growth alone gets you to FIRE by 65. You just earn enough to cover today.'],
+    ['Barista FIRE','Leave the career, keep a part-time job that covers some bills (and maybe health insurance). Your portfolio covers the rest.'],
+    ['Coast FIRE','Enough invested that growth alone reaches your number by 65. You only earn enough to cover today.'],
     ['Fat FIRE','Full lifestyle, about $100,000+ a year. Bigger number, room for travel and surprises.']
   ];
+  function fireList(items){return '<ul>'+items.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>';}
   var fireExtra=
     '<p class="x-sub">The flavors</p>'+
     '<div class="bias-grid">'+FIRE_TYPES.map(function(t){return '<div class="bias"><b>'+t[0]+'</b><p>'+t[1]+'</p></div>';}).join('')+'</div>'+
     '<div class="yp" data-fire></div>'+
-    '<p class="x-sub">Before you retire early</p>'+
-    '<ul>'+
-      '<li><b>Reaching the money before 59&frac12;.</b> Roth IRA <i>contributions</i> come out anytime; a taxable brokerage has no age rules; the Rule of 55 and 72(t) payments open retirement accounts early.</li>'+
-      '<li><b>Health insurance until Medicare at 65.</b> Budget for an ACA plan &mdash; it’s often the biggest new bill.</li>'+
-      '<li><b>Longer retirement, lower withdrawal.</b> The 4% rule was tested on 30 years. Retiring at 40 means 50+ years, so many plan on <b>3&ndash;3.5%</b>.</li>'+
-      '<li><b>Sequence risk.</b> A crash in year one hurts most. Keep 1&ndash;2 years of spending in cash.</li>'+
-    '</ul>';
+
+    '<p class="x-sub">Where it came from</p>'+
+    fireList([
+      '<b>1992:</b> <i>Your Money or Your Life</i> (Vicki Robin &amp; Joe Dominguez) reframed money as life energy you trade for it.',
+      '<b>1994&ndash;1998:</b> planner William Bengen and the Trinity Study found ~4% a year survived every 30-year stretch they tested &mdash; the “4% rule.”',
+      '<b>2011 on:</b> blogs like Mr. Money Mustache made extreme savings rates a movement.'
+    ])+
+
+    '<p class="x-sub">Fill accounts in this order</p>'+
+    '<ol>'+
+      '<li>Emergency fund (Commandment 2).</li>'+
+      '<li>Any 401(k) <b>match</b> &mdash; free money first.</li>'+
+      '<li>Kill high-interest debt.</li>'+
+      '<li><b>HSA</b> if you have a high-deductible plan ($4,400 self / $8,750 family in 2026): deductible in, tax-free growth, tax-free out for medical.</li>'+
+      '<li><b>Roth IRA</b> ($7,500 in 2026).</li>'+
+      '<li>Max the <b>401(k)</b> ($24,500 in 2026).</li>'+
+      '<li><b>Taxable brokerage</b> &mdash; the “bridge” account you live on before 59&frac12;.</li>'+
+    '</ol>'+
+
+    '<p class="x-sub">Getting the money out before 59&frac12;</p>'+
+    fireList([
+      '<b>Taxable brokerage:</b> no age rules. Only the gains are taxed.',
+      '<b>Roth IRA contributions</b> (not earnings) come out anytime, tax- and penalty-free.',
+      '<b>Roth conversion ladder:</b> convert some pre-tax money to Roth each year; each conversion can be withdrawn penalty-free after 5 years. Start converting 5 years before you need it.',
+      '<b>Rule of 55:</b> leave a job in or after the year you turn 55 and that job’s 401(k) opens penalty-free.',
+      '<b>72(t) payments:</b> fixed yearly withdrawals from an IRA at any age, locked for 5 years or until 59&frac12;, whichever is longer.',
+      '<b>HSA receipts:</b> pay medical bills out of pocket now, keep receipts, reimburse yourself tax-free years later.'
+    ])+
+
+    '<p class="x-sub">Taxes can be tiny</p>'+
+    fireList([
+      'Early retirees control their income. A married couple living on long-term gains and qualified dividends can have about <b>$131,000</b> of income in 2026 ($32,200 standard deduction + the $98,900 0% capital-gains bracket) and owe <b>$0</b> federal income tax.',
+      'Low-income years are also the cheapest time for <b>Roth conversions</b>.'
+    ])+
+
+    '<p class="x-sub">Health insurance</p>'+
+    fireList([
+      'Until Medicare at 65: <b>ACA marketplace</b> plans, COBRA (up to 18 months), a spouse’s plan, or a part-time job with benefits.',
+      'ACA premium help is based on your <b>income</b>, so how much you withdraw also sets what you pay for insurance. Plan both together.'
+    ])+
+
+    '<p class="x-sub">Making it last 40+ years</p>'+
+    fireList([
+      'Use <b>3.25&ndash;3.5%</b> for very long retirements (set it in the calculator above).',
+      '<b>Guardrails:</b> trim spending ~10% after a bad market year, add it back after a good one.',
+      'Keep <b>1&ndash;2 years of spending in cash</b> so a crash never forces you to sell low.',
+      '<b>A little income goes a long way:</b> $1,000 a month from anything cuts the number you need by about $300,000.'
+    ])+
+
+    '<p class="x-sub">Social Security still counts</p>'+
+    fireList([
+      'Fewer working years means more $0 years in your top-35 average, so the check is smaller &mdash; but it still arrives at 62&ndash;70 and lowers what your portfolio has to cover later.',
+      'Check your estimate at <a href="https://www.ssa.gov/myaccount/" target="_blank" rel="noopener">ssa.gov/myaccount</a>.'
+    ])+
+
+    '<p class="x-sub">Common mistakes</p>'+
+    fireList([
+      'Underestimating <b>healthcare and taxes</b>.',
+      'Forgetting the lumpy stuff: roofs, cars, kids, college, aging parents.',
+      'Letting <b>lifestyle creep</b> eat every raise.',
+      '<b>“One more year”</b> syndrome &mdash; the number keeps moving.',
+      'Retiring <i>from</i> something without retiring <i>to</i> something. Plan the purpose, not just the money.'
+    ])+
+
+    '<p class="x-sub">Start this month</p>'+
+    '<ol>'+
+      '<li>Track every dollar for 3 months &mdash; your number starts with real spending.</li>'+
+      '<li>Run the calculator above with those numbers.</li>'+
+      '<li>Automate savings the day you’re paid (Commandment 8).</li>'+
+      '<li>Save at least half of every raise.</li>'+
+      '<li>Recheck once a year.</li>'+
+    '</ol>';
 
   /* Social Security extra — everything past the five basics in the steps. */
   var ssExtra=
@@ -803,7 +900,7 @@
      extra:fireExtra,
      steps:[
        '<b>Your number is 25&times; what you spend</b> in a year (the 4% rule). Spend $60,000 &rarr; you need about $1.5 million.',
-       '<b>Your savings rate decides when, not your income.</b> Save 10% and it takes about 50 years. Save 50% and it’s about 17 (chart below).',
+       '<b>How much you save decides when &mdash; not your income.</b> The calculator below shows the age you’d hit each kind of FIRE at your yearly savings, and how much sooner more savings gets you there.',
        '<b>Spending cuts work twice:</b> you save more <i>and</i> your number shrinks.',
        '<b>The “retire early” part is optional.</b> The point is the choice &mdash; plenty of people reach FI and keep working on their own terms.']}
 
@@ -1468,46 +1565,70 @@
   }
 
   /* ---- FIRE calculator (extra: FIRE) ----
-     Real (after-inflation) 5% return, 4% withdrawal — so everything is in
-     today's dollars. Passive rating = what the pile pays at 4% ÷ what you
-     spend. The ladder puts each flavor's target on one line:
-       Coast   = FIRE number discounted back from 65
-       Barista = half the FIRE number (a part-time job covers the rest)
-       Lean    = 25 x $40,000     Fat = 25 x $100,000 */
-  var FI_R=0.05, FI_W=0.04;
+     Everything is in today's dollars: the return is REAL (after inflation).
+     Balance grows yearly: bal(t+1) = bal(t) x (1 + r) + save.
+     Targets, at withdrawal rate w:
+       Your FIRE = spend / w        Barista = half of that (part-time covers the rest)
+       Lean      = $40,000 / w      Fat     = $100,000 / w
+       Coast     = Your FIRE discounted back from 65 — it shrinks as you age,
+                   so it's checked against the balance in each year. */
   function initFire(wrap){
-    var v={age:30,spend:50000,have:50000,save:15000};
+    var v={age:30,spend:50000,have:50000,save:15000,ret:5,wr:4}, year=10, H=50;
+    var SAVE_STEPS=[5000,10000,15000,20000,25000,30000,40000,50000];
+    var MS=[['Coast','#7a9a8c'],['Barista','#3f9c80'],['Lean','#17705a'],['Your FIRE','#D38B26'],['Fat','#0A3B2E']];
     function num(x){return +String(x).replace(/[^0-9.]/g,'')||0;}
-    function fmt(k){return k==='age'?String(v[k]):Math.round(v[k]).toLocaleString('en-US');}
-    function field(k,label,pre){
+    function fmt(k){return (k==='age'||k==='ret')?String(v[k]):Math.round(v[k]).toLocaleString('en-US');}
+    function short(n){return n>=1e6?'$'+(n/1e6).toFixed(n>=1e7?1:2)+'M':n>=1e3?'$'+Math.round(n/1e3)+'K':money(n);}
+    function field(k,label,pre,post){
       return '<div class="aq-f"><label>'+label+'</label><span class="aq-in">'+(pre?'<span class="pre">'+pre+'</span>':'')+
-        '<input type="text" inputmode="numeric" data-fk="'+k+'" value="'+fmt(k)+'"></span></div>';
+        '<input type="text" inputmode="decimal" data-fk="'+k+'" value="'+fmt(k)+'">'+(post?'<span class="pre">'+post+'</span>':'')+'</span></div>';
     }
-    // Years from zero to FI at savings rate s (Mr. Money Mustache-style table).
-    function yrsAt(s){ return s<=0?Infinity:Math.log(1+FI_R*(1-s)/(FI_W*s))/Math.log(1+FI_R); }
+    function series(save,years){
+      var r=v.ret/100, b=[v.have]; for(var t=1;t<=years;t++) b.push(b[t-1]*(1+r)+save); return b;
+    }
+    function targets(){
+      var w=v.wr/100, fi=v.spend/w;
+      return {fi:fi,barista:fi/2,lean:40000/w,fat:100000/w,
+              coastAt:function(t){return fi/Math.pow(1+v.ret/100,Math.max(0,65-v.age-t));}};
+    }
+    function firstYear(b,test){ for(var t=0;t<b.length;t++) if(test(b[t],t)) return t; return null; }
+
     wrap.innerHTML=
-      '<p class="x-sub">Your passive rating</p>'+
-      '<div class="aq-ctl sl-ctl">'+field('age','Age','')+field('spend','Spend / year','$')+field('have','Invested now','$')+field('save','Save / year','$')+'</div>'+
+      '<p class="x-sub">Your FIRE calculator</p>'+
+      '<div class="aq-ctl ff-ctl">'+field('age','Age','')+field('spend','Spend / year','$')+field('have','Invested now','$')+field('save','You save / year','$')+
+        field('ret','Return after inflation','','%')+
+        '<div class="aq-f"><label>Withdrawal rate</label><span class="aq-in"><select data-fwr aria-label="Withdrawal rate">'+
+          '<option value="4">4% &middot; 30-yr retirement</option><option value="3.5">3.5% &middot; 40 yrs</option><option value="3.25">3.25% &middot; 50 yrs</option></select></span></div>'+
+      '</div>'+
       '<div class="fr-rating"><div class="fr-dial" data-fdial><b data-fpct>0%</b><small>of your spending<br>covered passively</small></div>'+
         '<div class="fr-tier"><span class="fr-badge" data-ftier></span><p data-ftierp></p></div></div>'+
+
+      '<p class="x-sub">Watch it grow</p>'+
+      '<div class="ff-year"><div class="ff-year-top"><b data-fylab></b><span data-fybal></span></div>'+
+        '<input type="range" min="0" max="'+H+'" step="1" value="'+year+'" data-fyr aria-label="Years from now"></div>'+
       '<div class="fl-track" data-fladder></div>'+
-      '<div class="yp-out sl-out" data-fout></div><div class="yp-verdict" data-fverdict></div>'+
-      '<p class="x-sub">Savings rate &rarr; years to FIRE</p><div data-frates></div>'+
-      '<p class="aq-note">Hypothetical estimate: 5% real (after-inflation) return, 4% withdrawal, today’s dollars, starting from $0 in the chart. Not a projection or a recommendation.</p>';
+      '<div class="ff-chart" data-fchart></div>'+
+
+      '<p class="x-sub">When you hit each one</p>'+
+      '<div class="ff-ms" data-fms></div>'+
+      '<div class="yp-verdict" data-fverdict></div>'+
+
+      '<p class="x-sub">Save more &rarr; retire sooner</p>'+
+      '<div data-fsaves></div>'+
+      '<p class="aq-note">Hypothetical estimate in today’s dollars: a steady real return every year and the withdrawal rate you pick. Real markets swing. Not a projection or a recommendation.</p>';
+
+    var sel=wrap.querySelector('[data-fwr]'); sel.value=String(v.wr);
 
     function paint(){
-      var fi=v.spend/FI_W, passive=v.have*FI_W, pct=v.spend>0?passive/v.spend:0;
-      var rate=v.save+v.spend>0?v.save/(v.save+v.spend):0;
-      var coast=fi/Math.pow(1+FI_R,Math.max(0,65-v.age)), barista=fi/2, lean=40000/FI_W, fat=100000/FI_W;
-      // Years to FI from where they are today, compounding yearly.
-      var bal=v.have, yrs=0; while(bal<fi && yrs<80){ bal=bal*(1+FI_R)+v.save; yrs++; }
-      var reach=bal>=fi;
+      var T=targets(), w=v.wr/100, b=series(v.save,H);
+      var passive=v.have*w, pct=v.spend>0?passive/v.spend:0, P=Math.round(pct*100);
 
-      var P=Math.round(pct*100), tier, tierP;
+      // --- rating
+      var tier,tierP;
       if(pct>=1.5){tier='Fat FI';tierP='Your money pays for your life and then some.';}
       else if(pct>=1){tier='Financially independent';tierP='Work is optional. Everything from here is margin.';}
       else if(pct>=.5){tier='Barista range';tierP='A part-time job could cover the rest.';}
-      else if(v.have>=coast){tier='Coasting';tierP='Stop saving today and growth still gets you there by 65.';}
+      else if(v.have>=T.coastAt(0)){tier='Coasting';tierP='Stop saving today and growth still gets you there by 65.';}
       else if(pct>=.1){tier='Building';tierP='The aqueduct is real &mdash; keep digging.';}
       else {tier='Getting started';tierP='Every dollar invested now is a dollar that works forever.';}
       wrap.querySelector('[data-fpct]').textContent=P+'%';
@@ -1515,41 +1636,90 @@
       wrap.querySelector('[data-ftier]').textContent=tier;
       wrap.querySelector('[data-ftierp]').innerHTML=tierP;
 
-      // Milestone ladder — markers alternate above/below so labels don't collide.
-      var marks=[['Coast',coast],['Barista',barista],['Lean',lean],['Your FIRE',fi],['Fat',fat]].sort(function(a,b){return a[1]-b[1];});
-      var max=Math.max(fat,fi,v.have)*1.04;
+      // --- milestone years
+      var yrs={
+        'Coast':firstYear(b,function(x,t){return x>=T.coastAt(t);}),
+        'Barista':firstYear(b,function(x){return x>=T.barista;}),
+        'Lean':firstYear(b,function(x){return x>=T.lean;}),
+        'Your FIRE':firstYear(b,function(x){return x>=T.fi;}),
+        'Fat':firstYear(b,function(x){return x>=T.fat;})
+      };
+      var tgt={'Coast':T.coastAt(0),'Barista':T.barista,'Lean':T.lean,'Your FIRE':T.fi,'Fat':T.fat};
+
+      // --- year slider + ladder at that year
+      var bal=b[year], coastNow=T.coastAt(year);
+      wrap.querySelector('[data-fylab]').textContent=year===0?'Today · age '+v.age:'Year '+year+' · age '+(v.age+year);
+      wrap.querySelector('[data-fybal]').innerHTML=short(bal)+' invested &middot; '+short(bal*w)+'/yr passive';
+      var marks=[['Coast',coastNow],['Barista',T.barista],['Lean',T.lean],['Your FIRE',T.fi],['Fat',T.fat]].sort(function(a,c){return a[1]-c[1];});
+      var max=Math.max(T.fat,T.fi)*1.06;
       wrap.querySelector('[data-fladder]').innerHTML=
-        '<div class="fl-fill" style="width:'+Math.min(100,v.have/max*100).toFixed(1)+'%"></div>'+
+        '<div class="fl-fill" style="width:'+Math.min(100,bal/max*100).toFixed(1)+'%"></div>'+
         marks.map(function(m,i){
-          return '<div class="fl-mk'+(i%2?' low':'')+(v.have>=m[1]?' hit':'')+(m[0]==='Your FIRE'?' me':'')+'" style="left:'+(m[1]/max*100).toFixed(1)+'%">'+
-            '<span>'+m[0]+' &middot; '+(m[1]>=1e6?'$'+(m[1]/1e6).toFixed(2)+'M':money(m[1]))+'</span></div>';
+          return '<div class="fl-mk'+(i%2?' low':'')+(bal>=m[1]?' hit':'')+(m[0]==='Your FIRE'?' me':'')+'" style="left:'+(m[1]/max*100).toFixed(1)+'%">'+
+            '<span>'+(bal>=m[1]?'&#10003; ':'')+m[0]+' &middot; '+short(m[1])+'</span></div>';
         }).join('');
 
-      wrap.querySelector('[data-fout]').innerHTML=
-         xStat('Your FIRE number',money(fi),'25&times; '+money(v.spend)+'.')
-        +xStat('Passive income now',money(passive)+'/yr','4% of '+money(v.have)+'.')
-        +xStat('Est. years to FIRE',reach?(yrs===0?'Now':yrs+' yrs'):'80+',reach?(yrs===0?'You’re there.':'At age '+(v.age+yrs)+'.'):'Save more or spend less.',!reach);
+      // --- growth chart: balance by year, a dashed line per milestone, a dot where it's crossed
+      var span=Math.min(H,Math.max(25,(yrs['Fat']!=null?yrs['Fat']:H)+3));
+      var W=640,Ht=250,L=52,R=12,Tp=14,B=28, ymax=Math.max(T.fat,T.fi,b[span])*1.08;
+      var X=function(t){return L+(W-L-R)*t/span;}, Y=function(val){return Tp+(Ht-Tp-B)*(1-Math.min(val,ymax)/ymax);};
+      var line='', area='';
+      for(var t=0;t<=span;t++){ line+=(t?'L':'M')+X(t).toFixed(1)+' '+Y(b[t]).toFixed(1); }
+      area=line+'L'+X(span)+' '+Y(0)+'L'+X(0)+' '+Y(0)+'Z';
+      var g='';
+      [0,.25,.5,.75,1].forEach(function(f){var val=ymax*f;g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(val)+'" y2="'+Y(val)+'" class="ff-grid"/><text x="'+(L-6)+'" y="'+(Y(val)+3)+'" class="ff-ax" text-anchor="end">'+short(val)+'</text>';});
+      for(var k=0;k<=span;k+=Math.ceil(span/6)) g+='<text x="'+X(k)+'" y="'+(Ht-8)+'" class="ff-ax" text-anchor="middle">'+(v.age+k)+'</text>';
+      var ms='';
+      MS.forEach(function(m){
+        var name=m[0], col=m[1], val=name==='Coast'?null:tgt[name];
+        if(val!=null && val<=ymax) ms+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+Y(val)+'" y2="'+Y(val)+'" stroke="'+col+'" class="ff-ms-line"/>'+
+          '<text x="'+(W-R-2)+'" y="'+(Y(val)-4)+'" text-anchor="end" class="ff-ms-lab" fill="'+col+'">'+name+'</text>';
+        var yr=yrs[name];
+        if(yr!=null && yr<=span) ms+='<circle cx="'+X(yr)+'" cy="'+Y(b[yr])+'" r="5" fill="'+col+'" stroke="#fff" stroke-width="2"><title>'+name+' at age '+(v.age+yr)+'</title></circle>';
+      });
+      var cur=Math.min(year,span);
+      wrap.querySelector('[data-fchart]').innerHTML=
+        '<svg viewBox="0 0 '+W+' '+Ht+'" role="img" aria-label="Investments growing year by year past each FIRE milestone">'+g+
+        '<path d="'+area+'" class="ff-area"/><path d="'+line+'" class="ff-line"/>'+ms+
+        '<line x1="'+X(cur)+'" x2="'+X(cur)+'" y1="'+Tp+'" y2="'+(Ht-B)+'" class="ff-cur"/>'+
+        '<circle cx="'+X(cur)+'" cy="'+Y(b[cur])+'" r="4" class="ff-cur-dot"/></svg>'+
+        '<p class="ff-axis-note">Age &rarr; &nbsp;&middot;&nbsp; dots mark the year you cross each line &middot; drag the slider to move the marker</p>';
 
-      var el=wrap.querySelector('[data-fverdict]');
-      el.className='yp-verdict'+(reach?'':' tight');
-      el.innerHTML=reach
-        ? 'Saving <b>'+Math.round(rate*100)+'%</b> of what you bring home, you could reach FIRE around <b>age '+(v.age+yrs)+'</b>. '+
-          (v.have>=coast?'You’ve already hit <b>Coast FIRE</b>.':'Coast FIRE is <b>'+money(coast)+'</b> &mdash; reach it and saving becomes optional.')
-        : 'At this pace the pile never catches your spending. Raise the savings rate &mdash; it moves this faster than anything.';
+      // --- milestone table
+      wrap.querySelector('[data-fms]').innerHTML=MS.map(function(m){
+        var name=m[0], yr=yrs[name], done=yr===0;
+        return '<div class="ff-row'+(done?' done':'')+(name==='Your FIRE'?' me':'')+'"><i style="background:'+m[1]+'"></i>'+
+          '<b>'+name+'</b><span class="ff-t">'+short(tgt[name])+(name==='Coast'?' today':'')+'</span>'+
+          '<span class="ff-y">'+(done?'&#10003; Reached':yr==null?H+'+ yrs':yr+' yr'+(yr===1?'':'s'))+'</span>'+
+          '<span class="ff-a">'+(done?'now':yr==null?'&mdash;':'age '+(v.age+yr))+'</span></div>';
+      }).join('');
 
-      // Savings-rate chart, user's own rate highlighted.
-      var rows=[10,20,30,40,50,60,70], mine=Math.round(rate*100);
-      if(rows.indexOf(mine)<0 && mine>0 && mine<100) rows.push(mine);
-      rows.sort(function(a,b){return a-b;});
-      var top=yrsAt(.1);
-      wrap.querySelector('[data-frates]').innerHTML=rows.map(function(r){
-        var y=yrsAt(r/100);
-        return '<div class="fr-row'+(r===mine?' me':'')+'"><span>'+r+'%</span><span class="fr-tr"><i class="fr-bar" style="width:'+Math.max(3,y/top*100).toFixed(1)+'%"></i></span><span>'+y.toFixed(0)+' yrs</span></div>';
+      var fy=yrs['Your FIRE'], el=wrap.querySelector('[data-fverdict]');
+      el.className='yp-verdict'+(fy==null?' tight':'');
+      el.innerHTML=fy==null
+        ? 'At '+money(v.save)+' a year the pile doesn’t reach your number within '+H+' years. Saving more moves this faster than anything else.'
+        : fy===0 ? '<b>You’re already financially independent</b> at a '+v.wr+'% withdrawal rate.'
+        : 'Saving <b>'+money(v.save)+' a year</b>, you could reach your FIRE number of '+short(T.fi)+' around <b>age '+(v.age+fy)+'</b>'+
+          (yrs['Barista']!=null&&yrs['Barista']<fy?' &mdash; and could downshift to Barista FIRE at <b>'+(v.age+yrs['Barista'])+'</b>':'')+'.';
+
+      // --- save more, retire sooner (dollars, not percentages)
+      var steps=SAVE_STEPS.slice(); if(steps.indexOf(v.save)<0&&v.save>0) steps.push(v.save); steps.sort(function(a,c){return a-c;});
+      var rows=steps.map(function(s){var y=firstYear(series(s,80),function(x){return x>=T.fi;});return [s,y];});
+      var top=Math.max.apply(null,rows.map(function(r){return r[1]==null?80:r[1];}).concat([1]));
+      wrap.querySelector('[data-fsaves]').innerHTML=rows.map(function(r){
+        var y=r[1]==null?80:r[1];
+        return '<div class="fr-row'+(r[0]===v.save?' me':'')+'"><span>'+short(r[0])+'/yr</span><span class="fr-tr"><i class="fr-bar" style="width:'+Math.max(3,y/top*100).toFixed(1)+'%"></i></span>'+
+          '<span>'+(r[1]==null?'80+ yrs':r[1]===0?'now':'age '+(v.age+r[1]))+'</span></div>';
       }).join('');
     }
     paint();
 
-    wrap.addEventListener('input',function(e){var k=e.target.getAttribute('data-fk');if(k){v[k]=num(e.target.value);paint();}});
+    wrap.addEventListener('input',function(e){
+      var t=e.target, k=t.getAttribute('data-fk');
+      if(k){v[k]=num(t.value);paint();return;}
+      if(t.matches('[data-fyr]')){year=+t.value;paint();}
+    });
+    wrap.addEventListener('change',function(e){if(e.target.matches('[data-fwr]')){v.wr=+e.target.value;paint();}});
     wrap.addEventListener('blur',function(e){var k=e.target.getAttribute('data-fk');if(k)e.target.value=fmt(k);},true);
   }
 
