@@ -25,22 +25,30 @@
   ::selection{background:var(--amber-soft);color:var(--ink)}
   a{color:inherit}
 
-  .bar{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 26px;background:rgba(243,245,242,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
-  .wordmark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.05rem;color:var(--ink)}
-  .mark{width:30px;height:30px;border-radius:8px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:.78rem;font-weight:700}
-  /* Left-side way home, mirrors the "Back to site" button on the right. */
-  .wm-back{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sage);color:var(--pine);font-size:1rem;transition:transform .18s,background .18s,color .18s}
-  .wordmark:hover .wm-back{transform:translateX(-3px);background:var(--pine);color:#fff}
-  /* Same four tabs as index.html (Tools/Fun open those pages via #hash). */
+  /* Header mirrors index.html's exactly — same 1200px container, logo size,
+  /* index.html sets html{font-size:15px}; this page keeps 16px, so the header uses px to match. */
+     tabs and right-hand buttons — so nothing jumps when you switch pages. */
+  .bar{position:sticky;top:0;z-index:20;background:rgba(243,245,242,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  .nav-inner{max-width:1200px;margin:0 auto;padding:0 28px;height:68px;display:flex;align-items:center;justify-content:space-between}
+  .wordmark{position:relative;display:flex;align-items:center;gap:11px;text-decoration:none;font-family:var(--display);font-weight:700;letter-spacing:-.01em;font-size:15px;color:var(--ink)}
+  .mark{width:34px;height:34px;border-radius:9px;background:var(--pine);color:#fff;display:grid;place-items:center;font-size:12.9px;font-weight:700;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+  /* Back arrow hangs in the margin left of the logo, so the logo itself
+     lines up with the home page. Hidden when there's no margin to hang in. */
+  .wm-back{position:absolute;right:calc(100% + 10px);top:50%;transform:translateY(-50%);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sage);color:var(--pine);font-size:15px;transition:transform .18s,background .18s,color .18s}
+  .wordmark:hover .wm-back{transform:translate(-3px,-50%);background:var(--pine);color:#fff}
+  @media(max-width:1290px){.wm-back{display:none}}
   nav.page-tabs{display:flex;align-items:center;gap:6px}
-  nav.page-tabs a{font-family:var(--body);font-size:.92rem;color:var(--ink-soft);font-weight:600;padding:8px 15px;border-radius:999px;text-decoration:none;transition:color .2s,background .2s}
+  nav.page-tabs a{font-family:var(--body);font-size:13.8px;color:var(--ink-soft);font-weight:600;padding:8px 15px;border-radius:999px;text-decoration:none;transition:color .2s,background .2s}
   nav.page-tabs a:hover{color:var(--ink);background:var(--paper-2)}
   nav.page-tabs a.active{color:var(--pine);background:var(--sage)}
-  .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-weight:700;font-size:.92rem;padding:9px 18px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:.18s}
-  .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px)}
-  .homebtn .ha{transition:transform .18s}.homebtn:hover .ha{transform:translateX(-3px)}
-  /* Phones: the left arrow is the way home; drop the button so tabs fit one row. */
-  @media(max-width:760px){.homebtn{display:none} .wordmark{font-size:0;gap:6px} nav.page-tabs{gap:2px} nav.page-tabs a{padding:7px 10px;font-size:.84rem}}
+  .nav-actions{display:flex;align-items:center;gap:10px}
+  .btn{font-family:var(--body);font-weight:600;font-size:13.8px;padding:9px 16px;border-radius:999px;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:8px;text-decoration:none;transition:transform .18s ease, box-shadow .18s ease, background .2s}
+  .btn-primary{background:var(--pine);color:#fff}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px rgba(14,82,64,.7)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+  .btn-ghost:hover{border-color:var(--pine);color:var(--pine);transform:translateY(-2px)}
+  @media(max-width:900px){nav.page-tabs{gap:2px} nav.page-tabs a{padding:7px 11px;font-size:12.9px}}
+  @media(max-width:560px){.wordmark{font-size:14.1px} nav.page-tabs a{padding:6px 9px;font-size:12px} .bar .btn{display:none}}
 
   .wrap{max-width:1080px;margin:0 auto;padding:0 26px}
   .hero{padding:64px 0 8px;position:relative}
@@ -340,6 +348,30 @@
   @media(max-width:700px){.sl-ctl{grid-template-columns:1fr 1fr}}
   @media(max-width:520px){.sl-out{grid-template-columns:1fr}}
 
+  /* FIRE — passive-rating dial, milestone ladder, savings-rate bars */
+  .fr-rating{display:flex;align-items:center;gap:18px;margin:16px 0 4px}
+  .fr-dial{--p:0;flex:none;width:118px;height:118px;border-radius:50%;display:grid;place-content:center;text-align:center;
+    background:radial-gradient(closest-side,var(--paper) 78%,transparent 79%),conic-gradient(var(--pine) calc(var(--p)*1%),#dfe6e0 0)}
+  .fr-dial b{font-family:var(--display);font-size:1.6rem;color:var(--pine);line-height:1}
+  .fr-dial small{font-size:.58rem;color:var(--ink-soft);line-height:1.25;margin-top:3px}
+  .fr-badge{display:inline-block;font-family:var(--display);font-weight:700;font-size:.9rem;background:var(--pine);color:#fff;border-radius:999px;padding:4px 12px}
+  .fr-tier p{font-size:.84rem;color:var(--ink-soft);margin-top:6px}
+  .fl-track{position:relative;height:14px;background:#e4e9e3;border-radius:99px;margin:38px 0 40px}
+  .fl-fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,var(--pine),#3f9c80);transition:width .4s}
+  .fl-mk{position:absolute;top:-6px;bottom:-6px;width:2px;margin-left:-1px;background:#9aa69f}
+  .fl-mk span{position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.56rem;white-space:nowrap;color:var(--ink-soft)}
+  .fl-mk.low span{bottom:auto;top:calc(100% + 4px)}
+  .fl-mk.hit{background:var(--pine)} .fl-mk.hit span{color:var(--pine);font-weight:700}
+  .fl-mk.me{background:var(--amber);width:3px} .fl-mk.me span{color:#9a5f12;font-weight:700}
+  .fl-mk:first-child+.fl-mk span{transform:translateX(-20%)}
+  .fl-mk:last-child span{transform:translateX(-85%)}   /* keep end labels inside the track */
+  .fr-row{display:grid;grid-template-columns:40px 1fr 52px;gap:8px;align-items:center;font-family:var(--mono);font-size:.68rem;color:var(--ink-soft);margin-bottom:5px}
+  .fr-tr{display:block;height:10px}
+  .fr-bar{display:block;height:100%;border-radius:99px;background:#cfe0d6}
+  .fr-row.me{color:#9a5f12;font-weight:700}
+  .fr-row.me .fr-bar{background:var(--amber)}
+  @media(max-width:560px){.fr-rating{flex-direction:column;align-items:flex-start}.fl-mk span{font-size:.5rem}}
+
   /* 401(k) rollover */
   .x-sub{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine);font-weight:700;margin:20px 0 9px}
   .impl-detail ul{margin:0;padding-left:18px;display:grid;gap:8px}
@@ -384,16 +416,24 @@
 </head>
 <body>
 
-<div class="bar">
-  <a class="wordmark" href="index.html" aria-label="Back to site"><span class="wm-back" aria-hidden="true">&#8592;</span><span class="mark">TR</span>Talon Rucker</a>
-  <nav class="page-tabs" aria-label="Site">
-    <a href="index.html#home">Home</a>
-    <a href="index.html#extras">Tools</a>
-    <a href="index.html#fun">Fun</a>
-    <a href="lessons.html" class="active" aria-current="page">Lessons</a>
-  </nav>
-  <a class="homebtn" href="index.html"><span class="ha">&#8592;</span> Back to site</a>
-</div>
+<header class="bar">
+  <div class="nav-inner">
+    <a class="wordmark" href="index.html" aria-label="Talon Rucker — back to home"><span class="wm-back" aria-hidden="true">&#8592;</span><span class="mark">TR</span>Talon Rucker</a>
+    <nav class="page-tabs" aria-label="Site">
+      <a href="index.html#home">Home</a>
+      <a href="index.html#extras">Tools</a>
+      <a href="index.html#fun">Fun</a>
+      <a href="lessons.html" class="active" aria-current="page">Lessons</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="https://www.linkedin.com/in/talonrucker" target="_blank" rel="noopener" class="btn btn-ghost nav-linkedin">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        <span>LinkedIn</span>
+      </a>
+      <a href="mailto:talonrucker@gmail.com?subject=Hi%20Talon" class="btn btn-primary">Get in touch</a>
+    </div>
+  </div>
+</header>
 
 <div class="wrap">
   <header class="hero">
@@ -503,7 +543,7 @@
     </div>
     <div class="impl-list" id="implList"></div>
     <button class="impl-xhead" id="implXHead" type="button" aria-expanded="false" aria-controls="implXList">
-      <span><span class="xe">Extras</span><span class="xt">Beyond the ten</span><span class="xs">Money biases &middot; Tax brackets &middot; Student loans &middot; 401(k) rollovers &middot; Social Security</span></span>
+      <span><span class="xe">Extras</span><span class="xt">Beyond the ten</span><span class="xs">Money biases &middot; Tax brackets &middot; Student loans &middot; 401(k) rollovers &middot; Social Security &middot; FIRE</span></span>
       <span class="impl-chev">&#x25BE;</span>
     </button>
     <div class="impl-xlist" id="implXList" hidden></div>
@@ -670,6 +710,25 @@
       '<li>When it lands, <b>invest it</b>. Rollovers usually arrive as cash and sit there until you buy something.</li>'+
     '</ol>';
 
+  /* FIRE extra — the flavors, the early-access catches, and the calculator. */
+  var FIRE_TYPES=[
+    ['Lean FIRE','Bare-bones budget, about $40,000 a year or less. Smaller number, thinner cushion.'],
+    ['Barista FIRE','Leave the career, keep a part-time job that covers some bills (and maybe health insurance). Your portfolio only covers the rest.'],
+    ['Coast FIRE','Enough invested that growth alone gets you to FIRE by 65. You just earn enough to cover today.'],
+    ['Fat FIRE','Full lifestyle, about $100,000+ a year. Bigger number, room for travel and surprises.']
+  ];
+  var fireExtra=
+    '<p class="x-sub">The flavors</p>'+
+    '<div class="bias-grid">'+FIRE_TYPES.map(function(t){return '<div class="bias"><b>'+t[0]+'</b><p>'+t[1]+'</p></div>';}).join('')+'</div>'+
+    '<div class="yp" data-fire></div>'+
+    '<p class="x-sub">Before you retire early</p>'+
+    '<ul>'+
+      '<li><b>Reaching the money before 59&frac12;.</b> Roth IRA <i>contributions</i> come out anytime; a taxable brokerage has no age rules; the Rule of 55 and 72(t) payments open retirement accounts early.</li>'+
+      '<li><b>Health insurance until Medicare at 65.</b> Budget for an ACA plan &mdash; it’s often the biggest new bill.</li>'+
+      '<li><b>Longer retirement, lower withdrawal.</b> The 4% rule was tested on 30 years. Retiring at 40 means 50+ years, so many plan on <b>3&ndash;3.5%</b>.</li>'+
+      '<li><b>Sequence risk.</b> A crash in year one hurts most. Keep 1&ndash;2 years of spending in cash.</li>'+
+    '</ul>';
+
   /* Social Security extra — everything past the five basics in the steps. */
   var ssExtra=
     '<div class="yp" data-ss></div>'+
@@ -738,7 +797,15 @@
        '<b>How it’s figured.</b> Your <b>highest 35 years</b> of earnings, adjusted for wage growth. Fewer than 35? Zeros fill the gap &mdash; one more working year can replace a zero.',
        '<b>Full retirement age is 67</b> for anyone born 1960 or later. Claim at 62 and get <b>70%</b> for life. Wait to 70 and get <b>124%</b>.',
        '<b>It rises with inflation</b> every year (2.8% for 2026) and lasts as long as you do &mdash; insurance against living a long time.',
-       'Check your earnings record free at <a href="https://www.ssa.gov/myaccount/" target="_blank" rel="noopener">ssa.gov/myaccount</a>. Missing years mean a smaller check.']}
+       'Check your earnings record free at <a href="https://www.ssa.gov/myaccount/" target="_blank" rel="noopener">ssa.gov/myaccount</a>. Missing years mean a smaller check.']},
+    {id:'fire',title:'FIRE: retire early',
+     lead:'Financial Independence, Retire Early. Your investments pay your bills &mdash; work becomes optional.',
+     extra:fireExtra,
+     steps:[
+       '<b>Your number is 25&times; what you spend</b> in a year (the 4% rule). Spend $60,000 &rarr; you need about $1.5 million.',
+       '<b>Your savings rate decides when, not your income.</b> Save 10% and it takes about 50 years. Save 50% and it’s about 17 (chart below).',
+       '<b>Spending cuts work twice:</b> you save more <i>and</i> your number shrinks.',
+       '<b>The “retire early” part is optional.</b> The point is the choice &mdash; plenty of people reach FI and keep working on their own terms.']}
 
   ];
 
@@ -789,6 +856,7 @@
     xList.querySelectorAll('[data-loans]').forEach(initLoans);
     xList.querySelectorAll('[data-rollover]').forEach(initRollover);
     xList.querySelectorAll('[data-ss]').forEach(initSS);
+    xList.querySelectorAll('[data-fire]').forEach(initFire);
     updateProgress();
   }
   function setOpen(btn,panel,open){panel.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
@@ -1397,6 +1465,92 @@
 
     wrap.addEventListener('input',function(e){var k=e.target.getAttribute('data-ssk');if(k){v[k]=num(e.target.value);paint();}});
     wrap.addEventListener('blur',function(e){var k=e.target.getAttribute('data-ssk');if(k)e.target.value=fmt(k);},true);
+  }
+
+  /* ---- FIRE calculator (extra: FIRE) ----
+     Real (after-inflation) 5% return, 4% withdrawal — so everything is in
+     today's dollars. Passive rating = what the pile pays at 4% ÷ what you
+     spend. The ladder puts each flavor's target on one line:
+       Coast   = FIRE number discounted back from 65
+       Barista = half the FIRE number (a part-time job covers the rest)
+       Lean    = 25 x $40,000     Fat = 25 x $100,000 */
+  var FI_R=0.05, FI_W=0.04;
+  function initFire(wrap){
+    var v={age:30,spend:50000,have:50000,save:15000};
+    function num(x){return +String(x).replace(/[^0-9.]/g,'')||0;}
+    function fmt(k){return k==='age'?String(v[k]):Math.round(v[k]).toLocaleString('en-US');}
+    function field(k,label,pre){
+      return '<div class="aq-f"><label>'+label+'</label><span class="aq-in">'+(pre?'<span class="pre">'+pre+'</span>':'')+
+        '<input type="text" inputmode="numeric" data-fk="'+k+'" value="'+fmt(k)+'"></span></div>';
+    }
+    // Years from zero to FI at savings rate s (Mr. Money Mustache-style table).
+    function yrsAt(s){ return s<=0?Infinity:Math.log(1+FI_R*(1-s)/(FI_W*s))/Math.log(1+FI_R); }
+    wrap.innerHTML=
+      '<p class="x-sub">Your passive rating</p>'+
+      '<div class="aq-ctl sl-ctl">'+field('age','Age','')+field('spend','Spend / year','$')+field('have','Invested now','$')+field('save','Save / year','$')+'</div>'+
+      '<div class="fr-rating"><div class="fr-dial" data-fdial><b data-fpct>0%</b><small>of your spending<br>covered passively</small></div>'+
+        '<div class="fr-tier"><span class="fr-badge" data-ftier></span><p data-ftierp></p></div></div>'+
+      '<div class="fl-track" data-fladder></div>'+
+      '<div class="yp-out sl-out" data-fout></div><div class="yp-verdict" data-fverdict></div>'+
+      '<p class="x-sub">Savings rate &rarr; years to FIRE</p><div data-frates></div>'+
+      '<p class="aq-note">Hypothetical estimate: 5% real (after-inflation) return, 4% withdrawal, today’s dollars, starting from $0 in the chart. Not a projection or a recommendation.</p>';
+
+    function paint(){
+      var fi=v.spend/FI_W, passive=v.have*FI_W, pct=v.spend>0?passive/v.spend:0;
+      var rate=v.save+v.spend>0?v.save/(v.save+v.spend):0;
+      var coast=fi/Math.pow(1+FI_R,Math.max(0,65-v.age)), barista=fi/2, lean=40000/FI_W, fat=100000/FI_W;
+      // Years to FI from where they are today, compounding yearly.
+      var bal=v.have, yrs=0; while(bal<fi && yrs<80){ bal=bal*(1+FI_R)+v.save; yrs++; }
+      var reach=bal>=fi;
+
+      var P=Math.round(pct*100), tier, tierP;
+      if(pct>=1.5){tier='Fat FI';tierP='Your money pays for your life and then some.';}
+      else if(pct>=1){tier='Financially independent';tierP='Work is optional. Everything from here is margin.';}
+      else if(pct>=.5){tier='Barista range';tierP='A part-time job could cover the rest.';}
+      else if(v.have>=coast){tier='Coasting';tierP='Stop saving today and growth still gets you there by 65.';}
+      else if(pct>=.1){tier='Building';tierP='The aqueduct is real &mdash; keep digging.';}
+      else {tier='Getting started';tierP='Every dollar invested now is a dollar that works forever.';}
+      wrap.querySelector('[data-fpct]').textContent=P+'%';
+      wrap.querySelector('[data-fdial]').style.setProperty('--p',Math.min(100,P));
+      wrap.querySelector('[data-ftier]').textContent=tier;
+      wrap.querySelector('[data-ftierp]').innerHTML=tierP;
+
+      // Milestone ladder — markers alternate above/below so labels don't collide.
+      var marks=[['Coast',coast],['Barista',barista],['Lean',lean],['Your FIRE',fi],['Fat',fat]].sort(function(a,b){return a[1]-b[1];});
+      var max=Math.max(fat,fi,v.have)*1.04;
+      wrap.querySelector('[data-fladder]').innerHTML=
+        '<div class="fl-fill" style="width:'+Math.min(100,v.have/max*100).toFixed(1)+'%"></div>'+
+        marks.map(function(m,i){
+          return '<div class="fl-mk'+(i%2?' low':'')+(v.have>=m[1]?' hit':'')+(m[0]==='Your FIRE'?' me':'')+'" style="left:'+(m[1]/max*100).toFixed(1)+'%">'+
+            '<span>'+m[0]+' &middot; '+(m[1]>=1e6?'$'+(m[1]/1e6).toFixed(2)+'M':money(m[1]))+'</span></div>';
+        }).join('');
+
+      wrap.querySelector('[data-fout]').innerHTML=
+         xStat('Your FIRE number',money(fi),'25&times; '+money(v.spend)+'.')
+        +xStat('Passive income now',money(passive)+'/yr','4% of '+money(v.have)+'.')
+        +xStat('Est. years to FIRE',reach?(yrs===0?'Now':yrs+' yrs'):'80+',reach?(yrs===0?'You’re there.':'At age '+(v.age+yrs)+'.'):'Save more or spend less.',!reach);
+
+      var el=wrap.querySelector('[data-fverdict]');
+      el.className='yp-verdict'+(reach?'':' tight');
+      el.innerHTML=reach
+        ? 'Saving <b>'+Math.round(rate*100)+'%</b> of what you bring home, you could reach FIRE around <b>age '+(v.age+yrs)+'</b>. '+
+          (v.have>=coast?'You’ve already hit <b>Coast FIRE</b>.':'Coast FIRE is <b>'+money(coast)+'</b> &mdash; reach it and saving becomes optional.')
+        : 'At this pace the pile never catches your spending. Raise the savings rate &mdash; it moves this faster than anything.';
+
+      // Savings-rate chart, user's own rate highlighted.
+      var rows=[10,20,30,40,50,60,70], mine=Math.round(rate*100);
+      if(rows.indexOf(mine)<0 && mine>0 && mine<100) rows.push(mine);
+      rows.sort(function(a,b){return a-b;});
+      var top=yrsAt(.1);
+      wrap.querySelector('[data-frates]').innerHTML=rows.map(function(r){
+        var y=yrsAt(r/100);
+        return '<div class="fr-row'+(r===mine?' me':'')+'"><span>'+r+'%</span><span class="fr-tr"><i class="fr-bar" style="width:'+Math.max(3,y/top*100).toFixed(1)+'%"></i></span><span>'+y.toFixed(0)+' yrs</span></div>';
+      }).join('');
+    }
+    paint();
+
+    wrap.addEventListener('input',function(e){var k=e.target.getAttribute('data-fk');if(k){v[k]=num(e.target.value);paint();}});
+    wrap.addEventListener('blur',function(e){var k=e.target.getAttribute('data-fk');if(k)e.target.value=fmt(k);},true);
   }
 
   render();
