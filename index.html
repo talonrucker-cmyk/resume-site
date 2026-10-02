@@ -4638,7 +4638,10 @@
     var KEY='tr-master';
     var mAge=document.getElementById('mAge'), mInc=document.getElementById('mInc');
     if(!mAge||!mInc) return;
-    var incomeIds=['wcInc','hlvInc','lcInc','lqInc','dbInc','hmInc','liInc','diInc'], ageIds=['hlvAge','liAge'];
+    var incomeIds=['wcInc','hlvInc','lcInc','lqInc','dbInc','hmInc','liInc','diInc','cfEarn','tbInc'], ageIds=['hlvAge','liAge'];
+    /* Rough take-home for the calculators that ask for it: gross minus 2026
+       federal income tax (single, standard deduction) and FICA. */
+    function takeHome(g){ return Math.max(0,g-fedTax(g,'single',1)-0.062*Math.min(g,184500)-0.0145*g); }
 
     function fire(el,v){
       if(!el) return;
@@ -4664,6 +4667,8 @@
          age here re-runs that calculator too (Batch 11 #51). */
       var wy=document.getElementById('wcYears');
       if(wy) fire(wy,65-age);
+      /* 12-month planner asks for monthly take-home. */
+      fire(document.querySelector('[data-ypinc]'),takeHome(income)/12);
     }
 
     try{

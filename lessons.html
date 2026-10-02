@@ -1014,9 +1014,21 @@
      and the cushion to bank up front, because the big months arrive before
      you've finished saving for them. Hand-ported from index.html — keep the
      two copies in step if the math changes. */
+  /* Age & income from the home page's "Start here" card (tr-master) seed
+     every calculator here. Take-home is a rough 2026 estimate: gross minus
+     federal income tax (single, standard deduction) and FICA. Computed on
+     use, because the TB bracket table is defined further down. */
+  var MASTER=(function(){try{return JSON.parse(localStorage.getItem('tr-master')||'null');}catch(e){return null;}})();
+  var M_INC=(MASTER&&MASTER.income>0)?MASTER.income:0, M_AGE=(MASTER&&MASTER.age>0)?MASTER.age:0;
+  function takeHome(g){
+    var t=TB.single, ti=Math.max(0,g-t.sd), tax=0, prev=0;
+    for(var k=0;k<t.b.length&&ti>prev;k++){ tax+=(Math.min(ti,t.b[k][0])-prev)*t.b[k][1]; prev=t.b[k][0]; }
+    return Math.max(0,g-tax-0.062*Math.min(g,184500)-0.0145*g);
+  }
+  function mTH(){ return M_INC?Math.round(takeHome(M_INC)):0; }   // yearly take-home
   var YP_MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function initYearPlan(wrap){
-    var income=4500;
+    var income=mTH()?Math.round(mTH()/12):4500;
     var rec=[{label:'Rent',amt:1500},{label:'Car + insurance',amt:480},
              {label:'Utilities & phone',amt:210},{label:'Subscriptions',amt:60}];
     var one=[{label:'Laptop',amt:1000,mo:1},{label:'Car registration',amt:520,mo:3},
@@ -1154,7 +1166,7 @@
   var AQ_RET=0.07, AQ_SWR=0.04, AQ_X0=70, AQ_X1=610, AQ_ARCHES=8;
 
   function initAqueduct(wrap){
-    var income=6000, living=4000, target=100000, year=15;
+    var income=mTH()?Math.round(mTH()/12):6000, living=4000, target=100000, year=15;
 
     function num(v){return +String(v).replace(/[^0-9.]/g,'')||0;}
     function com(v){return Math.round(v).toLocaleString('en-US');}
@@ -1373,7 +1385,7 @@
            '<span class="v">'+v+'</span><span class="d">'+d+'</span></div>';
   }
   function initBrackets(wrap){
-    var income=75000, status='single';
+    var income=M_INC||75000, status='single';
     function num(v){return +String(v).replace(/[^0-9.]/g,'')||0;}
     function com(v){return Math.round(v).toLocaleString('en-US');}
     wrap.innerHTML=
@@ -1578,7 +1590,7 @@
        Coast     = Your FIRE discounted back from 65 — it shrinks as you age,
                    so it's checked against the balance in each year. */
   function initFire(wrap){
-    var v={age:30,income:65000,spend:50000,have:50000,save:0,ret:5,wr:4}, year=10, H=50;   // save = income - spend, set in paint()
+    var v={age:M_AGE||30,income:mTH()||65000,spend:mTH()?Math.min(50000,Math.round(mTH()*0.8/1000)*1000):50000,have:50000,save:0,ret:5,wr:4}, year=10, H=50;   // save = income - spend, set in paint()
     var SAVE_STEPS=[5000,10000,15000,20000,25000,30000,40000,50000];
     var MS=[['Coast','#7a9a8c'],['Barista','#3f9c80'],['Lean','#17705a'],['Your FIRE','#D38B26'],['Fat','#0A3B2E']];
     function num(x){return +String(x).replace(/[^0-9.]/g,'')||0;}

@@ -1087,9 +1087,19 @@
   ckRender();
   syncActions();
 
+  /* ---------- MASTER AGE (from home page "Start here", read only) ---------- */
+  function applyMaster(){
+    var m; try{ m = JSON.parse(localStorage.getItem('tr-master') || 'null'); }catch(e){ return; }
+    if (!m || !(m.age > 0)) return;
+    var el = document.getElementById('ot_years'); if (!el) return;
+    el.value = Math.min(Math.max(65 - m.age, +el.min), +el.max);   // years until 65
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+  }
+
   /* ---------- INIT ---------- */
   calcNest();
   calcTrack();
+  applyMaster();
   goSlide(0, 0);
 })();
 </script>

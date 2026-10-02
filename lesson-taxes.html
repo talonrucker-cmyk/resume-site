@@ -1199,10 +1199,21 @@
   ckRender();
   syncActions();
 
+  /* ---------- MASTER INCOME (from home page "Start here", read only) ---------- */
+  function applyMaster(){
+    var m; try{ m = JSON.parse(localStorage.getItem('tr-master') || 'null'); }catch(e){ return; }
+    if (!m || !(m.income > 0)) return;
+    var el = document.getElementById('cg_ord'); if (!el) return;
+    // Other taxable income = salary minus the 2026 single standard deduction.
+    el.value = Math.max(0, m.income - 16100).toLocaleString('en-US');
+    el.dispatchEvent(new Event('input', {bubbles:true}));
+  }
+
   /* ---------- INIT ---------- */
   calcStdItem();
   calcCG();
   calcScorp();
+  applyMaster();
   goSlide(0, 0);
 })();
 </script>
