@@ -417,6 +417,23 @@
   .wc-total.ok .wc-tk{background:var(--pine);color:#fff}
   .wc-total.ok b{color:var(--pine)}
   .wc-total.low .wc-tk{background:var(--brick);color:#fff}
+  /* Compact pass (~15% tighter) so the featured calculator fits a laptop screen. */
+  .compound > .wrap{max-width:1096px}   /* narrower card = shorter chart; heading stays aligned */
+  .wc-inputs{padding:18px 20px}
+  .wc-title{font-size:1.15rem}
+  .wc-sub{font-size:.85rem;margin:4px 0 16px}
+  .wc-field{margin-bottom:13px}
+  .wc-field label{margin-bottom:5px}
+  .wc-num input{padding:6px 4px}
+  .wc-saverate{margin-top:16px;padding-top:13px}
+  .wc-advbtn{margin-top:14px}
+  .wc-output{padding:22px 24px}
+  .wc-bignums{gap:14px;margin-bottom:12px}
+  .wc-big{padding:13px 16px}
+  .wc-bv{font-size:clamp(1.35rem,2.6vw,1.8rem);margin-top:3px}
+  .wc-legend{margin-top:10px;font-size:.8rem}
+  .wc-total{margin-top:12px;padding-top:11px}
+  .wc-total b{font-size:clamp(1.9rem,4vw,2.6rem)}
   /* income steps + advanced */
   .wc-sub-d{margin:-8px 0 18px}
   .wc-sub-d>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--pine);padding:2px 0}
@@ -1179,7 +1196,7 @@
           </div>
           <div class="wc-field">
             <label for="wcRet">After-tax return</label>
-            <div class="wc-ctrl"><input type="range" id="wcRet" min="0" max="12" step="0.5" value="0"><span class="wc-val" id="wcRetV">0%</span></div>
+            <div class="wc-ctrl"><input type="range" id="wcRet" min="0" max="12" step="0.5" value="6"><span class="wc-val" id="wcRetV">6%</span></div>
           </div>
           <div class="wc-field">
             <label for="wcLife">Lifestyle (spend)</label>
@@ -1196,7 +1213,7 @@
                 <option value="married">Married, filing jointly</option>
               </select>
             </div>
-            <p class="wc-hint" id="wcTaxNote">Hypothetical estimate: 2026 brackets and standard deduction, indexed forward at 3% inflation. Federal only &mdash; no state or payroll tax. Not tax advice.</p>
+            <p class="wc-hint" id="wcTaxNote">Hypothetical estimate: 2026 brackets and standard deduction, indexed forward at 3% inflation. Federal income tax only &mdash; no state, payroll or capital-gains tax. Not tax advice.</p>
           </div>
         </div>
 
@@ -1213,10 +1230,10 @@
           <div class="wc-legend">
             <span><i class="sw green"></i>Wealth you build (invested &amp; compounding)</span>
             <span><i class="sw red"></i>Cash you spend on lifestyle (not invested)</span>
-            <span id="wcTaxLeg" style="display:none"><i class="sw tax"></i>Taxes paid (never yours to keep)</span>
+            <span id="wcTaxLeg" style="display:none"><i class="sw tax"></i>Estimated federal income tax (never yours to keep)</span>
           </div>
           <div class="wc-total" id="wcTotal"><span class="wc-tk" id="wcSpendTk">Guilt-free spending</span><b id="wcSpend">$0</b><span id="wcSpendSub">to enjoy over your career &mdash; and the wealth still gets built.</span></div>
-          <p class="wc-note">Hypothetical. Only the money you <b>save</b> is invested and compounds. The red bars are the raw dollars spent on lifestyle over the same years&mdash;spent, not grown. Flip to <b>Today&rsquo;s dollars</b> to strip out inflation and see what the ending balance is actually worth in current buying power.</p>
+          <p class="wc-note">Hypothetical. Only the money you <b>save</b> is invested and compounds. Investment taxes (capital gains, dividends) aren&rsquo;t calculated &mdash; enter an <b>after-tax</b> return instead. The red bars are the raw dollars spent on lifestyle over the same years&mdash;spent, not grown. Flip to <b>Today&rsquo;s dollars</b> to strip out inflation and see what the ending balance is actually worth in current buying power.</p>
         </div>
       </div>
 
@@ -3250,7 +3267,7 @@
     if(!chart) return;
     let mode='future', advOn=false;
     const wcTip=document.createElement('div'); wcTip.className='wc-tip'; wcTip.style.display='none'; document.body.appendChild(wcTip);
-    function wcShowTip(ev,year,d){ wcTip.style.display='block'; wcTip.innerHTML='<b>Year '+year+'</b><br>Income: '+fmt(d.income)+(d.tax>0?' &rarr; '+fmt(d.net)+' after tax':'')+'<br><span class="t-g">Wealth built: '+fmt(d.green)+'</span><br><span class="t-r">Lifestyle spent: '+fmt(d.red)+'</span>'+(d.taxCum>0?'<br><span class="t-t">Taxes paid: '+fmt(d.taxCum)+'</span>':''); wcTip.style.left=(ev.clientX+14)+'px'; wcTip.style.top=(ev.clientY+14)+'px'; }
+    function wcShowTip(ev,year,d){ wcTip.style.display='block'; wcTip.innerHTML='<b>Year '+year+'</b><br>Income: '+fmt(d.income)+(d.tax>0?' &rarr; '+fmt(d.net)+' after tax':'')+'<br><span class="t-g">Wealth built: '+fmt(d.green)+'</span><br><span class="t-r">Lifestyle spent: '+fmt(d.red)+'</span>'+(d.taxCum>0?'<br><span class="t-t">Est. taxes paid: '+fmt(d.taxCum)+'</span>':''); wcTip.style.left=(ev.clientX+14)+'px'; wcTip.style.top=(ev.clientY+14)+'px'; }
     function wcHideTip(){ wcTip.style.display='none'; }
     const NS="http://www.w3.org/2000/svg";
     const VB={w:1000,h:460,padL:70,padR:14,padT:16,padB:36};
@@ -3331,7 +3348,7 @@
       wealthEl.textContent=fmt(R.realized);
       incomeEl.textContent=fmt(R.retInc);
       wealthSub.textContent=fmtM(R.flip)+(mode==='today'?' in future dollars':' in today’s dollars');
-      taxSub.textContent=R.status==='off'?'':'Year-1 tax: '+Math.round(R.effRate*100)+'% effective';
+      taxSub.textContent=R.status==='off'?'':'Est. year-1 tax: '+Math.round(R.effRate*100)+'% effective';
       spendEl.textContent=fmt(R.spend);
       const spendSub=$('wcSpendSub');
       // Spending is only "guilt-free" once at least 15% is being saved.
