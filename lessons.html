@@ -400,6 +400,11 @@
   .ff-row.me{border-color:var(--amber);background:#fdf8ef}
   .ff-row.done{background:#e8f2ed;border-color:rgba(14,82,64,.35)}
   .fr-row{grid-template-columns:62px 1fr 64px}
+  .ff-save{margin-top:10px;font-size:.86rem;color:var(--ink);background:var(--paper-2);border-left:3px solid var(--pine);border-radius:0 8px 8px 0;padding:9px 12px}
+  .ff-save b{color:var(--pine)}
+  .ff-save.tight{border-left-color:var(--brick);background:#fdf0ed;color:#8f2b1f}.ff-save.tight b{color:var(--brick)}
+  .fr-coast{display:block;margin-top:8px;font-size:.8rem;font-weight:700;color:var(--pine)}
+  .fr-rating{margin-top:14px}
   @media(max-width:700px){.ff-ctl{grid-template-columns:1fr 1fr}}
   @media(max-width:480px){.ff-row{grid-template-columns:12px 1fr auto;}.ff-t{display:none}.ff-a{grid-column:2/-1;text-align:left}}
 
@@ -1573,7 +1578,7 @@
        Coast     = Your FIRE discounted back from 65 — it shrinks as you age,
                    so it's checked against the balance in each year. */
   function initFire(wrap){
-    var v={age:30,spend:50000,have:50000,save:15000,ret:5,wr:4}, year=10, H=50;
+    var v={age:30,income:65000,spend:50000,have:50000,save:0,ret:5,wr:4}, year=10, H=50;   // save = income - spend, set in paint()
     var SAVE_STEPS=[5000,10000,15000,20000,25000,30000,40000,50000];
     var MS=[['Coast','#7a9a8c'],['Barista','#3f9c80'],['Lean','#17705a'],['Your FIRE','#D38B26'],['Fat','#0A3B2E']];
     function num(x){return +String(x).replace(/[^0-9.]/g,'')||0;}
@@ -1595,17 +1600,18 @@
 
     wrap.innerHTML=
       '<p class="x-sub">Your FIRE calculator</p>'+
-      '<div class="aq-ctl ff-ctl">'+field('age','Age','')+field('spend','Spend / year','$')+field('have','Invested now','$')+field('save','You save / year','$')+
+      '<div class="aq-ctl ff-ctl">'+field('age','Age','')+field('income','Take-home income / year','$')+field('spend','Spend / year','$')+field('have','Invested now','$')+
         field('ret','Return after inflation','','%')+
         '<div class="aq-f"><label>Withdrawal rate</label><span class="aq-in"><select data-fwr aria-label="Withdrawal rate">'+
           '<option value="4">4% &middot; 30-yr retirement</option><option value="3.5">3.5% &middot; 40 yrs</option><option value="3.25">3.25% &middot; 50 yrs</option></select></span></div>'+
       '</div>'+
-      '<div class="fr-rating"><div class="fr-dial" data-fdial><b data-fpct>0%</b><small>of your spending<br>covered passively</small></div>'+
-        '<div class="fr-tier"><span class="fr-badge" data-ftier></span><p data-ftierp></p></div></div>'+
+      '<div class="ff-save" data-fsave></div>'+
 
       '<p class="x-sub">Watch it grow</p>'+
       '<div class="ff-year"><div class="ff-year-top"><b data-fylab></b><span data-fybal></span></div>'+
         '<input type="range" min="0" max="'+H+'" step="1" value="'+year+'" data-fyr aria-label="Years from now"></div>'+
+      '<div class="fr-rating"><div class="fr-dial" data-fdial><b data-fpct>0%</b><small data-fdialsub></small></div>'+
+        '<div class="fr-tier"><span class="fr-badge" data-ftier></span><p data-ftierp></p><span class="fr-coast" data-fcoast></span></div></div>'+
       '<div class="fl-track" data-fladder></div>'+
       '<div class="ff-chart" data-fchart></div>'+
 
@@ -1620,21 +1626,31 @@
     var sel=wrap.querySelector('[data-fwr]'); sel.value=String(v.wr);
 
     function paint(){
-      var T=targets(), w=v.wr/100, b=series(v.save,H);
-      var passive=v.have*w, pct=v.spend>0?passive/v.spend:0, P=Math.round(pct*100);
+      // Savings = take-home income minus spending — one source of truth.
+      var save=Math.max(0,v.income-v.spend); v.save=save;
+      var T=targets(), w=v.wr/100, b=series(save,H);
+      var sr=v.income>0?save/v.income:0;
+      wrap.querySelector('[data-fsave]').innerHTML=v.spend>v.income
+        ? '<b>You spend more than you take home.</b> Nothing is left to invest &mdash; close that gap first.'
+        : 'You save <b>'+money(save)+' a year</b> &mdash; <b>'+Math.round(sr*100)+'%</b> of your take-home pay.';
+      wrap.querySelector('[data-fsave]').className='ff-save'+(v.spend>v.income?' tight':'');
 
-      // --- rating
+      // --- rating: what the pile pays at the SLIDER's year, vs. what you spend.
+      // Savings and the slider both move it; Coast is a separate yes/no.
+      var bY=b[year], pct=v.spend>0?bY*w/v.spend:0, P=Math.round(pct*100), ageY=v.age+year;
       var tier,tierP;
       if(pct>=1.5){tier='Fat FI';tierP='Your money pays for your life and then some.';}
       else if(pct>=1){tier='Financially independent';tierP='Work is optional. Everything from here is margin.';}
       else if(pct>=.5){tier='Barista range';tierP='A part-time job could cover the rest.';}
-      else if(v.have>=T.coastAt(0)){tier='Coasting';tierP='Stop saving today and growth still gets you there by 65.';}
       else if(pct>=.1){tier='Building';tierP='The aqueduct is real &mdash; keep digging.';}
       else {tier='Getting started';tierP='Every dollar invested now is a dollar that works forever.';}
       wrap.querySelector('[data-fpct]').textContent=P+'%';
+      wrap.querySelector('[data-fdialsub]').innerHTML='of your spending<br>covered at age '+ageY;
       wrap.querySelector('[data-fdial]').style.setProperty('--p',Math.min(100,P));
       wrap.querySelector('[data-ftier]').textContent=tier;
-      wrap.querySelector('[data-ftierp]').innerHTML=tierP;
+      wrap.querySelector('[data-ftierp]').innerHTML=short(bY)+' invested &times; '+v.wr+'% = <b>'+short(bY*w)+'/yr</b> against '+short(v.spend)+'/yr of spending. '+tierP;
+      var coastOK=pct<1 && bY>=T.coastAt(year);
+      wrap.querySelector('[data-fcoast]').innerHTML=coastOK?'&#10003; Coast FIRE reached &mdash; stop saving and growth alone still hits your number by 65.':'';
 
       // --- milestone years
       var yrs={
