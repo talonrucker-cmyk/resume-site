@@ -276,11 +276,62 @@
   .impl-chart .ic-legend i.k-var{background:var(--amber-soft)}
   .impl-chart .ic-legend i.k-flat{background:var(--pine);height:3px}
 
+  /* ---- Extras: beyond the ten. Collapsible, no checkbox, not in the progress count. ---- */
+  .impl-xhead{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;border:0;border-top:1px solid var(--line);background:var(--white);padding:16px 24px;cursor:pointer;font:inherit;text-align:left}
+  .impl-xhead .xe{font-family:var(--mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--amber)}
+  .impl-xhead .xt{display:block;font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--ink);margin-top:2px}
+  .impl-xhead .xs{display:block;font-size:.8rem;color:var(--ink-soft)}
+  .impl-xhead[aria-expanded="true"] .impl-chev{transform:rotate(180deg)}
+  .impl-xlist{padding:6px 16px 4px}
+  .impl-xdot{flex:none;width:26px;height:26px;border-radius:8px;background:var(--amber-soft);color:#3a2a08;display:grid;place-items:center;font-family:var(--mono);font-size:.8rem;font-weight:700}
+
+  /* money biases */
+  .bias-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .bias{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+  .bias b{display:block;font-family:var(--display);font-size:.92rem;color:var(--pine)}
+  .bias p{font-size:.8rem;color:var(--ink);margin:3px 0 0;line-height:1.45}
+  .bias i{display:block;font-style:normal;font-size:.74rem;color:var(--ink-soft);margin-top:5px;line-height:1.4}
+  @media(max-width:560px){.bias-grid{grid-template-columns:1fr}}
+
+  /* bracket "glasses" — hand-ported from index.html (Tools §4). Equal-height
+     columns on purpose: the point is how full each one is, not how wide. */
+  .tb-st button.on{background:var(--pine);color:#fff}
+  .wcols{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:6px;align-items:end}
+  .wc-col{text-align:center;min-width:0}
+  .wc-glass{position:relative;height:112px;border:1.5px solid var(--line-strong);border-top:none;
+            border-radius:0 0 7px 7px;background:linear-gradient(#fff,#f7f9f6);overflow:hidden}
+  .wc-col.open .wc-glass{border-style:none dashed dashed}
+  .wc-fill{position:absolute;left:0;right:0;bottom:0;height:0;
+           background:linear-gradient(180deg,#17705a,var(--pine-deep));
+           transition:height .55s cubic-bezier(.3,.9,.35,1)}
+  .wc-fill::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:#3f9c80;opacity:.95}
+  .wc-col.filling .wc-fill{background:linear-gradient(180deg,var(--amber),#b8761f)}
+  .wc-col.filling .wc-fill::before{background:var(--amber-soft)}
+  .wc-rate{font-family:var(--display);font-size:.82rem;color:var(--pine);margin-top:6px;font-weight:700}
+  .wc-in{display:block;font-family:var(--mono);font-size:.58rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+  .wc-col.empty .wc-in,.wc-col.empty .wc-rate{color:#b3bcb4;font-weight:400}
+  .wc-cap{display:block;font-family:var(--mono);font-size:.54rem;color:#8b958d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .wc-lead{font-size:.82rem;color:var(--ink-soft);line-height:1.45;margin:12px 0 0}
+  .wc-lead b{color:var(--ink)}
+  .wc-spill{display:block;margin-top:7px;font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--amber)}
+  @media(max-width:620px){
+    .wc-glass{height:88px}
+    .wc-cap{display:none}
+    .wc-rate{font-size:.72rem}
+  }
+
+  /* student loans in savings */
+  .sl-ctl{grid-template-columns:repeat(4,1fr)}
+  .sl-out{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:700px){.sl-ctl{grid-template-columns:1fr 1fr}}
+  @media(max-width:520px){.sl-out{grid-template-columns:1fr}}
+
   @media (max-width:640px){
     .impl-card h2{font-size:1.6rem}
     .impl-detail{padding-left:14px}
     .impl-modal{padding:16px 10px}
     .impl-name{font-size:.96rem}
+    .impl-target{white-space:normal;text-align:right;max-width:45%}
   }
 </style>
 </head>
@@ -304,7 +355,7 @@
         <span class="ic-eyebrow">Start here</span>
         <h2>The 10 Commandments of Financial Planning</h2>
         <p>Not a lesson &mdash; a checklist. The exact accounts to open, the order to do them in, and step-by-step how-to for each. Toggle Moderate or Optimal to set your pace.</p>
-        <span class="impl-badges"><span>Planner &amp; habits</span><span>Dollar-cost averaging</span><span>Emergency fund</span><span>Debt payoff</span><span>Credit score</span><span>401(k) match</span><span>Roth IRA</span><span>Passive income</span><span>Automation</span><span>Variable income</span><span>Year planner</span></span>
+        <span class="impl-badges"><span>Planner &amp; habits</span><span>Dollar-cost averaging</span><span>Emergency fund</span><span>Debt payoff</span><span>Credit score</span><span>401(k) match</span><span>Roth IRA</span><span>Passive income</span><span>Automation</span><span>Variable income</span><span>Year planner</span><span>+ Extras</span></span>
       </span>
       <span class="ic-cta">Open the checklist &#8594;</span>
     </button>
@@ -398,6 +449,11 @@
       <span class="impl-count" id="implCount">0 of 10</span>
     </div>
     <div class="impl-list" id="implList"></div>
+    <button class="impl-xhead" id="implXHead" type="button" aria-expanded="false" aria-controls="implXList">
+      <span><span class="xe">Extras</span><span class="xt">Beyond the ten</span><span class="xs">Money biases &middot; Tax brackets &middot; Student loans</span></span>
+      <span class="impl-chev">&#x25BE;</span>
+    </button>
+    <div class="impl-xlist" id="implXList" hidden></div>
     <p class="impl-foot">Educational only &mdash; not individualized advice. Fidelity is one option; other brokerages work the same way.</p>
   </div>
 </div>
@@ -436,6 +492,7 @@
        '<b>Dollar-cost averaging.</b> Invest a fixed amount on a fixed day, every month, no matter what the market is doing. You automatically buy more shares when prices are low and fewer when they’re high, and you never have to guess the right moment — because nobody can.',
        '<b>Small and automatic beats big and occasional.</b> $50 a week that never stops will pass the $2,000 you keep meaning to invest once things settle down. Things don’t settle down.',
        '<b>Spend on purpose too.</b> Know what leaves each month before it leaves. A raise only makes you wealthier if the plan was already in place — otherwise it just raises your spending.',
+       '<b>Know your blind spots.</b> Ten money biases trip up almost everyone &mdash; <a href="#" data-goextra="biases">see them in Extras &darr;</a>',
        'A good planner does far more than this list — taxes, insurance, estate, buying a home, retirement timing, and the trade-offs between all of them.',
        'Treat these checkboxes as the foundation to have handled; a planner helps you build the rest on top and sidestep expensive mistakes.',
        'New to why it matters? Read <a href="why-you-need-a-financial-planner.pdf" target="_blank" rel="noopener">this short guide</a>.',
@@ -455,7 +512,7 @@
        'List every debt with its interest rate. Anything high-interest — credit cards, payday loans, often ~8%+ — gets attacked first.',
        'Two proven methods: <b>avalanche</b> (highest rate first, cheapest overall) or <b>snowball</b> (smallest balance first, best for momentum). Pick whichever keeps you going.',
        'Keep paying minimums on everything, then throw every extra dollar at the target debt until it’s gone.',
-       'Low-rate debt — most mortgages, many student and auto loans — can wait; you can invest alongside it.']},
+       'Low-rate debt — most mortgages, many student and auto loans — can wait; you can invest alongside it. <a href="#" data-goextra="loans">Student loans can even pay you &darr;</a>']},
     {id:'cc',title:'Open a credit card &amp; build credit',
      optimal:'Pay in full, usage under 10%',
      steps:[
@@ -520,6 +577,42 @@
        'This is what makes a variable income survivable: you stop guessing what you can afford and start knowing.']}
   ];
 
+  /* ---- Extras: beyond the ten. No checkbox, not in the progress count. ---- */
+  var BIASES=[
+    ['Mental accounting','Treating a dollar differently depending on which “bucket” it came from.','Blowing a tax refund on a trip while carrying a 22% credit card.'],
+    ['Confirmation bias','Seeking out what agrees with you and skipping what doesn’t.','Only reading bullish posts about a stock you already own.'],
+    ['Anchoring','Locking onto the first number you saw.','Refusing to sell until it gets “back to what I paid.”'],
+    ['Recency bias','Assuming whatever just happened will keep happening.','Piling in after a hot year; bailing out after a crash.'],
+    ['Framing','Same facts, different choice, depending on the wording.','“Save $500” feels optional; “lose $500” feels urgent.'],
+    ['Money scripts','Beliefs about money you absorbed growing up, usually unspoken.','“Rich people are greedy” or “more money fixes everything.”'],
+    ['Familiarity bias','Favoring what you know over what’s best.','Half your 401(k) in your own employer’s stock.'],
+    ['Risk aversion','Losses hurt about twice as much as gains feel good, so you play too safe.','Retirement money sitting in cash for 30 years.'],
+    ['Naive diversification','Splitting money evenly across whatever is offered.','Five 401(k) funds, 20% each &mdash; three hold the same stocks.'],
+    ['Herd mentality','Doing it because everyone else is.','Buying the meme stock at the top; panic-selling with the crowd.']
+  ];
+  var EXTRAS=[
+    {id:'biases',title:'Money biases to watch for',
+     lead:'Your brain takes shortcuts with money. Naming them is most of the fix.',
+     extra:'<div class="bias-grid">'+BIASES.map(function(b){
+       return '<div class="bias"><b>'+b[0]+'</b><p>'+b[1]+'</p><i>e.g. '+b[2]+'</i></div>';}).join('')+'</div>'},
+    {id:'brackets',title:'How tax brackets really work',
+     lead:'“I’m in the 24% bracket” almost never means you pay 24%.',
+     brackets:true,
+     steps:[
+       'Each bracket is a <b>glass</b>. Income fills the 10% glass first, spills into 12%, then 22%&hellip;',
+       'Only the water <i>in</i> a glass pays that glass’s rate. A raise never taxes your earlier dollars more.',
+       '<b>Marginal</b> = what your next dollar costs. <b>Effective</b> = what the whole thing cost.']},
+    {id:'loans',title:'Make your student loans pay you',
+     lead:'A loan charging 0% is free money &mdash; if you park it somewhere that pays.',
+     loans:true,
+     steps:[
+       '<b>Subsidized federal loans charge 0%</b> while you’re in school (half-time or more) and for the 6-month grace period.',
+       'Park that money in a <b>high-yield savings account</b> or money market (e.g. <b>SPAXX</b>). The interest is yours; pay the loan back from the principal when repayment starts.',
+       'Same idea after school: if your loan rate is <b>below</b> what safe cash pays, pay the minimum and let savings earn the spread. Above ~8%, pay it down (Commandment 3).',
+       '<b>Rules:</b> borrow only what you’d need anyway, keep it in insured cash &mdash; never the stock market &mdash; and know the interest is taxable.',
+       'Other levers: income-driven repayment, Public Service Loan Forgiveness, employers that match loan payments into your 401(k), and the up-to-$2,500 interest deduction. Refinancing federal loans into private ones gives those up.']}
+  ];
+
   var card=document.getElementById('implOpen'), modal=document.getElementById('implModal');
   if(!card||!modal) return;
   var listEl=document.getElementById('implList'),
@@ -530,38 +623,63 @@
   function save(){try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}}
   function money(v){v=Math.round(v);return (v<0?'-$':'$')+Math.abs(v).toLocaleString('en-US');}
 
+  var xHead=document.getElementById('implXHead'), xList=document.getElementById('implXList');
+
+  function itemHTML(it,i,isExtra){
+    var done=!isExtra&&!!st.done[it.id];
+    return '<div class="impl-item'+(done?' done':'')+'" data-item="'+it.id+'">'+
+        '<div class="impl-row">'+
+          (isExtra
+            ? '<span class="impl-xdot" aria-hidden="true">+</span>'
+            : '<button class="impl-check" type="button" data-check aria-pressed="'+(done?'true':'false')+'" aria-label="Mark done"><span class="ck"></span></button>')+
+          '<button class="impl-main" type="button" data-expand aria-expanded="false">'+
+            '<span class="impl-name">'+(isExtra?'':(i+1)+' &middot; ')+it.title+'</span>'+
+            (it.optimal?'<span class="impl-target optimal" data-target>'+it.optimal+'</span>':'')+
+            '<span class="impl-chev">&#x25BE;</span>'+
+          '</button>'+
+        '</div>'+
+        '<div class="impl-detail" data-detail hidden>'+
+          (it.lead?'<p class="impl-lead">'+it.lead+'</p>':'')+
+          (it.steps?'<ol>'+it.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>':'')+
+          (it.extra||'')+
+          (it.aqueduct?'<div class="aq" data-aqueduct></div>':'')+
+          (it.yplan?'<div class="yp" data-yplan></div>':'')+
+          (it.brackets?'<div class="yp" data-brackets></div>':'')+
+          (it.loans?'<div class="yp" data-loans></div>':'')+
+        '</div>'+
+      '</div>';
+  }
   function render(){
-    var h='';
-    ITEMS.forEach(function(it,i){
-      var done=!!st.done[it.id];
-      h+='<div class="impl-item'+(done?' done':'')+'" data-item="'+it.id+'">'+
-          '<div class="impl-row">'+
-            '<button class="impl-check" type="button" data-check aria-pressed="'+(done?'true':'false')+'" aria-label="Mark done"><span class="ck"></span></button>'+
-            '<button class="impl-main" type="button" data-expand aria-expanded="false">'+
-              '<span class="impl-name">'+(i+1)+' &middot; '+it.title+'</span>'+
-              '<span class="impl-target optimal" data-target>'+it.optimal+'</span>'+
-              '<span class="impl-chev">&#x25BE;</span>'+
-            '</button>'+
-          '</div>'+
-          '<div class="impl-detail" data-detail hidden>'+
-            (it.lead?'<p class="impl-lead">'+it.lead+'</p>':'')+
-            '<ol>'+it.steps.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ol>'+
-            (it.extra||'')+
-            (it.aqueduct?'<div class="aq" data-aqueduct></div>':'')+
-            (it.yplan?'<div class="yp" data-yplan></div>':'')+
-          '</div>'+
-        '</div>';
-    });
-    listEl.innerHTML=h;
+    listEl.innerHTML=ITEMS.map(function(it,i){return itemHTML(it,i,false);}).join('');
     listEl.querySelectorAll('[data-aqueduct]').forEach(initAqueduct);
     listEl.querySelectorAll('[data-yplan]').forEach(initYearPlan);
+    xList.innerHTML=EXTRAS.map(function(it,i){return itemHTML(it,i,true);}).join('');
+    xList.querySelectorAll('[data-brackets]').forEach(initBrackets);
+    xList.querySelectorAll('[data-loans]').forEach(initLoans);
     updateProgress();
   }
+  function setOpen(btn,panel,open){panel.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
+  xHead.addEventListener('click',function(){setOpen(xHead,xList,xList.hidden);});
   function updateProgress(){
     var n=ITEMS.filter(function(it){return st.done[it.id];}).length;
     barEl.style.width=(n/ITEMS.length*100)+'%';
     countEl.textContent=n+' of '+ITEMS.length;
   }
+  // Links from a commandment into Extras: open the section, open the item, scroll to it.
+  listEl.addEventListener('click',function(e){
+    var go=e.target.closest('[data-goextra]');
+    if(!go) return;
+    e.preventDefault();
+    var it=xList.querySelector('[data-item="'+go.getAttribute('data-goextra')+'"]');
+    if(!it) return;
+    setOpen(xHead,xList,true);
+    setOpen(it.querySelector('[data-expand]'),it.querySelector('[data-detail]'),true);
+    it.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  xList.addEventListener('click',function(e){
+    var ex=e.target.closest('[data-expand]');
+    if(ex){var d=ex.closest('.impl-item').querySelector('[data-detail]');setOpen(ex,d,d.hidden);}
+  });
   listEl.addEventListener('click',function(e){
     var chk=e.target.closest('[data-check]');
     if(chk){
@@ -937,6 +1055,120 @@
       else if(t.matches('[data-aqliv]'))t.value=com(living);
       else if(t.matches('[data-aqtgt]'))t.value=com(target);
     },true);
+  }
+
+  /* ---- Bracket glasses (extra: tax brackets) ----
+     Hand-ported from the bracket calculator in index.html Tools §4. 2026
+     brackets + standard deduction (Rev. Proc. 2025-32) — keep in step with
+     the FED table there when bumping to 2027. Federal only. */
+  var TB={
+    single:{sd:16100,b:[[12400,.10],[50400,.12],[105700,.22],[201775,.24],[256225,.32],[640600,.35],[Infinity,.37]]},
+    married:{sd:32200,b:[[24800,.10],[100800,.12],[211400,.22],[403550,.24],[512450,.32],[768700,.35],[Infinity,.37]]}
+  };
+  function xStat(k,v,d,warn){
+    return '<div class="yp-stat'+(warn?' warn':'')+'"><span class="k">'+k+'</span>'+
+           '<span class="v">'+v+'</span><span class="d">'+d+'</span></div>';
+  }
+  function initBrackets(wrap){
+    var income=75000, status='single';
+    function num(v){return +String(v).replace(/[^0-9.]/g,'')||0;}
+    function com(v){return Math.round(v).toLocaleString('en-US');}
+    wrap.innerHTML=
+      '<div class="yp-top">'+
+        '<div class="yp-f"><label>Gross income</label><span class="yp-in"><span class="pre">$</span>'+
+          '<input type="text" inputmode="numeric" data-tbinc value="'+com(income)+'"></span></div>'+
+        '<div class="yp-f"><label>Filing</label><span class="impl-toggle tb-st">'+
+          '<button type="button" data-tbst="single" class="on">Single</button>'+
+          '<button type="button" data-tbst="married">Married</button></span></div>'+
+      '</div>'+
+      '<div class="wcols" data-tbcols aria-hidden="true"></div>'+
+      '<p class="wc-lead" data-tbspill></p>'+
+      '<div class="yp-out" data-tbout></div>'+
+      '<p class="aq-note">2026 federal brackets after the standard deduction. Federal income tax only &mdash; no state, payroll tax or credits.</p>';
+
+    function paint(){
+      var t=TB[status], ti=Math.max(0,income-t.sd), prev=0, total=0, top=-1;
+      var bands=t.b.map(function(b,i){
+        var amt=Math.max(0,Math.min(ti,b[0])-prev);
+        total+=amt*b[1]; if(amt>0) top=i;
+        var r={rate:b[1],lo:prev,cap:b[0],amt:amt}; prev=b[0]; return r;
+      });
+      var marg=top>=0?bands[top].rate:0, ref=0;
+      // The top band has no rim, so it borrows the widest finite band as its scale.
+      bands.forEach(function(b){if(b.cap!==Infinity)ref=Math.max(ref,b.cap-b.lo);});
+      wrap.querySelector('[data-tbcols]').innerHTML=bands.map(function(b){
+        var open=b.cap===Infinity, room=open?ref:b.cap-b.lo;
+        var pct=b.amt<=0?0:Math.max(6,Math.min(open?85:100,b.amt/room*100));
+        var cls=b.amt<=0?'empty':((!open&&b.amt>=room-.5)?'full':'filling');
+        return '<div class="wc-col '+cls+(open?' open':'')+'">'+
+          '<div class="wc-glass"><div class="wc-fill" style="height:'+pct.toFixed(1)+'%"></div></div>'+
+          '<div class="wc-rate">'+Math.round(b.rate*100)+'%</div>'+
+          '<span class="wc-in">'+(b.amt>0?money(b.amt):'&mdash;')+'</span>'+
+          '<span class="wc-cap">'+(open?'no rim':'holds '+money(room))+'</span></div>';
+      }).join('');
+
+      var filled=bands.filter(function(b){return b.cap!==Infinity&&b.amt>=b.cap-b.lo-.5;}).length,
+          cur=top>=0?bands[top]:null;
+      wrap.querySelector('[data-tbspill]').innerHTML=ti<=0
+        ? 'The standard deduction covers everything &mdash; no glass gets a drop.'
+        : '<b>'+filled+' glass'+(filled===1?'':'es')+' filled.</b> You’re part-way up the '+Math.round(marg*100)+'% glass'+
+          (cur&&cur.cap!==Infinity?' &mdash; '+money(cur.cap-cur.lo-cur.amt)+' of room before the next rate.':'.')+
+          '<span class="wc-spill">A raise only fills the glass you’re standing in</span>';
+
+      wrap.querySelector('[data-tbout]').innerHTML=
+         xStat('Taxable income',money(ti),'After the '+money(t.sd)+' deduction.')
+        +xStat('Top bracket',Math.round(marg*100)+'%','Only on the last dollars.')
+        +xStat('Effective rate',(income>0?(total/income*100).toFixed(1):'0')+'%','What you really pay.')
+        +xStat('Federal tax',money(total),'All glasses combined.');
+    }
+    paint();
+
+    wrap.addEventListener('input',function(e){if(e.target.matches('[data-tbinc]')){income=num(e.target.value);paint();}});
+    wrap.addEventListener('blur',function(e){if(e.target.matches('[data-tbinc]'))e.target.value=com(income);},true);
+    wrap.addEventListener('click',function(e){
+      var b=e.target.closest('[data-tbst]'); if(!b) return;
+      status=b.getAttribute('data-tbst');
+      wrap.querySelectorAll('[data-tbst]').forEach(function(x){x.classList.toggle('on',x===b);});
+      paint();
+    });
+  }
+
+  /* ---- Student loans in savings (extra: student loans) ----
+     Savings compound monthly; federal loans accrue simple interest, so the
+     cost while parked is just balance × rate × years. */
+  function initLoans(wrap){
+    var v={loan:20000,lr:0,hy:4,yrs:4};
+    function num(x){return +String(x).replace(/[^0-9.]/g,'')||0;}
+    function fmt(k){return k==='loan'?Math.round(v[k]).toLocaleString('en-US'):String(v[k]);}
+    function field(k,label,pre,post){
+      return '<div class="aq-f"><label>'+label+'</label><span class="aq-in">'+(pre?'<span class="pre">'+pre+'</span>':'')+
+        '<input type="text" inputmode="decimal" data-sl="'+k+'" value="'+fmt(k)+'">'+(post?'<span class="pre">'+post+'</span>':'')+'</span></div>';
+    }
+    wrap.innerHTML=
+      '<div class="aq-ctl sl-ctl">'+
+        field('loan','Loan','$','')+field('lr','Loan rate','','%')+
+        field('hy','Savings rate','','%')+field('yrs','Years parked','','')+
+      '</div>'+
+      '<div class="yp-out sl-out" data-slout></div><div class="yp-verdict" data-slverdict></div>'+
+      '<p class="aq-note">Subsidized loans: 0% until repayment. Unsubsidized: enter the loan’s rate. Savings rates move; interest earned is taxable.</p>';
+
+    function paint(){
+      var earned=v.loan*(Math.pow(1+v.hy/100/12,v.yrs*12)-1),
+          owed=v.loan*v.lr/100*v.yrs, net=earned-owed;
+      wrap.querySelector('[data-slout]').innerHTML=
+         xStat('Savings earns',money(earned),v.hy+'% for '+v.yrs+' yr'+(v.yrs===1?'':'s')+'.')
+        +xStat('Loan costs',money(owed),v.lr>0?v.lr+'% simple interest.':'Nothing while subsidized.')
+        +xStat('You keep',money(net),net>=0?'Free money.':'Pay it down instead.',net<0);
+      var el=wrap.querySelector('[data-slverdict]');
+      el.className='yp-verdict'+(net<0?' tight':'');
+      el.innerHTML=net>=0
+        ? '<b>Park it.</b> Repay the '+money(v.loan)+' when the bill comes and keep the '+money(net)+'.'
+        : '<b>Pay it down.</b> At '+v.lr+'% the loan costs more than safe cash earns &mdash; each extra payment is a guaranteed '+v.lr+'% return.';
+    }
+    paint();
+
+    wrap.addEventListener('input',function(e){var k=e.target.getAttribute('data-sl');if(k){v[k]=num(e.target.value);paint();}});
+    wrap.addEventListener('blur',function(e){var k=e.target.getAttribute('data-sl');if(k)e.target.value=fmt(k);},true);
   }
 
   render();

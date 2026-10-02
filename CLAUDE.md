@@ -106,6 +106,7 @@ with their `index.html` originals by hand if the math changes.
 | Calculator | Lives in | Notes |
 |---|---|---|
 | 12-month fixed-expense planner (`.yp-*`, `initYearPlan` / `[data-yplan]`) | `index.html` Tools §2 **and** `lessons.html` Commandment 10 | Two copies, CSS + JS. index uses `const`/arrow style, lessons uses `var`/`function`. Same math. |
+| Bracket "glasses" (`.wc-*`, `TB` table, `initBrackets`) | `index.html` Tools §4 **and** `lessons.html` Commandments → Extras | `TB` in lessons is a copy of `FED` — bump both together. |
 | Quick annual fixed-expense calc (`.ib-*`, `[data-ibudget]`) | `index.html` Tools §2 only | Moved out of `lessons.html` — Commandment 10 now shows the year planner instead. |
 
 The planner's income line is drawn **inside each bar** as a CSS percentage, not
@@ -117,7 +118,7 @@ toggle; the Commandments modal), so a measured offset reads zero on first paint.
 Contribution limits and federal brackets are **2026** (IRS Notice 2025-67 and
 Rev. Proc. 2025-32). The `FED` table in `index.html` feeds the compound teacher,
 Roth-vs-pre-tax, wealth calculator and bracket calculator. When bumping to 2027,
-also update the two "2026 brackets" notes in the HTML and the 401(k)/IRA/HSA
+also update the two "2026 brackets" notes in the HTML, the `TB` copy in `lessons.html`, and the 401(k)/IRA/HSA
 figures in `lesson-retirement.html` and Commandment 6.
 
 ## Contact
