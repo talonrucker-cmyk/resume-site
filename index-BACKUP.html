@@ -480,6 +480,16 @@
   .collapse[open]>summary .cc-less{display:inline}
   .collapse-body{padding-top:18px;animation:collapseIn .35s ease}
   @keyframes collapseIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  /* Home-page calculators: featured look so they read as the main event.
+     Accent stripe + soft tint + solid button. Tools-page cards stay quiet. */
+  #tools .collapse>summary{position:relative;overflow:hidden;padding-left:30px;border-color:rgba(14,82,64,.28);
+    background:linear-gradient(100deg,#eef5f0 0%,var(--white) 55%);transition:border-color .2s,box-shadow .2s,transform .2s}
+  #tools .collapse>summary::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,var(--pine),var(--amber))}
+  #tools .collapse>summary:hover{transform:translateY(-2px);border-color:var(--pine);box-shadow:0 1px 2px rgba(10,40,30,.05),0 20px 44px -20px rgba(10,40,30,.45)}
+  #tools .collapse-txt .eyebrow{color:var(--pine);font-weight:700}
+  #tools .collapse-btn{background:var(--pine);color:#fff;border-color:var(--pine);box-shadow:0 6px 16px -8px rgba(14,82,64,.8)}
+  #tools .collapse>summary:hover .collapse-btn{background:var(--pine-deep);color:#fff;border-color:var(--pine-deep)}
+  #tools .collapse[open]>summary{border-color:var(--pine)}
 
   /* EXPERIENCE: see-more toggle */
   .xp-more>summary{list-style:none;cursor:pointer;display:flex;justify-content:center;padding:24px 0 2px}
@@ -5136,11 +5146,13 @@
   /* Each stop: a live element + its name and one-line "why it matters".
      Nav tabs stay visible at every width, so the tour works on mobile too. */
   var STEPS=[
-    {sel:'.page-tabs a[data-nav="home"]',   name:'Home',            why:'Start here — who I am and the one idea the whole plan is built on.'},
-    {sel:'.page-tabs a[data-nav="extras"]', name:'Tools',           why:'Plug in your real numbers and watch them compound.'},
-    {sel:'.page-tabs a[data-nav="fun"]',    name:'Fun',             why:'The human side — books, music, and a hidden surprise or two.'},
-    {sel:'.comp-head',                       name:'Savings potential',why:'Save a little more of every raise and watch what it becomes.'},
-    {sel:'.page-tabs a[href="lessons.html"]',name:'Lessons',        why:'The 10 Commandments plus eight hands-on lessons. The tour continues there.', go:'lessons.html?tour=1', cta:'Continue to Lessons &#8594;'}
+    {sel:'.page-tabs a[data-nav="home"]',   name:'Home',              why:'Who I am and the one idea the whole plan is built on.'},
+    {sel:'.master',                          name:'Start here',        why:'Your age and income fill in every calculator on the page.'},
+    {sel:'.wcalc',                           name:'Your savings potential', why:'Slide Lifestyle and Return to see what saving a little more of every raise becomes.'},
+    {sel:'.page-tabs a[data-nav="extras"]', name:'Tools',             why:'Dozens more calculators — protection, cash flow, taxes, retirement, estate.'},
+    {sel:'.page-tabs a[data-nav="fun"]',    name:'Fun',               why:'The human side — books, music, and a hidden surprise or two.'},
+    /* href*= — Netlify Pretty URLs rewrites "lessons.html" to "/lessons" live. */
+    {sel:'.page-tabs a[href*="lessons"]',   name:'Lessons',           why:'The 10 Commandments plus eight hands-on lessons. The tour continues there.', go:'lessons.html?tour=1', cta:'Continue to Lessons &#8594;'}
   ];
   var live=[], i=0;
 
@@ -5155,6 +5167,10 @@
     if(top+pr.height>vh-m) top=r.top-pad-12-pr.height;   // flip above if no room below
     top=Math.max(m, Math.min(top, vh-pr.height-m));      // never let it leave the viewport
     var left=r.left+r.width/2-pr.width/2;
+    // Target fills the screen (e.g. the savings calculator): tuck the card
+    // into its bottom-left corner — the quiet space under the inputs.
+    if(r.height>vh*.6){ top=Math.min(r.bottom,vh)-pr.height-pad-12; left=r.left+16; }
+    top=Math.max(m, Math.min(top, vh-pr.height-m));
     left=Math.max(m, Math.min(left, vw-pr.width-m));
     pop.style.top=top+'px'; pop.style.left=left+'px';
   }
@@ -5199,6 +5215,8 @@
     else if(e.key==='Enter'||e.key==='ArrowRight') next();
   });
   window.addEventListener('resize', function(){ if(back.classList.contains('on')) place(); });
+  // Smooth scroll can outlast the 340ms settle — keep the spotlight glued while it moves.
+  document.addEventListener('scroll', function(){ if(back.classList.contains('on')) place(); }, {passive:true, capture:true});
 
   // First-time visitors get a gentle pulse on the trigger, never an auto-launch.
   try{ if(!localStorage.getItem(DONE)) btn.classList.add('pulse'); }catch(e){}

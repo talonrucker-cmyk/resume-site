@@ -1457,6 +1457,8 @@
     else if(e.key==='Enter'||e.key==='ArrowRight') next();
   });
   window.addEventListener('resize', function(){ if(back.classList.contains('on')) place(); });
+  // Follow scrolling anywhere (page or the checklist modal) so the spotlight stays on target.
+  document.addEventListener('scroll', function(){ if(back.classList.contains('on')) place(); }, {passive:true, capture:true});
 
   back.classList.add('on'); spot.classList.add('on'); pop.classList.add('on');
   document.body.style.overflow='hidden';
