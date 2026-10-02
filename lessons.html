@@ -330,6 +330,14 @@
   @media(max-width:700px){.sl-ctl{grid-template-columns:1fr 1fr}}
   @media(max-width:520px){.sl-out{grid-template-columns:1fr}}
 
+  /* 401(k) rollover */
+  .x-sub{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine);font-weight:700;margin:20px 0 9px}
+  .impl-detail ul{margin:0;padding-left:18px;display:grid;gap:8px}
+  .impl-detail ul li{font-size:.88rem;color:var(--ink);line-height:1.5}
+  .bias.bad{border-color:#e9c3bc;background:#fdf6f4}
+  .bias.bad b{color:var(--brick)}
+  .bias p b{display:inline;font-family:inherit;font-size:inherit;color:var(--brick)}
+
   @media (max-width:640px){
     .impl-card h2{font-size:1.6rem}
     .impl-detail{padding-left:14px}
@@ -454,7 +462,7 @@
     </div>
     <div class="impl-list" id="implList"></div>
     <button class="impl-xhead" id="implXHead" type="button" aria-expanded="false" aria-controls="implXList">
-      <span><span class="xe">Extras</span><span class="xt">Beyond the ten</span><span class="xs">Money biases &middot; Tax brackets &middot; Student loans</span></span>
+      <span><span class="xe">Extras</span><span class="xt">Beyond the ten</span><span class="xs">Money biases &middot; Tax brackets &middot; Student loans &middot; 401(k) rollovers</span></span>
       <span class="impl-chev">&#x25BE;</span>
     </button>
     <div class="impl-xlist" id="implXList" hidden></div>
@@ -594,6 +602,33 @@
     ['Naive diversification','Splitting money evenly across whatever is offered.','Five 401(k) funds, 20% each &mdash; three hold the same stocks.'],
     ['Herd mentality','Doing it because everyone else is.','Buying the meme stock at the top; panic-selling with the crowd.']
   ];
+  /* Rollover extra — the four doors, when to stay put, and how to move it. */
+  var RO_OPTIONS=[
+    ['Leave it','Allowed if the balance is over $7,000. Easy, but easy to forget, and you’re stuck with that plan’s funds and fees.',''],
+    ['Roll to new 401(k)','Consolidates and keeps 401(k) protections. Limited to the new plan’s fund menu.',''],
+    ['Roll to an IRA','Most choice and control, often lowest cost. Common when none of the cases below apply.',''],
+    ['Cash it out','$50,000 at 22% tax + 10% penalty &asymp; <b>$34,000</b> kept. Left invested at 7% for 30 years, that $50,000 could be ~$380,000.','bad']
+  ];
+  var roExtra=
+    '<p class="x-sub">Your four options</p>'+
+    '<div class="bias-grid">'+RO_OPTIONS.map(function(o){
+      return '<div class="bias'+(o[2]?' '+o[2]:'')+'"><b>'+o[0]+'</b><p>'+o[1]+'</p></div>';}).join('')+'</div>'+
+    '<p class="x-sub">Keep it in a 401(k) if&hellip;</p>'+
+    '<ul>'+
+      '<li><b>You’ll retire between 55 and 59&frac12;.</b> The Rule of 55 lets you withdraw from the plan of a job you leave in or after the year you turn 55, with no 10% penalty. Roll it to an IRA and you wait until 59&frac12;.</li>'+
+      '<li><b>You do backdoor Roth contributions.</b> Pre-tax IRA money makes most of the conversion taxable (the pro-rata rule). Roll into the new 401(k) instead and the backdoor stays clean.</li>'+
+      '<li><b>You hold company stock that has grown a lot.</b> Net unrealized appreciation (NUA) can tax that growth at capital-gains rates &mdash; but only if it comes out of the 401(k), not an IRA.</li>'+
+      '<li><b>Lawsuit protection matters.</b> 401(k)s have federal protection from creditors; IRA protection outside bankruptcy depends on your state.</li>'+
+      '<li><b>You might want a loan.</b> Many 401(k)s allow them. IRAs never do.</li>'+
+    '</ul>'+
+    '<p class="x-sub">How to roll it</p>'+
+    '<ol>'+
+      '<li>Open a <b>rollover IRA</b> (or Roth IRA for Roth money) at your brokerage.</li>'+
+      '<li>Call the old plan and ask for a <b>direct rollover</b>. The check goes to the brokerage, e.g. “Fidelity FBO Your Name,” never to you.</li>'+
+      '<li>Avoid indirect rollovers. A check made out to you has <b>20% withheld</b>, and you have <b>60 days</b> to deposit the full amount from your own pocket or it’s taxed and penalized.</li>'+
+      '<li>When it lands, <b>invest it</b>. Rollovers usually arrive as cash and sit there until you buy something.</li>'+
+    '</ol>';
+
   var EXTRAS=[
     {id:'biases',title:'Money biases to watch for',
      lead:'Your brain takes shortcuts with money. Naming them is most of the fix.',
@@ -614,8 +649,20 @@
        'Park that money in a <b>high-yield savings account</b> or money market (e.g. <b>SPAXX</b>). The interest is yours; pay the loan back from the principal when repayment starts.',
        'Same idea after school: if your loan rate is <b>below</b> what safe cash pays, pay the minimum and let savings earn the spread. Above ~8%, pay it down (Commandment 3).',
        '<b>Rules:</b> borrow only what you’d need anyway, keep it in insured cash &mdash; never the stock market &mdash; and know the interest is taxable.',
-       'Other levers: income-driven repayment, Public Service Loan Forgiveness, employers that match loan payments into your 401(k), and the up-to-$2,500 interest deduction. Refinancing federal loans into private ones gives those up.']}
+       'Other levers: income-driven repayment, Public Service Loan Forgiveness, employers that match loan payments into your 401(k), and the up-to-$2,500 interest deduction. Refinancing federal loans into private ones gives those up.']},
+    {id:'rollover',title:'Roll over an old 401(k)',
+     lead:'Change jobs and your 401(k) stays behind. Decide where it goes on purpose &mdash; don’t let it drift.',
+     extra:roExtra,
+     rollover:true,
+     steps:[
+       '<b>One account, one view.</b> Every job change can leave a 401(k) behind. Rolling them together means one login, one statement, one allocation to manage &mdash; and no forgotten accounts.',
+       '<b>More choices.</b> A plan offers a short menu of funds. An IRA at a brokerage like <a href="https://www.fidelity.com" target="_blank" rel="noopener">Fidelity</a> opens up nearly every index fund, ETF, bond and CD.',
+       '<b>Often lower fees.</b> Some plans charge admin fees and pricier funds; low-cost index funds in an IRA can run under 0.1%. Not always &mdash; big employers sometimes get cheaper institutional funds. Compare first (calculator below).',
+       '<b>More control.</b> You pick the brokerage, the investments, the beneficiaries and when to convert to Roth. Your old employer can’t change the fund lineup or the record-keeper on you.',
+       '<b>Simpler estate planning.</b> One beneficiary form to keep current, not one per old employer.',
+       '<b>No tax if done right.</b> Pre-tax 401(k) &rarr; Traditional (rollover) IRA. Roth 401(k) &rarr; Roth IRA. A direct rollover isn’t a withdrawal, so nothing is taxed or penalized.']}
   ];
+
 
   var card=document.getElementById('implOpen'), modal=document.getElementById('implModal');
   if(!card||!modal) return;
@@ -650,6 +697,7 @@
           (it.yplan?'<div class="yp" data-yplan></div>':'')+
           (it.brackets?'<div class="yp" data-brackets></div>':'')+
           (it.loans?'<div class="yp" data-loans></div>':'')+
+          (it.rollover?'<div class="yp" data-rollover></div>':'')+
         '</div>'+
       '</div>';
   }
@@ -660,6 +708,7 @@
     xList.innerHTML=EXTRAS.map(function(it,i){return itemHTML(it,i,true);}).join('');
     xList.querySelectorAll('[data-brackets]').forEach(initBrackets);
     xList.querySelectorAll('[data-loans]').forEach(initLoans);
+    xList.querySelectorAll('[data-rollover]').forEach(initRollover);
     updateProgress();
   }
   function setOpen(btn,panel,open){panel.hidden=!open;btn.setAttribute('aria-expanded',open?'true':'false');}
@@ -1182,6 +1231,45 @@
 
     wrap.addEventListener('input',function(e){var k=e.target.getAttribute('data-sl');if(k){v[k]=num(e.target.value);paint();}});
     wrap.addEventListener('blur',function(e){var k=e.target.getAttribute('data-sl');if(k)e.target.value=fmt(k);},true);
+  }
+
+  /* ---- Fee drag (extra: 401(k) rollover) ----
+     Same balance, same market, two all-in fee levels. Fees come straight off
+     the return each year, so the gap compounds: FV = bal × (1 + r − fee)^yrs. */
+  function initRollover(wrap){
+    var v={bal:50000,yrs:25,oldf:0.75,newf:0.1}, RET=7;
+    function num(x){return +String(x).replace(/[^0-9.]/g,'')||0;}
+    function fmt(k){return k==='bal'?Math.round(v[k]).toLocaleString('en-US'):String(v[k]);}
+    function field(k,label,pre,post){
+      return '<div class="aq-f"><label>'+label+'</label><span class="aq-in">'+(pre?'<span class="pre">'+pre+'</span>':'')+
+        '<input type="text" inputmode="decimal" data-ro="'+k+'" value="'+fmt(k)+'">'+(post?'<span class="pre">'+post+'</span>':'')+'</span></div>';
+    }
+    wrap.innerHTML=
+      '<p class="x-sub">What fees cost you</p>'+
+      '<div class="aq-ctl sl-ctl">'+
+        field('bal','Old 401(k)','$','')+field('yrs','Years invested','','')+
+        field('oldf','Old plan fees','','%')+field('newf','New account fees','','%')+
+      '</div>'+
+      '<div class="yp-out sl-out" data-roout></div><div class="yp-verdict" data-roverdict></div>'+
+      '<p class="aq-note">Hypothetical illustration assuming a '+RET+'% average annual return before fees; not a projection or a recommendation to roll over. Fees = fund expense ratios plus any plan or advisory fees &mdash; find them on your plan’s fee disclosure. Compare fees, services and protections before moving money.</p>';
+
+    function paint(){
+      var a=v.bal*Math.pow(1+(RET-v.oldf)/100,v.yrs),
+          b=v.bal*Math.pow(1+(RET-v.newf)/100,v.yrs), gap=b-a;
+      wrap.querySelector('[data-roout]').innerHTML=
+         xStat('Est. at old fees',money(a),v.oldf+'% a year.')
+        +xStat('Est. at new fees',money(b),v.newf+'% a year.')
+        +xStat('Est. difference',money(gap),gap>=0?'Lower fees, more left.':'The new account costs more.',gap<0);
+      var el=wrap.querySelector('[data-roverdict]');
+      el.className='yp-verdict'+(gap<0?' tight':'');
+      el.innerHTML=gap>=0
+        ? '<b>'+(v.oldf-v.newf).toFixed(2).replace(/\.?0+$/,'')+'% a year sounds small.</b> Over '+v.yrs+' years in this example it’s about '+money(gap)+'.'
+        : '<b>Staying put is cheaper here.</b> At these fees the old plan leaves about '+money(-gap)+' more.';
+    }
+    paint();
+
+    wrap.addEventListener('input',function(e){var k=e.target.getAttribute('data-ro');if(k){v[k]=num(e.target.value);paint();}});
+    wrap.addEventListener('blur',function(e){var k=e.target.getAttribute('data-ro');if(k)e.target.value=fmt(k);},true);
   }
 
   render();
