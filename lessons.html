@@ -296,6 +296,10 @@
   /* bracket "glasses" — hand-ported from index.html (Tools §4). Equal-height
      columns on purpose: the point is how full each one is, not how wide. */
   .tb-st button.on{background:var(--pine);color:#fff}
+  .tb-step{display:inline-flex;gap:6px}
+  .tb-step button{border:1px solid var(--line-strong);background:var(--white);color:var(--pine);border-radius:8px;padding:7px 12px;font-family:var(--mono);font-size:.78rem;font-weight:700;cursor:pointer;transition:.15s}
+  .tb-step button:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+  .tb-step button:active{transform:translateY(1px)}
   .wcols{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:6px;align-items:end}
   .wc-col{text-align:center;min-width:0}
   .wc-glass{position:relative;height:112px;border:1.5px solid var(--line-strong);border-top:none;
@@ -603,7 +607,7 @@
        'Only the water <i>in</i> a glass pays that glass’s rate. A raise never taxes your earlier dollars more.',
        '<b>Marginal</b> = what your next dollar costs. <b>Effective</b> = what the whole thing cost.']},
     {id:'loans',title:'Make your student loans pay you',
-     lead:'A loan charging 0% is free money &mdash; if you park it somewhere that pays.',
+     lead:'A loan charging 0% costs nothing while it sits &mdash; so where you park it matters.',
      loans:true,
      steps:[
        '<b>Subsidized federal loans charge 0%</b> while you’re in school (half-time or more) and for the 6-month grace period.',
@@ -1077,6 +1081,9 @@
       '<div class="yp-top">'+
         '<div class="yp-f"><label>Gross income</label><span class="yp-in"><span class="pre">$</span>'+
           '<input type="text" inputmode="numeric" data-tbinc value="'+com(income)+'"></span></div>'+
+        '<div class="yp-f"><label>Raise</label><span class="tb-step">'+
+          '<button type="button" data-tbstep="-10000" aria-label="Lower income by $10,000">&#9660;</button>'+
+          '<button type="button" data-tbstep="10000" aria-label="Raise income by $10,000">&#9650; $10k</button></span></div>'+
         '<div class="yp-f"><label>Filing</label><span class="impl-toggle tb-st">'+
           '<button type="button" data-tbst="single" class="on">Single</button>'+
           '<button type="button" data-tbst="married">Married</button></span></div>'+
@@ -1084,7 +1091,7 @@
       '<div class="wcols" data-tbcols aria-hidden="true"></div>'+
       '<p class="wc-lead" data-tbspill></p>'+
       '<div class="yp-out" data-tbout></div>'+
-      '<p class="aq-note">2026 federal brackets after the standard deduction. Federal income tax only &mdash; no state, payroll tax or credits.</p>';
+      '<p class="aq-note">Hypothetical illustration using 2026 IRS brackets (Rev. Proc. 2025-32) and the standard deduction. Federal income tax only &mdash; ignores credits, other deductions, state and payroll tax. Not tax advice; consult a tax professional.</p>';
 
     function paint(){
       var t=TB[status], ti=Math.max(0,income-t.sd), prev=0, total=0, top=-1;
@@ -1116,15 +1123,21 @@
           '<span class="wc-spill">A raise only fills the glass you’re standing in</span>';
 
       wrap.querySelector('[data-tbout]').innerHTML=
-         xStat('Taxable income',money(ti),'After the '+money(t.sd)+' deduction.')
+         xStat('Est. taxable income',money(ti),'After the '+money(t.sd)+' deduction.')
         +xStat('Top bracket',Math.round(marg*100)+'%','Only on the last dollars.')
-        +xStat('Effective rate',(income>0?(total/income*100).toFixed(1):'0')+'%','What you really pay.')
-        +xStat('Federal tax',money(total),'All glasses combined.');
+        +xStat('Est. effective rate',(income>0?(total/income*100).toFixed(1):'0')+'%','Total tax &divide; income.')
+        +xStat('Est. federal tax',money(total),'All glasses combined.');
     }
     paint();
 
     wrap.addEventListener('input',function(e){if(e.target.matches('[data-tbinc]')){income=num(e.target.value);paint();}});
     wrap.addEventListener('blur',function(e){if(e.target.matches('[data-tbinc]'))e.target.value=com(income);},true);
+    wrap.addEventListener('click',function(e){
+      var s=e.target.closest('[data-tbstep]'); if(!s) return;
+      income=Math.max(0,income+(+s.getAttribute('data-tbstep')));
+      wrap.querySelector('[data-tbinc]').value=com(income);
+      paint();
+    });
     wrap.addEventListener('click',function(e){
       var b=e.target.closest('[data-tbst]'); if(!b) return;
       status=b.getAttribute('data-tbst');
@@ -1150,20 +1163,20 @@
         field('hy','Savings rate','','%')+field('yrs','Years parked','','')+
       '</div>'+
       '<div class="yp-out sl-out" data-slout></div><div class="yp-verdict" data-slverdict></div>'+
-      '<p class="aq-note">Subsidized loans: 0% until repayment. Unsubsidized: enter the loan’s rate. Savings rates move; interest earned is taxable.</p>';
+      '<p class="aq-note">Hypothetical illustration, not a recommendation. Subsidized loans: 0% until repayment; unsubsidized: enter the loan’s rate. Savings rates vary and are not guaranteed; interest earned is taxable. Review your loan terms before acting.</p>';
 
     function paint(){
       var earned=v.loan*(Math.pow(1+v.hy/100/12,v.yrs*12)-1),
           owed=v.loan*v.lr/100*v.yrs, net=earned-owed;
       wrap.querySelector('[data-slout]').innerHTML=
-         xStat('Savings earns',money(earned),v.hy+'% for '+v.yrs+' yr'+(v.yrs===1?'':'s')+'.')
-        +xStat('Loan costs',money(owed),v.lr>0?v.lr+'% simple interest.':'Nothing while subsidized.')
-        +xStat('You keep',money(net),net>=0?'Free money.':'Pay it down instead.',net<0);
+         xStat('Est. savings interest',money(earned),v.hy+'% for '+v.yrs+' yr'+(v.yrs===1?'':'s')+'.')
+        +xStat('Est. loan interest',money(owed),v.lr>0?v.lr+'% simple interest.':'Nothing while subsidized.')
+        +xStat('Est. difference',money(net),net>=0?'In your favor.':'Costs more than it earns.',net<0);
       var el=wrap.querySelector('[data-slverdict]');
       el.className='yp-verdict'+(net<0?' tight':'');
       el.innerHTML=net>=0
-        ? '<b>Park it.</b> Repay the '+money(v.loan)+' when the bill comes and keep the '+money(net)+'.'
-        : '<b>Pay it down.</b> At '+v.lr+'% the loan costs more than safe cash earns &mdash; each extra payment is a guaranteed '+v.lr+'% return.';
+        ? '<b>Parking it could come out ahead.</b> In this example, repaying the '+money(v.loan)+' when the bill comes leaves about '+money(net)+'.'
+        : '<b>Paying it down may make more sense.</b> At '+v.lr+'% the loan costs more than these savings earn &mdash; each extra payment avoids '+v.lr+'% interest.';
     }
     paint();
 

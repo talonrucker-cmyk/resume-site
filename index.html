@@ -1092,7 +1092,7 @@
           <div class="cred-row"><span class="k">SIE — Securities Industry Essentials</span><span class="v">Passed</span></div>
           <div class="cred-row"><span class="k">Life &amp; Health Insurance</span><span class="v">Licensed</span></div>
           <div class="cred-row"><span class="k">eMoney Advisor</span><span class="v">Certified</span></div>
-          <p class="pursuing">Currently pursuing the <b>CFP®</b>, <b>Series 7</b>, and <b>Series 66</b>.</p>
+          <p class="pursuing">Currently pursuing <b>CFP®</b> certification and the <b>Series 7</b> and <b>Series 66</b> exams.</p>
           <div class="chips"><span class="chip">Eagle Scout</span><span class="chip">EVC Wrestling Champion</span><span class="chip">AI enthusiast</span><span class="chip">Avid skier</span></div>
         </div>
       </div>
@@ -1289,7 +1289,7 @@
                 <option value="married">Married, filing jointly</option>
               </select>
             </div>
-            <p class="wc-hint" id="wcTaxNote">2026 brackets and standard deduction, indexed forward at 3% inflation. Federal only &mdash; no state or payroll tax.</p>
+            <p class="wc-hint" id="wcTaxNote">Hypothetical estimate: 2026 brackets and standard deduction, indexed forward at 3% inflation. Federal only &mdash; no state or payroll tax. Not tax advice.</p>
           </div>
         </div>
 
@@ -2328,7 +2328,7 @@
               </div>
             </div>
             <div class="xc-res">
-              <div class="k">Effective tax rate</div><div class="v" id="tbEff">0%</div>
+              <div class="k">Est. effective tax rate</div><div class="v" id="tbEff">0%</div>
               <div class="sub" id="tbSub"></div>
             </div>
           </div>
@@ -2336,7 +2336,7 @@
           <div class="wcols" id="tbCols" aria-hidden="true"></div>
           <p class="wc-lead" id="tbSpill"></p>
           <table class="brk"><thead><tr><th>Bracket</th><th>Income taxed here</th><th>Tax</th></tr></thead><tbody id="tbRows"></tbody></table>
-          <p class="x-note">2026 federal brackets and standard deduction. <b>Federal income tax only</b>&mdash;no state tax, no Social Security or Medicare payroll tax, no credits. Your <b>marginal</b> rate is what the next dollar costs; your <b>effective</b> rate is what the whole thing cost.</p>
+          <p class="x-note">Hypothetical illustration using 2026 IRS brackets (Rev. Proc. 2025-32) and the standard deduction. <b>Federal income tax only</b>&mdash;no state tax, no Social Security or Medicare payroll tax, no credits. Your <b>marginal</b> rate is what the next dollar costs; your <b>effective</b> rate is what the whole thing cost. Not tax advice; consult a tax professional.</p>
         </div></div>
       </details>
 
@@ -4098,7 +4098,7 @@
         }
         eff.textContent=I>0?(total/I*100).toFixed(1)+'%':'0%';
         sub.innerHTML=I>0
-          ? money(total)+' of federal tax &mdash; but your <b>top bracket is '+Math.round(marg*100)+'%</b>'+(sd?', after a '+money(sd)+' standard deduction':'')+'.'
+          ? 'About '+money(total)+' of estimated federal tax &mdash; but your <b>top bracket is '+Math.round(marg*100)+'%</b>'+(sd?', after a '+money(sd)+' standard deduction':'')+'.'
           : 'Enter an income.';
       }
       [inc,status,ded].forEach(e=>{e.addEventListener('input',run);e.addEventListener('change',run);});
