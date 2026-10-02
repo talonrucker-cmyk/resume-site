@@ -31,9 +31,16 @@
   /* Left-side way home, mirrors the "Back to site" button on the right. */
   .wm-back{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sage);color:var(--pine);font-size:1rem;transition:transform .18s,background .18s,color .18s}
   .wordmark:hover .wm-back{transform:translateX(-3px);background:var(--pine);color:#fff}
+  /* Same four tabs as index.html (Tools/Fun open those pages via #hash). */
+  nav.page-tabs{display:flex;align-items:center;gap:6px}
+  nav.page-tabs a{font-family:var(--body);font-size:.92rem;color:var(--ink-soft);font-weight:600;padding:8px 15px;border-radius:999px;text-decoration:none;transition:color .2s,background .2s}
+  nav.page-tabs a:hover{color:var(--ink);background:var(--paper-2)}
+  nav.page-tabs a.active{color:var(--pine);background:var(--sage)}
   .homebtn{display:inline-flex;align-items:center;gap:9px;background:var(--pine);color:#fff;font-weight:700;font-size:.92rem;padding:9px 18px;border-radius:999px;text-decoration:none;box-shadow:0 6px 18px -8px rgba(14,82,64,.85);transition:.18s}
   .homebtn:hover{background:var(--pine-deep);transform:translateY(-2px)}
   .homebtn .ha{transition:transform .18s}.homebtn:hover .ha{transform:translateX(-3px)}
+  /* Phones: the left arrow is the way home; drop the button so tabs fit one row. */
+  @media(max-width:760px){.homebtn{display:none} .wordmark{font-size:0;gap:6px} nav.page-tabs{gap:2px} nav.page-tabs a{padding:7px 10px;font-size:.84rem}}
 
   .wrap{max-width:1080px;margin:0 auto;padding:0 26px}
   .hero{padding:64px 0 8px;position:relative}
@@ -360,6 +367,11 @@
   .tour-pop{position:fixed;z-index:82;width:min(320px,calc(100vw - 28px));background:var(--white);
     border-radius:14px;box-shadow:0 20px 50px -12px rgba(0,0,0,.5);padding:18px 18px 16px;display:none}
   .tour-pop.on{display:block}
+  /* Docked bottom-center for every step: the card (and its Next button) never
+     moves, only the spotlight does. Bottom-anchored so the button row stays put
+     even when the step text changes length. */
+  .tour-pop{left:50%;bottom:22px;transform:translateX(-50%);width:min(520px,calc(100vw - 28px))}
+  .tour-pop .tp-next{min-width:96px}
   .tour-pop .tp-step{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine)}
   .tour-pop h4{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:4px 0 5px;color:var(--ink)}
   .tour-pop p{font-size:.9rem;color:var(--ink-soft);line-height:1.5;margin-bottom:14px}
@@ -374,6 +386,12 @@
 
 <div class="bar">
   <a class="wordmark" href="index.html" aria-label="Back to site"><span class="wm-back" aria-hidden="true">&#8592;</span><span class="mark">TR</span>Talon Rucker</a>
+  <nav class="page-tabs" aria-label="Site">
+    <a href="index.html#home">Home</a>
+    <a href="index.html#extras">Tools</a>
+    <a href="index.html#fun">Fun</a>
+    <a href="lessons.html" class="active" aria-current="page">Lessons</a>
+  </nav>
   <a class="homebtn" href="index.html"><span class="ha">&#8592;</span> Back to site</a>
 </div>
 
@@ -1415,8 +1433,7 @@
   var STEPS=[
     {sel:'#implOpen', name:'The 10 Commandments', why:'Start here — ten money steps, in order. Tick each one off as you go.'},
     {sel:'#implList .impl-row', before:openModal, name:'Every step opens up', why:'Tap a commandment for the how-to. Several have a live calculator inside.'},
-    {sel:'#implXHead', before:openModal, name:'Extras', why:'Beyond the ten: money biases, tax brackets, student loans and 401(k) rollovers.'},
-    {sel:'.grid .lcard', before:closeModal, name:'Lessons', why:'Eight hands-on lessons. Pick any card to start.'}
+    {sel:'.grid .lcard', before:closeModal, name:'Lessons', why:'Eight hands-on lessons — pick any card to start. That’s the tour; back to the home page.', cta:'Back to home &#10003;', go:'index.html'}
   ];
   var i=0;
 
@@ -1425,28 +1442,28 @@
     var r=el.getBoundingClientRect(), pad=8;
     spot.style.top=(r.top-pad)+'px'; spot.style.left=(r.left-pad)+'px';
     spot.style.width=(r.width+pad*2)+'px'; spot.style.height=(r.height+pad*2)+'px';
-    var pr=pop.getBoundingClientRect(), vh=window.innerHeight, vw=window.innerWidth, m=14;
-    var top=r.bottom+pad+12;
-    if(top+pr.height>vh-m) top=r.top-pad-12-pr.height;
-    top=Math.max(m, Math.min(top, vh-pr.height-m));
-    var left=Math.max(m, Math.min(r.left+r.width/2-pr.width/2, vw-pr.width-m));
-    pop.style.top=top+'px'; pop.style.left=left+'px';
+    // The card stays docked bottom-center (CSS), so Next never moves.
   }
   function show(){
     var s=STEPS[i];
     if(s.before) s.before();
     stepEl.textContent='Step '+(i+1)+' of '+STEPS.length;
     nameEl.textContent=s.name; whyEl.textContent=s.why;
-    nextB.textContent=i===STEPS.length-1?'Done':'Next';
+    nextB.innerHTML=i===STEPS.length-1?(s.cta||'Done'):'Next &#8594;';
     var el=document.querySelector(s.sel);
-    if(el) el.scrollIntoView({block:'center',behavior:'smooth'});
+    if(el) el.scrollIntoView({block:'center',behavior:'instant'});
     setTimeout(place,360);
+    setTimeout(place,900);    // re-measure after any fade-in finishes
   }
   function close(){
     back.classList.remove('on'); spot.classList.remove('on'); pop.classList.remove('on');
     if(!modalOpen()) document.body.style.overflow='';
   }
-  function next(){ if(i>=STEPS.length-1) close(); else { i++; show(); } }
+  function next(){
+    if(i<STEPS.length-1){ i++; show(); return; }
+    var go=STEPS[i].go; close();
+    if(go) location.href=go;   // tour ends back on the home page
+  }
 
   nextB.addEventListener('click', next);
   skipB.addEventListener('click', close);

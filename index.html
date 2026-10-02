@@ -1005,6 +1005,11 @@
   .tour-pop{position:fixed;z-index:82;width:min(320px,calc(100vw - 28px));background:var(--white);
     border-radius:14px;box-shadow:0 20px 50px -12px rgba(0,0,0,.5);padding:18px 18px 16px;display:none}
   .tour-pop.on{display:block}
+  /* Docked bottom-center for every step: the card (and its Next button) never
+     moves, only the spotlight does. Bottom-anchored so the button row stays put
+     even when the step text changes length. */
+  .tour-pop{left:50%;bottom:22px;transform:translateX(-50%);width:min(520px,calc(100vw - 28px))}
+  .tour-pop .tp-next{min-width:96px}
   .tour-pop .tp-step{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine)}
   .tour-pop h4{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:4px 0 5px;color:var(--ink)}
   .tour-pop p{font-size:.9rem;color:var(--ink-soft);line-height:1.5;margin-bottom:14px}
@@ -4670,11 +4675,14 @@
        blocking confirm dialog with a highlighted awareness toast: the change
        applies immediately and a bar reminds the visitor it touches every
        calculator. Fires on `change` (commit), not per keystroke. (was #51) */
-    var lastAge=+mAge.value||0, lastInc=+mInc.value||0;
+    var lastAge=+mAge.value||0, lastInc=+mInc.value||0, lastToast=0;
     function commit(){
       if((+mAge.value||0)===lastAge && (+mInc.value||0)===lastInc) return;
       lastAge=+mAge.value||0; lastInc=+mInc.value||0;
       apply(true);
+      // Remind once a minute at most — rapid age/income tweaks shouldn't stack toasts.
+      if(Date.now()-lastToast<60000) return;
+      lastToast=Date.now();
       if(window.trToast) window.trToast('<b>Applied everywhere.</b> Your age and income here feed every calculator on the site — change them and the numbers update across the page.',{tone:'warn',ico:'⚙️',duration:6000});
     }
     mAge.addEventListener('change',commit);
@@ -5146,7 +5154,6 @@
   /* Each stop: a live element + its name and one-line "why it matters".
      Nav tabs stay visible at every width, so the tour works on mobile too. */
   var STEPS=[
-    {sel:'.page-tabs a[data-nav="home"]',   name:'Home',              why:'Who I am and the one idea the whole plan is built on.'},
     {sel:'.master',                          name:'Start here',        why:'Your age and income fill in every calculator on the page.'},
     {sel:'.wcalc',                           name:'Your savings potential', why:'Slide Lifestyle and Return to see what saving a little more of every raise becomes.'},
     {sel:'.page-tabs a[data-nav="extras"]', name:'Tools',             why:'Dozens more calculators — protection, cash flow, taxes, retirement, estate.'},
@@ -5161,27 +5168,26 @@
     var r=el.getBoundingClientRect(), pad=8;
     spot.style.top=(r.top-pad)+'px'; spot.style.left=(r.left-pad)+'px';
     spot.style.width=(r.width+pad*2)+'px'; spot.style.height=(r.height+pad*2)+'px';
-    // Prefer below the target; flip above if it would run off the bottom.
-    var pr=pop.getBoundingClientRect(), vh=window.innerHeight, vw=window.innerWidth, m=14;
-    var top=r.bottom+pad+12;
-    if(top+pr.height>vh-m) top=r.top-pad-12-pr.height;   // flip above if no room below
-    top=Math.max(m, Math.min(top, vh-pr.height-m));      // never let it leave the viewport
-    var left=r.left+r.width/2-pr.width/2;
-    // Target fills the screen (e.g. the savings calculator): tuck the card
-    // into its bottom-left corner — the quiet space under the inputs.
-    if(r.height>vh*.6){ top=Math.min(r.bottom,vh)-pr.height-pad-12; left=r.left+16; }
-    top=Math.max(m, Math.min(top, vh-pr.height-m));
-    left=Math.max(m, Math.min(left, vw-pr.width-m));
-    pop.style.top=top+'px'; pop.style.left=left+'px';
+    // The card itself never moves — it's docked bottom-center in CSS, so
+    // Next stays under the visitor's mouse for the whole tour.
+  }
+  /* Centre the target in the space ABOVE the docked card, not the whole
+     viewport, so the card never sits on top of what it's describing. */
+  function frame(el){
+    if(el.closest('header')) return;   // nav tabs are sticky — already in view
+    var r=el.getBoundingClientRect(), room=window.innerHeight-pop.offsetHeight-40;
+    var y=window.scrollY+r.top-Math.max(76,(room-r.height)/2);
+    window.scrollTo({top:Math.max(0,y),behavior:'instant'});   // instant: the spotlight's own glide is the animation
   }
   function show(){
     var meta=liveMeta[i];
     stepEl.textContent='Step '+(i+1)+' of '+live.length;
     nameEl.textContent=meta.name; whyEl.textContent=meta.why;
-    nextB.innerHTML = i===live.length-1 ? (meta.cta||'Done') : 'Next';
-    live[i].scrollIntoView({block:'center',behavior:'smooth'});
-    // Let the smooth scroll settle before measuring.
+    nextB.innerHTML = i===live.length-1 ? (meta.cta||'Done') : 'Next &#8594;';
+    frame(live[i]);
+    // Let the smooth scroll settle before measuring (scroll listener refines it).
     setTimeout(place, 340);
+    setTimeout(place, 900);   // re-measure after any fade-in (.reveal) finishes moving it
   }
   var liveMeta=[];
   function open(){
