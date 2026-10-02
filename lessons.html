@@ -345,6 +345,26 @@
     .impl-name{font-size:.96rem}
     .impl-target{white-space:normal;text-align:right;max-width:45%}
   }
+
+  /* ---- spotlight tour, continued from index.html ---- */
+  .tour-back{position:fixed;inset:0;z-index:80;display:none}
+  .tour-back.on{display:block}
+  /* The box-shadow is the dimmer; the transparent rect is the "hole". */
+  .tour-spot{position:fixed;z-index:81;border-radius:12px;pointer-events:none;
+    box-shadow:0 0 0 9999px rgba(10,20,16,.74);outline:2px solid var(--amber-soft);outline-offset:3px;
+    transition:top .32s cubic-bezier(.4,0,.2,1),left .32s cubic-bezier(.4,0,.2,1),width .32s cubic-bezier(.4,0,.2,1),height .32s cubic-bezier(.4,0,.2,1);display:none}
+  .tour-spot.on{display:block}
+  .tour-pop{position:fixed;z-index:82;width:min(320px,calc(100vw - 28px));background:var(--white);
+    border-radius:14px;box-shadow:0 20px 50px -12px rgba(0,0,0,.5);padding:18px 18px 16px;display:none}
+  .tour-pop.on{display:block}
+  .tour-pop .tp-step{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--pine)}
+  .tour-pop h4{font-family:var(--display);font-weight:600;font-size:1.12rem;margin:4px 0 5px;color:var(--ink)}
+  .tour-pop p{font-size:.9rem;color:var(--ink-soft);line-height:1.5;margin-bottom:14px}
+  .tour-pop .tp-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .tour-pop .tp-skip{background:none;border:0;cursor:pointer;font-family:var(--body);font-size:.84rem;color:var(--ink-soft);padding:6px 2px}
+  .tour-pop .tp-skip:hover{color:var(--ink)}
+  .tour-pop .tp-next{font-family:var(--body);font-weight:600;font-size:.88rem;padding:9px 18px;border-radius:999px;border:0;cursor:pointer;background:var(--pine);color:#fff}
+  .tour-pop .tp-next:hover{background:var(--pine-deep)}
 </style>
 </head>
 <body>
@@ -1273,6 +1293,85 @@
   }
 
   render();
+})();
+</script>
+
+<!-- Tour hand-off from index.html (lessons.html?tour=1). Same spotlight
+     markup/CSS as the home-page tour — keep the two in step by hand. -->
+<div class="tour-back" id="tourBack"></div>
+<div class="tour-spot" id="tourSpot"></div>
+<div class="tour-pop" id="tourPop" role="dialog" aria-modal="true" aria-label="Site tour">
+  <span class="tp-step" id="tpStep"></span>
+  <h4 id="tpName"></h4>
+  <p id="tpWhy"></p>
+  <div class="tp-row">
+    <button type="button" class="tp-skip" id="tpSkip">Skip tour</button>
+    <button type="button" class="tp-next" id="tpNext">Next</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(!/[?&]tour=1\b/.test(location.search)) return;
+  try{ history.replaceState(null,'',location.pathname); }catch(e){}   // a refresh shouldn't restart it
+  var back=document.getElementById('tourBack'), spot=document.getElementById('tourSpot'),
+      pop=document.getElementById('tourPop'), stepEl=document.getElementById('tpStep'),
+      nameEl=document.getElementById('tpName'), whyEl=document.getElementById('tpWhy'),
+      nextB=document.getElementById('tpNext'), skipB=document.getElementById('tpSkip');
+  function modalOpen(){return document.getElementById('implModal').classList.contains('open');}
+  function openModal(){if(!modalOpen())document.getElementById('implOpen').click();}
+  function closeModal(){if(modalOpen())document.getElementById('implX').click();}
+
+  /* `before` runs ahead of each stop, so the tour can open the checklist and
+     close it again on the way out. */
+  var STEPS=[
+    {sel:'#implOpen', name:'The 10 Commandments', why:'Start here — ten money steps, in order. Tick each one off as you go.'},
+    {sel:'#implList .impl-row', before:openModal, name:'Every step opens up', why:'Tap a commandment for the how-to. Several have a live calculator inside.'},
+    {sel:'#implXHead', before:openModal, name:'Extras', why:'Beyond the ten: money biases, tax brackets, student loans and 401(k) rollovers.'},
+    {sel:'.grid .lcard', before:closeModal, name:'Lessons', why:'Eight hands-on lessons. Pick any card to start.'}
+  ];
+  var i=0;
+
+  function place(){
+    var el=document.querySelector(STEPS[i].sel); if(!el) return;
+    var r=el.getBoundingClientRect(), pad=8;
+    spot.style.top=(r.top-pad)+'px'; spot.style.left=(r.left-pad)+'px';
+    spot.style.width=(r.width+pad*2)+'px'; spot.style.height=(r.height+pad*2)+'px';
+    var pr=pop.getBoundingClientRect(), vh=window.innerHeight, vw=window.innerWidth, m=14;
+    var top=r.bottom+pad+12;
+    if(top+pr.height>vh-m) top=r.top-pad-12-pr.height;
+    top=Math.max(m, Math.min(top, vh-pr.height-m));
+    var left=Math.max(m, Math.min(r.left+r.width/2-pr.width/2, vw-pr.width-m));
+    pop.style.top=top+'px'; pop.style.left=left+'px';
+  }
+  function show(){
+    var s=STEPS[i];
+    if(s.before) s.before();
+    stepEl.textContent='Step '+(i+1)+' of '+STEPS.length;
+    nameEl.textContent=s.name; whyEl.textContent=s.why;
+    nextB.textContent=i===STEPS.length-1?'Done':'Next';
+    var el=document.querySelector(s.sel);
+    if(el) el.scrollIntoView({block:'center',behavior:'smooth'});
+    setTimeout(place,360);
+  }
+  function close(){
+    back.classList.remove('on'); spot.classList.remove('on'); pop.classList.remove('on');
+    if(!modalOpen()) document.body.style.overflow='';
+  }
+  function next(){ if(i>=STEPS.length-1) close(); else { i++; show(); } }
+
+  nextB.addEventListener('click', next);
+  skipB.addEventListener('click', close);
+  back.addEventListener('click', close);
+  window.addEventListener('keydown', function(e){
+    if(!back.classList.contains('on')) return;
+    if(e.key==='Escape') close();
+    else if(e.key==='Enter'||e.key==='ArrowRight') next();
+  });
+  window.addEventListener('resize', function(){ if(back.classList.contains('on')) place(); });
+
+  back.classList.add('on'); spot.classList.add('on'); pop.classList.add('on');
+  document.body.style.overflow='hidden';
+  show();
 })();
 </script>
 

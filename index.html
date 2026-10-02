@@ -178,6 +178,28 @@
   .acct3-ctl select{font-family:var(--body);font-size:.88rem;padding:7px 9px;border:1px solid var(--line-strong);border-radius:8px;background:var(--white);color:var(--ink)}
   .acct3-verdict{background:var(--sage);color:var(--pine);border-radius:10px;padding:13px 15px;margin-top:14px;font-size:.9rem;line-height:1.55}
   .acct3-verdict b{font-weight:800}
+  /* "When the tax hits" lanes — same $1,000 of pay through each account.
+     The red cell is where the IRS takes its cut; the outlined cell wins. */
+  .txl{margin-top:18px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .txl-title{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
+  .txl-grid{display:grid;grid-template-columns:auto repeat(3,1fr);gap:8px 12px;align-items:stretch}
+  .txl-h{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);text-align:center;align-self:end}
+  .txl-name{font-family:var(--display);font-weight:700;font-size:.86rem;color:var(--ink);align-self:center;line-height:1.2}
+  .txl-name small{display:block;font-family:var(--body);font-weight:400;font-size:.68rem;color:var(--ink-soft)}
+  .txl-c{position:relative;background:var(--paper-2);border-radius:9px;padding:9px 6px;text-align:center}
+  .txl-c:not(:last-child)::after{content:"\2192";position:absolute;right:-11px;top:50%;transform:translateY(-50%);font-size:.8rem;color:var(--ink-soft)}
+  .txl-c b{display:block;font-family:var(--display);font-size:1.05rem;color:var(--pine);font-variant-numeric:tabular-nums}
+  .txl-c small{display:block;font-size:.68rem;color:var(--ink-soft);line-height:1.3}
+  .txl-c.hit{background:#fdf0ed}
+  .txl-chip{display:inline-block;margin-top:5px;font-family:var(--mono);font-size:.58rem;color:#fff;background:var(--brick);border-radius:99px;padding:2px 7px;white-space:nowrap}
+  .txl-c.win{outline:2px solid var(--pine);outline-offset:-2px;background:#e8f2ed}
+  .txl-sum{margin-top:12px;font-size:.84rem;color:var(--ink);line-height:1.5}
+  @media(max-width:560px){
+    .txl-grid{gap:8px 10px}
+    .txl-c b{font-size:.88rem}
+    .txl-name{font-size:.74rem}
+    .txl-chip{font-size:.52rem;padding:2px 5px}
+  }
   @media(max-width:640px){.acct3{grid-template-columns:1fr}}
 
   /* risk tolerance survey */
@@ -388,7 +410,8 @@
   .wc-bsub{font-family:var(--mono);font-size:.7rem;color:var(--ink-soft);margin-top:6px}
   .wc-big.alt .wc-bsub{color:#9FBBB0}
   .wc-total{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:.9rem;color:var(--ink-soft);text-align:center}
-  .wc-total b{font-family:var(--display);font-weight:700;font-size:1.15rem;color:var(--brick)}
+  .wc-total .wc-tk{display:inline-block;font-family:var(--display);font-weight:700;font-size:.95rem;color:#3a2a08;background:var(--amber-soft);border-radius:999px;padding:5px 14px}
+  .wc-total b{display:block;font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,5vw,3.2rem);line-height:1.1;letter-spacing:-.02em;color:var(--brick);margin:4px 0 2px}
   /* income steps + advanced */
   .wc-sub-d{margin:-8px 0 18px}
   .wc-sub-d>summary{list-style:none;cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--pine);padding:2px 0}
@@ -1067,7 +1090,7 @@
           <div class="portrait-card">
             <div class="pc-name">Talon Rucker</div>
             <div class="pc-school">BYU — Marriott School of Business</div>
-            <div class="pc-meta">B.S. Finance · <b>3.90 GPA</b></div>
+            <div class="pc-meta">B.S. Finance · <b>3.9 GPA</b></div>
           </div>
         </div>
       </div>
@@ -1083,7 +1106,7 @@
           <h3><span class="dot"></span>Education</h3>
           <div class="cred-row"><span class="k">B.S. in Finance</span><span class="v">Apr 2026</span></div>
           <div class="cred-row"><span class="k">BYU — Marriott School of Business</span><span class="v">Provo, UT</span></div>
-          <div class="cred-row"><span class="k">GPA · Academic Perf. Scholarship</span><span class="v">3.90 / 4.00</span></div>
+          <div class="cred-row"><span class="k">GPA · Academic Perf. Scholarship</span><span class="v">3.9 / 4.0</span></div>
           <div class="cred-row"><span class="k">Degree completed in</span><span class="v">3 years</span></div>
           <div class="chips"><span class="chip">Finance Society</span><span class="chip">Wealth Management Assoc.</span><span class="chip">SF Net Trek Rep</span><span class="chip">8,000+ hrs volunteer work</span></div>
         </div>
@@ -1123,130 +1146,9 @@
   <section class="compound" data-page="home">
     <div class="wrap">
       <div class="comp-head reveal">
-        <span class="eyebrow">The compound effect</span>
-        <h2>Put in $1,000 once. Watch it work for 40 years.</h2>
+        <span class="eyebrow">Your savings potential</span>
+        <h2>Save a little more of every raise. Watch what it becomes.</h2>
       </div>
-      <div class="comp-shell">
-        <div class="chart-card reveal">
-          <svg class="curve" id="curve" viewBox="0 0 1100 470" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Compound growth of a one-time deposit from your age to 65 at 8 percent">
-            <defs>
-              <linearGradient id="fillgrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#0E5240" stop-opacity="0.20"/>
-                <stop offset="100%" stop-color="#0E5240" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <g id="gridlines"></g>
-            <path id="area" fill="url(#fillgrad)" opacity="0"></path>
-            <path class="curve-path" id="line"></path>
-            <rect id="scrub" x="120" y="64" width="932" height="338" fill="transparent" style="cursor:crosshair"></rect>
-            <g id="nodes"></g>
-            <g id="hoverLayer" pointer-events="none">
-              <line id="vGuide" class="vguide" x1="0" y1="0" x2="0" y2="0"></line>
-              <circle id="hoverDot" class="hoverdot" r="7"></circle>
-              <g id="tipPos">
-                <g id="tip" class="tip">
-                  <rect class="tipbg" x="-80" y="-60" width="160" height="50" rx="11"></rect>
-                  <text id="tipAge" class="tipage" x="0" y="-39" text-anchor="middle"></text>
-                  <text id="tipVal" class="tipval" x="0" y="-18" text-anchor="middle"></text>
-                </g>
-              </g>
-            </g>
-          </svg>
-          <div class="ac-row" role="group" aria-label="Account type">
-            <span class="ac-lab">Account</span>
-            <button type="button" class="ac-tab active" data-acct="roth">Roth IRA</button>
-            <button type="button" class="ac-tab" data-acct="trad">Traditional IRA</button>
-            <button type="button" class="ac-tab" data-acct="k401">401(k)</button>
-          </div>
-          <div class="ac-row" role="group" aria-label="How often you contribute">
-            <span class="ac-lab">Put in</span>
-            <button type="button" class="ac-tab active" data-mode="once">Once</button>
-            <button type="button" class="ac-tab" data-mode="every">Every year</button>
-          </div>
-          <div class="control">
-            <label for="seed" id="seedLab">One-time deposit</label>
-            <input type="range" id="seed" min="100" max="7500" step="100" value="1000">
-            <span class="amt" id="seedAmt">$1,000</span>
-          </div>
-          <div class="control">
-            <label for="ciAge">Your age</label>
-            <input type="number" id="ciAge" class="numfld" min="16" max="75" value="22">
-            <span class="amt" id="startNote">to age 65</span>
-          </div>
-          <div class="control">
-            <label for="years">Years to grow</label>
-            <input type="range" id="years" min="5" max="47" step="1" value="43">
-            <span class="amt" id="yearsAmt">43 yrs</span>
-          </div>
-          <div class="control">
-            <label for="retire">Retirement age</label>
-            <input type="number" id="retire" class="numfld" min="50" max="80" value="65">
-          </div>
-          <p class="chart-hint">Hover or hold anywhere on the line to see the value at any age · tap a dot to pin it</p>
-        </div>
-
-        <div class="result-card reveal">
-          <div class="ci-tabs" role="tablist">
-            <button type="button" class="ci-tab active" data-ci="future">Future dollars</button>
-            <button type="button" class="ci-tab" data-ci="today">Today&rsquo;s dollars</button>
-          </div>
-          <div class="rk" id="rkLine">By age 65, it becomes</div>
-          <div class="big"><span class="amber" id="finalVal">$27,367</span></div>
-          <p class="aftertax" id="afterTax" style="display:none"></p>
-          <div class="breakdown">
-            <div class="bd"><div class="bn" id="contribVal">$1,000</div><div class="bl">You put in</div></div>
-            <div class="bd grow"><div class="bn" id="growthVal">$26,367</div><div class="bl">Pure growth</div></div>
-          </div>
-          <p class="blurb" id="ciBlurb">A Roth IRA grows <b style="color:#fff">completely tax-free</b>. Drop in $1,000, leave it alone, and at a long-run market average near 8% it keeps doubling roughly every 9 years—without you adding another cent. <b style="color:#fff">The earlier you start, the more the math does for you.</b></p>
-          <a class="video-cta" href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener">▶ &nbsp;Open a Roth IRA in the Fidelity app</a>
-          <a class="fid-link" href="https://www.fidelity.com/learning-center/trading-investing/how-to-open-a-roth-ira" target="_blank" rel="noopener">Fidelity's step-by-step guide →</a>
-          <p class="disclaim">Hypothetical illustration. 8% is an assumed average annual return, not a guarantee; actual results vary and investments can lose value. Today&rsquo;s dollars discounts by 3% a year for inflation.</p>
-        </div>
-      </div>
-
-      <!-- "Same money. Three accounts." moved to Tools ▸ Cash Flow as a clearer
-           explainer (Batch 12 #52). The #rvtRate select that assumedRetireRate()
-           reads lives there now — still in the DOM, so the after-tax line works. -->
-    </div>
-  </section>
-
-
-
-
-  <!-- ============ HOME (page 1): THE PLAN ============ -->
-  <!-- FINANCIAL CALCULATORS -->
-  <section id="tools" class="block" data-page="home">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <span class="eyebrow">Try it yourself</span>
-        <h2>The Financial Calculators I actually use.</h2>
-        <p style="color:var(--ink-soft);margin-top:14px;max-width:60ch">The financial calculators I use to make money make sense&mdash;each one fully live, so you can change any input and watch it recompute.</p>
-      </div>
-      <div class="master reveal">
-        <div class="m-lead">
-          <b>Start here.</b>
-          <span>Your age and income fill in every calculator below.</span>
-        </div>
-        <div class="wc-field">
-          <label for="mAge">Your age</label>
-          <div class="wc-ctrl wc-num"><input type="number" id="mAge" min="16" max="80" step="1" value="30"></div>
-        </div>
-        <div class="wc-field">
-          <label for="mInc">Annual income</label>
-          <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="mInc" min="0" max="5000000" step="1000" value="75000"></div>
-        </div>
-      </div>
-
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">Calculator</span>
-            <h3>Your Savings Potential Calculator.</h3>
-            <p>See what saving a little more of every raise could really be worth over a career.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
       <div class="wcalc reveal">
         <div class="wc-inputs">
           <div class="wc-title">Your Savings Potential Calculator</div>
@@ -1308,53 +1210,43 @@
             <span><i class="sw red"></i>Cash you spend on lifestyle (not invested)</span>
             <span id="wcTaxLeg" style="display:none"><i class="sw tax"></i>Taxes paid (never yours to keep)</span>
           </div>
-          <div class="wc-total">Lifetime lifestyle spending: <b id="wcSpend">$0</b> &mdash; spent, never invested, never compounded.</div>
+          <div class="wc-total"><span class="wc-tk">Guilt-free spending</span><b id="wcSpend">$0</b><span id="wcSpendSub">to enjoy over your career &mdash; and the wealth still gets built.</span></div>
           <p class="wc-note">Hypothetical. Only the money you <b>save</b> is invested and compounds. The red bars are the raw dollars spent on lifestyle over the same years&mdash;spent, not grown. Flip to <b>Today&rsquo;s dollars</b> to strip out inflation and see what the ending balance is actually worth in current buying power.</p>
         </div>
       </div>
-        </div>
-      </details>
 
-      <details class="collapse reveal">
-        <summary>
-          <div class="collapse-txt">
-            <span class="eyebrow">What are you worth?</span>
-            <h3>Your paycheck is your biggest asset.</h3>
-            <p>See what your future income is really worth - and why it is worth protecting.</p>
-          </div>
-          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
-        </summary>
-        <div class="collapse-body">
-          <p style="color:var(--ink-soft);margin-top:14px;max-width:64ch">The years of income ahead of you are probably the largest asset you'll ever own—and the one most people never protect. Put in an age and an income to see the paychecks a family is really counting on between now and retirement. <b>That</b> number is what the right life and disability insurance is quietly protecting.</p>
-      <div class="hlv reveal">
-        <div class="hlv-inputs">
-          <div class="wc-field">
-            <label for="hlvAge">Current age</label>
-            <div class="wc-ctrl wc-num"><input type="number" id="hlvAge" min="16" max="70" step="1" value="30"></div>
-          </div>
-          <div class="wc-field">
-            <label for="hlvInc">Annual income</label>
-            <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="hlvInc" min="0" max="5000000" step="1000" value="75000"></div>
-          </div>
-          <div class="wc-field">
-            <label for="hlvGrow">Annual raise</label>
-            <div class="wc-ctrl"><input type="range" id="hlvGrow" min="0" max="8" step="0.5" value="4"><span class="wc-val" id="hlvGrowV">4%</span></div>
-          </div>
-          <div class="wc-field">
-            <label for="hlvRet">Retirement age</label>
-            <div class="wc-ctrl wc-num"><input type="number" id="hlvRet" min="40" max="80" step="1" value="65"></div>
-          </div>
+      <!-- "Same money. Three accounts." moved to Tools ▸ Cash Flow as a clearer
+           explainer (Batch 12 #52). The #rvtRate select that assumedRetireRate()
+           reads lives there now — still in the DOM, so the after-tax line works. -->
+    </div>
+  </section>
+
+
+
+
+  <!-- ============ HOME (page 1): THE PLAN ============ -->
+  <!-- FINANCIAL CALCULATORS -->
+  <section id="tools" class="block" data-page="home">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="eyebrow">Try it yourself</span>
+        <h2>The Financial Calculators I actually use.</h2>
+        <p style="color:var(--ink-soft);margin-top:14px;max-width:60ch">The financial calculators I use to make money make sense&mdash;each one fully live, so you can change any input and watch it recompute.</p>
+      </div>
+      <div class="master reveal">
+        <div class="m-lead">
+          <b>Start here.</b>
+          <span>Your age and income fill in every calculator below.</span>
         </div>
-        <div class="hlv-output">
-          <div class="hlv-bk">Between now &amp; retirement, you're projected to earn</div>
-          <div class="hlv-bv" id="hlvVal">$0</div>
-          <div class="hlv-meta"><span id="hlvYears">35 years</span> of income, growing <span id="hlvGrow2">4%</span> a year</div>
-          <p class="hlv-note">A permanent loss of that income—death or disability—is the single biggest financial threat most families face. It's also the one thing insurance is built to protect.</p>
+        <div class="wc-field">
+          <label for="mAge">Your age</label>
+          <div class="wc-ctrl wc-num"><input type="number" id="mAge" min="16" max="80" step="1" value="30"></div>
+        </div>
+        <div class="wc-field">
+          <label for="mInc">Annual income</label>
+          <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="mInc" min="0" max="5000000" step="1000" value="75000"></div>
         </div>
       </div>
-      <p class="wc-note" style="margin-top:14px">A simple projection of future earnings—an illustration to size the conversation, not a quote or advice.</p>
-        </div>
-      </details>
 
       <details class="collapse reveal">
         <summary>
@@ -1467,6 +1359,96 @@
           </div>
           <label class="solve-f"><span>Discretionary spending / year<small>fun, dining, extras</small></span><span class="xc-in"><span class="pre">$</span><input type="text" inputmode="numeric" data-solve-disc></span></label>
           <div class="solve-out" data-solve-out></div>
+        </div>
+      </div>
+        </div>
+      </details>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt">
+            <span class="eyebrow">Calculator</span>
+            <h3>Put in $1,000 once. Watch it work for 40 years.</h3>
+            <p>Roth IRA, Traditional IRA or 401(k) &mdash; one deposit, left alone.</p>
+          </div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body">
+      <div class="comp-shell">
+        <div class="chart-card reveal">
+          <svg class="curve" id="curve" viewBox="0 0 1100 470" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Compound growth of a one-time deposit from your age to 65 at 8 percent">
+            <defs>
+              <linearGradient id="fillgrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0E5240" stop-opacity="0.20"/>
+                <stop offset="100%" stop-color="#0E5240" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <g id="gridlines"></g>
+            <path id="area" fill="url(#fillgrad)" opacity="0"></path>
+            <path class="curve-path" id="line"></path>
+            <rect id="scrub" x="120" y="64" width="932" height="338" fill="transparent" style="cursor:crosshair"></rect>
+            <g id="nodes"></g>
+            <g id="hoverLayer" pointer-events="none">
+              <line id="vGuide" class="vguide" x1="0" y1="0" x2="0" y2="0"></line>
+              <circle id="hoverDot" class="hoverdot" r="7"></circle>
+              <g id="tipPos">
+                <g id="tip" class="tip">
+                  <rect class="tipbg" x="-80" y="-60" width="160" height="50" rx="11"></rect>
+                  <text id="tipAge" class="tipage" x="0" y="-39" text-anchor="middle"></text>
+                  <text id="tipVal" class="tipval" x="0" y="-18" text-anchor="middle"></text>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <div class="ac-row" role="group" aria-label="Account type">
+            <span class="ac-lab">Account</span>
+            <button type="button" class="ac-tab active" data-acct="roth">Roth IRA</button>
+            <button type="button" class="ac-tab" data-acct="trad">Traditional IRA</button>
+            <button type="button" class="ac-tab" data-acct="k401">401(k)</button>
+          </div>
+          <div class="ac-row" role="group" aria-label="How often you contribute">
+            <span class="ac-lab">Put in</span>
+            <button type="button" class="ac-tab active" data-mode="once">Once</button>
+            <button type="button" class="ac-tab" data-mode="every">Every year</button>
+          </div>
+          <div class="control">
+            <label for="seed" id="seedLab">One-time deposit</label>
+            <input type="range" id="seed" min="100" max="7500" step="100" value="1000">
+            <span class="amt" id="seedAmt">$1,000</span>
+          </div>
+          <div class="control">
+            <label for="ciAge">Your age</label>
+            <input type="number" id="ciAge" class="numfld" min="16" max="75" value="22">
+            <span class="amt" id="startNote">to age 65</span>
+          </div>
+          <div class="control">
+            <label for="years">Years to grow</label>
+            <input type="range" id="years" min="5" max="47" step="1" value="43">
+            <span class="amt" id="yearsAmt">43 yrs</span>
+          </div>
+          <div class="control">
+            <label for="retire">Retirement age</label>
+            <input type="number" id="retire" class="numfld" min="50" max="80" value="65">
+          </div>
+          <p class="chart-hint">Hover or hold anywhere on the line to see the value at any age · tap a dot to pin it</p>
+        </div>
+
+        <div class="result-card reveal">
+          <div class="ci-tabs" role="tablist">
+            <button type="button" class="ci-tab active" data-ci="future">Future dollars</button>
+            <button type="button" class="ci-tab" data-ci="today">Today&rsquo;s dollars</button>
+          </div>
+          <div class="rk" id="rkLine">By age 65, it becomes</div>
+          <div class="big"><span class="amber" id="finalVal">$27,367</span></div>
+          <p class="aftertax" id="afterTax" style="display:none"></p>
+          <div class="breakdown">
+            <div class="bd"><div class="bn" id="contribVal">$1,000</div><div class="bl">You put in</div></div>
+            <div class="bd grow"><div class="bn" id="growthVal">$26,367</div><div class="bl">Pure growth</div></div>
+          </div>
+          <p class="blurb" id="ciBlurb">A Roth IRA grows <b style="color:#fff">completely tax-free</b>. Drop in $1,000, leave it alone, and at a long-run market average near 8% it keeps doubling roughly every 9 years—without you adding another cent. <b style="color:#fff">The earlier you start, the more the math does for you.</b></p>
+          <a class="video-cta" href="https://www.youtube.com/watch?v=sLbfcehrZVU" target="_blank" rel="noopener">▶ &nbsp;Open a Roth IRA in the Fidelity app</a>
+          <a class="fid-link" href="https://www.fidelity.com/learning-center/trading-investing/how-to-open-a-roth-ira" target="_blank" rel="noopener">Fidelity's step-by-step guide →</a>
+          <p class="disclaim">Hypothetical illustration. 8% is an assumed average annual return, not a guarantee; actual results vary and investments can lose value. Today&rsquo;s dollars discounts by 3% a year for inflation.</p>
         </div>
       </div>
         </div>
@@ -1599,6 +1581,47 @@
       <!-- ========== 1 · PROTECTION ========== -->
       <h3 class="xcat reveal"><span class="xnum">1</span>Protection</h3>
       <p class="xcat-sub reveal">Before you grow money, you defend it. Protection is the foundation&mdash;if one lawsuit, illness, or death can wipe out everything else, nothing else on this page matters yet.</p>
+
+      <details class="collapse reveal">
+        <summary>
+          <div class="collapse-txt">
+            <span class="eyebrow">What are you worth?</span>
+            <h3>Your paycheck is your biggest asset.</h3>
+            <p>See what your future income is really worth - and why it is worth protecting.</p>
+          </div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body">
+          <p style="color:var(--ink-soft);margin-top:14px;max-width:64ch">The years of income ahead of you are probably the largest asset you'll ever own—and the one most people never protect. Put in an age and an income to see the paychecks a family is really counting on between now and retirement. <b>That</b> number is what the right life and disability insurance is quietly protecting.</p>
+      <div class="hlv reveal">
+        <div class="hlv-inputs">
+          <div class="wc-field">
+            <label for="hlvAge">Current age</label>
+            <div class="wc-ctrl wc-num"><input type="number" id="hlvAge" min="16" max="70" step="1" value="30"></div>
+          </div>
+          <div class="wc-field">
+            <label for="hlvInc">Annual income</label>
+            <div class="wc-ctrl wc-num"><span class="pre">$</span><input type="number" id="hlvInc" min="0" max="5000000" step="1000" value="75000"></div>
+          </div>
+          <div class="wc-field">
+            <label for="hlvGrow">Annual raise</label>
+            <div class="wc-ctrl"><input type="range" id="hlvGrow" min="0" max="8" step="0.5" value="4"><span class="wc-val" id="hlvGrowV">4%</span></div>
+          </div>
+          <div class="wc-field">
+            <label for="hlvRet">Retirement age</label>
+            <div class="wc-ctrl wc-num"><input type="number" id="hlvRet" min="40" max="80" step="1" value="65"></div>
+          </div>
+        </div>
+        <div class="hlv-output">
+          <div class="hlv-bk">Between now &amp; retirement, you're projected to earn</div>
+          <div class="hlv-bv" id="hlvVal">$0</div>
+          <div class="hlv-meta"><span id="hlvYears">35 years</span> of income, growing <span id="hlvGrow2">4%</span> a year</div>
+          <p class="hlv-note">A permanent loss of that income—death or disability—is the single biggest financial threat most families face. It's also the one thing insurance is built to protect.</p>
+        </div>
+      </div>
+      <p class="wc-note" style="margin-top:14px">A simple projection of future earnings—an illustration to size the conversation, not a quote or advice.</p>
+        </div>
+      </details>
 
       <details class="collapse reveal">
         <summary>
@@ -1979,6 +2002,12 @@
             </select>
           </div>
           <div class="acct3-verdict" id="rvtVerdict"></div>
+          <div class="txl">
+            <div class="txl-title">When the tax hits &middot; $1,000 of pay</div>
+            <div class="txl-grid" id="txlGrid"></div>
+            <p class="txl-sum" id="txlSum"></p>
+            <p class="x-note" style="margin-top:8px">Hypothetical: $1,000 growing 10&times; (about 8% a year for 30 years). Federal rates from your income and the dropdown above. Not tax advice.</p>
+          </div>
           <p class="x-note">2026 limits, under age 50. A 401(k) also lets higher earners contribute where an IRA can be phased out. Concept only; no employer match or state tax modeled.</p>
         </div></div>
       </details>
@@ -3168,6 +3197,33 @@
         v='At the same <b>'+pct+'%</b> rate either way it&rsquo;s nearly a wash &mdash; but a Roth&rsquo;s limit holds <b>already-taxed</b> dollars, so it quietly fits more real money. Once any match is captured, <b>Roth</b> edges it.';
       }
       verdict.innerHTML=v;
+      lanes(rNow,rRet);
+    }
+    /* Same $1,000 of pay, same 10x growth — only the moment of tax moves.
+       Roth: tax at today's rate on the way in. Traditional/401(k): tax at
+       the retirement rate on the way out. Equal rates → equal results. */
+    const grid=$('txlGrid'), sum=$('txlSum'), G=10, PAY=1000;
+    function lanes(rNow,rRet){
+      if(!grid) return;
+      const m=v=>'$'+Math.round(v).toLocaleString('en-US');
+      const pN=Math.round(rNow*100), pR=Math.round(rRet*100);
+      const rIn=PAY*(1-rNow), rOut=rIn*G, tGrow=PAY*G, tOut=tGrow*(1-rRet);
+      const rw=rOut>tOut+.5, tw=tOut>rOut+.5;
+      const c=(cls,big,sm,chip)=>'<div class="txl-c '+cls+'"><b>'+big+'</b><small>'+sm+'</small>'+(chip?'<span class="txl-chip">&#9986; '+chip+'</span>':'')+'</div>';
+      grid.innerHTML=
+        '<span></span><span class="txl-h">Goes in</span><span class="txl-h">Grows 10&times;</span><span class="txl-h">Comes out</span>'
+        +'<span class="txl-name">Roth<small>tax now</small></span>'
+        +c('hit',m(rIn),'after tax',pN+'% now')
+        +c('',m(rOut),'untaxed')
+        +c(rw?'win':'',m(rOut),'tax-free')
+        +'<span class="txl-name">Traditional<br>&amp; 401(k)<small>tax later</small></span>'
+        +c('',m(PAY),'no tax yet')
+        +c('',m(tGrow),'untaxed')
+        +c('hit'+(tw?' win':''),m(tOut),'after tax',pR+'% later');
+      sum.innerHTML=rw
+        ? '<b>Roth keeps '+m(rOut-tOut)+' more</b> &mdash; you paid '+pN+'% instead of '+pR+'%.'
+        : tw ? '<b>Traditional keeps '+m(tOut-rOut)+' more</b> &mdash; you paid '+pR+'% instead of '+pN+'%.'
+        : '<b>Same rate, same result.</b> The only question is whether your rate is lower now or later.';
     }
     [rateSel,mInc].forEach(el=>{ if(el){el.addEventListener('input',run);el.addEventListener('change',run);} });
     /* The teacher's after-tax line reads the same select; nudge it to
@@ -3272,6 +3328,10 @@
       wealthSub.textContent=fmtM(R.flip)+(mode==='today'?' in future dollars':' in today’s dollars');
       taxSub.textContent=R.status==='off'?'':'Year-1 tax: '+Math.round(R.effRate*100)+'% effective';
       spendEl.textContent=fmt(R.spend);
+      const spendSub=$('wcSpendSub');
+      if(spendSub) spendSub.innerHTML=R.spend>0
+        ? 'to enjoy over your career &mdash; and the wealth still gets built.'
+        : 'Slide Lifestyle (spend) up to see it.';
       if(taxLeg) taxLeg.style.display = R.status!=='off' ? '' : 'none';
 
       while(chart.firstChild) chart.removeChild(chart.firstChild);
@@ -5050,8 +5110,8 @@
     {sel:'.page-tabs a[data-nav="home"]',   name:'Home',            why:'Start here — who I am and the one idea the whole plan is built on.'},
     {sel:'.page-tabs a[data-nav="extras"]', name:'Tools',           why:'Plug in your real numbers and watch them compound.'},
     {sel:'.page-tabs a[data-nav="fun"]',    name:'Fun',             why:'The human side — books, music, and a hidden surprise or two.'},
-    {sel:'.page-tabs a[href="lessons.html"]',name:'Lessons',        why:'Money concepts made visual — jargon left at the door.'},
-    {sel:'.comp-head',                       name:'Compound interest',why:'The big idea: start early and time does the heavy lifting.'}
+    {sel:'.comp-head',                       name:'Savings potential',why:'Save a little more of every raise and watch what it becomes.'},
+    {sel:'.page-tabs a[href="lessons.html"]',name:'Lessons',        why:'The 10 Commandments plus eight hands-on lessons. The tour continues there.', go:'lessons.html?tour=1', cta:'Continue to Lessons &#8594;'}
   ];
   var live=[], i=0;
 
@@ -5073,7 +5133,7 @@
     var meta=liveMeta[i];
     stepEl.textContent='Step '+(i+1)+' of '+live.length;
     nameEl.textContent=meta.name; whyEl.textContent=meta.why;
-    nextB.textContent = i===live.length-1 ? 'Done' : 'Next';
+    nextB.innerHTML = i===live.length-1 ? (meta.cta||'Done') : 'Next';
     live[i].scrollIntoView({block:'center',behavior:'smooth'});
     // Let the smooth scroll settle before measuring.
     setTimeout(place, 340);
@@ -5094,7 +5154,11 @@
     document.body.style.overflow='';
     try{ localStorage.setItem(DONE,'1'); }catch(e){}
   }
-  function next(){ if(i>=live.length-1){ close(); } else { i++; show(); } }
+  function next(){
+    if(i<live.length-1){ i++; show(); return; }
+    var go=liveMeta[i].go; close();
+    if(go) location.href=go;   // hand the tour off to the next page
+  }
 
   btn.addEventListener('click', open);
   nextB.addEventListener('click', next);

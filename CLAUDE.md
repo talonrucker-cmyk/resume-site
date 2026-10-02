@@ -101,6 +101,10 @@ deliberately not extracted (copying is simpler and lower-risk). Revisit extracti
 lifestyle-creep chart) are hand-ported into the decks, not imported — keep them in step
 with their `index.html` originals by hand if the math changes.
 
+The home-page "Take the tour" ends on the Lessons tab and hands off to
+`lessons.html?tour=1`, which runs a 4-stop tour (Commandments card → opens the
+checklist → Extras → lesson cards). The spotlight CSS/markup is copied, not shared.
+
 ## Hand-ported calculators (keep in step)
 
 | Calculator | Lives in | Notes |
