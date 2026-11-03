@@ -1083,6 +1083,51 @@
   .game-wrap:fullscreen{max-width:none;width:100%;height:100%;border:0;border-radius:0;
     display:flex;align-items:center;justify-content:center;background:#0b1a14}
   .game-wrap:fullscreen .game-cv{width:auto;height:100%;max-width:100%}
+  /* INVESTMENT STREAM (reservoir calc, under the spending circuit) */
+  .isc{--isc-surface:var(--white);--isc-panel:var(--paper);--isc-border:var(--line-strong);--isc-ink:var(--ink);--isc-ink-2:var(--ink-soft);--isc-ink-3:#8a968f;--isc-water:#2a78d6;--isc-gold:var(--amber);--isc-pipe:#a9b2ad;--isc-bad:var(--brick);--isc-good:var(--pine)}
+  .isc-body{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--white);color:var(--ink);box-shadow:var(--shadow)}
+  .isc-tabs{display:inline-flex;background:var(--paper);border-radius:999px;padding:3px;margin:0 0 14px}
+  .isc-tab{border:0;background:transparent;color:var(--ink-soft);font:inherit;font-size:.92rem;padding:7px 14px;border-radius:999px;cursor:pointer}
+  .isc-tab[aria-selected="true"]{background:var(--pine);color:#fff;font-weight:600}
+  .isc-scene{width:100%;height:auto;max-height:330px;display:block;margin:0 auto}
+  .isc-scene .flow{fill:none;stroke-linecap:round}
+  .isc-scene .rain{stroke:var(--isc-water);animation:isc-rain .5s linear infinite}
+  @keyframes isc-rain{to{stroke-dashoffset:calc(var(--gap) * -1)}}
+  .isc-scene .pour,.isc-scene .spill{stroke:var(--isc-water);stroke-dasharray:14 6;animation:isc-fall .45s linear infinite}
+  .isc-scene .paused .rain,.isc-scene .paused .pour,.isc-scene .paused .spill{animation-play-state:paused}
+  @keyframes isc-fall{to{stroke-dashoffset:-20}}
+  @media (prefers-reduced-motion:reduce){.isc-scene .flow{animation:none!important}}
+  .isc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0 14px}
+  .isc-stat{background:var(--paper);border-radius:10px;padding:10px 12px;min-width:0}
+  .isc-stat .k{font-family:var(--mono);font-size:.7rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:6px}
+  .isc-stat .v{font-family:var(--display);font-size:1.35rem;font-weight:700;font-variant-numeric:tabular-nums;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .isc-swatch{width:10px;height:10px;border-radius:3px;flex:none}
+  .isc-stat .v.good{color:var(--isc-good)}
+  .isc-stat .v.bad{color:var(--isc-bad)}
+  .isc-controls{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 18px;margin-bottom:12px}
+  .isc-controls[hidden]{display:none}
+  .isc-ctrl label{display:flex;justify-content:space-between;font-size:.86rem;color:var(--ink-soft);margin-bottom:6px}
+  .isc-ctrl label b{color:var(--ink);font-variant-numeric:tabular-nums}
+  .isc-ctrl .track{position:relative}
+  .isc-ctrl input[type=range]{width:100%;margin:0;accent-color:var(--pine)}
+  .isc-mark{position:absolute;top:20px;transform:translateX(-50%);font-size:11px;line-height:1;color:var(--isc-good);pointer-events:none;white-space:nowrap}
+  .isc-mark.hidden{display:none}
+  .isc-bar{display:flex;align-items:center;gap:10px;margin:4px 0 10px}
+  .isc-btn{border:1px solid var(--line-strong);background:var(--white);color:var(--ink);border-radius:8px;padding:6px 12px;font:inherit;font-size:.92rem;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+  .isc-btn:hover{background:var(--paper)}
+  .isc-scrub{flex:1;accent-color:var(--isc-ink-3)}
+  .isc-chartwrap{position:relative}
+  .isc-legend{display:flex;gap:16px;font-size:.8rem;color:var(--ink-soft);margin:6px 0 2px}
+  .isc-legend span{display:inline-flex;align-items:center;gap:6px}
+  .isc-chart{width:100%;height:auto;display:block;touch-action:pan-y}
+  .isc-chart .grid{stroke:var(--line);stroke-width:1}
+  .isc-chart .axis{fill:var(--isc-ink-3);font-family:var(--mono);font-size:11px;font-variant-numeric:tabular-nums}
+  .isc-chart .lbl{font-size:12px;font-weight:600;fill:var(--ink-soft)}
+  .isc-tip{position:absolute;pointer-events:none;background:var(--white);border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.12);white-space:nowrap;opacity:0;transition:opacity .1s}
+  .isc-tip .row{display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+  .isc-tip .row b{margin-left:auto;padding-left:12px}
+  .isc-note{font-size:.76rem;color:var(--isc-ink-3);margin:10px 0 0;line-height:1.45}
+  @media (max-width:560px){.isc-stats{grid-template-columns:repeat(2,1fr)}.isc-controls{grid-template-columns:1fr}.isc-stat .v{font-size:1.15rem}}
 </style>
 </head>
 <body>
@@ -1400,6 +1445,98 @@
         </div>
       </div>
         </div>
+      </details>
+
+      <details class="collapse reveal isc" id="isc">
+        <summary>
+          <div class="collapse-txt">
+            <span class="eyebrow">Calculator</span>
+            <h3>Build an investment stream.</h3>
+            <p>Live off returns, not paychecks.</p>
+          </div>
+          <span class="collapse-btn"><span class="cc-more">See more</span><span class="cc-less">See less</span> <span class="cc-chev">&#x25BE;</span></span>
+        </summary>
+        <div class="collapse-body"><div class="isc-body">
+          <div class="isc-tabs" role="tablist">
+            <button type="button" class="isc-tab" role="tab" data-mode="build" aria-selected="true">Build the stream</button>
+            <button type="button" class="isc-tab" role="tab" data-mode="live" aria-selected="false">Live off the stream</button>
+          </div>
+          <svg class="isc-scene" viewBox="0 0 600 330" role="img" aria-label="Reservoir animation">
+            <defs>
+              <clipPath id="isc-tankclip"><rect x="242" y="82" width="156" height="216" rx="6"/></clipPath>
+              <linearGradient id="isc-watergrad" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#2a78d6" stop-opacity=".85"/>
+                <stop offset="1" stop-color="#2a78d6" stop-opacity="1"/>
+              </linearGradient>
+            </defs>
+            <g id="isc-anim">
+              <g fill="var(--isc-ink-3)" opacity=".55">
+                <ellipse cx="320" cy="32" rx="44" ry="16"/><ellipse cx="296" cy="26" rx="22" ry="16"/><ellipse cx="340" cy="20" rx="24" ry="17"/>
+              </g>
+              <text id="isc-cloudtxt" x="320" y="37" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">+10%</text>
+              <line id="isc-rain" class="flow rain" x1="320" y1="50" x2="320" y2="200"/>
+              <g id="isc-income">
+                <path d="M0 104 H262" stroke="var(--isc-pipe)" stroke-width="14" fill="none"/>
+                <path d="M0 104 H262" stroke="#fff" stroke-width="8" fill="none" opacity=".35"/>
+                <circle cx="120" cy="104" r="13" fill="#fff" stroke="var(--isc-pipe)" stroke-width="3"/>
+                <path id="isc-valve" d="M110 104 H130" stroke="var(--isc-ink-2)" stroke-width="3" stroke-linecap="round"/>
+                <text x="40" y="88" text-anchor="middle" font-size="13" fill="var(--isc-ink-2)" font-weight="600">$ &rarr;</text>
+                <line id="isc-pour" class="flow pour" x1="262" y1="104" x2="262" y2="290"/>
+              </g>
+              <rect x="240" y="80" width="160" height="220" rx="8" fill="var(--isc-panel)" stroke="var(--isc-ink-3)" stroke-width="2"/>
+              <g clip-path="url(#isc-tankclip)">
+                <rect id="isc-water" x="242" y="200" width="156" height="98" fill="url(#isc-watergrad)"/>
+                <rect id="isc-surfline" x="242" y="200" width="156" height="3" fill="#fff" opacity=".35"/>
+              </g>
+              <line id="isc-target" x1="232" x2="408" y1="120" y2="120" stroke="var(--isc-ink-2)" stroke-width="1.5" stroke-dasharray="5 4"/>
+              <text id="isc-targettxt" x="228" y="124" text-anchor="end" font-size="12" fill="var(--isc-ink-2)">$1M</text>
+              <text id="isc-baltxt" x="320" y="290" text-anchor="middle" font-size="16" font-weight="700" fill="#fff">$1.00M</text>
+              <path d="M400 262 H452 V272" stroke="var(--isc-pipe)" stroke-width="12" fill="none" stroke-linejoin="round"/>
+              <line id="isc-spill" class="flow spill" x1="452" y1="278" x2="452" y2="318"/>
+              <g id="isc-coins"></g>
+              <text id="isc-cointxt" x="530" y="140" text-anchor="middle" font-size="12" fill="var(--isc-ink-2)"></text>
+              <text id="isc-dry" x="320" y="200" text-anchor="middle" font-size="40" fill="var(--isc-bad)" opacity="0">&#x2715;</text>
+              <text id="isc-flowtxt" font-size="13" font-weight="700"></text>
+            </g>
+          </svg>
+          <div class="isc-stats">
+            <div class="isc-stat"><div class="k">Year</div><div class="v" id="isc-s-year">0</div></div>
+            <div class="isc-stat"><div class="k"><span class="isc-swatch" style="background:var(--isc-water)"></span>Reservoir</div><div class="v" id="isc-s-bal">$1.00M</div></div>
+            <div class="isc-stat"><div class="k"><span class="isc-swatch" style="background:var(--isc-gold)"></span>Paid to you</div><div class="v" id="isc-s-rec">$0</div></div>
+            <div class="isc-stat"><div class="k" id="isc-s-statk">Lasts</div><div class="v" id="isc-s-stat">&infin;</div></div>
+          </div>
+          <div class="isc-controls" data-for="live" hidden>
+            <div class="isc-ctrl"><label>Reservoir <b id="isc-v-p">$1.00M</b></label>
+              <div class="track"><input type="range" id="isc-p" min="100000" max="5000000" step="50000" value="1000000"></div></div>
+            <div class="isc-ctrl"><label>Return / yr <b id="isc-v-r">10%</b></label>
+              <div class="track"><input type="range" id="isc-r" min="1" max="15" step="0.5" value="10"></div></div>
+            <div class="isc-ctrl"><label>Take / yr <b id="isc-v-w">$100k</b></label>
+              <div class="track"><input type="range" id="isc-w" min="0" max="300000" step="5000" value="100000">
+              <span class="isc-mark" id="isc-wmark" title="Sustainable forever">&#x25B2; &infin;</span></div></div>
+          </div>
+          <div class="isc-controls" data-for="build">
+            <div class="isc-ctrl"><label>Redirect / mo <b id="isc-v-c">$1,500</b></label>
+              <div class="track"><input type="range" id="isc-c" min="100" max="10000" step="100" value="1500"></div></div>
+            <div class="isc-ctrl"><label>Return / yr <b id="isc-v-r2">10%</b></label>
+              <div class="track"><input type="range" id="isc-r2" min="1" max="15" step="0.5" value="10"></div></div>
+            <div class="isc-ctrl"><label>Stream goal / yr <b id="isc-v-g">$100k</b></label>
+              <div class="track"><input type="range" id="isc-g" min="10000" max="300000" step="5000" value="100000"></div></div>
+          </div>
+          <div class="isc-bar">
+            <button type="button" class="isc-btn" id="isc-play" aria-label="Play or pause">&#x275A;&#x275A;</button>
+            <button type="button" class="isc-btn" id="isc-restart" aria-label="Restart">&#x21BA;</button>
+            <input class="isc-scrub" type="range" id="isc-scrub" min="0" max="1000" value="0" aria-label="Timeline">
+          </div>
+          <div class="isc-chartwrap">
+            <div class="isc-legend">
+              <span><span class="isc-swatch" style="background:var(--isc-water)"></span>Reservoir</span>
+              <span><span class="isc-swatch" style="background:var(--isc-gold)"></span>Total paid to you</span>
+            </div>
+            <svg class="isc-chart" id="isc-chart" viewBox="0 0 600 210" aria-label="Reservoir balance and total paid out over time"></svg>
+            <div class="isc-tip" id="isc-tip"></div>
+          </div>
+          <p class="isc-note">Illustration only. Assumes a steady return; real markets swing and inflation erodes buying power.</p>
+        </div></div>
       </details>
 
       <details class="collapse reveal">
@@ -5234,5 +5371,330 @@
 })();
 </script>
 
+
+<script>
+// Investment stream — reservoir calc under "Interrupt the spending circuit" (home)
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const root = $('isc');
+  if (!root) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function money(v, digits) {
+    const a = Math.abs(v), s = v < 0 ? '-' : '';
+    if (a >= 1e9) return s + '$' + (a / 1e9).toFixed(digits ?? 2) + 'B';
+    if (a >= 1e6) return s + '$' + (a / 1e6).toFixed(digits ?? 2) + 'M';
+    if (a >= 1e4) return s + '$' + Math.round(a / 1e3) + 'k';
+    return s + '$' + Math.round(a).toLocaleString('en-US');
+  }
+  const pct = (r) => (r * 100).toFixed(r * 100 % 1 ? 1 : 0) + '%';
+
+  function simLive(B0, r, W) {
+    const N = 50, bal = [B0], rec = [0];
+    let b = B0, got = 0, dryYear = null;
+    for (let y = 1; y <= N; y++) {
+      b = b * (1 + r);
+      const w = Math.min(W, b);
+      b -= w; got += w;
+      if (b < 1 && dryYear === null) { dryYear = y - 1 + (w / W || 0); b = 0; }
+      bal.push(b); rec.push(got);
+    }
+    return { N, bal, rec, target: B0, unit: W, dryYear, fillYear: 0 };
+  }
+
+  function simBuild(C, r, G) {
+    const T = G / r, m = Math.pow(1 + r, 1 / 12) - 1;
+    let b = 0, got = 0, fillYear = null, month = 0;
+    const bal = [0], rec = [0];
+    const MAXY = 80;
+    let N = MAXY;
+    for (let y = 1; y <= N; y++) {
+      for (let k = 0; k < 12; k++) {
+        month++;
+        if (fillYear === null) {
+          const prev = b;
+          b = b * (1 + m) + C;
+          if (b >= T) { fillYear = (month - 1 + (T - prev) / (b - prev)) / 12; b = T; N = Math.min(MAXY, Math.ceil(fillYear) + 25); }
+        } else {
+          got += G / 12;
+        }
+      }
+      bal.push(b); rec.push(got);
+    }
+    return { N, bal, rec, target: T, unit: G, dryYear: null, fillYear };
+  }
+
+  let mode = 'build', S = null, t = 0, playing = true, last = 0;
+  const P = { p: 1e6, r: 0.10, w: 1e5, c: 1500, r2: 0.10, g: 1e5 };
+
+  function recompute(keepTime) {
+    S = mode === 'live' ? simLive(P.p, P.r, P.w) : simBuild(P.c, P.r2, P.g);
+    S.max = Math.max(S.target, ...S.bal);
+    S.recMax = Math.max(...S.rec);
+    if (!keepTime) t = 0;
+    t = Math.min(t, S.N);
+    drawChartStatic();
+    render();
+  }
+
+  function at(arr, tt) {
+    const i = Math.floor(tt), f = tt - i;
+    if (i >= arr.length - 1) return arr[arr.length - 1];
+    return arr[i] + (arr[i + 1] - arr[i]) * f;
+  }
+
+  // scene: income pipe → tank ← rain (returns); spigot → coins (1 coin = 1 year of income)
+  const TANK_BOT = 298, TANK_H = TANK_BOT - 82;
+  const flowPx = (perYear) => perYear <= 0 ? 0 : Math.max(2.5, Math.min(26, perYear / 8000));
+  const coinsG = $('isc-coins'), scene = root.querySelector('.isc-scene');
+  const COIN_MAX = 50, COINS_PER_STACK = 10;
+  for (let i = 0; i < COIN_MAX; i++) {
+    const stack = Math.floor(i / COINS_PER_STACK), row = i % COINS_PER_STACK;
+    const e = document.createElementNS(NS, 'ellipse');
+    e.setAttribute('cx', 482 + stack * 25);
+    e.setAttribute('cy', 318 - row * 6);
+    e.setAttribute('rx', 11); e.setAttribute('ry', 3.6);
+    e.setAttribute('fill', 'var(--isc-gold)');
+    e.setAttribute('stroke', '#fff'); e.setAttribute('stroke-width', 1.5);
+    e.style.display = 'none';
+    coinsG.appendChild(e);
+  }
+
+  function setLine(el, w, y2) {
+    if (w <= 0) { el.style.display = 'none'; return; }
+    el.style.display = '';
+    if (el.id === 'isc-rain') { const gap = Math.round(w * 2.2 + 6); el.setAttribute('stroke-dasharray', '0 ' + gap); el.style.setProperty('--gap', gap + 'px'); }
+    el.setAttribute('stroke-width', w);
+    if (y2 != null) el.setAttribute('y2', y2);
+  }
+
+  function render() {
+    const tt = Math.min(t, S.N);
+    const r = mode === 'live' ? P.r : P.r2;
+    const filling = mode === 'build' && (S.fillYear === null || tt < S.fillYear);
+    const dry = S.dryYear !== null && tt >= S.dryYear;
+    // each year: rain refills the tank (first half), then the spigot pays out (second half)
+    const yi = Math.floor(tt), f = tt - yi;
+    let b = at(S.bal, tt), got = at(S.rec, tt), phase = null, gain = 0;
+    if (!filling && !dry && yi < S.N && (mode === 'live' || yi >= Math.ceil(S.fillYear))) {
+      const start = S.bal[yi], grown = start * (1 + r), end = S.bal[yi + 1];
+      gain = grown - start;
+      if (f < 0.5) { phase = 'rain'; b = start + gain * (f / 0.5); got = S.rec[yi]; }
+      else { phase = 'drain'; const k = (f - 0.5) / 0.5; b = grown + (end - grown) * k; got = S.rec[yi] + (S.rec[yi + 1] - S.rec[yi]) * k; }
+    }
+    const scale = S.max * (1 + r) / 0.86;
+    const waterY = TANK_BOT - Math.max(0, b / scale) * TANK_H;
+    $('isc-water').setAttribute('y', waterY);
+    $('isc-water').setAttribute('height', TANK_BOT - waterY + 2);
+    $('isc-surfline').setAttribute('y', waterY);
+    $('isc-surfline').style.display = b > 0 ? '' : 'none';
+    const ty = TANK_BOT - (S.target / scale) * TANK_H;
+    $('isc-target').setAttribute('y1', ty); $('isc-target').setAttribute('y2', ty);
+    $('isc-targettxt').setAttribute('y', ty + 4);
+    $('isc-targettxt').textContent = money(S.target);
+    const bt = $('isc-baltxt');
+    bt.textContent = money(b);
+    bt.setAttribute('y', Math.min(290, Math.max(waterY + 20, 104)));
+    bt.setAttribute('fill', waterY + 20 > TANK_BOT - 2 || b <= 0 ? 'var(--isc-ink-2)' : '#fff');
+
+    $('isc-cloudtxt').textContent = '+' + pct(r);
+    setLine($('isc-rain'), b > 0 && phase !== 'drain' ? flowPx(b * r) * (phase === 'rain' ? 1.5 : 1) : 0, waterY);
+    $('isc-income').style.display = mode === 'build' ? '' : 'none';
+    scene.setAttribute('viewBox', mode === 'build' ? '0 0 600 330' : '180 0 420 330');
+    setLine($('isc-pour'), filling ? flowPx(P.c * 12) : 0, waterY);
+    $('isc-valve').setAttribute('transform', filling ? '' : 'rotate(90 120 104)');
+    const out = phase === 'rain' ? 0 : mode === 'live' ? (dry ? 0 : P.w) : (filling ? 0 : P.g);
+    setLine($('isc-spill'), flowPx(out));
+    $('isc-dry').setAttribute('opacity', dry ? 1 : 0);
+    const ft = $('isc-flowtxt');
+    if (phase === 'rain') { ft.textContent = '+' + money(gain); ft.setAttribute('x', 334); ft.setAttribute('y', Math.max(66, waterY - 10)); ft.setAttribute('text-anchor', 'start'); ft.setAttribute('fill', 'var(--isc-water)'); }
+    else if (phase === 'drain') { ft.textContent = '−' + money(out); ft.setAttribute('x', 426); ft.setAttribute('y', 250); ft.setAttribute('text-anchor', 'middle'); ft.setAttribute('fill', 'var(--isc-gold)'); }
+    else ft.textContent = '';
+
+    const coins = S.unit > 0 ? Math.floor(got / S.unit + 1e-6) : 0;
+    const kids = coinsG.children;
+    for (let i = 0; i < COIN_MAX; i++) kids[i].style.display = i < coins ? '' : 'none';
+    $('isc-cointxt').textContent = coins > 0 ? (coins > COIN_MAX ? COIN_MAX + '+' : coins) + ' × ' + money(S.unit) : '';
+    $('isc-cointxt').setAttribute('y', 318 - Math.min(coins, COINS_PER_STACK) * 6 - 10);
+
+    $('isc-s-year').textContent = Math.floor(tt);
+    $('isc-s-bal').textContent = money(b);
+    $('isc-s-rec').textContent = money(got);
+    const sk = $('isc-s-statk'), sv = $('isc-s-stat');
+    sv.className = 'v';
+    if (mode === 'live') {
+      sk.textContent = 'Lasts';
+      if (S.dryYear !== null) { sv.textContent = Math.ceil(S.dryYear) + ' yrs'; sv.classList.add('bad'); }
+      else { sv.textContent = '∞'; sv.classList.add('good'); }
+    } else {
+      sk.textContent = 'Full in';
+      if (S.fillYear === null) { sv.textContent = '80+ yrs'; sv.classList.add('bad'); }
+      else { sv.textContent = S.fillYear.toFixed(1) + ' yrs'; sv.classList.add('good'); }
+    }
+
+    $('isc-scrub').value = Math.round((tt / S.N) * 1000);
+    $('isc-anim').classList.toggle('paused', !playing);
+    drawChartProgress(tt);
+  }
+
+  // chart
+  const chart = $('isc-chart'), tip = $('isc-tip');
+  let CW = 600; const CH = 210, PL = 52, PR = 74, PT = 12, PB = 26;
+  let xS, yS, balPath, recPath, balDot, recDot, balLbl, recLbl, cross, hoverG;
+  function el(tag, attrs, parent) {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || chart).appendChild(e); return e;
+  }
+  function niceStep(v) {
+    if (v <= 0) return 1;
+    const p = Math.pow(10, Math.floor(Math.log10(v))), n = v / p;
+    return (n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10) * p;
+  }
+  function drawChartStatic() {
+    chart.innerHTML = '';
+    CW = Math.max(320, Math.round(chart.parentNode.clientWidth || 600));
+    chart.setAttribute('viewBox', '0 0 ' + CW + ' ' + CH);
+    const tick = niceStep(Math.max(S.max, S.recMax) / 4);
+    const nT = Math.ceil(Math.max(S.max, S.recMax) / tick);
+    const yMax = tick * nT;
+    xS = (x) => PL + (x / S.N) * (CW - PL - PR);
+    yS = (v) => PT + (1 - v / yMax) * (CH - PT - PB);
+    for (let i = 0; i <= nT; i++) {
+      const v = tick * i, y = yS(v);
+      el('line', { x1: PL, x2: CW - PR, y1: y, y2: y, class: 'grid' });
+      el('text', { x: PL - 8, y: y + 4, 'text-anchor': 'end', class: 'axis' }).textContent = money(v, v >= 1e6 && v % 1e6 ? (v % 1e5 ? 2 : 1) : 0);
+    }
+    const step = S.N > 60 || CW < 420 ? 20 : 10;
+    for (let x = 0; x <= S.N; x += step)
+      el('text', { x: xS(x), y: CH - 6, 'text-anchor': 'middle', class: 'axis' }).textContent = x === 0 ? 'yr 0' : x;
+    if (mode === 'build' && S.fillYear !== null) {
+      const fx = xS(S.fillYear);
+      el('line', { x1: fx, x2: fx, y1: PT, y2: CH - PB, stroke: 'var(--isc-ink-3)', 'stroke-dasharray': '3 4' });
+    }
+    balPath = el('path', { fill: 'none', stroke: 'var(--isc-water)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+    recPath = el('path', { fill: 'none', stroke: 'var(--isc-gold)', 'stroke-width': 2, 'stroke-linejoin': 'round' });
+    balDot = el('circle', { r: 4, fill: 'var(--isc-water)', stroke: '#fff', 'stroke-width': 2 });
+    recDot = el('circle', { r: 4, fill: 'var(--isc-gold)', stroke: '#fff', 'stroke-width': 2 });
+    balLbl = el('text', { class: 'lbl' }); recLbl = el('text', { class: 'lbl' });
+    hoverG = el('g', { opacity: 0 });
+    cross = el('line', { y1: PT, y2: CH - PB, stroke: 'var(--isc-ink-3)', 'stroke-width': 1 }, hoverG);
+    hoverG.hb = el('circle', { r: 4.5, fill: 'var(--isc-water)', stroke: '#fff', 'stroke-width': 2 }, hoverG);
+    hoverG.hr = el('circle', { r: 4.5, fill: 'var(--isc-gold)', stroke: '#fff', 'stroke-width': 2 }, hoverG);
+    el('rect', { x: PL, y: PT, width: CW - PL - PR, height: CH - PT - PB, fill: 'transparent' });
+  }
+  function pathTo(arr, tt) {
+    let d = '';
+    const end = Math.floor(tt);
+    for (let i = 0; i <= end && i < arr.length; i++) d += (i ? 'L' : 'M') + xS(i).toFixed(1) + ' ' + yS(arr[i]).toFixed(1);
+    if (tt > end && end < arr.length - 1) d += 'L' + xS(tt).toFixed(1) + ' ' + yS(at(arr, tt)).toFixed(1);
+    return d;
+  }
+  function drawChartProgress(tt) {
+    balPath.setAttribute('d', pathTo(S.bal, tt));
+    recPath.setAttribute('d', pathTo(S.rec, tt));
+    const bx = xS(tt), b = at(S.bal, tt), g = at(S.rec, tt);
+    balDot.setAttribute('cx', bx); balDot.setAttribute('cy', yS(b));
+    recDot.setAttribute('cx', bx); recDot.setAttribute('cy', yS(g));
+    let yb = yS(b) + 4, yr = yS(g) + 4;
+    if (Math.abs(yb - yr) < 14) { if (yb < yr) { yb -= (14 - (yr - yb)) / 2; yr = yb + 14; } else { yr -= (14 - (yb - yr)) / 2; yb = yr + 14; } }
+    balLbl.setAttribute('x', bx + 8); balLbl.setAttribute('y', yb); balLbl.textContent = money(b, 1);
+    recLbl.setAttribute('x', bx + 8); recLbl.setAttribute('y', yr); recLbl.textContent = money(g, 1);
+  }
+  function hover(evt) {
+    const rect = chart.getBoundingClientRect();
+    const sx = (evt.clientX - rect.left) * (CW / rect.width);
+    let yr = Math.round(((sx - PL) / (CW - PL - PR)) * S.N);
+    yr = Math.max(0, Math.min(Math.floor(t), yr));
+    const x = xS(yr);
+    cross.setAttribute('x1', x); cross.setAttribute('x2', x);
+    hoverG.hb.setAttribute('cx', x); hoverG.hb.setAttribute('cy', yS(S.bal[yr]));
+    hoverG.hr.setAttribute('cx', x); hoverG.hr.setAttribute('cy', yS(S.rec[yr]));
+    hoverG.setAttribute('opacity', 1);
+    tip.innerHTML = '<div style="font-weight:600;margin-bottom:4px">Year ' + yr + '</div>' +
+      '<div class="row"><span class="isc-swatch" style="background:var(--isc-water)"></span>Reservoir<b>' + money(S.bal[yr]) + '</b></div>' +
+      '<div class="row"><span class="isc-swatch" style="background:var(--isc-gold)"></span>Paid to you<b>' + money(S.rec[yr]) + '</b></div>';
+    tip.style.opacity = 1;
+    const px = (x / CW) * rect.width;
+    const tw = tip.offsetWidth;
+    tip.style.left = Math.min(rect.width - tw, Math.max(0, px + (px > rect.width / 2 ? -tw - 12 : 12))) + 'px';
+    tip.style.top = '28px';
+  }
+  function unhover() { if (hoverG) hoverG.setAttribute('opacity', 0); tip.style.opacity = 0; }
+  chart.addEventListener('pointermove', hover);
+  chart.addEventListener('pointerleave', unhover);
+
+  // years per second: ~1.7s a year at first so the fill/drain is readable, then speeds up
+  function speed(tt) {
+    if (mode === 'build' && (S.fillYear === null || tt < S.fillYear)) return S.N / 14;
+    const since = mode === 'build' ? tt - S.fillYear : tt;
+    return Math.min(2, 0.6 + since * 0.35);
+  }
+
+  // loop — only advances while the dropdown is open
+  function frame(ts) {
+    const dt = last ? Math.min(0.1, (ts - last) / 1000) : 0;
+    last = ts;
+    if (playing && root.open) {
+      t += dt * speed(t);
+      if (t >= S.N) { t = S.N; playing = false; updatePlayBtn(); }
+      render();
+    }
+    requestAnimationFrame(frame);
+  }
+  function updatePlayBtn() { $('isc-play').textContent = playing ? '❚❚' : '▶'; }
+
+  function bind(id, key, fmt, toVal) {
+    const input = $(id);
+    const show = () => { P[key] = toVal(+input.value); $('isc-v-' + id.replace('isc-', '')).textContent = fmt(P[key]); };
+    input.addEventListener('input', () => { show(); syncTakeSlider(); recompute(true); });
+    show();
+  }
+  bind('isc-p', 'p', (v) => money(v), (v) => v);
+  bind('isc-r', 'r', pct, (v) => v / 100);
+  bind('isc-w', 'w', (v) => money(v), (v) => v);
+  bind('isc-c', 'c', (v) => '$' + v.toLocaleString('en-US'), (v) => v);
+  bind('isc-r2', 'r2', pct, (v) => v / 100);
+  bind('isc-g', 'g', (v) => money(v), (v) => v);
+
+  // keep "Take" range proportional; ▲∞ marks the most you can take forever
+  function syncTakeSlider() {
+    const w = $('isc-w');
+    const max = Math.max(100000, Math.round((P.p * 0.3) / 5000) * 5000);
+    if (+w.max !== max) { w.max = max; if (+w.value > max) { w.value = max; P.w = max; $('isc-v-w').textContent = money(max); } }
+    const sus = P.p * P.r, m = $('isc-wmark');
+    if (sus > max) { m.classList.add('hidden'); return; }
+    m.classList.remove('hidden');
+    const f = sus / max, wpx = w.offsetWidth || 200;
+    m.style.left = (8 + f * (wpx - 16)) + 'px';
+  }
+  window.addEventListener('resize', () => { syncTakeSlider(); if (S && root.open) { drawChartStatic(); render(); } });
+
+  root.querySelectorAll('.isc-tab').forEach((btn) => btn.addEventListener('click', () => {
+    mode = btn.dataset.mode;
+    root.querySelectorAll('.isc-tab').forEach((b) => b.setAttribute('aria-selected', b === btn));
+    root.querySelectorAll('.isc-controls').forEach((c) => (c.hidden = c.dataset.for !== mode));
+    playing = !reduceMotion; updatePlayBtn();
+    recompute(false);
+    if (reduceMotion) { t = S.N; render(); }
+    syncTakeSlider();
+  }));
+  $('isc-play').addEventListener('click', () => {
+    if (t >= S.N) t = 0;
+    playing = !playing; updatePlayBtn(); render();
+  });
+  $('isc-restart').addEventListener('click', () => { t = 0; playing = true; updatePlayBtn(); render(); });
+  $('isc-scrub').addEventListener('input', (e) => { t = (+e.target.value / 1000) * S.N; playing = false; updatePlayBtn(); render(); });
+  root.addEventListener('toggle', () => {
+    if (root.open) { syncTakeSlider(); drawChartStatic(); render(); if (t === 0 && !reduceMotion) { playing = true; updatePlayBtn(); } }
+  });
+
+  recompute(false);
+  if (reduceMotion) { playing = false; t = S.N; render(); }
+  updatePlayBtn();
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
